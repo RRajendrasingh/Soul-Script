@@ -858,13 +858,13 @@ require_once __DIR__ . '/config/config.php';
           </div>
         </div>
 
-        <!-- Total Amount & Payment CTA Button in 1 compact section -->
-        <div class="p-3.5 bg-[#100d10] border border-[#4d444b] rounded-2xl flex items-center justify-between gap-4 mb-4">
-          <div>
-            <span class="text-[11px] uppercase font-bold text-[#d0c3cb]/70 block">Total Investment</span>
+        <!-- Total Amount & Payment CTA Button (Responsive Stack on Mobile, Row on Desktop) -->
+        <div class="p-4 bg-[#100d10] border border-[#4d444b] rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mb-4">
+          <div class="flex items-center justify-between sm:flex-col sm:items-start shrink-0">
+            <span class="text-[11px] uppercase font-bold text-[#d0c3cb]/70">Total Investment</span>
             <span class="font-serif text-2xl font-extrabold text-[#eac34a]" id="modalPrice">₹499</span>
           </div>
-          <button type="submit" class="px-6 py-3 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-sans text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg shrink-0 flex items-center gap-2" id="checkoutBtn">
+          <button type="submit" class="w-full sm:w-auto px-6 py-3.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-sans text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg flex items-center justify-center gap-2" id="checkoutBtn">
             <span>Proceed to Pay &amp; Personalize</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
