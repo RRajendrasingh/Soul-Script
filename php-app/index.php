@@ -804,11 +804,11 @@ require_once __DIR__ . '/config/config.php';
   </footer>
 
   <!-- Checkout Modal -->
-  <div id="checkoutModal" class="modal-overlay fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-    <div class="modal-container bg-[#191518] border border-[#eac34a]/30 rounded-3xl max-w-lg w-full p-8 relative">
-      <button class="modal-close text-[#d0c3cb] hover:text-white text-xl absolute top-4 right-4" onclick="closeCheckout()">&times;</button>
-      <h2 class="font-serif text-2xl text-[#e8e0e3] font-bold mb-1" id="modalTemplateTitle">Checkout</h2>
-      <p class="text-xs text-[#d0c3cb] mb-6">Enter your details to unlock your partner personalization form.</p>
+  <div id="checkoutModal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden overflow-y-auto p-4 sm:p-6 flex items-start sm:items-center justify-center py-8 sm:py-12">
+    <div class="modal-container bg-[#191518] border border-[#eac34a]/40 rounded-3xl max-w-lg w-full p-6 sm:p-8 relative my-auto max-h-[90vh] overflow-y-auto shadow-2xl">
+      <button class="modal-close text-[#d0c3cb] hover:text-white text-2xl absolute top-4 right-4 p-1 cursor-pointer transition-colors z-10" onclick="closeCheckout()">&times;</button>
+      <h2 class="font-serif text-2xl text-[#e8e0e3] font-bold mb-1 pr-6" id="modalTemplateTitle">Checkout</h2>
+      <p class="text-xs text-[#d0c3cb] mb-5">Enter your details to unlock your partner personalization form.</p>
       
       <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
         <input type="hidden" id="selectedTemplateId" value="">

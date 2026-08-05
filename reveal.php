@@ -1409,11 +1409,11 @@ try {
   </script>
 
   <!-- In-Place Live Visual Editor Modal -->
-  <div id="liveEditorModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLiveEditorModal()">
-    <div class="relative max-w-lg w-full bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/60 shadow-2xl space-y-6 text-center" onclick="event.stopPropagation()">
+  <div id="liveEditorModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6 flex items-start sm:items-center justify-center py-8 sm:py-12" onclick="closeLiveEditorModal()">
+    <div class="relative max-w-lg w-full bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/60 shadow-2xl space-y-6 text-center my-auto max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between border-b border-[#4d444b] pb-3">
         <h3 id="liveEditorTitle" class="text-lg font-bold font-serif text-[#e8e0e3]"></h3>
-        <button onclick="closeLiveEditorModal()" class="text-[#d0c3cb] hover:text-white p-1">
+        <button onclick="closeLiveEditorModal()" class="text-[#d0c3cb] hover:text-white p-1 cursor-pointer">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1421,7 +1421,7 @@ try {
       <div id="liveEditorBody"></div>
 
       <div class="flex items-center justify-end gap-3 pt-2">
-        <button onclick="closeLiveEditorModal()" class="px-4 py-2 bg-[#151215] text-[#d0c3cb] font-bold text-xs rounded-xl border border-[#4d444b]">
+        <button onclick="closeLiveEditorModal()" class="px-4 py-2 bg-[#151215] text-[#d0c3cb] font-bold text-xs rounded-xl border border-[#4d444b] cursor-pointer">
           Cancel
         </button>
         <button id="liveEditorSaveBtn" class="px-6 py-2.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all cursor-pointer">
@@ -1432,8 +1432,8 @@ try {
   </div>
 
   <!-- Letter Reading Modal -->
-  <div id="letterModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLetterModal()">
-    <div class="relative max-w-xl w-full bg-[#221f21] p-8 sm:p-10 rounded-3xl border border-[#eac34a]/50 shadow-2xl space-y-6 text-center" onclick="event.stopPropagation()">
+  <div id="letterModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6 flex items-start sm:items-center justify-center py-8 sm:py-12" onclick="closeLetterModal()">
+    <div class="relative max-w-xl w-full bg-[#221f21] p-6 sm:p-10 rounded-3xl border border-[#eac34a]/50 shadow-2xl space-y-6 text-center my-auto max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
       <span id="letterModalCat" class="text-[10px] uppercase font-bold text-[#eac34a] bg-[#3b1e3b] px-3 py-1 rounded-full border border-[#e4b9df]/20"></span>
       <h2 id="letterModalTitle" class="text-2xl font-bold font-serif text-[#e8e0e3]"></h2>
       
