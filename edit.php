@@ -264,8 +264,8 @@ $token = trim($_GET['token'] ?? '');
         if (data.success) {
           if (data.redirect_url) {
             window.location.href = data.redirect_url;
-          } else {
-            window.location.href = `<?php echo APP_URL; ?>/gift/${data.url_slug}?edit_token=${data.edit_token}`;
+          } else if (data.edit_token) {
+            window.location.href = `<?php echo APP_URL; ?>/edit.php?token=${encodeURIComponent(data.edit_token)}`;
           }
         } else {
           msg.classList.remove('hidden');
@@ -283,13 +283,9 @@ $token = trim($_GET['token'] ?? '');
     async function loadDashboardData(token) {
       if (!token) return;
 
-      try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/edit_page.php?token=' + encodeURIComponent(token));
-        const data = await res.json();
-
-        if (data.success) {
-          window.location.href = `<?php echo APP_URL; ?>/gift/${data.page.url_slug}?edit_token=${token}`;
-        }
+      activeToken = token;
+      document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('dashboardView').classList.remove('hidden');
 
       try {
         const res = await fetch('<?php echo APP_URL; ?>/api/edit_page.php?token=' + encodeURIComponent(token));
@@ -322,7 +318,11 @@ $token = trim($_GET['token'] ?? '');
 
           lucide.createIcons();
         } else {
-          alert('Error: ' + data.message);
+          const msg = document.getElementById('loginMsg');
+          document.getElementById('loginView').classList.remove('hidden');
+          document.getElementById('dashboardView').classList.add('hidden');
+          msg.classList.remove('hidden');
+          msg.innerText = data.message || 'Invalid or expired edit link token';
         }
       } catch (err) {
         console.error(err);

@@ -190,8 +190,13 @@ try {
         if (strpos($photoData, 'data:image') === 0) {
             // Base64 image payload from client compressor
             preg_match('/data:image\/(.*?);base64,(.*)/', $photoData, $matches);
-            $ext = $matches[1] ?? 'jpg';
-            if ($ext === 'jpeg') $ext = 'jpg';
+            $rawExt = strtolower($matches[1] ?? 'jpg');
+            if ($rawExt === 'jpeg') $rawExt = 'jpg';
+            
+            // Security: Strict whitelist of allowed image extensions to prevent RCE
+            $allowedExts = ['jpg', 'png', 'webp', 'gif'];
+            $ext = in_array($rawExt, $allowedExts) ? $rawExt : 'jpg';
+
             $imageData = base64_decode($matches[2] ?? '');
             
             $fileName = ($idx + 1) . '.' . $ext;

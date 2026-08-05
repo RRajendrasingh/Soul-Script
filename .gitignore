@@ -10,6 +10,7 @@ php-app/scratch/
 *.log
 *.stackdump
 test_*.php
+run_*.php
 check_*.php
 import_*.php
 fix_*.php

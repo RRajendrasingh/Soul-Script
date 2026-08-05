@@ -2,7 +2,8 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
-$token = trim($_GET['token'] ?? $_POST['token'] ?? '');
+$input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
+$token = trim($_GET['token'] ?? $input['token'] ?? $_POST['token'] ?? '');
 
 if (!$token) {
     http_response_code(400);
