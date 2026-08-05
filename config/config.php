@@ -18,12 +18,19 @@ if (!defined('APP_URL')) {
     }
 }
 
-// Database Credentials (Set for local testing / Hostinger MySQL)
-define('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1');
-define('DB_PORT', getenv('DB_PORT') ?: (isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1') ? '3307' : '3306'));
-define('DB_NAME', getenv('DB_NAME') ?: 'soulscript_db');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
+// Load custom server environment overrides if present (e.g., config.env.php on Hostinger)
+if (file_exists(__DIR__ . '/config.env.php')) {
+    require_once __DIR__ . '/config.env.php';
+}
+
+$isLocal = !isset($_SERVER['HTTP_HOST']) || $_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1';
+
+// Database Credentials (Auto-switch between Local XAMPP and Hostinger Production)
+define('DB_HOST', defined('PROD_DB_HOST') && !$isLocal ? PROD_DB_HOST : (getenv('DB_HOST') ?: '127.0.0.1'));
+define('DB_PORT', defined('PROD_DB_PORT') && !$isLocal ? PROD_DB_PORT : (getenv('DB_PORT') ?: ($isLocal ? '3307' : '3306')));
+define('DB_NAME', defined('PROD_DB_NAME') && !$isLocal ? PROD_DB_NAME : (getenv('DB_NAME') ?: 'soulscript_db'));
+define('DB_USER', defined('PROD_DB_USER') && !$isLocal ? PROD_DB_USER : (getenv('DB_USER') ?: 'root'));
+define('DB_PASS', defined('PROD_DB_PASS') && !$isLocal ? PROD_DB_PASS : (getenv('DB_PASS') ?: ''));
 
 // Razorpay Credentials
 define('RAZORPAY_KEY_ID', getenv('RAZORPAY_KEY_ID') ?: 'rzp_test_soulscript_key');
