@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /gift/
+Disallow: /edit/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /uploads/

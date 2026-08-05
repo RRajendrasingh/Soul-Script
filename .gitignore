@@ -1,0 +1,23 @@
+# Dependencies & Locks
+node_modules/
+package-lock.json
+package.json
+yarn.lock
+
+# Temporary & Diagnostic files
+scratch/
+php-app/scratch/
+*.log
+*.stackdump
+test_*.php
+check_*.php
+import_*.php
+fix_*.php
+verify_*.php
+
+# Environment & IDE
+.env
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
