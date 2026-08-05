@@ -42,20 +42,20 @@ require_once __DIR__ . '/config/config.php';
   </div>
 
   <!-- Navbar -->
-  <header class="sticky top-0 z-50 bg-[#151215]/90 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+  <header class="sticky top-0 z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+    <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
       <!-- Brand Logo -->
-      <a href="<?php echo APP_URL; ?>" class="flex items-center gap-3 text-left group">
-        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] shadow-[0_0_15px_rgba(234,195,74,0.3)] group-hover:scale-105 transition-transform duration-300">
+      <a href="<?php echo APP_URL; ?>" class="flex items-center gap-2 sm:gap-3 text-left group shrink-0">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] shadow-[0_0_15px_rgba(234,195,74,0.3)] group-hover:scale-105 transition-transform duration-300">
           <div class="w-full h-full bg-[#151215] rounded-full flex items-center justify-center">
-            <i data-lucide="heart" class="w-4 h-4 text-[#eac34a] fill-[#eac34a]/30 group-hover:fill-[#eac34a] transition-colors"></i>
+            <i data-lucide="heart" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#eac34a] fill-[#eac34a]/30 group-hover:fill-[#eac34a] transition-colors"></i>
           </div>
         </div>
         <div class="flex flex-col">
-          <span class="text-2xl font-bold tracking-wide text-[#e8e0e3] font-serif group-hover:text-[#eac34a] transition-colors">
+          <span class="text-lg sm:text-2xl font-bold tracking-wide text-[#e8e0e3] font-serif group-hover:text-[#eac34a] transition-colors leading-none">
             SoulScript
           </span>
-          <span class="text-[9px] uppercase tracking-[0.2em] text-[#eac34a] font-semibold -mt-1 font-sans">
+          <span class="hidden min-[400px]:block text-[8px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#eac34a] font-semibold mt-0.5 font-sans">
             Romantic Surprise Websites
           </span>
         </div>
@@ -76,14 +76,14 @@ require_once __DIR__ . '/config/config.php';
       </nav>
 
       <!-- Right Action Controls -->
-      <div class="flex items-center gap-3">
-        <a href="<?php echo APP_URL; ?>/edit.php" class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 border border-[#eac34a]/60 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] shadow-[0_0_15px_rgba(234,195,74,0.2)] transition-all">
-          <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        <a href="<?php echo APP_URL; ?>/edit.php" class="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1 sm:gap-1.5 border border-[#eac34a]/60 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] shadow-[0_0_15px_rgba(234,195,74,0.2)] transition-all">
+          <i data-lucide="key-round" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
           <span>Buyer Login</span>
         </a>
 
-        <a href="#gallery" class="px-5 py-2 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] text-xs font-semibold uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] hover:shadow-[0_0_30px_rgba(234,195,74,0.5)] hover:scale-105 transition-all duration-300 flex items-center gap-2">
-          <i data-lucide="gift" class="w-3.5 h-3.5"></i>
+        <a href="#gallery" class="px-3 sm:px-5 py-1.5 sm:py-2 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] hover:shadow-[0_0_30px_rgba(234,195,74,0.5)] hover:scale-105 transition-all duration-300 flex items-center gap-1 sm:gap-2">
+          <i data-lucide="gift" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
           <span>Create Surprise</span>
         </a>
       </div>
@@ -103,31 +103,28 @@ require_once __DIR__ . '/config/config.php';
           </span>
         </div>
 
-        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#e8e0e3] leading-[1.15] tracking-tight">
+        <h1 class="font-serif text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#e8e0e3] leading-[1.15] tracking-tight">
           Turn Your Memories Into a 
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#e4b9df]">
             Digital Surprise.
           </span>
         </h1>
 
-        <p class="font-sans text-base sm:text-lg text-[#d0c3cb] max-w-lg leading-relaxed font-normal">
+        <p class="font-sans text-xs sm:text-base text-[#d0c3cb] max-w-lg leading-relaxed font-normal">
           Craft breathtaking, personalized website experiences that build anticipation and deliver unforgettable romantic moments. Perfect for anniversaries, birthdays, proposals, or long-distance love.
         </p>
 
         <!-- CTA Buttons -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto pt-2">
-          <a href="#gallery" class="group relative px-8 py-4 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] rounded-full font-sans text-xs font-bold uppercase tracking-[0.2em] shadow-[0_0_25px_rgba(234,195,74,0.3)] hover:shadow-[0_0_35px_rgba(234,195,74,0.6)] transition-all duration-500 flex items-center justify-center gap-3 cursor-pointer">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto pt-2">
+          <a href="#gallery" class="group relative px-6 sm:px-8 py-3.5 sm:py-4 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] rounded-full font-sans text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-[0_0_25px_rgba(234,195,74,0.3)] hover:shadow-[0_0_35px_rgba(234,195,74,0.6)] transition-all duration-500 flex items-center justify-center gap-2.5 cursor-pointer">
             <i data-lucide="gift" class="w-4 h-4 shrink-0"></i>
-            <span class="flex flex-col text-center leading-tight">
-              <span>CHOOSE YOUR</span>
-              <span>SURPRISE</span>
-            </span>
+            <span class="font-bold tracking-wider">CHOOSE YOUR SURPRISE</span>
             <i data-lucide="arrow-right" class="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform"></i>
           </a>
 
-          <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="group flex items-center justify-center gap-3 px-6 py-4 rounded-full border border-[#4d444b] hover:border-[#eac34a]/60 text-[#d0c3cb] hover:text-[#e8e0e3] transition-all duration-300 font-sans text-xs uppercase tracking-wider font-semibold cursor-pointer whitespace-nowrap">
-            <div class="w-8 h-8 rounded-full border border-[#eac34a]/40 flex items-center justify-center group-hover:border-[#eac34a] group-hover:bg-[#eac34a]/10 transition-all shrink-0">
-              <i data-lucide="play" class="w-3.5 h-3.5 text-[#eac34a] fill-[#eac34a]"></i>
+          <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="group flex items-center justify-center gap-3 px-6 py-3.5 sm:py-4 rounded-full border border-[#4d444b] hover:border-[#eac34a]/60 text-[#d0c3cb] hover:text-[#e8e0e3] transition-all duration-300 font-sans text-xs uppercase tracking-wider font-semibold cursor-pointer whitespace-nowrap">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#eac34a]/40 flex items-center justify-center group-hover:border-[#eac34a] group-hover:bg-[#eac34a]/10 transition-all shrink-0">
+              <i data-lucide="play" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#eac34a] fill-[#eac34a]"></i>
             </div>
             <span class="whitespace-nowrap font-bold tracking-wider">TRY LIVE DEMO</span>
           </a>
