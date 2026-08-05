@@ -244,14 +244,25 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
                   ${o.proposal_note ? `<p class="text-[10px] italic text-[#d0c3cb] mt-1">"${o.proposal_note}"</p>` : ''}
                 ` : '<span class="text-[#d0c3cb]/40">—</span>'}
               </td>
-              <td class="p-4 text-right space-y-1">
-                ${o.edit_token ? `
-                  <button onclick="copyLink('${data.app_url}/edit/${o.edit_token}')" class="px-3 py-1 rounded-full bg-[#151215] border border-[#4d444b] text-[10px] font-semibold text-[#e8e0e3] hover:border-[#eac34a]">Copy Edit Link</button>
-                ` : ''}
-                ${o.page_id ? `
-                  <button onclick="deletePage('${o.page_id}')" class="px-3 py-1 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-[10px] font-semibold text-[#e4b9df] hover:border-[#e4b9df]">Delete Page</button>
-                ` : ''}
-                <button onclick="deleteOrder('${o.order_id}')" class="px-3 py-1 rounded-full bg-rose-950/60 border border-rose-500/40 text-[10px] font-semibold text-rose-300 hover:border-rose-400 hover:text-white transition-colors cursor-pointer">Delete Entry 🗑️</button>
+              <td class="p-4 text-right">
+                <div class="flex flex-wrap items-center justify-end gap-1.5">
+                  ${o.edit_token ? `
+                    <button onclick="copyLink('${data.app_url}/edit/${o.edit_token}')" class="px-2.5 py-1 rounded-lg bg-[#151215] border border-[#eac34a]/30 text-[10px] font-semibold text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] transition-colors cursor-pointer flex items-center gap-1" title="Copy Buyer Edit Link">
+                      <i data-lucide="copy" class="w-3 h-3"></i>
+                      <span>Copy Link</span>
+                    </button>
+                  ` : ''}
+                  ${o.page_id ? `
+                    <button onclick="deletePage('${o.page_id}')" class="px-2.5 py-1 rounded-lg bg-[#3b1e3b]/50 border border-[#e4b9df]/30 text-[10px] font-semibold text-[#e4b9df] hover:border-[#e4b9df] hover:bg-[#3b1e3b] transition-colors cursor-pointer flex items-center gap-1" title="Delete Generated Surprise Page">
+                      <i data-lucide="file-x" class="w-3 h-3"></i>
+                      <span>Delete Page</span>
+                    </button>
+                  ` : ''}
+                  <button onclick="deleteOrder('${o.order_id}')" class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-500/30 text-[10px] font-semibold text-rose-300 hover:border-rose-400 hover:bg-rose-900/60 hover:text-white transition-colors cursor-pointer flex items-center gap-1" title="Delete Entire Order Record">
+                    <i data-lucide="trash-2" class="w-3 h-3"></i>
+                    <span>Delete Entry</span>
+                  </button>
+                </div>
               </td>
             </tr>
           `).join('');
