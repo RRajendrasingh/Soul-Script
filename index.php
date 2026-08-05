@@ -1017,10 +1017,12 @@ require_once __DIR__ . '/config/config.php';
       const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
       const fullPhone = '+91' + (cleanPhone.length === 10 ? cleanPhone : '9876543210');
 
+      const buyerPass = document.getElementById('buyerPassword').value.trim() || '123456';
       const payload = {
         buyer_name: document.getElementById('buyerName').value || 'Test Buyer',
         buyer_phone: fullPhone,
         buyer_email: document.getElementById('buyerEmail').value || 'test@example.com',
+        buyer_password: buyerPass,
         template_id: currentTemplateId || 'anniversary_reveal'
       };
 
