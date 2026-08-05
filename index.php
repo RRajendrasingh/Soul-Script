@@ -855,20 +855,19 @@ require_once __DIR__ . '/config/config.php';
               </button>
             </div>
         <!-- Total Amount & Payment CTA Button (Responsive Stack on Mobile, Row on Desktop) -->
-        <div class="p-4 bg-[#100d10] border border-[#4d444b] rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mb-3">
+        <div class="p-4 bg-[#100d10] border border-[#4d444b] rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mb-4">
           <div class="flex items-center justify-between sm:flex-col sm:items-start shrink-0">
             <span class="text-[11px] uppercase font-bold text-[#d0c3cb]/70">Total Investment</span>
             <span class="font-serif text-2xl font-extrabold text-[#eac34a]" id="modalPrice">₹499</span>
           </div>
-          <button type="button" disabled class="w-full sm:w-auto px-5 py-3.5 bg-[#221f21] text-[#d0c3cb]/50 border border-[#4d444b]/60 font-sans text-xs font-bold uppercase tracking-wider rounded-xl cursor-not-allowed flex items-center justify-center gap-2 shrink-0 opacity-75" id="checkoutBtn" title="Razorpay gateway is paused. Use Instant Test Mode below.">
-            <i data-lucide="lock" class="w-4 h-4 text-[#eac34a]/60"></i>
-            <span>Gateway Paused (Use Test Mode Below)</span>
+          <button type="button" disabled class="w-full sm:w-auto px-6 py-3.5 bg-[#eac34a]/60 text-[#241a00]/70 font-sans text-xs font-bold uppercase tracking-wider rounded-xl cursor-not-allowed flex items-center justify-center gap-2 shadow-sm" id="checkoutBtn">
+            <span>Proceed to Pay &amp; Personalize</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </div>
 
-        <button type="button" onclick="simulateDevPayment()" class="w-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-sans text-xs font-bold uppercase tracking-wider py-3 rounded-xl transition-all cursor-pointer shadow-lg flex items-center justify-center gap-2">
-          <span>⚡ Instant Skip Payment &amp; Personalize (Active Test Mode)</span>
-          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        <button type="button" onclick="simulateDevPayment()" class="w-full bg-transparent text-[#eac34a] border border-[#eac34a]/40 font-sans text-[11px] font-semibold py-2 rounded-xl hover:border-[#eac34a] transition-all cursor-pointer">
+          ⚡ Test Mode: Instant Skip Payment &amp; Personalize
         </button>
       </form>
     </div>
