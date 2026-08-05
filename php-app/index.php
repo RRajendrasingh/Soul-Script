@@ -804,10 +804,10 @@ require_once __DIR__ . '/config/config.php';
   </footer>
 
   <!-- Checkout Modal -->
-  <div id="checkoutModal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden overflow-y-auto p-4 sm:p-6 flex items-start sm:items-center justify-center py-8 sm:py-12">
-    <div class="modal-container bg-[#191518] border border-[#eac34a]/40 rounded-3xl max-w-lg w-full p-6 sm:p-8 relative my-auto max-h-[90vh] overflow-y-auto shadow-2xl">
-      <button class="modal-close text-[#d0c3cb] hover:text-white text-2xl absolute top-4 right-4 p-1 cursor-pointer transition-colors z-10" onclick="closeCheckout()">&times;</button>
-      <h2 class="font-serif text-2xl text-[#e8e0e3] font-bold mb-1 pr-6" id="modalTemplateTitle">Checkout</h2>
+  <div id="checkoutModal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden items-center justify-center p-4 sm:p-6">
+    <div class="modal-container bg-[#191518] border border-[#eac34a]/40 rounded-3xl max-w-2xl w-full p-6 sm:p-8 relative shadow-2xl">
+      <button class="modal-close text-[#d0c3cb] hover:text-white text-2xl absolute top-4 right-5 p-1 cursor-pointer transition-colors z-10" onclick="closeCheckout()">&times;</button>
+      <h2 class="font-serif text-2xl text-[#e8e0e3] font-bold mb-0.5 pr-6" id="modalTemplateTitle">Checkout</h2>
       <p class="text-xs text-[#d0c3cb] mb-5">Enter your details to unlock your partner personalization form.</p>
       
       <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
@@ -815,54 +815,62 @@ require_once __DIR__ . '/config/config.php';
         
         <div id="checkoutErrorMsg" class="hidden mb-4 p-3 bg-[#3b1e3b] border border-[#e4b9df]/40 text-[#e4b9df] rounded-xl text-xs font-semibold text-center"></div>
 
-        <div class="form-group mb-4">
-          <label class="form-label text-xs font-semibold text-[#d0c3cb] block mb-1">Your Full Name (Buyer) *</label>
-          <input type="text" id="buyerName" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl p-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Rohan Sharma" minlength="2" maxlength="60" required>
-        </div>
+        <!-- 2-Column Responsive Grid on Desktop -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <!-- Column 1: Full Name -->
+          <div class="form-group">
+            <label class="form-label text-xs font-semibold text-[#d0c3cb] block mb-1">Your Full Name (Buyer) *</label>
+            <input type="text" id="buyerName" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Rohan Sharma" minlength="2" maxlength="60" required>
+          </div>
 
-        <div class="form-group mb-4">
-          <label class="form-label text-xs font-semibold text-[#d0c3cb] block mb-1">WhatsApp Mobile Number *</label>
-          <div class="flex rounded-xl overflow-hidden border border-[#4d444b] focus-within:border-[#eac34a] bg-[#100d10] transition-colors">
-            <div class="bg-[#221f21] text-[#eac34a] font-mono text-xs font-bold px-3.5 flex items-center border-r border-[#4d444b] gap-1.5 shrink-0 select-none">
-              <span>🇮🇳</span>
-              <span>+91</span>
+          <!-- Column 2: WhatsApp Number -->
+          <div class="form-group">
+            <label class="form-label text-xs font-semibold text-[#d0c3cb] block mb-1">WhatsApp Mobile Number *</label>
+            <div class="flex rounded-xl overflow-hidden border border-[#4d444b] focus-within:border-[#eac34a] bg-[#100d10] transition-colors">
+              <div class="bg-[#221f21] text-[#eac34a] font-mono text-xs font-bold px-3 flex items-center border-r border-[#4d444b] gap-1 shrink-0 select-none">
+                <span>🇮🇳</span>
+                <span>+91</span>
+              </div>
+              <input type="tel" id="buyerPhone" class="w-full bg-transparent px-3 py-2.5 text-sm text-[#e8e0e3] focus:outline-none font-mono tracking-wider placeholder-[#d0c3cb]/40" placeholder="9876543210" pattern="^[6-9]\d{9}$" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
             </div>
-            <input type="tel" id="buyerPhone" class="w-full bg-transparent px-3 py-3 text-sm text-[#e8e0e3] focus:outline-none font-mono tracking-wider placeholder-[#d0c3cb]/40" placeholder="9876543210" pattern="^[6-9]\d{9}$" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+            <span class="text-[10px] text-[#d0c3cb]/60 mt-1 block">Enter 10-digit mobile number</span>
           </div>
-          <span class="text-[10px] text-[#d0c3cb]/60 mt-1 block">Enter 10-digit mobile number (starts with 6, 7, 8, or 9)</span>
-        </div>
 
-        <div class="form-group mb-4">
-          <label class="form-label text-xs font-semibold text-[#d0c3cb] block mb-1">Email Address *</label>
-          <input type="email" id="buyerEmail" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl p-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="rohan@example.com" required>
-        </div>
-
-        <div class="form-group mb-4">
-          <div class="flex items-center justify-between mb-1">
-            <label class="form-label text-xs font-semibold text-[#d0c3cb]">Create Secret Edit Password *</label>
-            <span class="text-[10px] text-[#eac34a] font-bold" id="passStrengthBadge">Min 6 chars</span>
+          <!-- Column 1: Email Address -->
+          <div class="form-group">
+            <label class="form-label text-xs font-semibold text-[#d0c3cb] block mb-1">Email Address *</label>
+            <input type="email" id="buyerEmail" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="rohan@example.com" required>
           </div>
-          <div class="relative">
-            <input type="password" id="buyerPassword" minlength="6" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl p-3 pr-10 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="••••••••" oninput="checkPasswordStrength(this.value)" required>
-            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-3 text-[#d0c3cb] hover:text-[#eac34a] transition-colors">
-              <i data-lucide="eye" id="passEyeIcon" class="w-4 h-4"></i>
-            </button>
+
+          <!-- Column 2: Secret Edit Password -->
+          <div class="form-group">
+            <div class="flex items-center justify-between mb-1">
+              <label class="form-label text-xs font-semibold text-[#d0c3cb]">Secret Edit Password *</label>
+              <span class="text-[10px] text-[#eac34a] font-bold" id="passStrengthBadge">Min 6 chars</span>
+            </div>
+            <div class="relative">
+              <input type="password" id="buyerPassword" minlength="6" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 pr-10 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="••••••••" oninput="checkPasswordStrength(this.value)" required>
+              <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-2.5 text-[#d0c3cb] hover:text-[#eac34a] transition-colors">
+                <i data-lucide="eye" id="passEyeIcon" class="w-4 h-4"></i>
+              </button>
+            </div>
+            <span class="text-[10px] text-[#d0c3cb]/70 mt-1 block">🔒 Used to log into your Buyer Portal</span>
           </div>
-          <span class="text-[10px] text-[#d0c3cb]/70 mt-1.5 block leading-relaxed">
-            🔒 You will use this Secret Password to log into your Buyer Portal at <strong class="text-[#eac34a]">soulscript.in/edit</strong> anytime.
-          </span>
         </div>
 
-        <div class="my-6 p-4 bg-[#100d10] border border-[#4d444b] rounded-xl flex justify-between items-center">
-          <span class="text-xs text-[#d0c3cb]">Total Amount</span>
-          <span class="font-serif text-xl font-extrabold text-[#eac34a]" id="modalPrice">₹499</span>
+        <!-- Total Amount & Payment CTA Button in 1 compact section -->
+        <div class="p-3.5 bg-[#100d10] border border-[#4d444b] rounded-2xl flex items-center justify-between gap-4 mb-4">
+          <div>
+            <span class="text-[11px] uppercase font-bold text-[#d0c3cb]/70 block">Total Investment</span>
+            <span class="font-serif text-2xl font-extrabold text-[#eac34a]" id="modalPrice">₹499</span>
+          </div>
+          <button type="submit" class="px-6 py-3 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-sans text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg shrink-0 flex items-center gap-2" id="checkoutBtn">
+            <span>Proceed to Pay &amp; Personalize</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
         </div>
 
-        <button type="submit" class="w-full bg-[#eac34a] text-[#241a00] font-sans text-xs font-bold uppercase tracking-wider py-3.5 rounded-full hover:bg-[#ffe088] transition-all cursor-pointer shadow-lg" id="checkoutBtn">
-          Proceed to Pay &amp; Personalize →
-        </button>
-
-        <button type="button" onclick="simulateDevPayment()" class="w-full mt-3 bg-transparent text-[#eac34a] border border-[#eac34a]/40 font-sans text-xs font-semibold py-2.5 rounded-full hover:border-[#eac34a] transition-all cursor-pointer">
+        <button type="button" onclick="simulateDevPayment()" class="w-full bg-transparent text-[#eac34a] border border-[#eac34a]/40 font-sans text-[11px] font-semibold py-2 rounded-xl hover:border-[#eac34a] transition-all cursor-pointer">
           ⚡ Test Mode: Instant Skip Payment &amp; Personalize
         </button>
       </form>
