@@ -1,5 +1,24 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config/config.php';
+
+$loginError = '';
+if (isset($_GET['logout'])) {
+    unset($_SESSION['admin_logged_in']);
+    session_destroy();
+    header("Location: " . APP_URL . "/admin/index.php");
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_user'], $_POST['admin_pass'])) {
+    if ($_POST['admin_user'] === ADMIN_USER && $_POST['admin_pass'] === ADMIN_PASS) {
+        $_SESSION['admin_logged_in'] = true;
+    } else {
+        $loginError = 'Invalid admin username or password.';
+    }
+}
+
+$isLoggedIn = !empty($_SESSION['admin_logged_in']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,18 +65,57 @@ require_once __DIR__ . '/../config/config.php';
         <span class="text-xl font-bold font-serif text-[#e8e0e3]">SoulScript Admin</span>
       </a>
 
-      <a href="<?php echo APP_URL; ?>" class="px-4 py-2 rounded-full bg-[#221f21] border border-[#4d444b] text-xs font-semibold uppercase tracking-wider text-[#d0c3cb] hover:text-[#e8e0e3]">
-        ← Back to App
-      </a>
+      <div class="flex items-center gap-3">
+        <?php if ($isLoggedIn): ?>
+          <a href="?logout=1" class="px-4 py-2 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-xs font-semibold uppercase tracking-wider text-[#e4b9df] hover:border-[#e4b9df]">
+            Logout
+          </a>
+        <?php endif; ?>
+        <a href="<?php echo APP_URL; ?>" class="px-4 py-2 rounded-full bg-[#221f21] border border-[#4d444b] text-xs font-semibold uppercase tracking-wider text-[#d0c3cb] hover:text-[#e8e0e3]">
+          ← Back to App
+        </a>
+      </div>
     </div>
   </header>
 
   <main class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 space-y-8">
-    <!-- Header Title -->
-    <div>
-      <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]">Orders &amp; Page Management</h1>
-      <p class="text-xs text-[#d0c3cb] mt-1">Real-time overview of all customer orders, generated surprise reveal links, and proposal responses.</p>
-    </div>
+    <?php if (!$isLoggedIn): ?>
+      <!-- Admin Login Form Card -->
+      <div class="max-w-md mx-auto bg-[#221f21] p-8 rounded-3xl border border-[#4d444b] shadow-2xl space-y-6 text-left">
+        <div class="text-center space-y-2">
+          <div class="w-12 h-12 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/40 mx-auto flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-6 h-6 text-[#eac34a]"></i>
+          </div>
+          <h2 class="text-2xl font-bold font-serif text-[#e8e0e3]">Admin Authentication</h2>
+          <p class="text-xs text-[#d0c3cb]">Enter your administrator credentials to access the dashboard.</p>
+        </div>
+
+        <?php if ($loginError): ?>
+          <div class="p-3 bg-[#3b1e3b] border border-[#e4b9df]/50 rounded-xl text-xs text-[#e4b9df] text-center font-semibold">
+            <?php echo htmlspecialchars($loginError); ?>
+          </div>
+        <?php endif; ?>
+
+        <form method="POST" action="" class="space-y-4">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-[#d0c3cb] mb-1.5">Username</label>
+            <input type="text" name="admin_user" required class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="admin">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-[#d0c3cb] mb-1.5">Password</label>
+            <input type="password" name="admin_pass" required class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="••••••••">
+          </div>
+          <button type="submit" class="w-full py-3 rounded-xl bg-[#eac34a] text-[#241a00] font-bold uppercase tracking-wider text-xs shadow-lg hover:bg-[#ffe088] transition-all">
+            Login to Admin
+          </button>
+        </form>
+      </div>
+    <?php else: ?>
+      <!-- Header Title -->
+      <div>
+        <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]">Orders &amp; Page Management</h1>
+        <p class="text-xs text-[#d0c3cb] mt-1">Real-time overview of all customer orders, generated surprise reveal links, and proposal responses.</p>
+      </div>
 
     <!-- Stats Row -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -121,6 +179,7 @@ require_once __DIR__ . '/../config/config.php';
         </tbody>
       </table>
     </div>
+    <?php endif; ?>
   </main>
 
   <script>
@@ -192,6 +251,7 @@ require_once __DIR__ . '/../config/config.php';
                 ${o.page_id ? `
                   <button onclick="deletePage('${o.page_id}')" class="px-3 py-1 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-[10px] font-semibold text-[#e4b9df] hover:border-[#e4b9df]">Delete Page</button>
                 ` : ''}
+                <button onclick="deleteOrder('${o.order_id}')" class="px-3 py-1 rounded-full bg-rose-950/60 border border-rose-500/40 text-[10px] font-semibold text-rose-300 hover:border-rose-400 hover:text-white transition-colors cursor-pointer">Delete Entry 🗑️</button>
               </td>
             </tr>
           `).join('');
@@ -216,6 +276,15 @@ require_once __DIR__ . '/../config/config.php';
       const formData = new FormData();
       formData.append('action', 'delete_page');
       formData.append('page_id', pageId);
+      await fetch('<?php echo APP_URL; ?>/api/admin.php', { method: 'POST', body: formData });
+      fetchOrders();
+    }
+
+    async function deleteOrder(orderId) {
+      if (!confirm("Permanently delete order entry " + orderId + " and all associated data from database?")) return;
+      const formData = new FormData();
+      formData.append('action', 'delete_order');
+      formData.append('order_id', orderId);
       await fetch('<?php echo APP_URL; ?>/api/admin.php', { method: 'POST', body: formData });
       fetchOrders();
     }

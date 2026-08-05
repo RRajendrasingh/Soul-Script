@@ -1,8 +1,22 @@
 <?php
+session_start();
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
-$action = $_GET['action'] ?? $_POST['action'] ?? 'list';
+$input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
+
+// Authentication Check: Verify session login or valid admin key
+$adminKey = $_SERVER['HTTP_X_ADMIN_KEY'] ?? $_GET['admin_key'] ?? $input['admin_key'] ?? $_POST['admin_key'] ?? '';
+$isSessionAuth = !empty($_SESSION['admin_logged_in']);
+$isKeyAuth = (defined('ADMIN_PASS') && !empty($adminKey) && $adminKey === ADMIN_PASS);
+
+if (!$isSessionAuth && !$isKeyAuth) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access: Admin session or valid admin key required']);
+    exit;
+}
+
+$action = $_GET['action'] ?? $input['action'] ?? $_POST['action'] ?? 'list';
 
 try {
     $db = getDB();
@@ -69,7 +83,7 @@ try {
     }
 
     if ($action === 'expire_page') {
-        $page_id = $_POST['page_id'] ?? '';
+        $page_id = $input['page_id'] ?? $_POST['page_id'] ?? '';
         $stmt = $db->prepare("UPDATE pages SET status = 'expired' WHERE page_id = ?");
         $stmt->execute([$page_id]);
         echo json_encode(['success' => true, 'message' => 'Page marked as expired']);
@@ -77,15 +91,30 @@ try {
     }
 
     if ($action === 'delete_page') {
-        $page_id = $_POST['page_id'] ?? '';
+        $page_id = $input['page_id'] ?? $_POST['page_id'] ?? '';
         $stmt = $db->prepare("DELETE FROM pages WHERE page_id = ?");
         $stmt->execute([$page_id]);
         echo json_encode(['success' => true, 'message' => 'Page deleted permanently']);
         exit;
     }
 
+    if ($action === 'delete_order') {
+        $order_id = $input['order_id'] ?? $_POST['order_id'] ?? '';
+        
+        // Delete pages associated with this order
+        $stmtPage = $db->prepare("DELETE FROM pages WHERE order_id = ?");
+        $stmtPage->execute([$order_id]);
+        
+        // Delete order record
+        $stmtOrder = $db->prepare("DELETE FROM orders WHERE order_id = ?");
+        $stmtOrder->execute([$order_id]);
+        
+        echo json_encode(['success' => true, 'message' => 'Order entry deleted permanently']);
+        exit;
+    }
+
     if ($action === 'simulate_payment') {
-        $order_id = $_POST['order_id'] ?? '';
+        $order_id = $input['order_id'] ?? $_POST['order_id'] ?? '';
         $stmt = $db->prepare("UPDATE orders SET payment_status = 'paid', razorpay_payment_id = ? WHERE order_id = ?");
         $stmt->execute(['sim_pay_' . time(), $order_id]);
         echo json_encode(['success' => true, 'message' => 'Payment status updated to paid (Simulation)']);
