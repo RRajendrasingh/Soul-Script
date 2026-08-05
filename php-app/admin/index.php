@@ -246,12 +246,6 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
               </td>
               <td class="p-4 text-right">
                 <div class="flex flex-wrap items-center justify-end gap-1.5">
-                  ${o.edit_token ? `
-                    <button onclick="copyLink('${data.app_url}/edit/${o.edit_token}')" class="px-2.5 py-1 rounded-lg bg-[#151215] border border-[#eac34a]/30 text-[10px] font-semibold text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] transition-colors cursor-pointer flex items-center gap-1" title="Copy Buyer Edit Link">
-                      <i data-lucide="copy" class="w-3 h-3"></i>
-                      <span>Copy Link</span>
-                    </button>
-                  ` : ''}
                   ${o.page_id ? `
                     <button onclick="deletePage('${o.page_id}')" class="px-2.5 py-1 rounded-lg bg-[#3b1e3b]/50 border border-[#e4b9df]/30 text-[10px] font-semibold text-[#e4b9df] hover:border-[#e4b9df] hover:bg-[#3b1e3b] transition-colors cursor-pointer flex items-center gap-1" title="Delete Generated Surprise Page">
                       <i data-lucide="file-x" class="w-3 h-3"></i>
