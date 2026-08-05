@@ -805,10 +805,10 @@ require_once __DIR__ . '/config/config.php';
 
   <!-- Checkout Modal -->
   <div id="checkoutModal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden items-center justify-center p-4 sm:p-6">
-    <div class="modal-container bg-[#191518] border border-[#eac34a]/40 rounded-3xl max-w-2xl w-full p-6 sm:p-8 relative shadow-2xl">
+    <div class="modal-container bg-[#191518] border border-[#eac34a]/30 rounded-3xl max-w-2xl sm:max-w-[720px] w-full p-6 sm:p-8 relative shadow-2xl">
       <button class="modal-close text-[#d0c3cb] hover:text-white text-2xl absolute top-4 right-5 p-1 cursor-pointer transition-colors z-10" onclick="closeCheckout()">&times;</button>
       <h2 class="font-serif text-2xl text-[#e8e0e3] font-bold mb-0.5 pr-6" id="modalTemplateTitle">Checkout</h2>
-      <p class="text-xs text-[#d0c3cb] mb-5">Enter your details to unlock your partner personalization form.</p>
+      <p class="text-xs text-[#d0c3cb] mb-6">Enter your details to unlock your partner personalization form.</p>
       
       <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
         <input type="hidden" id="selectedTemplateId" value="">
@@ -828,7 +828,7 @@ require_once __DIR__ . '/config/config.php';
             <label class="form-label text-xs font-semibold text-[#d0c3cb] block mb-1">WhatsApp Mobile Number *</label>
             <div class="flex rounded-xl overflow-hidden border border-[#4d444b] focus-within:border-[#eac34a] bg-[#100d10] transition-colors">
               <div class="bg-[#221f21] text-[#eac34a] font-mono text-xs font-bold px-3 flex items-center border-r border-[#4d444b] gap-1 shrink-0 select-none">
-                <span>🇮🇳</span>
+                <span>IN</span>
                 <span>+91</span>
               </div>
               <input type="tel" id="buyerPhone" class="w-full bg-transparent px-3 py-2.5 text-sm text-[#e8e0e3] focus:outline-none font-mono tracking-wider placeholder-[#d0c3cb]/40" placeholder="9876543210" pattern="^[6-9]\d{9}$" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
@@ -854,19 +854,23 @@ require_once __DIR__ . '/config/config.php';
                 <i data-lucide="eye" id="passEyeIcon" class="w-4 h-4"></i>
               </button>
             </div>
-        <!-- Total Amount & Payment CTA Button (Responsive Stack on Mobile, Row on Desktop) -->
-        <div class="p-4 bg-[#100d10] border border-[#4d444b] rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mb-4">
-          <div class="flex items-center justify-between sm:flex-col sm:items-start shrink-0">
-            <span class="text-[11px] uppercase font-bold text-[#d0c3cb]/70">Total Investment</span>
-            <span class="font-serif text-2xl font-extrabold text-[#eac34a]" id="modalPrice">₹499</span>
+            <span class="text-[10px] text-[#d0c3cb]/70 mt-1 block">🔒 Used to log into your Buyer Portal</span>
           </div>
-          <button type="button" disabled class="w-full sm:w-auto px-6 py-3.5 bg-[#eac34a]/60 text-[#241a00]/70 font-sans text-xs font-bold uppercase tracking-wider rounded-xl cursor-not-allowed flex items-center justify-center gap-2 shadow-sm" id="checkoutBtn">
+        </div>
+
+        <!-- Total Amount & Payment CTA Button (Exact Reference Layout) -->
+        <div class="p-4 sm:p-5 bg-[#100d10] border border-[#4d444b] rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-4">
+          <div>
+            <span class="text-[11px] uppercase font-extrabold text-[#d0c3cb]/70 tracking-wider block mb-0.5">Total Investment</span>
+            <span class="font-serif text-3xl font-extrabold text-[#eac34a]" id="modalPrice">₹499</span>
+          </div>
+          <button type="button" disabled class="px-6 py-3.5 bg-[#eac34a] text-[#241a00] font-sans text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-lg flex items-center justify-center gap-2 cursor-not-allowed opacity-80 shrink-0 whitespace-nowrap" id="checkoutBtn">
             <span>Proceed to Pay &amp; Personalize</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </div>
 
-        <button type="button" onclick="simulateDevPayment()" class="w-full bg-transparent text-[#eac34a] border border-[#eac34a]/40 font-sans text-[11px] font-semibold py-2 rounded-xl hover:border-[#eac34a] transition-all cursor-pointer">
+        <button type="button" onclick="simulateDevPayment()" class="w-full bg-transparent text-[#eac34a] border border-[#eac34a]/40 font-sans text-[11px] font-semibold py-2.5 rounded-xl hover:border-[#eac34a] transition-all cursor-pointer">
           ⚡ Test Mode: Instant Skip Payment &amp; Personalize
         </button>
       </form>
