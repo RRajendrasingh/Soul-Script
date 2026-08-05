@@ -796,9 +796,16 @@ require_once __DIR__ . '/config/config.php';
         </div>
       </div>
 
-      <div class="pt-8 border-t border-[#4d444b]/30 flex flex-col sm:flex-row items-center justify-between text-xs text-[#d0c3cb]/60 gap-4">
+    </div>
+
+    <!-- Full-Width Dedicated Bottom Footer Bar Strip -->
+    <div class="mt-12 py-6 border-t border-[#4d444b]/40 bg-[#0d0a0d]">
+      <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#d0c3cb]/70 gap-4">
         <span>© 2026 SoulScript. All rights reserved. Made with ❤️ for couples everywhere.</span>
-        <a href="<?php echo APP_URL; ?>/admin/index.php" class="text-[11px] text-[#d0c3cb]/40 hover:text-[#eac34a] transition-colors">Admin Portal</a>
+        <a href="<?php echo APP_URL; ?>/admin/index.php" class="text-[11px] text-[#d0c3cb]/50 hover:text-[#eac34a] transition-colors flex items-center gap-1 font-mono">
+          <span>Admin Portal</span>
+          <i data-lucide="lock" class="w-3 h-3 text-[#eac34a]/70"></i>
+        </a>
       </div>
     </div>
   </footer>
