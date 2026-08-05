@@ -31,14 +31,21 @@ require_once __DIR__ . '/config/config.php';
   
   <!-- Lucide Icons & Razorpay -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    html, body {
+      overflow-x: hidden !important;
+      width: 100% !important;
+      max-width: 100vw !important;
+      position: relative;
+    }
+  </style>
 </head>
 <body class="bg-[#151215] text-[#e8e0e3] font-sans relative overflow-x-hidden min-h-screen">
 
   <!-- Background Ambient Glows -->
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-    <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#3b1e3b]/30 blur-[140px]"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-[#cca830]/10 blur-[130px]"></div>
+    <div class="absolute top-0 left-0 w-[50vw] h-[50vw] rounded-full bg-[#3b1e3b]/30 blur-[140px]"></div>
+    <div class="absolute bottom-0 right-0 w-[45vw] h-[45vw] rounded-full bg-[#cca830]/10 blur-[130px]"></div>
   </div>
 
   <!-- Navbar -->
@@ -189,10 +196,10 @@ require_once __DIR__ . '/config/config.php';
       </div>
 
       <!-- Right Column: Phone Mockup Frame & Background Spinning Circles -->
-      <div class="w-full lg:w-1/2 flex justify-center lg:justify-end relative">
+      <div class="w-full lg:w-1/2 flex justify-center lg:justify-end relative overflow-hidden py-4">
         <!-- Spinning Background Outline Circles -->
-        <div class="absolute top-1/4 -left-8 w-64 h-64 rounded-full border border-[#eac34a]/20 animate-spin z-10 pointer-events-none" style="animation-duration: 20s;"></div>
-        <div class="absolute bottom-10 -right-8 w-48 h-48 rounded-full border border-[#e4b9df]/20 animate-spin z-10 pointer-events-none" style="animation-duration: 25s; animation-direction: reverse;"></div>
+        <div class="absolute top-1/4 left-4 sm:-left-8 w-64 h-64 rounded-full border border-[#eac34a]/20 animate-spin z-10 pointer-events-none" style="animation-duration: 20s;"></div>
+        <div class="absolute bottom-10 right-4 sm:-right-8 w-48 h-48 rounded-full border border-[#e4b9df]/20 animate-spin z-10 pointer-events-none" style="animation-duration: 25s; animation-direction: reverse;"></div>
 
         <!-- Phone Container -->
         <div class="relative w-[300px] sm:w-[330px] h-[620px] bg-[#100d10] rounded-[3rem] border-[6px] border-[#2d292b] shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden transform rotate-[-2deg] hover:rotate-0 hover:scale-105 transition-all duration-700 ease-out z-20">
