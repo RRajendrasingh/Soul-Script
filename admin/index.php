@@ -55,28 +55,12 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
     <div class="absolute bottom-[-10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-[#cca830]/10 blur-[130px]"></div>
   </div>
 
-  <!-- Navbar (Smart Auto-Hiding Header) -->
-  <header id="adminHeader" class="fixed top-0 left-0 right-0 w-full z-50 bg-[#151215]/90 backdrop-blur-xl border-b border-[#4d444b]/30 transition-transform duration-300 ease-in-out transform translate-y-0">
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <a href="<?php echo APP_URL; ?>" class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 flex items-center justify-center">
-          <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#eac34a]"></i>
-        </div>
-        <span class="text-xl font-bold font-serif text-[#e8e0e3]">SoulScript Admin</span>
-      </a>
-
-      <div class="flex items-center gap-3">
-        <?php if ($isLoggedIn): ?>
-          <a href="?logout=1" class="px-4 py-2 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-xs font-semibold uppercase tracking-wider text-[#e4b9df] hover:border-[#e4b9df]">
-            Logout
-          </a>
-        <?php endif; ?>
-        <a href="<?php echo APP_URL; ?>" class="px-4 py-2 rounded-full bg-[#221f21] border border-[#4d444b] text-xs font-semibold uppercase tracking-wider text-[#d0c3cb] hover:text-[#e8e0e3]">
-          ← Back to App
-        </a>
-      </div>
-    </div>
-  </header>
+  <!-- Unified Global Navbar -->
+  <?php 
+  $current_page = 'admin';
+  $isAdminPage = true;
+  require_once __DIR__ . '/../includes/header.php'; 
+  ?>
 
   <main class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 relative z-10 space-y-8">
     <?php if (!$isLoggedIn): ?>

@@ -55,33 +55,11 @@ if ($order_id) {
   <div class="fixed inset-0 pointer-events-none z-0">
     <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#3b1e3b]/30 blur-[140px]"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-[#cca830]/10 blur-[130px]"></div>
-  </div>  <!-- Navbar (Smart Auto-Hiding Header) -->
-  <header id="createHeader" class="fixed top-0 left-0 right-0 w-full z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out transform translate-y-0">
-    <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
-      <a href="<?php echo APP_URL; ?>" class="flex items-center gap-2 sm:gap-3 text-left group shrink-0">
-        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] shadow-[0_0_15px_rgba(234,195,74,0.3)] group-hover:scale-105 transition-transform duration-300">
-          <div class="w-full h-full bg-[#151215] rounded-full flex items-center justify-center">
-            <i data-lucide="heart" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#eac34a] fill-[#eac34a]/30 group-hover:fill-[#eac34a] transition-colors"></i>
-          </div>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-lg sm:text-2xl font-bold tracking-wide text-[#e8e0e3] font-serif group-hover:text-[#eac34a] transition-colors leading-none">
-            SoulScript
-          </span>
-          <span class="hidden min-[400px]:block text-[8px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#eac34a] font-semibold mt-0.5 font-sans">
-            Romantic Surprise Websites
-          </span>
-        </div>
-      </a>
-
-      <div class="flex items-center gap-2">
-        <a href="<?php echo APP_URL; ?>/edit.php" class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 border border-[#eac34a]/60 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] transition-all">
-          <i data-lucide="key-round" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
-          <span>Buyer Login</span>
-        </a>
-      </div>
-    </div>
-  </header>
+  </div>  <!-- Unified Global Navbar -->
+  <?php 
+  $current_page = 'create';
+  require_once __DIR__ . '/includes/header.php'; 
+  ?>
 
   <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 relative z-10 space-y-8">
 
