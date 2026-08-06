@@ -294,25 +294,6 @@ $token = trim($_GET['token'] ?? '');
               <p class="text-[11px] text-[#d0c3cb]">Set a new password used to log in at <code>soulscript.in/edit</code>. Leave blank to keep current password.</p>
               <input type="password" id="buyerAccountPassword" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="Enter new secret login password (leave blank to keep current)">
             </div>
-
-            <!-- Lock Screen Recipient Security & Hint Question Box -->
-            <div class="bg-[#221f21] p-4.5 rounded-2xl border border-[#4d444b] space-y-4">
-              <label class="block font-bold text-[#e8e0e3] text-xs flex items-center gap-1.5">
-                <i data-lucide="shield-check" class="w-4 h-4 text-[#eac34a]"></i>
-                <span>Recipient Lock Screen Security &amp; Hint Lock 🔓</span>
-              </label>
-
-              <div>
-                <label class="block font-semibold text-[#d0c3cb] mb-1">Secret Hint Question (Shown on lock screen)</label>
-                <input type="text" id="secHintQuestion" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="e.g. Where did we take our very first trip together in 2022?">
-              </div>
-
-              <div>
-                <label class="block font-semibold text-[#d0c3cb] mb-1">New Hint Answer / Secret Unlock Password (Case-insensitive)</label>
-                <input type="text" id="secHintAnswer" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="Enter new secret answer (leave blank to keep current)">
-                <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Leave blank if you don't want to change the secret unlock answer.</p>
-              </div>
-            </div>
           </div>
         </div>
 
