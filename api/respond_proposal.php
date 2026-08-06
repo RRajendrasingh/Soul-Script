@@ -58,7 +58,8 @@ try {
             'page_id' => $page_id,
             'response' => $response_type,
             'partner_note' => $partner_note,
-            'responded_at' => date('Y-m-d H:i:s')
+            'responded_at' => date('Y-m-d H:i:s'),
+            'responded_at_formatted' => date('j M, h:i a')
         ]
     ]);
 

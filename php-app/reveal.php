@@ -772,11 +772,22 @@ try {
           <section class="max-w-xl mx-auto px-4 py-8 relative z-10">
             <div id="proposalResponseSection" class="bg-[#221f21] p-8 rounded-3xl border border-[#eac34a]/40 text-center space-y-6">
               ${existingResp ? `
-                <i data-lucide="heart" class="w-12 h-12 text-[#eac34a] fill-[#eac34a] mx-auto"></i>
-                <h3 class="text-2xl font-bold font-serif text-[#e8e0e3]">
-                  You Answered: "${existingResp.response.toUpperCase() === 'YES' ? 'YES! 💍' : 'Let\'s Talk 💬'}"
-                </h3>
-                <p class="text-xs text-[#d0c3cb]">${content.buyer_name} has been notified!</p>
+                <div class="space-y-4">
+                  <div class="w-14 h-14 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center mx-auto shadow-lg">
+                    <i data-lucide="check-circle-2" class="w-7 h-7 text-[#eac34a]"></i>
+                  </div>
+                  <div class="space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#eac34a]">Your Answer 💕</span>
+                    <h3 class="text-2xl font-bold font-serif text-[#e8e0e3]">
+                      ${existingResp.response === 'yes' ? 'YES! A Thousand Times Yes 💍' : "Let's Talk 💕"}
+                    </h3>
+                    <p class="text-xs text-[#d0c3cb]/80">Responded on ${existingResp.responded_at_formatted || 'Recently'}</p>
+                  </div>
+                  <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] text-sm font-serif italic text-[#eac34a] max-w-md mx-auto shadow-inner">
+                    "${existingResp.partner_note ? existingResp.partner_note : (existingResp.response === 'yes' ? 'YES! A thousand times YES my love! 💕' : 'Let\'s talk and celebrate together! 💕')}"
+                  </div>
+                  <p class="text-[11px] text-[#d0c3cb]/60 italic pt-1">${content.buyer_name} has been notified!</p>
+                </div>
               ` : `
                 <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">Your Answer</h3>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -1138,12 +1149,24 @@ try {
 
         if (data.success) {
           confetti({ particleCount: 180, spread: 100 });
+          const resp = data.proposal_response || { response: answer, responded_at_formatted: 'Just now' };
           document.getElementById('proposalResponseSection').innerHTML = `
-            <i data-lucide="heart" class="w-12 h-12 text-[#eac34a] fill-[#eac34a] mx-auto"></i>
-            <h3 class="text-2xl font-bold font-serif text-[#e8e0e3]">
-              You Answered: "${answer.toUpperCase() === 'YES' ? 'YES! 💍' : 'Let\'s Talk 💬'}"
-            </h3>
-            <p class="text-xs text-[#d0c3cb]">${data.message}</p>
+            <div class="space-y-4">
+              <div class="w-14 h-14 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center mx-auto shadow-lg">
+                <i data-lucide="check-circle-2" class="w-7 h-7 text-[#eac34a]"></i>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#eac34a]">Your Answer 💕</span>
+                <h3 class="text-2xl font-bold font-serif text-[#e8e0e3]">
+                  ${resp.response === 'yes' ? 'YES! A Thousand Times Yes 💍' : "Let's Talk 💕"}
+                </h3>
+                <p class="text-xs text-[#d0c3cb]/80">Responded on ${resp.responded_at_formatted || 'Just now'}</p>
+              </div>
+              <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] text-sm font-serif italic text-[#eac34a] max-w-md mx-auto shadow-inner">
+                "${resp.partner_note ? resp.partner_note : (resp.response === 'yes' ? 'YES! A thousand times YES my love! 💕' : 'Let\'s talk and celebrate together! 💕')}"
+              </div>
+              <p class="text-[11px] text-[#d0c3cb]/60 italic pt-1">Your response has been securely captured &amp; sent!</p>
+            </div>
           `;
           lucide.createIcons();
         } else {

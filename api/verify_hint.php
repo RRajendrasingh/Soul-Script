@@ -45,6 +45,9 @@ if ($slug && $bypass_edit_token) {
                 $stmtP = $db->prepare("SELECT * FROM proposal_responses WHERE page_id = ?");
                 $stmtP->execute([$page['page_id']]);
                 $proposalResponse = $stmtP->fetch() ?: null;
+                if ($proposalResponse) {
+                    $proposalResponse['responded_at_formatted'] = date('j M, h:i a', strtotime($proposalResponse['responded_at']));
+                }
             }
 
             $lettersData = !empty($page['letters_json']) ? json_decode($page['letters_json'], true) : [];

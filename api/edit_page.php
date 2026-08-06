@@ -48,12 +48,21 @@ try {
         $stmtMedia->execute([$page_id]);
         $media = $stmtMedia->fetchAll();
 
+        // Fetch Proposal Response
+        $stmtP = $db->prepare("SELECT * FROM proposal_responses WHERE page_id = ?");
+        $stmtP->execute([$page_id]);
+        $proposal_response = $stmtP->fetch();
+        if ($proposal_response) {
+            $proposal_response['responded_at_formatted'] = date('j M, h:i a', strtotime($proposal_response['responded_at']));
+        }
+
         echo json_encode([
             'success' => true,
             'page' => $page,
             'milestones' => $milestones,
             'reasons' => $reasons,
             'media' => $media,
+            'proposal_response' => $proposal_response,
             'share_url' => APP_URL . '/gift/' . $page['url_slug']
         ]);
         exit;

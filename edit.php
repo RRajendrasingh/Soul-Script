@@ -188,6 +188,8 @@ $token = trim($_GET['token'] ?? '');
             <label class="block font-semibold text-[#d0c3cb] mb-1">Short Love Note / Signature Message</label>
             <textarea id="loveNoteText" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl p-4 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" rows="3"></textarea>
           </div>
+        </div>
+
         <!-- TAB 2: DYNAMIC TEMPLATE-ISOLATED THEME SETTINGS -->
         <div id="tabContent-theme" class="hidden space-y-4 text-xs">
           <div id="themeContainer">
@@ -562,9 +564,29 @@ $token = trim($_GET['token'] ?? '');
         tabBtn.innerText = '💍 Love Letter & Answer';
 
         const resp = data.proposal_response;
-        const answerStatusHtml = resp ? 
-          `<span class="text-xs font-bold text-[#eac34a]">💍 Partner Answered: "${resp.response.toUpperCase() === 'YES' ? 'YES! A Thousand Times Yes' : 'Let\'s Talk & Celebrate'}" (${resp.created_at || 'Recent'})</span>` : 
-          `<span class="text-xs text-[#d0c3cb] font-medium">⏳ Partner has not answered the proposal question yet.</span>`;
+        const answerStatusHtml = resp ? `
+          <div class="space-y-4 pt-1">
+            <div class="w-14 h-14 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center mx-auto shadow-lg">
+              <i data-lucide="check-circle-2" class="w-7 h-7 text-[#eac34a]"></i>
+            </div>
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#eac34a]">Partner's Answer 💕</span>
+              <h4 class="text-2xl font-bold font-serif text-[#e8e0e3]">
+                ${resp.response === 'yes' ? 'YES! A Thousand Times Yes 💍' : "Let's Talk 💕"}
+              </h4>
+              <p class="text-xs text-[#d0c3cb]/80">Responded on ${resp.responded_at_formatted || 'Recently'}</p>
+            </div>
+            <div class="bg-[#100d10] p-4 rounded-2xl border border-[#4d444b] text-sm font-serif italic text-[#eac34a] max-w-md mx-auto shadow-inner">
+              "${resp.partner_note ? resp.partner_note : (resp.response === 'yes' ? 'YES! A thousand times YES my love! 💕' : 'Let\'s talk and celebrate together! 💕')}"
+            </div>
+          </div>
+        ` : `
+          <div class="space-y-2 py-4">
+            <i data-lucide="clock" class="w-8 h-8 text-[#d0c3cb]/60 mx-auto"></i>
+            <h4 class="text-sm font-bold text-[#e8e0e3]">Partner Has Not Answered Yet</h4>
+            <p class="text-xs text-[#d0c3cb]/70">When your partner unlocks their surprise page and clicks "YES!" or "Let's Talk", their answer will appear here in real-time!</p>
+          </div>
+        `;
 
         themeContainer.innerHTML = `
           <div class="space-y-4">
