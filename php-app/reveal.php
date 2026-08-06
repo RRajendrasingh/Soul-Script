@@ -1345,9 +1345,20 @@ try {
 
     loadLockMetadata();
 
-    // IN-PLACE LIVE VISUAL EDITOR ENGINE
-    const isEditMode = <?php echo $isEditMode ? 'true' : 'false'; ?>;
-    const activeEditToken = '<?php echo htmlspecialchars($editToken); ?>';
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function cleanAttrStr(str) {
+      if (!str) return '';
+      return String(str).replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
 
     function openLiveSectionEditor(section) {
       const modal = document.getElementById('liveEditorModal');
