@@ -167,9 +167,89 @@ $token = trim($_GET['token'] ?? '');
             </div>
           </div>
 
-          <div>
-            <label class="block font-semibold text-[#d0c3cb] mb-1">Background Audio MP3 URL 🎵</label>
-            <input type="url" id="bgMusicUrl" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="https://example.com/song.mp3">
+          <!-- Universal Music Engine (iTunes Live Search + YouTube Link + Favorite Singer) -->
+          <div class="bg-[#151215] p-5 rounded-2xl border border-[#eac34a]/30 space-y-4">
+            <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-2">
+              <label class="font-bold text-[#eac34a] text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="music" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Background Music Engine 🎵</span>
+              </label>
+            </div>
+
+            <!-- Choice Mode Radios -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <label class="flex items-center gap-2 p-3 bg-[#221f21] border border-[#4d444b] rounded-xl cursor-pointer hover:border-[#eac34a]">
+                <input type="radio" name="dash_music_mode" value="itunes_search" checked onchange="toggleDashMusicMode('itunes_search')" class="text-[#eac34a]">
+                <div class="text-xs">
+                  <strong class="block text-[#e8e0e3]">🔍 Live Song Search</strong>
+                  <span class="text-[10px] text-[#d0c3cb]">Search any song / singer</span>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-2 p-3 bg-[#221f21] border border-[#4d444b] rounded-xl cursor-pointer hover:border-[#eac34a]">
+                <input type="radio" name="dash_music_mode" value="youtube_link" onchange="toggleDashMusicMode('youtube_link')" class="text-[#eac34a]">
+                <div class="text-xs">
+                  <strong class="block text-[#e8e0e3]">🎥 YouTube / Shorts Link</strong>
+                  <span class="text-[10px] text-[#d0c3cb]">Paste YouTube or Shorts URL</span>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-2 p-3 bg-[#221f21] border border-[#4d444b] rounded-xl cursor-pointer hover:border-[#eac34a]">
+                <input type="radio" name="dash_music_mode" value="random_singer" onchange="toggleDashMusicMode('random_singer')" class="text-[#eac34a]">
+                <div class="text-xs">
+                  <strong class="block text-[#e8e0e3]">🎙️ Favorite Singer</strong>
+                  <span class="text-[10px] text-[#d0c3cb]">Auto-plays random hit</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- iTunes Live Search Container -->
+            <div id="dashItunesSearchBox" class="space-y-3">
+              <div>
+                <label class="block font-semibold text-[#d0c3cb] mb-1">Search &amp; Select Song (Bollywood, Romantic, English, Punjabi) 🎶</label>
+                <input type="text" id="dashItunesQueryInput" oninput="handleDashItunesSearch(this.value)" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="🔍 Type song name or singer e.g. Tum Hi Ho, Arijit Singh, Zara Sa, Kesariya, Taylor Swift...">
+              </div>
+
+              <!-- Selected Track Card -->
+              <div id="dashSelectedTrackCard" class="bg-[#100d10] p-3 rounded-xl border border-[#eac34a]/60 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <img id="dashSelectedTrackImg" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-lg object-cover border border-[#4d444b]">
+                  <div>
+                    <span class="block font-bold text-xs text-[#e8e0e3]" id="dashSelectedTrackTitle">Tum Hi Ho</span>
+                    <span class="block text-[10px] text-[#eac34a]" id="dashSelectedTrackArtist">Artist: Arijit Singh</span>
+                  </div>
+                </div>
+                <span class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] px-2.5 py-1 rounded-full border border-[#e4b9df]/20 font-bold">✓ Selected</span>
+              </div>
+
+              <!-- Live Search Results Container -->
+              <div id="dashItunesResultsList" class="hidden space-y-2 max-h-60 overflow-y-auto bg-[#100d10] p-2 rounded-xl border border-[#4d444b]"></div>
+            </div>
+
+            <!-- YouTube Link Container -->
+            <div id="dashYoutubeLinkBox" class="hidden space-y-3">
+              <div>
+                <label class="block font-semibold text-[#d0c3cb] mb-1">Paste YouTube Video / Shorts / Audio URL 🎥</label>
+                <input type="url" id="dashYoutubeUrlInput" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="https://www.youtube.com/watch?v=... or https://youtube.com/shorts/... or https://youtu.be/...">
+                <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Paste any public YouTube video or YouTube Shorts link. Video ID will be extracted automatically.</p>
+              </div>
+            </div>
+
+            <!-- Favorite Singer Random Play Section -->
+            <div id="dashRandomSingerBox" class="hidden space-y-3">
+              <div>
+                <label class="block font-semibold text-[#d0c3cb] mb-1">Select Partner's Favorite Singer 🎙️</label>
+                <select id="dashFavoriteSingerChoice" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+                  <option value="Arijit Singh">🎤 Arijit Singh (Auto-plays random hit: Tum Hi Ho, Kesariya, Apna Bana Le)</option>
+                  <option value="KK">🎤 KK (Auto-plays random hit: Zara Sa, Labon Ko, Dil Ibadat)</option>
+                  <option value="Atif Aslam">🎤 Atif Aslam (Auto-plays random hit: Tera Hone Laga Hoon, Jeene Laga Hoon)</option>
+                  <option value="Shreya Ghoshal">🎤 Shreya Ghoshal (Auto-plays random hit: Sun Raha Hai, Piyu Bole)</option>
+                  <option value="Darshan Raval">🎤 Darshan Raval</option>
+                  <option value="Mohit Chauhan">🎤 Mohit Chauhan</option>
+                </select>
+              </div>
+            </div>
+            <input type="hidden" id="bgMusicUrl" value="">
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -319,6 +399,78 @@ $token = trim($_GET['token'] ?? '');
         btn.innerText = 'Log In To Live Visual Editor';
         btn.disabled = false;
       }
+    }
+
+    let dashMusicSearchTimer = null;
+    let dashCurrentMusicUrl = '';
+    let dashCurrentSongTitle = '';
+    let dashCurrentArtist = '';
+
+    function toggleDashMusicMode(mode) {
+      const itunesBox = document.getElementById('dashItunesSearchBox');
+      const ytBox = document.getElementById('dashYoutubeLinkBox');
+      const randBox = document.getElementById('dashRandomSingerBox');
+
+      if (itunesBox) itunesBox.classList.add('hidden');
+      if (ytBox) ytBox.classList.add('hidden');
+      if (randBox) randBox.classList.add('hidden');
+
+      if (mode === 'itunes_search' && itunesBox) itunesBox.classList.remove('hidden');
+      if (mode === 'youtube_link' && ytBox) ytBox.classList.remove('hidden');
+      if (mode === 'random_singer' && randBox) randBox.classList.remove('hidden');
+    }
+
+    function handleDashItunesSearch(query) {
+      clearTimeout(dashMusicSearchTimer);
+      const resultsContainer = document.getElementById('dashItunesResultsList');
+      if (!query.trim()) {
+        resultsContainer.classList.add('hidden');
+        return;
+      }
+
+      dashMusicSearchTimer = setTimeout(async () => {
+        try {
+          resultsContainer.innerHTML = '<div class="p-3 text-center text-xs text-[#eac34a]">Searching iTunes Music Database...</div>';
+          resultsContainer.classList.remove('hidden');
+
+          const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=8`);
+          const data = await res.json();
+
+          if (data.results && data.results.length > 0) {
+            resultsContainer.innerHTML = data.results.map(item => `
+              <div class="p-2.5 bg-[#151215] hover:bg-[#221f21] rounded-xl flex items-center justify-between border border-[#4d444b]/50 transition-all">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <img src="${item.artworkUrl60 || item.artworkUrl100}" class="w-10 h-10 rounded-lg object-cover border border-[#4d444b] shrink-0">
+                  <div class="truncate">
+                    <span class="block font-bold text-xs text-[#e8e0e3] truncate">${escapeHtml(item.trackName)}</span>
+                    <span class="block text-[10px] text-[#d0c3cb] truncate">🎤 ${escapeHtml(item.artistName)} • ${escapeHtml(item.collectionName || '')}</span>
+                  </div>
+                </div>
+                <button type="button" onclick="selectDashItunesTrack('${escapeHtml(item.previewUrl)}', '${escapeHtml(item.trackName)}', '${escapeHtml(item.artistName)}', '${escapeHtml(item.artworkUrl100)}')" class="px-3 py-1.5 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] font-bold text-[11px] rounded-lg border border-[#eac34a]/40 shrink-0 transition-all">
+                  + Select
+                </button>
+              </div>
+            `).join('');
+          } else {
+            resultsContainer.innerHTML = '<div class="p-3 text-center text-xs text-[#d0c3cb]">No songs found. Try typing artist name or song title.</div>';
+          }
+        } catch (err) {
+          resultsContainer.innerHTML = '<div class="p-3 text-center text-xs text-rose-400">Search error. Please check query.</div>';
+        }
+      }, 350);
+    }
+
+    function selectDashItunesTrack(previewUrl, trackName, artistName, imgUrl) {
+      dashCurrentMusicUrl = previewUrl;
+      dashCurrentSongTitle = trackName;
+      dashCurrentArtist = artistName;
+
+      document.getElementById('dashSelectedTrackImg').src = imgUrl || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=150&q=80';
+      document.getElementById('dashSelectedTrackTitle').innerText = trackName;
+      document.getElementById('dashSelectedTrackArtist').innerText = 'Artist: ' + artistName;
+      document.getElementById('bgMusicUrl').value = previewUrl;
+
+      document.getElementById('dashItunesResultsList').classList.add('hidden');
     }
 
     async function loadDashboardData(token) {
@@ -863,6 +1015,25 @@ $token = trim($_GET['token'] ?? '');
         templateFields.milestones = milestones;
       }
 
+      const dashMusicMode = document.querySelector('input[name="dash_music_mode"]:checked')?.value || 'itunes_search';
+      let finalBgMusicUrl = document.getElementById('bgMusicUrl').value;
+      let finalFavoriteSingers = document.getElementById('dashFavoriteSingerChoice')?.value || 'Arijit Singh & KK';
+      let finalSongTitle = dashCurrentSongTitle || 'Selected Song';
+
+      if (dashMusicMode === 'itunes_search') {
+        finalBgMusicUrl = dashCurrentMusicUrl || finalBgMusicUrl;
+        if (dashCurrentArtist) finalFavoriteSingers = dashCurrentArtist;
+      } else if (dashMusicMode === 'youtube_link') {
+        finalBgMusicUrl = document.getElementById('dashYoutubeUrlInput').value.trim() || finalBgMusicUrl;
+        finalSongTitle = 'Custom YouTube Song';
+      } else if (dashMusicMode === 'random_singer') {
+        finalBgMusicUrl = 'random_singer';
+        finalFavoriteSingers = document.getElementById('dashFavoriteSingerChoice').value;
+        finalSongTitle = 'Random Hit';
+      }
+
+      templateFields.song_title = finalSongTitle;
+
       const payload = {
         token: activeToken,
         partner_name: document.getElementById('partnerName').value,
@@ -870,8 +1041,8 @@ $token = trim($_GET['token'] ?? '');
         hint_answer: document.getElementById('hintAnswer').value,
         love_note_text: document.getElementById('loveNoteText').value,
         tagline_quote: document.getElementById('taglineQuote').value,
-        favorite_singers: document.getElementById('favoriteSingers').value,
-        bg_music_url: document.getElementById('bgMusicUrl').value,
+        favorite_singers: finalFavoriteSingers,
+        bg_music_url: finalBgMusicUrl,
         receiver_photo: document.getElementById('receiverPhotoUrl').value,
         letters: letters,
         tokens: tokens,
