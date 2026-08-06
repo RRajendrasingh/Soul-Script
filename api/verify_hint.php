@@ -1,0 +1,263 @@
+<?php
+header('Content-Type: application/json');
+require_once __DIR__ . '/../config/db.php';
+
+$input = json_decode(file_get_contents('php://input'), true);
+
+$slug              = trim($input['slug'] ?? '');
+$answer            = trim($input['answer'] ?? '');
+$bypass_edit_token = trim($input['bypass_edit_token'] ?? '');
+$userIp            = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+
+// BUYER EDIT MODE: bypass hint check using edit_token
+if ($slug && $bypass_edit_token) {
+    try {
+        $db = getDB();
+        $stmtBp = $db->prepare("
+            SELECT p.page_id, p.template_id, p.url_slug, p.status, p.expires_at, c.*
+            FROM pages p
+            JOIN page_content c ON p.page_id = c.page_id
+            WHERE LOWER(p.url_slug) = LOWER(?) AND p.edit_token = ?
+        ");
+        $stmtBp->execute([$slug, $bypass_edit_token]);
+        $page = $stmtBp->fetch();
+
+        if ($page) {
+            // Valid buyer token — return full page data without hint check
+            $stmtMedia = $db->prepare("SELECT * FROM page_media WHERE page_id = ? ORDER BY display_order ASC");
+            $stmtMedia->execute([$page['page_id']]);
+            $media = $stmtMedia->fetchAll();
+
+            $milestones = [];
+            if ($page['template_id'] === 'anniversary_reveal') {
+                $stmtM = $db->prepare("SELECT * FROM story_milestones WHERE page_id = ? ORDER BY entry_order ASC");
+                $stmtM->execute([$page['page_id']]);
+                $milestones = $stmtM->fetchAll();
+            }
+            $reasons = [];
+            if ($page['template_id'] === 'birthday_magic') {
+                $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
+                $stmtR->execute([$page['page_id']]);
+                $reasons = $stmtR->fetchAll(PDO::FETCH_COLUMN);
+            }
+            $proposalResponse = null;
+            if ($page['template_id'] === 'perfect_proposal') {
+                $stmtP = $db->prepare("SELECT * FROM proposal_responses WHERE page_id = ?");
+                $stmtP->execute([$page['page_id']]);
+                $proposalResponse = $stmtP->fetch() ?: null;
+            }
+
+            $lettersData = !empty($page['letters_json']) ? json_decode($page['letters_json'], true) : [];
+            $tokensData  = !empty($page['tokens_json'])  ? json_decode($page['tokens_json'], true)  : [];
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Buyer edit mode — page loaded.',
+                'page_id' => $page['page_id'],
+                'template_id' => $page['template_id'],
+                'url_slug' => $page['url_slug'],
+                'expires_at' => $page['expires_at'],
+                'content' => [
+                    'partner_name'     => $page['partner_name'],
+                    'buyer_name'       => $page['buyer_name'],
+                    'hint_question'    => $page['hint_question'],
+                    'love_note_text'   => $page['love_note_text'],
+                    'tagline_quote'    => $page['tagline_quote'] ?? 'Safar Khubsurat h manjil se bhi 🌹',
+                    'favorite_singers' => $page['favorite_singers'] ?? 'Arijit Singh & KK',
+                    'bg_music_url'     => $page['bg_music_url'] ?? '',
+                    'receiver_photo'   => $page['receiver_photo'] ?? '',
+                    'letters' => $lettersData,
+                    'tokens'  => $tokensData,
+                    'template_fields' => [
+                        'relationship_start_date' => $page['relationship_start_date'],
+                        'partner_dob'             => $page['partner_dob'],
+                        'love_letter_text'        => $page['love_letter_text'],
+                        'buyer_city'              => $page['buyer_city'],
+                        'buyer_timezone'          => $page['buyer_timezone'],
+                        'partner_city'            => $page['partner_city'],
+                        'partner_timezone'        => $page['partner_timezone'],
+                        'reunion_date'            => $page['reunion_date'],
+                        'playlist_url'            => $page['playlist_url'],
+                        'song_title'              => $page['song_title'],
+                        'song_artist'             => $page['song_artist'],
+                        'milestones'              => $milestones,
+                        'reasons'                 => $reasons
+                    ],
+                    'media' => $media
+                ],
+                'proposal_response' => $proposalResponse
+            ]);
+            exit;
+        }
+    } catch (Exception $e) {
+        // Fall through to normal answer flow
+    }
+}
+
+if (!$slug || !$answer) {
+
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Slug and answer are required']);
+    exit;
+}
+
+try {
+    $db = getDB();
+
+    // 1. Fetch page and content hash
+    $stmt = $db->prepare("
+        SELECT p.page_id, p.template_id, p.url_slug, p.status, p.expires_at,
+               c.*
+        FROM pages p
+        JOIN page_content c ON p.page_id = c.page_id
+        WHERE LOWER(p.url_slug) = LOWER(?)
+    ");
+    $stmt->execute([$slug]);
+    $page = $stmt->fetch();
+
+    if (!$page) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Page not found']);
+        exit;
+    }
+
+    // 2. Check Rate Limiter
+    $stmtLock = $db->prepare("SELECT attempts_count, locked_until FROM failed_attempts WHERE slug = ? AND ip_address = ?");
+    $stmtLock->execute([$slug, $userIp]);
+    $lockInfo = $stmtLock->fetch();
+
+    $now = time();
+    if ($lockInfo && !empty($lockInfo['locked_until'])) {
+        $lockedUntilTime = strtotime($lockInfo['locked_until']);
+        if ($lockedUntilTime > $now) {
+            $secs = $lockedUntilTime - $now;
+            http_response_code(429);
+            echo json_encode([
+                'success' => false,
+                'message' => "Too many wrong attempts. Locked for {$secs} more seconds.",
+                'locked_until' => $lockedUntilTime
+            ]);
+            exit;
+        }
+    }
+
+    // 3. Verify Hash (Case-insensitive, trimmed)
+    $incomingHash = hashHintAnswer($answer);
+    $isMatch = ($incomingHash === $page['hint_answer_hash']);
+
+    if (!$isMatch) {
+        $currentCount = $lockInfo ? (int)$lockInfo['attempts_count'] : 0;
+        $newCount = $currentCount + 1;
+        $newLockedUntil = null;
+
+        if ($newCount >= 5) {
+            $newLockedUntil = date('Y-m-d H:i:s', $now + 60); // 60s cooldown
+            $newCount = 0; // Reset counter for next cycle
+        }
+
+        $stmtUpsert = $db->prepare("
+            INSERT INTO failed_attempts (slug, ip_address, attempts_count, locked_until, updated_at)
+            VALUES (?, ?, ?, ?, NOW())
+            ON DUPLICATE KEY UPDATE attempts_count = ?, locked_until = ?, updated_at = NOW()
+        ");
+        $stmtUpsert->execute([$slug, $userIp, $newCount, $newLockedUntil, $newCount, $newLockedUntil]);
+
+        if ($newLockedUntil !== null) {
+            http_response_code(429);
+            echo json_encode([
+                'success' => false,
+                'message' => '5 incorrect guesses. Lockout engaged for 60 seconds.',
+                'locked_until' => $now + 60
+            ]);
+            exit;
+        }
+
+        $attemptsLeft = 5 - $newCount;
+        http_response_code(401);
+        echo json_encode([
+            'success' => false,
+            'message' => "Incorrect answer. {$attemptsLeft} attempt(s) remaining before a 60s cooldown.",
+            'attempts_remaining' => $attemptsLeft
+        ]);
+        exit;
+    }
+
+    // 4. Verification Successful! Clear Lockout Record
+    $stmtClear = $db->prepare("DELETE FROM failed_attempts WHERE slug = ? AND ip_address = ?");
+    $stmtClear->execute([$slug, $userIp]);
+
+    // 5. Fetch Full Media
+    $stmtMedia = $db->prepare("SELECT * FROM page_media WHERE page_id = ? ORDER BY display_order ASC");
+    $stmtMedia->execute([$page['page_id']]);
+    $media = $stmtMedia->fetchAll();
+
+    // 6. Fetch Milestones (if Anniversary)
+    $milestones = [];
+    if ($page['template_id'] === 'anniversary_reveal') {
+        $stmtM = $db->prepare("SELECT * FROM story_milestones WHERE page_id = ? ORDER BY entry_order ASC");
+        $stmtM->execute([$page['page_id']]);
+        $milestones = $stmtM->fetchAll();
+    }
+
+    // 7. Fetch Reasons List (if Birthday)
+    $reasons = [];
+    if ($page['template_id'] === 'birthday_magic') {
+        $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
+        $stmtR->execute([$page['page_id']]);
+        $reasons = $stmtR->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    // 8. Fetch Proposal Response (if Perfect Proposal)
+    $proposalResponse = null;
+    if ($page['template_id'] === 'perfect_proposal') {
+        $stmtP = $db->prepare("SELECT * FROM proposal_responses WHERE page_id = ?");
+        $stmtP->execute([$page['page_id']]);
+        $proposalResponse = $stmtP->fetch() ?: null;
+    }
+
+    // Return Full Result Page Payload
+    $lettersData = !empty($page['letters_json']) ? json_decode($page['letters_json'], true) : [];
+    $tokensData = !empty($page['tokens_json']) ? json_decode($page['tokens_json'], true) : [];
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Hint verified successfully!',
+        'page_id' => $page['page_id'],
+        'template_id' => $page['template_id'],
+        'url_slug' => $page['url_slug'],
+        'expires_at' => $page['expires_at'],
+        'content' => [
+            'partner_name' => $page['partner_name'],
+            'buyer_name' => $page['buyer_name'],
+            'hint_question' => $page['hint_question'],
+            'love_note_text' => $page['love_note_text'],
+            'tagline_quote' => $page['tagline_quote'] ?? 'Safar Khubsurat h manjil se bhi 🌹',
+            'favorite_singers' => $page['favorite_singers'] ?? 'Arijit Singh & KK',
+            'bg_music_url' => $page['bg_music_url'] ?? 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3',
+            'receiver_photo' => $page['receiver_photo'] ?? '',
+            'letters' => $lettersData,
+            'tokens' => $tokensData,
+            'template_fields' => [
+                'relationship_start_date' => $page['relationship_start_date'],
+                'partner_dob'             => $page['partner_dob'],
+                'love_letter_text'        => $page['love_letter_text'],
+                'buyer_city'              => $page['buyer_city'],
+                'buyer_timezone'          => $page['buyer_timezone'],
+                'partner_city'            => $page['partner_city'],
+                'partner_timezone'        => $page['partner_timezone'],
+                'reunion_date'            => $page['reunion_date'],
+                'playlist_url'            => $page['playlist_url'],
+                'song_title'              => $page['song_title'],
+                'song_artist'             => $page['song_artist'],
+                'milestones'              => $milestones,
+                'reasons'                 => $reasons
+            ],
+            'media' => $media
+        ],
+        'proposal_response' => $proposalResponse
+    ]);
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+}

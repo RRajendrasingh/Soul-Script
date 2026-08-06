@@ -182,11 +182,11 @@ try {
   <main id="lockScreenView" class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
     <div class="max-w-md w-full bg-[#221f21]/90 border border-[#eac34a]/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative my-8">
       
-      <!-- Header Icon -->
+      <!-- Header Icon / Receiver Avatar -->
       <div class="text-center space-y-3">
-        <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] mx-auto shadow-[0_0_20px_rgba(234,195,74,0.3)]">
-          <div class="w-full h-full bg-[#151215] rounded-full flex items-center justify-center">
-            <i data-lucide="key-round" class="w-7 h-7 text-[#eac34a]"></i>
+        <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[2px] mx-auto shadow-[0_0_25px_rgba(234,195,74,0.4)]">
+          <div class="w-full h-full bg-[#151215] rounded-full flex items-center justify-center overflow-hidden">
+            <img id="lockReceiverPhotoImg" src="<?php echo htmlspecialchars(!empty($initialLockData['receiver_photo']) ? $initialLockData['receiver_photo'] : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'); ?>" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">
           </div>
         </div>
 
@@ -484,6 +484,19 @@ try {
         <section class="relative pt-20 pb-12 px-4 text-center z-10">
           <div class="max-w-4xl mx-auto space-y-6">
             
+            <!-- Circular Gift Receiver Avatar Frame -->
+            <div class="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto group mb-2">
+              <div class="w-full h-full rounded-full p-1 bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] shadow-[0_0_30px_rgba(234,195,74,0.4)] transition-transform duration-300 group-hover:scale-105">
+                <img id="receiverPhotoImg" src="${content.receiver_photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">
+              </div>
+              ${isEditMode ? `
+                <button onclick="triggerReceiverPhotoUpload()" class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-2 border-[#eac34a]">
+                  <i data-lucide="camera" class="w-4 h-4 text-[#eac34a] mb-0.5"></i>
+                  <span>Change Photo</span>
+                </button>
+              ` : ''}
+            </div>
+
             <!-- Floating Romantic Quote Banner -->
             <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#e4b9df]/40 text-[#eac34a] text-xs font-bold shadow-lg backdrop-blur-md">
               <i data-lucide="sparkles" class="w-4 h-4 text-[#eac34a]"></i>
@@ -1405,6 +1418,52 @@ try {
         btn.innerText = 'Save & Apply Live ✨';
         btn.disabled = false;
       }
+    }
+
+    function triggerReceiverPhotoUpload() {
+      const modal = document.getElementById('liveEditorModal');
+      const title = document.getElementById('liveEditorTitle');
+      const body = document.getElementById('liveEditorBody');
+      const saveBtn = document.getElementById('liveEditorSaveBtn');
+
+      title.innerText = '📷 Change Gift Receiver Photo';
+      const currentPhoto = (lockData && lockData.content && lockData.content.receiver_photo) ? lockData.content.receiver_photo : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400';
+
+      body.innerHTML = `
+        <div class="space-y-4 text-left">
+          <div class="flex items-center gap-4 bg-[#151215] p-3 rounded-2xl border border-[#4d444b]">
+            <img id="livePhotoPreview" src="${currentPhoto}" class="w-16 h-16 rounded-full border-2 border-[#eac34a] object-cover shrink-0">
+            <div class="flex-1">
+              <input type="file" id="livePhotoFileInput" accept="image/*" onchange="handleLivePhotoSelect(this)" class="hidden">
+              <button type="button" onclick="document.getElementById('livePhotoFileInput').click()" class="px-4 py-2 bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 font-bold text-xs rounded-xl hover:bg-[#eac34a] hover:text-[#241a00] transition-all cursor-pointer flex items-center gap-1.5">
+                <i data-lucide="camera" class="w-4 h-4"></i>
+                <span>Choose New Photo</span>
+              </button>
+              <input type="hidden" id="livePhotoBase64" value="${currentPhoto}">
+              <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Upload portrait photo of your partner/friend.</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      window.handleLivePhotoSelect = function(input) {
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            document.getElementById('livePhotoPreview').src = e.target.result;
+            document.getElementById('livePhotoBase64').value = e.target.result;
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      };
+
+      saveBtn.onclick = function() {
+        const newPhoto = document.getElementById('livePhotoBase64').value;
+        saveLiveField('receiver_photo', newPhoto);
+      };
+
+      modal.classList.remove('hidden');
+      if (typeof lucide === 'object') lucide.createIcons();
     }
   </script>
 

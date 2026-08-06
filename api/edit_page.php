@@ -85,6 +85,7 @@ try {
         $tagline_quote    = trim($input['tagline_quote'] ?? ($template_fields['tagline_quote'] ?? $page['tagline_quote']));
         $favorite_singers = trim($input['favorite_singers'] ?? ($template_fields['favorite_singers'] ?? $page['favorite_singers']));
         $bg_music_url     = trim($input['bg_music_url'] ?? ($template_fields['bg_music_url'] ?? $page['bg_music_url']));
+        $receiver_photo   = trim($input['receiver_photo'] ?? ($template_fields['receiver_photo'] ?? $page['receiver_photo']));
 
         $letters_json     = isset($input['letters']) ? json_encode($input['letters']) : (isset($template_fields['letters']) ? json_encode($template_fields['letters']) : $page['letters_json']);
         $tokens_json      = isset($input['tokens']) ? json_encode($input['tokens']) : (isset($template_fields['tokens']) ? json_encode($template_fields['tokens']) : $page['tokens_json']);
@@ -105,7 +106,7 @@ try {
         $stmtUpdate = $db->prepare("
             UPDATE page_content SET
                 partner_name = ?, hint_question = ?, hint_answer_hash = ?, love_note_text = ?,
-                tagline_quote = ?, favorite_singers = ?, bg_music_url = ?, letters_json = ?, tokens_json = ?,
+                tagline_quote = ?, favorite_singers = ?, bg_music_url = ?, receiver_photo = ?, letters_json = ?, tokens_json = ?,
                 relationship_start_date = ?, partner_dob = ?, love_letter_text = ?, buyer_city = ?,
                 buyer_timezone = ?, partner_city = ?, partner_timezone = ?, reunion_date = ?,
                 playlist_url = ?, song_title = ?, song_artist = ?
@@ -113,7 +114,7 @@ try {
         ");
         $stmtUpdate->execute([
             $partner_name, $hint_question, $hint_answer_hash, $love_note_text,
-            $tagline_quote, $favorite_singers, $bg_music_url, $letters_json, $tokens_json,
+            $tagline_quote, $favorite_singers, $bg_music_url, $receiver_photo, $letters_json, $tokens_json,
             $relationship_start_date, $partner_dob, $love_letter_text, $buyer_city,
             $buyer_timezone, $partner_city, $partner_timezone, $reunion_date,
             $playlist_url, $song_title, $song_artist,

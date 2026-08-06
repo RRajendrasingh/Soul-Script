@@ -77,6 +77,7 @@ CREATE TABLE `page_content` (
   `tagline_quote` VARCHAR(255) DEFAULT NULL,
   `favorite_singers` VARCHAR(255) DEFAULT NULL,
   `bg_music_url` VARCHAR(500) DEFAULT NULL,
+  `receiver_photo` LONGTEXT DEFAULT NULL,
   `letters_json` TEXT DEFAULT NULL,
   `tokens_json` TEXT DEFAULT NULL,
   `love_note_text` TEXT DEFAULT NULL,

@@ -122,13 +122,14 @@ try {
     $playlist_url            = $template_fields['playlist_url'] ?? null;
     $song_title              = $template_fields['song_title'] ?? null;
     $song_artist             = $template_fields['song_artist'] ?? null;
+    $receiver_photo          = $input['receiver_photo'] ?? null;
 
     $stmt = $db->prepare("
         INSERT INTO page_content (
-            page_id, partner_name, buyer_name, hint_question, hint_answer_hash, tagline_quote, favorite_singers, bg_music_url, letters_json, tokens_json, love_note_text,
+            page_id, partner_name, buyer_name, hint_question, hint_answer_hash, tagline_quote, favorite_singers, bg_music_url, receiver_photo, letters_json, tokens_json, love_note_text,
             relationship_start_date, partner_dob, love_letter_text, buyer_city, buyer_timezone,
             partner_city, partner_timezone, reunion_date, playlist_url, song_title, song_artist
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
     $stmt->execute([
         $page_id,
@@ -139,6 +140,7 @@ try {
         $tagline_quote,
         $favorite_singers,
         $bg_music_url,
+        $receiver_photo,
         $letters_json,
         $tokens_json,
         $love_note_text,
@@ -190,8 +192,13 @@ try {
         if (strpos($photoData, 'data:image') === 0) {
             // Base64 image payload from client compressor
             preg_match('/data:image\/(.*?);base64,(.*)/', $photoData, $matches);
-            $ext = $matches[1] ?? 'jpg';
-            if ($ext === 'jpeg') $ext = 'jpg';
+            $rawExt = strtolower($matches[1] ?? 'jpg');
+            if ($rawExt === 'jpeg') $rawExt = 'jpg';
+            
+            // Security: Strict whitelist of allowed image extensions to prevent RCE
+            $allowedExts = ['jpg', 'png', 'webp', 'gif'];
+            $ext = in_array($rawExt, $allowedExts) ? $rawExt : 'jpg';
+
             $imageData = base64_decode($matches[2] ?? '');
             
             $fileName = ($idx + 1) . '.' . $ext;

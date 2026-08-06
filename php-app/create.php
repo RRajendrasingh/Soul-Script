@@ -164,6 +164,23 @@ if ($order_id) {
           <input type="text" name="partner_name" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Ananya" value="Ananya" required>
         </div>
 
+        <!-- Gift Receiver Avatar Profile Photo Upload -->
+        <div>
+          <label class="block font-semibold text-[#d0c3cb] mb-1">Gift Receiver / Partner Photo 🖼️ (Optional)</label>
+          <div class="flex items-center gap-4 bg-[#151215] p-3 rounded-2xl border border-[#4d444b]">
+            <img id="receiverPhotoPreview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400" alt="Receiver preview" class="w-14 h-14 rounded-full border-2 border-[#eac34a] object-cover shrink-0">
+            <div class="flex-1">
+              <input type="file" id="receiverPhotoInput" accept="image/*" onchange="handleReceiverPhotoUpload(this)" class="hidden">
+              <button type="button" onclick="document.getElementById('receiverPhotoInput').click()" class="px-4 py-2 bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center gap-1.5">
+                <i data-lucide="camera" class="w-4 h-4"></i>
+                <span>Choose Receiver Photo</span>
+              </button>
+              <input type="hidden" name="receiver_photo" id="receiverPhotoData" value="">
+              <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Upload a portrait photo of your partner/friend to display inside a glowing circular frame on their surprise page.</p>
+            </div>
+          </div>
+        </div>
+
         <div>
           <div class="flex items-center justify-between mb-1">
             <label class="block font-semibold text-[#d0c3cb]">Custom Romantic Quote / Tagline Banner *</label>
@@ -822,6 +839,18 @@ Today, I want to ask you the most important question of my life. Will you take m
       if (modal) {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+      }
+    }
+
+    function handleReceiverPhotoUpload(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('receiverPhotoPreview').src = e.target.result;
+          document.getElementById('receiverPhotoData').value = e.target.result;
+        };
+        reader.readAsDataURL(file);
       }
     }
   </script>
