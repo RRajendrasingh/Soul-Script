@@ -420,6 +420,21 @@ $token = trim($_GET['token'] ?? '');
       if (mode === 'random_singer' && randBox) randBox.classList.remove('hidden');
     }
 
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function cleanAttrStr(str) {
+      if (!str) return '';
+      return String(str).replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
+
     function handleDashItunesSearch(query) {
       clearTimeout(dashMusicSearchTimer);
       const resultsContainer = document.getElementById('dashItunesResultsList');
@@ -446,7 +461,7 @@ $token = trim($_GET['token'] ?? '');
                     <span class="block text-[10px] text-[#d0c3cb] truncate">🎤 ${escapeHtml(item.artistName)} • ${escapeHtml(item.collectionName || '')}</span>
                   </div>
                 </div>
-                <button type="button" onclick="selectDashItunesTrack('${escapeHtml(item.previewUrl)}', '${escapeHtml(item.trackName)}', '${escapeHtml(item.artistName)}', '${escapeHtml(item.artworkUrl100)}')" class="px-3 py-1.5 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] font-bold text-[11px] rounded-lg border border-[#eac34a]/40 shrink-0 transition-all">
+                <button type="button" onclick="selectDashItunesTrack('${cleanAttrStr(item.previewUrl)}', '${cleanAttrStr(item.trackName)}', '${cleanAttrStr(item.artistName)}', '${cleanAttrStr(item.artworkUrl100)}')" class="px-3 py-1.5 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] font-bold text-[11px] rounded-lg border border-[#eac34a]/40 shrink-0 transition-all cursor-pointer">
                   + Select
                 </button>
               </div>
@@ -455,7 +470,7 @@ $token = trim($_GET['token'] ?? '');
             resultsContainer.innerHTML = '<div class="p-3 text-center text-xs text-[#d0c3cb]">No songs found. Try typing artist name or song title.</div>';
           }
         } catch (err) {
-          resultsContainer.innerHTML = '<div class="p-3 text-center text-xs text-rose-400">Search error. Please check query.</div>';
+          resultsContainer.innerHTML = '<div class="p-3 text-center text-xs text-rose-400">Search error: ' + escapeHtml(err.message) + '</div>';
         }
       }, 350);
     }
