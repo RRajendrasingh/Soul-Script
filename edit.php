@@ -243,6 +243,41 @@ $token = trim($_GET['token'] ?? '');
 
   </main>
 
+  <!-- Interactive Circle Crop Modal -->
+  <div id="circleCropModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 hidden">
+    <div class="bg-[#221f21] border border-[#eac34a]/40 rounded-3xl p-6 max-w-md w-full text-center space-y-4 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3">
+        <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
+          <i data-lucide="crop" class="w-4 h-4 text-[#eac34a]"></i>
+          <span>Adjust &amp; Crop Partner Photo</span>
+        </h3>
+        <button onclick="closeCircleCropModal()" type="button" class="text-[#d0c3cb] hover:text-white text-lg font-bold">✕</button>
+      </div>
+
+      <!-- Circle Preview Container -->
+      <div class="relative w-64 h-64 mx-auto overflow-hidden bg-[#151215] rounded-2xl border border-[#4d444b] flex items-center justify-center cursor-move select-none" id="cropCanvasWrapper">
+        <canvas id="cropCanvas" width="256" height="256" class="touch-none"></canvas>
+        <!-- Circular Overlay Mask Guide -->
+        <div class="absolute inset-0 rounded-full border-4 border-[#eac34a] shadow-[0_0_0_9999px_rgba(21,18,21,0.7)] pointer-events-none"></div>
+      </div>
+
+      <!-- Controls: Zoom & Position reset -->
+      <div class="space-y-3 pt-2">
+        <div class="flex items-center gap-3 text-xs">
+          <span class="text-[#d0c3cb] font-semibold w-12 text-right">Zoom:</span>
+          <input type="range" id="cropZoomRange" min="0.5" max="3" step="0.05" value="1" oninput="updateCropCanvas()" class="w-full accent-[#eac34a]">
+        </div>
+        <p class="text-[10px] text-[#d0c3cb]/70">Drag photo to align partner's face inside the golden circle.</p>
+      </div>
+
+      <!-- Modal Action Buttons -->
+      <div class="flex items-center gap-3 pt-2">
+        <button type="button" onclick="closeCircleCropModal()" class="w-1/2 py-2.5 bg-[#151215] text-[#d0c3cb] border border-[#4d444b] rounded-xl font-bold text-xs">Cancel</button>
+        <button type="button" onclick="applyCircleCrop()" class="w-1/2 py-2.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg hover:bg-[#ffe088] transition-all">Crop &amp; Apply</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let activeToken = "<?php echo htmlspecialchars($token); ?>";
 
@@ -365,16 +400,116 @@ $token = trim($_GET['token'] ?? '');
       }
     }
 
+    let cropImg = null;
+    let cropScale = 1;
+    let cropOffsetX = 0;
+    let cropOffsetY = 0;
+    let isDraggingCrop = false;
+    let startDragX = 0;
+    let startDragY = 0;
+
     function handleDashPhotoSelect(input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
         const reader = new FileReader();
         reader.onload = function(e) {
-          const partnerName = document.getElementById('partnerName').value || 'Partner';
-          updatePartnerPhotoAvatar(e.target.result, partnerName);
+          cropImg = new Image();
+          cropImg.onload = function() {
+            openCircleCropModal();
+          };
+          cropImg.src = e.target.result;
         };
         reader.readAsDataURL(file);
       }
+    }
+
+    function openCircleCropModal() {
+      if (!cropImg) return;
+      cropScale = 1;
+      cropOffsetX = 0;
+      cropOffsetY = 0;
+      document.getElementById('cropZoomRange').value = 1;
+      document.getElementById('circleCropModal').classList.remove('hidden');
+      setupCropCanvasEvents();
+      updateCropCanvas();
+      lucide.createIcons();
+    }
+
+    function closeCircleCropModal() {
+      document.getElementById('circleCropModal').classList.add('hidden');
+      document.getElementById('dashPhotoInput').value = '';
+    }
+
+    function updateCropCanvas() {
+      const canvas = document.getElementById('cropCanvas');
+      if (!canvas || !cropImg) return;
+      const ctx = canvas.getContext('2d');
+      const zoom = parseFloat(document.getElementById('cropZoomRange').value || 1);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const baseScale = Math.max(canvas.width / cropImg.width, canvas.height / cropImg.height);
+      const drawWidth = cropImg.width * baseScale * zoom;
+      const drawHeight = cropImg.height * baseScale * zoom;
+
+      const drawX = (canvas.width - drawWidth) / 2 + cropOffsetX;
+      const drawY = (canvas.height - drawHeight) / 2 + cropOffsetY;
+
+      ctx.drawImage(cropImg, drawX, drawY, drawWidth, drawHeight);
+    }
+
+    function setupCropCanvasEvents() {
+      const wrapper = document.getElementById('cropCanvasWrapper');
+      if (!wrapper || wrapper.dataset.bound) return;
+      wrapper.dataset.bound = "true";
+
+      const startDrag = (e) => {
+        isDraggingCrop = true;
+        const pageX = e.touches ? e.touches[0].pageX : e.pageX;
+        const pageY = e.touches ? e.touches[0].pageY : e.pageY;
+        startDragX = pageX - cropOffsetX;
+        startDragY = pageY - cropOffsetY;
+      };
+
+      const moveDrag = (e) => {
+        if (!isDraggingCrop) return;
+        const pageX = e.touches ? e.touches[0].pageX : e.pageX;
+        const pageY = e.touches ? e.touches[0].pageY : e.pageY;
+        cropOffsetX = pageX - startDragX;
+        cropOffsetY = pageY - startDragY;
+        updateCropCanvas();
+      };
+
+      const stopDrag = () => {
+        isDraggingCrop = false;
+      };
+
+      wrapper.addEventListener('mousedown', startDrag);
+      window.addEventListener('mousemove', moveDrag);
+      window.addEventListener('mouseup', stopDrag);
+
+      wrapper.addEventListener('touchstart', startDrag, { passive: true });
+      window.addEventListener('touchmove', moveDrag, { passive: true });
+      window.addEventListener('touchend', stopDrag);
+    }
+
+    function applyCircleCrop() {
+      if (!cropImg) return;
+
+      const outCanvas = document.createElement('canvas');
+      outCanvas.width = 400;
+      outCanvas.height = 400;
+      const ctx = outCanvas.getContext('2d');
+
+      const srcCanvas = document.getElementById('cropCanvas');
+      ctx.drawImage(srcCanvas, 0, 0, 400, 400);
+
+      // Export compressed JPEG (~35KB) to completely eliminate MySQL max_allowed_packet error!
+      const croppedDataUrl = outCanvas.toDataURL('image/jpeg', 0.85);
+
+      const partnerName = document.getElementById('partnerName').value || 'Partner';
+      updatePartnerPhotoAvatar(croppedDataUrl, partnerName);
+      closeCircleCropModal();
     }
 
     function removeDashPhoto() {

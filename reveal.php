@@ -1525,8 +1525,21 @@ try {
         if (input.files && input.files[0]) {
           const reader = new FileReader();
           reader.onload = function(e) {
-            document.getElementById('livePhotoPreview').src = e.target.result;
-            document.getElementById('livePhotoBase64').value = e.target.result;
+            const tempImg = new Image();
+            tempImg.onload = function() {
+              const canvas = document.createElement('canvas');
+              canvas.width = 400;
+              canvas.height = 400;
+              const ctx = canvas.getContext('2d');
+              const baseScale = Math.max(400 / tempImg.width, 400 / tempImg.height);
+              const drawW = tempImg.width * baseScale;
+              const drawH = tempImg.height * baseScale;
+              ctx.drawImage(tempImg, (400 - drawW) / 2, (400 - drawH) / 2, drawW, drawH);
+              const compressedUrl = canvas.toDataURL('image/jpeg', 0.85);
+              document.getElementById('livePhotoPreview').src = compressedUrl;
+              document.getElementById('livePhotoBase64').value = compressedUrl;
+            };
+            tempImg.src = e.target.result;
           };
           reader.readAsDataURL(input.files[0]);
         }

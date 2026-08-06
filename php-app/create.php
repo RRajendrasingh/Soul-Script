@@ -166,17 +166,26 @@ if ($order_id) {
 
         <!-- Gift Receiver Avatar Profile Photo Upload -->
         <div>
-          <label class="block font-semibold text-[#d0c3cb] mb-1">Gift Receiver / Partner Photo 🖼️ (Optional)</label>
-          <div class="flex items-center gap-4 bg-[#151215] p-3 rounded-2xl border border-[#4d444b]">
-            <img id="receiverPhotoPreview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400" alt="Receiver preview" class="w-14 h-14 rounded-full border-2 border-[#eac34a] object-cover shrink-0">
-            <div class="flex-1">
+          <label class="block font-semibold text-[#d0c3cb] mb-1.5">Gift Receiver / Partner Profile Photo 🖼️ (Optional)</label>
+          <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] flex flex-col sm:flex-row items-center gap-4">
+            <div id="partnerAvatarContainer" class="w-16 h-16 rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#eac34a] flex items-center justify-center font-bold text-2xl shadow-[0_0_20px_rgba(234,195,74,0.3)] shrink-0 overflow-hidden">
+              <span id="partnerAvatarFallback">A</span>
+              <img id="partnerAvatarImg" src="" class="w-full h-full object-cover hidden">
+            </div>
+            <div class="flex-1 text-center sm:text-left space-y-2">
               <input type="file" id="receiverPhotoInput" accept="image/*" onchange="handleReceiverPhotoUpload(this)" class="hidden">
-              <button type="button" onclick="document.getElementById('receiverPhotoInput').click()" class="px-4 py-2 bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center gap-1.5">
-                <i data-lucide="camera" class="w-4 h-4"></i>
-                <span>Choose Receiver Photo</span>
-              </button>
               <input type="hidden" name="receiver_photo" id="receiverPhotoData" value="">
-              <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Upload a portrait photo of your partner/friend to display inside a glowing circular frame on their surprise page.</p>
+              <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <button type="button" onclick="document.getElementById('receiverPhotoInput').click()" class="px-4 py-2 bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-md">
+                  <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                  <span>Upload / Crop Photo</span>
+                </button>
+                <button type="button" onclick="removeCreatePhoto()" id="removeCreatePhotoBtn" class="px-3 py-2 bg-[#221f21] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs rounded-xl transition-all cursor-pointer hidden flex items-center gap-1.5">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  <span>Remove Photo</span>
+                </button>
+              </div>
+              <p class="text-[10px] text-[#d0c3cb]/70">Upload a portrait photo to show at the top of the surprise page. If no photo is added, partner's initial character will be displayed.</p>
             </div>
           </div>
         </div>
@@ -473,6 +482,158 @@ Today, I want to ask you the most important question of my life. Will you take m
 
   <script>
     lucide.createIcons();
+
+    let cropImg = null;
+    let cropScale = 1;
+    let cropOffsetX = 0;
+    let cropOffsetY = 0;
+    let isDraggingCrop = false;
+    let startDragX = 0;
+    let startDragY = 0;
+
+    function handleReceiverPhotoUpload(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          cropImg = new Image();
+          cropImg.onload = function() {
+            openCircleCropModal();
+          };
+          cropImg.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function openCircleCropModal() {
+      if (!cropImg) return;
+      cropScale = 1;
+      cropOffsetX = 0;
+      cropOffsetY = 0;
+      document.getElementById('cropZoomRange').value = 1;
+      document.getElementById('circleCropModal').classList.remove('hidden');
+      setupCropCanvasEvents();
+      updateCropCanvas();
+      lucide.createIcons();
+    }
+
+    function closeCircleCropModal() {
+      document.getElementById('circleCropModal').classList.add('hidden');
+      document.getElementById('receiverPhotoInput').value = '';
+    }
+
+    function updateCropCanvas() {
+      const canvas = document.getElementById('cropCanvas');
+      if (!canvas || !cropImg) return;
+      const ctx = canvas.getContext('2d');
+      const zoom = parseFloat(document.getElementById('cropZoomRange').value || 1);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const baseScale = Math.max(canvas.width / cropImg.width, canvas.height / cropImg.height);
+      const drawWidth = cropImg.width * baseScale * zoom;
+      const drawHeight = cropImg.height * baseScale * zoom;
+
+      const drawX = (canvas.width - drawWidth) / 2 + cropOffsetX;
+      const drawY = (canvas.height - drawHeight) / 2 + cropOffsetY;
+
+      ctx.drawImage(cropImg, drawX, drawY, drawWidth, drawHeight);
+    }
+
+    function setupCropCanvasEvents() {
+      const wrapper = document.getElementById('cropCanvasWrapper');
+      if (!wrapper || wrapper.dataset.bound) return;
+      wrapper.dataset.bound = "true";
+
+      const startDrag = (e) => {
+        isDraggingCrop = true;
+        const pageX = e.touches ? e.touches[0].pageX : e.pageX;
+        const pageY = e.touches ? e.touches[0].pageY : e.pageY;
+        startDragX = pageX - cropOffsetX;
+        startDragY = pageY - cropOffsetY;
+      };
+
+      const moveDrag = (e) => {
+        if (!isDraggingCrop) return;
+        const pageX = e.touches ? e.touches[0].pageX : e.pageX;
+        const pageY = e.touches ? e.touches[0].pageY : e.pageY;
+        cropOffsetX = pageX - startDragX;
+        cropOffsetY = pageY - startDragY;
+        updateCropCanvas();
+      };
+
+      const stopDrag = () => {
+        isDraggingCrop = false;
+      };
+
+      wrapper.addEventListener('mousedown', startDrag);
+      window.addEventListener('mousemove', moveDrag);
+      window.addEventListener('mouseup', stopDrag);
+
+      wrapper.addEventListener('touchstart', startDrag, { passive: true });
+      window.addEventListener('touchmove', moveDrag, { passive: true });
+      window.addEventListener('touchend', stopDrag);
+    }
+
+    function applyCircleCrop() {
+      if (!cropImg) return;
+
+      const outCanvas = document.createElement('canvas');
+      outCanvas.width = 400;
+      outCanvas.height = 400;
+      const ctx = outCanvas.getContext('2d');
+
+      const srcCanvas = document.getElementById('cropCanvas');
+      ctx.drawImage(srcCanvas, 0, 0, 400, 400);
+
+      // Export compressed JPEG (~35KB) to prevent MySQL packet errors
+      const croppedDataUrl = outCanvas.toDataURL('image/jpeg', 0.85);
+
+      const partnerName = document.querySelector('input[name="partner_name"]')?.value || 'Partner';
+      updatePartnerPhotoAvatar(croppedDataUrl, partnerName);
+      closeCircleCropModal();
+    }
+
+    function updatePartnerPhotoAvatar(photoUrl, partnerName) {
+      const fallback = document.getElementById('partnerAvatarFallback');
+      const img = document.getElementById('partnerAvatarImg');
+      const removeBtn = document.getElementById('removeCreatePhotoBtn');
+      const hiddenInput = document.getElementById('receiverPhotoData');
+
+      const nameChar = (partnerName || 'P').charAt(0).toUpperCase();
+      if (fallback) fallback.innerText = nameChar;
+
+      if (photoUrl && photoUrl.trim() !== '') {
+        if (hiddenInput) hiddenInput.value = photoUrl;
+        if (img) {
+          img.src = photoUrl;
+          img.classList.remove('hidden');
+        }
+        if (fallback) fallback.classList.add('hidden');
+        if (removeBtn) {
+          removeBtn.classList.remove('hidden');
+          removeBtn.classList.add('flex');
+        }
+      } else {
+        if (hiddenInput) hiddenInput.value = '';
+        if (img) {
+          img.src = '';
+          img.classList.add('hidden');
+        }
+        if (fallback) fallback.classList.remove('hidden');
+        if (removeBtn) {
+          removeBtn.classList.add('hidden');
+          removeBtn.classList.remove('flex');
+        }
+      }
+    }
+
+    function removeCreatePhoto() {
+      const partnerName = document.querySelector('input[name="partner_name"]')?.value || 'Partner';
+      document.getElementById('receiverPhotoInput').value = '';
+      updatePartnerPhotoAvatar('', partnerName);
+    }
 
     // Sample Photos Registry (Exact match with 4th SS)
     const SAMPLE_PHOTOS = [
@@ -869,6 +1030,41 @@ Today, I want to ask you the most important question of my life. Will you take m
         <button onclick="closeQrModal()" class="px-6 py-2.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase rounded-full hover:bg-[#ffe088] transition-all cursor-pointer">
           Done &amp; Close
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Circle Crop Modal -->
+  <div id="circleCropModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 hidden">
+    <div class="bg-[#221f21] border border-[#eac34a]/40 rounded-3xl p-6 max-w-md w-full text-center space-y-4 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3">
+        <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
+          <i data-lucide="crop" class="w-4 h-4 text-[#eac34a]"></i>
+          <span>Adjust &amp; Crop Partner Photo</span>
+        </h3>
+        <button onclick="closeCircleCropModal()" type="button" class="text-[#d0c3cb] hover:text-white text-lg font-bold">✕</button>
+      </div>
+
+      <!-- Circle Preview Container -->
+      <div class="relative w-64 h-64 mx-auto overflow-hidden bg-[#151215] rounded-2xl border border-[#4d444b] flex items-center justify-center cursor-move select-none" id="cropCanvasWrapper">
+        <canvas id="cropCanvas" width="256" height="256" class="touch-none"></canvas>
+        <!-- Circular Overlay Mask Guide -->
+        <div class="absolute inset-0 rounded-full border-4 border-[#eac34a] shadow-[0_0_0_9999px_rgba(21,18,21,0.7)] pointer-events-none"></div>
+      </div>
+
+      <!-- Controls: Zoom & Position reset -->
+      <div class="space-y-3 pt-2">
+        <div class="flex items-center gap-3 text-xs">
+          <span class="text-[#d0c3cb] font-semibold w-12 text-right">Zoom:</span>
+          <input type="range" id="cropZoomRange" min="0.5" max="3" step="0.05" value="1" oninput="updateCropCanvas()" class="w-full accent-[#eac34a]">
+        </div>
+        <p class="text-[10px] text-[#d0c3cb]/70">Drag photo to align partner's face inside the golden circle.</p>
+      </div>
+
+      <!-- Modal Action Buttons -->
+      <div class="flex items-center gap-3 pt-2">
+        <button type="button" onclick="closeCircleCropModal()" class="w-1/2 py-2.5 bg-[#151215] text-[#d0c3cb] border border-[#4d444b] rounded-xl font-bold text-xs">Cancel</button>
+        <button type="button" onclick="applyCircleCrop()" class="w-1/2 py-2.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg hover:bg-[#ffe088] transition-all">Crop &amp; Apply</button>
       </div>
     </div>
   </div>
