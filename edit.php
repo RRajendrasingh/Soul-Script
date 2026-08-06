@@ -657,17 +657,31 @@ $token = trim($_GET['token'] ?? '');
     }
 
     function switchTab(tabName) {
+      const activeTemplateId = document.getElementById('activeTemplateId')?.value;
+
       ['general', 'theme', 'photos', 'letters', 'tokens'].forEach(t => {
         const btn = document.getElementById('tabBtn-' + t);
         const content = document.getElementById('tabContent-' + t);
+        if (!btn || !content) return;
+
         if (t === tabName) {
-          btn.className = 'px-4 py-2 rounded-full text-xs font-bold bg-[#eac34a] text-[#241a00] transition-all';
+          btn.classList.add('bg-[#eac34a]', 'text-[#241a00]');
+          btn.classList.remove('bg-[#221f21]', 'text-[#d0c3cb]', 'border', 'border-[#4d444b]', 'hover:text-white');
           content.classList.remove('hidden');
         } else {
-          btn.className = 'px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all';
+          btn.classList.remove('bg-[#eac34a]', 'text-[#241a00]');
+          btn.classList.add('bg-[#221f21]', 'text-[#d0c3cb]', 'border', 'border-[#4d444b]', 'hover:text-white');
           content.classList.add('hidden');
         }
       });
+
+      // Enforce strict hidden state for letters & tokens on non-anniversary themes
+      if (activeTemplateId && activeTemplateId !== 'anniversary_reveal') {
+        const tabBtnLetters = document.getElementById('tabBtn-letters');
+        const tabBtnTokens = document.getElementById('tabBtn-tokens');
+        if (tabBtnLetters) tabBtnLetters.classList.add('hidden');
+        if (tabBtnTokens) tabBtnTokens.classList.add('hidden');
+      }
     }
 
     function renderMilestonesList(milestones) {
