@@ -687,6 +687,19 @@ try {
         html = `
           <section class="relative pt-20 pb-16 px-4 text-center z-10">
             <div class="max-w-4xl mx-auto space-y-6">
+              <!-- Circular Gift Receiver Avatar Frame -->
+              <div class="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto group mb-2">
+                <div class="w-full h-full rounded-full p-1 bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] shadow-[0_0_30px_rgba(234,195,74,0.4)] transition-transform duration-300 group-hover:scale-105">
+                  <img id="receiverPhotoImg" src="${content.receiver_photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">
+                </div>
+                ${isEditMode ? `
+                  <button onclick="triggerReceiverPhotoUpload()" class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-2 border-[#eac34a]">
+                    <i data-lucide="camera" class="w-4 h-4 text-[#eac34a] mb-0.5"></i>
+                    <span>Change Photo</span>
+                  </button>
+                ` : ''}
+              </div>
+
               <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-[#e4b9df] text-xs font-semibold shadow-md">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
                 <span class="uppercase tracking-widest text-[11px]">A Special Question</span>
@@ -754,6 +767,19 @@ try {
         html = `
           <section class="relative pt-20 pb-16 px-4 text-center z-10">
             <div class="max-w-4xl mx-auto space-y-6">
+              <!-- Circular Gift Receiver Avatar Frame -->
+              <div class="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto group mb-2">
+                <div class="w-full h-full rounded-full p-1 bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] shadow-[0_0_30px_rgba(234,195,74,0.4)] transition-transform duration-300 group-hover:scale-105">
+                  <img id="receiverPhotoImg" src="${content.receiver_photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">
+                </div>
+                ${isEditMode ? `
+                  <button onclick="triggerReceiverPhotoUpload()" class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-2 border-[#eac34a]">
+                    <i data-lucide="camera" class="w-4 h-4 text-[#eac34a] mb-0.5"></i>
+                    <span>Change Photo</span>
+                  </button>
+                ` : ''}
+              </div>
+
               <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-[#eac34a] text-xs font-semibold shadow-md">
                 <i data-lucide="cake" class="w-4 h-4 text-[#eac34a]"></i>
                 <span class="uppercase tracking-widest text-[11px]">It's Time To Celebrate!</span>
@@ -876,6 +902,19 @@ try {
         html = `
           <section class="relative pt-20 pb-16 px-4 text-center z-10">
             <div class="max-w-4xl mx-auto space-y-6">
+              <!-- Circular Gift Receiver Avatar Frame -->
+              <div class="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto group mb-2">
+                <div class="w-full h-full rounded-full p-1 bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] shadow-[0_0_30px_rgba(234,195,74,0.4)] transition-transform duration-300 group-hover:scale-105">
+                  <img id="receiverPhotoImg" src="${content.receiver_photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">
+                </div>
+                ${isEditMode ? `
+                  <button onclick="triggerReceiverPhotoUpload()" class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-2 border-[#eac34a]">
+                    <i data-lucide="camera" class="w-4 h-4 text-[#eac34a] mb-0.5"></i>
+                    <span>Change Photo</span>
+                  </button>
+                ` : ''}
+              </div>
+
               <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-[#eac34a] text-xs font-semibold shadow-md">
                 <i data-lucide="globe" class="w-4 h-4 text-[#eac34a]"></i>
                 <span class="uppercase tracking-widest text-[11px]">Miles Apart, Joined At Heart</span>
