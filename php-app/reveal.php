@@ -87,30 +87,6 @@ try {
 </head>
 <body class="bg-[#151215] text-[#e8e0e3] font-sans min-h-screen relative overflow-x-hidden">
 
-<?php if ($isEditMode): ?>
-<!-- TOP STICKY BUYER LIVE EDIT BAR -->
-<div class="bg-gradient-to-r from-[#3b1e3b] via-[#221f21] to-[#3b1e3b] border-b border-[#eac34a]/60 px-4 py-3 sticky top-0 z-50 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xl text-xs">
-  <div class="flex items-center gap-2">
-    <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-    <strong class="text-[#e8e0e3] font-bold">✏️ BUYER LIVE VISUAL EDITOR — Click any section's ✏️ icon to edit &amp; preview live!</strong>
-  </div>
-  <div class="flex items-center gap-3">
-    <button onclick="openEditModal('security')" class="px-3.5 py-1.5 rounded-full bg-[#3b1e3b] border border-[#eac34a]/60 text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] font-bold text-[11px] transition-all flex items-center gap-1 cursor-pointer">
-      <i data-lucide="key-round" class="w-3 h-3"></i>
-      <span>Edit Passwords &amp; Security</span>
-    </button>
-    <a href="<?php echo APP_URL; ?>/gift/<?php echo htmlspecialchars($slug); ?>" target="_blank" class="px-3.5 py-1.5 rounded-full bg-[#151215] border border-[#eac34a]/40 text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] font-bold text-[11px] transition-all flex items-center gap-1">
-      <i data-lucide="eye" class="w-3 h-3"></i>
-      <span>View As Partner</span>
-    </a>
-    <a href="<?php echo APP_URL; ?>/edit.php" class="px-3.5 py-1.5 rounded-full bg-rose-950/80 border border-rose-500/40 text-rose-300 hover:bg-rose-600 hover:text-white font-bold text-[11px] transition-all">
-      🔒 Logout / Exit Edit
-    </a>
-  </div>
-</div>
-<?php endif; ?>
-
-  <!-- Top-Left Navigation Pill -->
   <style>
   @keyframes spinVinyl {
     from { transform: rotate(0deg); }
@@ -150,8 +126,8 @@ try {
 </div>
 <?php endif; ?>
 
-<!-- Navbar (Smart Auto-Hiding Header) -->
-<header id="revealHeader" class="fixed <?php echo $isEditMode ? 'top-10' : 'top-0'; ?> left-0 right-0 w-full z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md transition-transform duration-300 ease-in-out transform translate-y-0">
+<!-- Navbar Header -->
+<header id="revealHeader" class="fixed <?php echo $isEditMode ? 'top-10' : 'top-0'; ?> left-0 right-0 w-full z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md">
   <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
     <a href="<?php echo APP_URL; ?>" class="flex items-center gap-1.5 text-xs font-bold text-[#e8e0e3] hover:text-[#eac34a] transition-colors shrink-0">
       <i data-lucide="arrow-left" class="w-4 h-4 text-[#eac34a]"></i>
@@ -208,7 +184,7 @@ try {
   </div>
 
   <!-- STEP 7: LOCK SCREEN (Exact LockScreen.tsx DOM Layout) -->
-  <main id="lockScreenView" class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
+  <main id="lockScreenView" class="w-full flex flex-col items-center justify-center p-4 <?php echo $isEditMode ? 'pt-28' : 'pt-16'; ?> pb-16 relative z-10">
     <div class="max-w-md w-full bg-[#221f21]/90 border border-[#eac34a]/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative my-8">
       
       <!-- Header Icon / Receiver Avatar -->
@@ -283,6 +259,8 @@ try {
   <script>
     const APP_URL = '<?php echo APP_URL; ?>';
     const currentSlug = '<?php echo htmlspecialchars($slug); ?>';
+    const isEditMode = <?php echo $isEditMode ? 'true' : 'false'; ?>;
+    const activeEditToken = '<?php echo htmlspecialchars($editToken); ?>';
     let lockData = null;
 
     let isPlaying = false;
