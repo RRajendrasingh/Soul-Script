@@ -259,29 +259,56 @@ try {
     let isPlaying = false;
     let isMuted = false;
 
+    function extractYouTubeId(url) {
+      if (!url) return null;
+      let match = url.match(/\/shorts\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) return match[1];
+      match = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) return match[1];
+      match = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) return match[1];
+      match = url.match(/\/embed\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) return match[1];
+      return null;
+    }
+
     function toggleAudioPlay() {
       const audio = document.getElementById('bgAudio');
       const btn = document.getElementById('audioPlayBtn');
-      if (isPlaying) {
-        audio.pause();
-        isPlaying = false;
-        btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-white ml-0.5"></i>';
-      } else {
-        audio.play().then(() => {
+      const ytIframe = document.getElementById('ytAudioIframe');
+
+      if (ytIframe) {
+        if (isPlaying) {
+          ytIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          isPlaying = false;
+          if (btn) btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-white ml-0.5"></i>';
+        } else {
+          ytIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
           isPlaying = true;
-          btn.innerHTML = '<i data-lucide="pause" class="w-4 h-4 fill-white"></i>';
-        }).catch(err => console.log('Audio playback allowed on interaction:', err));
+          if (btn) btn.innerHTML = '<i data-lucide="pause" class="w-4 h-4 fill-white"></i>';
+        }
+      } else if (audio) {
+        if (isPlaying) {
+          audio.pause();
+          isPlaying = false;
+          if (btn) btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-white ml-0.5"></i>';
+        } else {
+          audio.play().then(() => {
+            isPlaying = true;
+            if (btn) btn.innerHTML = '<i data-lucide="pause" class="w-4 h-4 fill-white"></i>';
+          }).catch(err => console.log('Audio playback allowed on interaction:', err));
+        }
       }
-      lucide.createIcons();
+      if (typeof lucide === 'object') lucide.createIcons();
     }
 
     function toggleAudioMute() {
       const audio = document.getElementById('bgAudio');
       const btn = document.getElementById('audioMuteBtn');
       isMuted = !isMuted;
-      audio.muted = isMuted;
-      btn.innerHTML = isMuted ? '<i data-lucide="volume-x" class="w-4 h-4 text-rose-400"></i>' : '<i data-lucide="volume-2" class="w-4 h-4 text-[#eac34a]"></i>';
-      lucide.createIcons();
+      if (audio) audio.muted = isMuted;
+      if (btn) btn.innerHTML = isMuted ? '<i data-lucide="volume-x" class="w-4 h-4 text-rose-400"></i>' : '<i data-lucide="volume-2" class="w-4 h-4 text-[#eac34a]"></i>';
+      if (typeof lucide === 'object') lucide.createIcons();
     }
 
     async function loadLockMetadata() {
@@ -495,12 +522,26 @@ try {
         finalSongTitle = randomTrack.title + ' (Random Hit)';
       }
 
-      // Update Floating Music Box Audio Source
-      const audioElem = document.getElementById('bgAudio');
-      if (audioElem) {
-        audioElem.src = finalAudioUrl;
-        audioElem.play().catch(e => console.log('Auto-play ready on user tap:', e));
+      // Check if bg_music_url is a YouTube Video or Shorts URL
+      const ytVideoId = extractYouTubeId(content.bg_music_url);
+      if (ytVideoId) {
+        let ytContainer = document.getElementById('ytAudioIframeContainer');
+        if (!ytContainer) {
+          ytContainer = document.createElement('div');
+          ytContainer.id = 'ytAudioIframeContainer';
+          ytContainer.className = 'fixed top-0 left-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden';
+          document.body.appendChild(ytContainer);
+        }
+        ytContainer.innerHTML = `<iframe id="ytAudioIframe" width="100" height="100" src="https://www.youtube.com/embed/${ytVideoId}?enablejsapi=1&autoplay=1&loop=1&playlist=${ytVideoId}" allow="autoplay"></iframe>`;
+        finalSongTitle = 'YouTube Track';
+      } else {
+        const audioElem = document.getElementById('bgAudio');
+        if (audioElem) {
+          audioElem.src = finalAudioUrl;
+          audioElem.play().catch(e => console.log('Auto-play ready on user tap:', e));
+        }
       }
+
       if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
       if (document.getElementById('musicBoxSinger')) document.getElementById('musicBoxSinger').innerText = '🎙️ ' + singerName;
 
