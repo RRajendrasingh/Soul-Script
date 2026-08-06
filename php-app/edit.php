@@ -359,14 +359,39 @@ $token = trim($_GET['token'] ?? '');
           </div>
         </div>
 
-        <!-- TAB 3: SCRAPBOOK PHOTOS -->
-        <div id="tabContent-photos" class="hidden space-y-4 text-xs">
-          <div class="border-b border-[#4d444b]/40 pb-3">
-            <h3 class="text-base font-bold font-serif text-[#e8e0e3]">🖼️ Photo Scrapbook</h3>
+        <!-- TAB 4: SCRAPBOOK PHOTOS MANAGEMENT -->
+        <div id="tabContent-photos" class="hidden space-y-5 text-xs">
+          <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3">
+            <div>
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
+                <i data-lucide="image" class="w-5 h-5 text-[#eac34a]"></i>
+                <span>Photo Scrapbook Management 🖼️</span>
+              </h3>
+              <span class="text-[11px] text-[#d0c3cb]" id="dashSelectedPhotoCount">Selected: 0 photos</span>
+            </div>
+            <button type="button" onclick="document.getElementById('dashScrapbookFileInput').click()" class="px-4 py-2 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center gap-1.5 cursor-pointer shadow-md">
+              <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+              <span>Upload Photos</span>
+            </button>
+            <input type="file" id="dashScrapbookFileInput" accept="image/*" multiple class="hidden" onchange="handleDashScrapbookFiles(event)">
           </div>
 
-          <div id="editPhotosList" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <!-- Dynamic Photos -->
+          <!-- Current Selected Uploads Grid -->
+          <div class="bg-[#151215] p-4 sm:p-5 rounded-3xl border border-[#4d444b] min-h-[140px] space-y-3">
+            <div id="dashScrapbookContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+              <!-- Dynamic Photo Thumbnails with Delete X Button -->
+            </div>
+          </div>
+
+          <!-- Quick Pick Sample Photos Gallery -->
+          <div class="space-y-3 pt-2">
+            <label class="text-xs font-bold uppercase tracking-wider text-[#eac34a] flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>QUICK PICK SAMPLE ROMANTIC PHOTOS:</span>
+            </label>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-3" id="dashSamplePhotosGrid">
+              <!-- Rendered by JS -->
+            </div>
           </div>
         </div>
 
@@ -985,13 +1010,122 @@ $token = trim($_GET['token'] ?? '');
       container.appendChild(div);
     }
 
+    let dashPhotosList = [];
+
+    const SAMPLE_SCRAPBOOK_PHOTOS = [
+      'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'
+    ];
+
     function renderPhotosList(media) {
-      const container = document.getElementById('editPhotosList');
-      container.innerHTML = media.map(m => `
-        <div class="aspect-square rounded-2xl overflow-hidden border border-[#4d444b] relative group bg-[#151215]">
-          <img src="${m.file_path}" class="w-full h-full object-cover">
-        </div>
-      `).join('');
+      if (Array.isArray(media)) {
+        dashPhotosList = media.map(m => typeof m === 'string' ? m : m.file_path);
+      } else {
+        dashPhotosList = [];
+      }
+      renderDashScrapbookPhotos();
+    }
+
+    function renderDashScrapbookPhotos() {
+      const container = document.getElementById('dashScrapbookContainer');
+      const countLabel = document.getElementById('dashSelectedPhotoCount');
+      const sampleGrid = document.getElementById('dashSamplePhotosGrid');
+      if (!container) return;
+
+      if (countLabel) countLabel.innerText = `Selected: ${dashPhotosList.length} photos`;
+
+      if (dashPhotosList.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-8 text-center space-y-2">
+            <i data-lucide="image" class="w-8 h-8 text-[#d0c3cb]/50 mx-auto"></i>
+            <p class="text-xs text-[#d0c3cb]">No scrapbook photos uploaded yet. Click "Upload Photos" or pick from sample gallery below!</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = dashPhotosList.map((url, i) => `
+          <div class="aspect-square rounded-2xl overflow-hidden border border-[#4d444b] relative group bg-[#100d10] shadow-md hover:border-[#eac34a] transition-all">
+            <img src="${url}" class="w-full h-full object-cover">
+            <button type="button" onclick="deleteDashPhoto(${i})" class="absolute top-2 right-2 bg-rose-900/90 hover:bg-rose-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shadow-lg transition-colors cursor-pointer border border-rose-400/40">
+              ✕
+            </button>
+          </div>
+        `).join('');
+      }
+
+      if (sampleGrid) {
+        sampleGrid.innerHTML = SAMPLE_SCRAPBOOK_PHOTOS.map(url => {
+          const isSel = dashPhotosList.includes(url);
+          return `
+            <div onclick="toggleDashSamplePhoto('${url}')" class="aspect-square rounded-xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/40' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-105 transition-all">
+              <img src="${url}" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-black/40 flex items-center justify-center ${isSel ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity">
+                <span class="px-2 py-1 rounded-md ${isSel ? 'bg-[#eac34a] text-[#241a00]' : 'bg-[#3b1e3b] text-[#eac34a]'} font-bold text-[10px]">
+                  ${isSel ? '✓ Added' : '+ Add'}
+                </span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (typeof lucide === 'object') lucide.createIcons();
+    }
+
+    function deleteDashPhoto(index) {
+      dashPhotosList.splice(index, 1);
+      renderDashScrapbookPhotos();
+    }
+
+    function toggleDashSamplePhoto(url) {
+      const idx = dashPhotosList.indexOf(url);
+      if (idx > -1) {
+        dashPhotosList.splice(idx, 1);
+      } else {
+        dashPhotosList.push(url);
+      }
+      renderDashScrapbookPhotos();
+    }
+
+    function handleDashScrapbookFiles(e) {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const tempImg = new Image();
+          tempImg.onload = function() {
+            const canvas = document.createElement('canvas');
+            const maxDim = 800;
+            let w = tempImg.width;
+            let h = tempImg.height;
+
+            if (w > h && w > maxDim) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else if (h > maxDim) {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(tempImg, 0, 0, w, h);
+            const compressedUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+            dashPhotosList.push(compressedUrl);
+            renderDashScrapbookPhotos();
+          };
+          tempImg.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+      e.target.value = '';
     }
 
     function renderLettersList(letters) {
@@ -1177,6 +1311,7 @@ $token = trim($_GET['token'] ?? '');
         receiver_photo: document.getElementById('receiverPhotoUrl').value,
         letters: letters,
         tokens: tokens,
+        media_photos: dashPhotosList,
         template_fields: templateFields
       };
 
