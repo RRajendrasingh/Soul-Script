@@ -1,5 +1,8 @@
 <?php
 // SoulScript Configuration File
+if (!headers_sent()) {
+    header("X-Robots-Tag: noindex, nofollow", true);
+}
 
 define('APP_NAME', 'SoulScript');
 define('APP_TAGLINE', 'Personalized Surprise Reveal Websites');

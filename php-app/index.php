@@ -6,6 +6,8 @@ require_once __DIR__ . '/config/config.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
   <title><?php echo APP_NAME; ?> — Romantic Surprise Websites</title>
 
   <!-- Google Fonts -->

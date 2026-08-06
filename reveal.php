@@ -61,6 +61,7 @@ try {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
   <title>A Secret Surprise For You ✨ — <?php echo APP_NAME; ?></title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -101,7 +102,7 @@ try {
 <header id="revealHeader" class="fixed top-0 left-0 right-0 w-full z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md">
   <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
     <a href="<?php echo APP_URL; ?>" class="flex items-center gap-1.5 text-xs font-bold text-[#e8e0e3] hover:text-[#eac34a] transition-colors shrink-0">
-      <i data-lucide="arrow-left" class="w-4 h-4 text-[#eac34a]"></i>
+      <svg class="w-4 h-4 text-[#eac34a] stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
       <span class="hidden min-[360px]:inline">SoulScript Home</span>
       <span class="inline min-[360px]:hidden">Home</span>
     </a>
@@ -109,35 +110,49 @@ try {
     <div class="flex items-center gap-2 shrink-0">
       <!-- Mobile Compact Music Pill -->
       <button id="audioPlayBtnMobile" onclick="toggleAudioPlay()" class="px-2.5 py-1 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-[10px] uppercase flex items-center gap-1 shadow-md transition-all cursor-pointer">
-        <i data-lucide="music" class="w-3 h-3 text-[#241a00]"></i>
+        <svg class="w-3 h-3 text-[#241a00] stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
         <span id="musicBtnLabel">Music</span>
       </button>
 
       <a href="<?php echo APP_URL; ?>/edit.php" class="px-2.5 sm:px-3.5 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-[#eac34a]/60 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center gap-1">
-        <i data-lucide="key-round" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
+        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3"/></svg>
         <span>Buyer Login</span>
       </a>
     </div>
   </div>
 </header>
 
-<!-- Floating Audio Player Box (Desktop floating view) -->
-<div id="desktopMusicBox" class="hidden sm:flex fixed bottom-6 right-6 z-50 bg-[#221f21]/95 backdrop-blur-xl border border-[#eac34a]/40 rounded-2xl p-2.5 items-center gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+<!-- Floating Music Player Widget Box (Hidden on Lock Screen, shown only after unlock) -->
+<div id="desktopMusicBox" class="hidden fixed bottom-6 right-6 z-50 bg-[#221f21]/95 backdrop-blur-xl border border-[#eac34a]/40 rounded-2xl p-3 items-center gap-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.85)] max-w-xs sm:max-w-sm">
   <audio id="bgAudio" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3" loop preload="none"></audio>
   
-  <!-- Vinyl Disc Graphic -->
-  <div id="vinylDisc" class="w-9 h-9 rounded-full bg-black border-2 border-[#eac34a] flex items-center justify-center relative shadow-lg shrink-0">
-    <div class="w-3 h-3 rounded-full bg-[#151215] border border-[#eac34a]"></div>
+  <!-- Left: Partner Thumbnail Photo -->
+  <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] shrink-0 shadow-md">
+    <div class="w-full h-full bg-[#151215] rounded-[10px] overflow-hidden flex items-center justify-center" id="playerAvatarContainer">
+      <?php if (!empty($initialLockData['receiver_photo'])): ?>
+        <img id="playerReceiverPhotoImg" src="<?php echo htmlspecialchars($initialLockData['receiver_photo']); ?>" alt="Partner Photo" class="w-full h-full object-cover rounded-[10px]">
+      <?php else: ?>
+        <span id="playerReceiverFallback" class="text-base font-bold font-serif text-[#eac34a]"><?php echo htmlspecialchars(strtoupper(substr($initialLockData['partner_name'] ?? 'P', 0, 1))); ?></span>
+      <?php endif; ?>
+    </div>
   </div>
 
-  <button id="audioPlayBtn" onclick="toggleAudioPlay()" class="w-9 h-9 rounded-xl bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] flex items-center justify-center shadow-md transition-all shrink-0 cursor-pointer">
-    <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
-  </button>
-  <div class="text-[11px] pr-3 border-r border-[#4d444b]">
-    <span class="block font-bold text-[#e8e0e3] line-clamp-1" id="musicBoxTitle">Tum Hi Ho</span>
+  <!-- Center: Song Title, Artist & Volume Slider (Pre-set to 50%) -->
+  <div class="flex-1 min-w-0 space-y-1">
+    <div>
+      <span class="block font-bold text-xs text-[#e8e0e3] truncate leading-tight" id="musicBoxTitle">Tum Hi Ho</span>
+      <span class="block text-[10px] text-[#eac34a] truncate mt-0.5" id="musicBoxArtist">Arijit Singh</span>
+    </div>
+
+    <div class="flex items-center gap-1.5 pt-0.5">
+      <i data-lucide="volume-1" class="w-3 h-3 text-[#d0c3cb] shrink-0"></i>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5" oninput="changeAudioVolume(this.value)" class="w-full h-1 bg-[#4d444b] rounded-lg appearance-none cursor-pointer accent-[#eac34a]">
+    </div>
   </div>
-  <button id="audioMuteBtn" onclick="toggleAudioMute()" class="p-1.5 text-[#d0c3cb] hover:text-white transition-colors cursor-pointer">
-    <i data-lucide="volume-2" class="w-4 h-4 text-[#eac34a]"></i>
+
+  <!-- Right: Circular Play/Pause Button -->
+  <button id="audioPlayBtn" onclick="toggleAudioPlay()" aria-label="Play Pause Music" class="w-10 h-10 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] flex items-center justify-center shadow-lg transition-all shrink-0 cursor-pointer">
+    <svg class="w-4 h-4 fill-[#241a00] ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
   </button>
 </div>
 
@@ -243,6 +258,9 @@ try {
       return null;
     }
 
+    const PLAY_SVG = '<svg class="w-4 h-4 fill-[#241a00] ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+    const PAUSE_SVG = '<svg class="w-4 h-4 fill-[#241a00]" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+
     function toggleAudioPlay() {
       const audio = document.getElementById('bgAudio');
       const btn = document.getElementById('audioPlayBtn');
@@ -252,34 +270,31 @@ try {
         if (isPlaying) {
           ytIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
           isPlaying = false;
-          if (btn) btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-white ml-0.5"></i>';
+          if (btn) btn.innerHTML = PLAY_SVG;
         } else {
           ytIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
           isPlaying = true;
-          if (btn) btn.innerHTML = '<i data-lucide="pause" class="w-4 h-4 fill-white"></i>';
+          if (btn) btn.innerHTML = PAUSE_SVG;
         }
       } else if (audio) {
         if (isPlaying) {
           audio.pause();
           isPlaying = false;
-          if (btn) btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-white ml-0.5"></i>';
+          if (btn) btn.innerHTML = PLAY_SVG;
         } else {
           audio.play().then(() => {
             isPlaying = true;
-            if (btn) btn.innerHTML = '<i data-lucide="pause" class="w-4 h-4 fill-white"></i>';
+            if (btn) btn.innerHTML = PAUSE_SVG;
           }).catch(err => console.log('Audio playback allowed on interaction:', err));
         }
       }
-      if (typeof lucide === 'object') lucide.createIcons();
     }
 
-    function toggleAudioMute() {
+    function changeAudioVolume(val) {
       const audio = document.getElementById('bgAudio');
-      const btn = document.getElementById('audioMuteBtn');
-      isMuted = !isMuted;
-      if (audio) audio.muted = isMuted;
-      if (btn) btn.innerHTML = isMuted ? '<i data-lucide="volume-x" class="w-4 h-4 text-rose-400"></i>' : '<i data-lucide="volume-2" class="w-4 h-4 text-[#eac34a]"></i>';
-      if (typeof lucide === 'object') lucide.createIcons();
+      if (audio) {
+        audio.volume = parseFloat(val);
+      }
     }
 
     function relockGiftSession() {
@@ -287,6 +302,14 @@ try {
       if (audio) {
         audio.pause();
         audio.currentTime = 0;
+      }
+      const btn = document.getElementById('audioPlayBtn');
+      if (btn) btn.innerHTML = PLAY_SVG;
+      isPlaying = false;
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) {
+        musicBox.classList.add('hidden');
+        musicBox.classList.remove('flex');
       }
       document.getElementById('resultPageView')?.classList.add('hidden');
       document.getElementById('lockScreenView')?.classList.remove('hidden');
@@ -456,15 +479,17 @@ try {
         ]
       };
 
-      // Resolve Music Track
+      // Resolve Music Track & Titles
       let finalAudioUrl = content.bg_music_url || 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3';
-      let finalSongTitle = tf.song_title || 'Acoustic Sunset Love';
+      let finalSongTitle = content.song_title || tf.song_title || 'Acoustic Sunset Love';
+      let finalArtist = content.song_artist || '';
 
       if (finalAudioUrl === 'random_singer' || !finalAudioUrl || finalAudioUrl.includes('pixabay')) {
         const matchedList = SINGER_PLAYLISTS['arijit singh'];
         const randomTrack = matchedList[Math.floor(Math.random() * matchedList.length)];
         finalAudioUrl = randomTrack.url;
         finalSongTitle = randomTrack.title;
+        finalArtist = 'Arijit Singh';
       }
 
       // Check if bg_music_url is a YouTube Video or Shorts URL
@@ -478,16 +503,55 @@ try {
           document.body.appendChild(ytContainer);
         }
         ytContainer.innerHTML = `<iframe id="ytAudioIframe" width="100" height="100" src="https://www.youtube.com/embed/${ytVideoId}?enablejsapi=1&autoplay=1&loop=1&playlist=${ytVideoId}" allow="autoplay"></iframe>`;
-        finalSongTitle = 'YouTube Track';
+        finalSongTitle = (content.song_title && content.song_title !== 'Random Hit Track') ? content.song_title : 'YouTube Romantic Track';
+        finalArtist = 'YouTube Audio Track';
       } else {
         const audioElem = document.getElementById('bgAudio');
         if (audioElem) {
+          audioElem.volume = 0.5;
+          const volSlider = document.getElementById('volumeSlider');
+          if (volSlider) volSlider.value = 0.5;
           audioElem.src = finalAudioUrl;
-          audioElem.play().catch(e => console.log('Auto-play ready on user tap:', e));
+          audioElem.play().then(() => {
+            isPlaying = true;
+            const btn = document.getElementById('audioPlayBtn');
+            if (btn) btn.innerHTML = PAUSE_SVG;
+          }).catch(e => {
+            console.log('Auto-play ready on user tap:', e);
+            const btn = document.getElementById('audioPlayBtn');
+            if (btn) btn.innerHTML = PLAY_SVG;
+          });
         }
       }
 
+      if (!finalArtist) {
+        if (content.favorite_singers && !content.favorite_singers.includes('Tony!')) {
+          finalArtist = content.favorite_singers;
+        } else {
+          finalArtist = 'Romantic Track';
+        }
+      }
+
+      // Unhide and populate Floating Music Player Widget
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) {
+        musicBox.classList.remove('hidden');
+        musicBox.classList.add('flex');
+      }
+
       if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
+      if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').innerText = finalArtist;
+
+      // Update Partner Photo Avatar inside Music Box
+      const playerAvatarContainer = document.getElementById('playerAvatarContainer');
+      if (playerAvatarContainer) {
+        if (content.receiver_photo && content.receiver_photo.trim() !== '') {
+          playerAvatarContainer.innerHTML = `<img id="playerReceiverPhotoImg" src="${content.receiver_photo}" alt="${content.partner_name}" class="w-full h-full object-cover rounded-[10px]">`;
+        } else {
+          const pInitial = (content.partner_name || 'P').charAt(0).toUpperCase();
+          playerAvatarContainer.innerHTML = `<span id="playerReceiverFallback" class="text-base font-bold font-serif text-[#eac34a]">${pInitial}</span>`;
+        }
+      }
 
       const startDate = tf.relationship_start_date ? new Date(tf.relationship_start_date) : new Date();
       const dobStr = tf.partner_dob || '1998-11-20';
@@ -501,8 +565,8 @@ try {
       if (templateId === 'anniversary_reveal') {
 
         let html = `
-        <!-- Custom Quote Badge & Hero Section -->
-        <section class="relative pt-20 pb-12 px-4 text-center z-10">
+        <!-- Hero Header & Custom Quote Section -->
+        <section class="relative pt-20 pb-8 px-4 text-center z-10">
           <div class="max-w-4xl mx-auto space-y-6">
             
             <!-- Circular Gift Receiver Avatar Frame -->
@@ -531,82 +595,69 @@ try {
             <p class="text-xs sm:text-sm text-[#d0c3cb] max-w-md mx-auto italic font-serif leading-relaxed">
               "You are my today, my tomorrow, and all of my beautiful memories in between."
             </p>
+          </div>
+        </section>
 
-            <!-- 4-Tabbed View Switcher -->
-            <div class="pt-4 flex items-center gap-2 overflow-x-auto pb-2 px-1 sm:justify-center sm:flex-wrap">
-              <button onclick="switchRevealTab('journey')" id="revealTab-journey" class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold bg-[#eac34a] text-[#241a00] shadow-lg transition-all cursor-pointer whitespace-nowrap shrink-0">📖 Our Journey</button>
-              <button onclick="switchRevealTab('scrapbook')" id="revealTab-scrapbook" class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all cursor-pointer whitespace-nowrap shrink-0">🖼️ Scrapbook</button>
-              <button onclick="switchRevealTab('letters')" id="revealTab-letters" class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all cursor-pointer whitespace-nowrap shrink-0">✉️ Sealed Letters (${letters.length || 2})</button>
-              <button onclick="switchRevealTab('tokens')" id="revealTab-tokens" class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all cursor-pointer whitespace-nowrap shrink-0">🎟️ Love Tokens (${tokens.length || 3})</button>
+        <!-- SECTION 1: LIVE COUNTER -->
+        <section class="max-w-2xl mx-auto px-4 py-6 relative z-10">
+          <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/30 shadow-2xl text-center space-y-3">
+            <span class="text-xs font-bold uppercase tracking-widest text-[#eac34a] flex items-center justify-center gap-1.5">
+              <i data-lucide="clock" class="w-4 h-4 text-[#eac34a]"></i>
+              <span>Counting Every Second Together</span>
+            </span>
+
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-3 pt-2">
+              <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntY">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Years</span></div>
+              <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntM">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Months</span></div>
+              <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntD">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Days</span></div>
+              <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntH">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Hours</span></div>
+              <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntMin">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Mins</span></div>
+              <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntSec">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Secs</span></div>
             </div>
           </div>
         </section>
 
-        <!-- TAB 1: OUR JOURNEY -->
-        <div id="revealTabContent-journey" class="space-y-12">
-          
-          <!-- Live Counter -->
-          <section class="max-w-2xl mx-auto px-4 relative z-10">
-            <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/30 shadow-2xl text-center space-y-3">
-              <span class="text-xs font-bold uppercase tracking-widest text-[#eac34a] flex items-center justify-center gap-1.5">
-                <i data-lucide="clock" class="w-4 h-4 text-[#eac34a]"></i>
-                <span>Counting Every Second Together</span>
-              </span>
+        <!-- SECTION 2: LOVE NOTE CENTERPIECE -->
+        <section class="max-w-3xl mx-auto px-4 py-6 relative z-10">
+          <div class="bg-[#221f21] p-8 sm:p-12 rounded-3xl border border-[#eac34a]/40 shadow-2xl text-center space-y-4">
+            <i data-lucide="feather" class="w-8 h-8 text-[#eac34a] mx-auto"></i>
+            <p class="font-serif text-lg sm:text-xl italic text-[#e8e0e3] leading-relaxed">
+              "${content.love_note_text || 'Happy Anniversary my love!'}"
+            </p>
+            <p class="font-handwriting text-3xl text-[#eac34a] pt-4">— Forever yours, ${content.buyer_name}</p>
+          </div>
+        </section>
 
-              <div class="grid grid-cols-3 sm:grid-cols-6 gap-3 pt-2">
-                <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntY">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Years</span></div>
-                <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntM">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Months</span></div>
-                <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntD">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Days</span></div>
-                <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntH">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Hours</span></div>
-                <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntMin">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Mins</span></div>
-                <div class="bg-[#151215] p-3 rounded-2xl border border-[#4d444b]"><span class="text-2xl font-bold font-serif text-[#eac34a] block" id="cntSec">0</span><span class="text-[10px] uppercase text-[#d0c3cb]">Secs</span></div>
-              </div>
-            </div>
-          </section>
+        <!-- SECTION 3: OUR PRECIOUS MILESTONES TIMELINE -->
+        <section class="max-w-3xl mx-auto px-4 py-8 relative z-10">
+          <div class="text-center space-y-2 mb-12">
+            <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">OUR LOVE ROAD</span>
+            <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Our Precious Milestones</h2>
+            <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-2"></div>
+          </div>
 
-          <!-- Love Note Centerpiece -->
-          <section class="max-w-3xl mx-auto px-4 relative z-10">
-            <div class="bg-[#221f21] p-8 sm:p-12 rounded-3xl border border-[#eac34a]/40 shadow-2xl text-center space-y-4">
-              <i data-lucide="feather" class="w-8 h-8 text-[#eac34a] mx-auto"></i>
-              <p class="font-serif text-lg sm:text-xl italic text-[#e8e0e3] leading-relaxed">
-                "${content.love_note_text || 'Happy Anniversary my love!'}"
-              </p>
-              <p class="font-handwriting text-3xl text-[#eac34a] pt-4">— Forever yours, ${content.buyer_name}</p>
-            </div>
-          </section>
-
-          <!-- Vertical Timeline Road -->
-          <section class="max-w-3xl mx-auto px-4 relative z-10">
-            <div class="text-center space-y-2 mb-12">
-              <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">OUR LOVE ROAD</span>
-              <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Our Precious Milestones</h2>
-              <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-2"></div>
-            </div>
-
-            <div class="relative border-l-2 border-[#eac34a]/40 ml-4 sm:ml-32 space-y-8">
-              ${(tf.milestones || []).map(m => {
-                const dateObj = new Date(m.date || m.milestone_date || '2022-08-15');
-                const formattedDate = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-                return `
-                  <div class="relative pl-6 sm:pl-8 group">
-                    <div class="absolute -left-[9px] top-2 w-4 h-4 rounded-full bg-[#eac34a] border-4 border-[#151215] shadow-md group-hover:scale-125 transition-transform"></div>
-                    <div class="sm:absolute sm:-left-32 sm:top-1 text-xs font-bold text-[#eac34a] mb-1 sm:mb-0 sm:w-24 sm:text-right font-mono tracking-wider">
-                      ${formattedDate}
-                    </div>
-                    <div class="bg-[#221f21] p-5 rounded-2xl border border-[#4d444b] hover:border-[#eac34a]/60 shadow-xl transition-all space-y-1.5">
-                      <h3 class="text-base font-bold font-serif text-[#e8e0e3]">${m.title}</h3>
-                      <p class="text-xs text-[#d0c3cb] leading-relaxed font-sans">${m.description}</p>
-                    </div>
+          <div class="relative border-l-2 border-[#eac34a]/40 ml-4 sm:ml-32 space-y-8">
+            ${(tf.milestones || []).map(m => {
+              const dateObj = new Date(m.date || m.milestone_date || '2022-08-15');
+              const formattedDate = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+              return `
+                <div class="relative pl-6 sm:pl-8 group">
+                  <div class="absolute -left-[9px] top-2 w-4 h-4 rounded-full bg-[#eac34a] border-4 border-[#151215] shadow-md group-hover:scale-125 transition-transform"></div>
+                  <div class="sm:absolute sm:-left-32 sm:top-1 text-xs font-bold text-[#eac34a] mb-1 sm:mb-0 sm:w-24 sm:text-right font-mono tracking-wider">
+                    ${formattedDate}
                   </div>
-                `;
-              }).join('')}
-            </div>
-          </section>
+                  <div class="bg-[#221f21] p-5 rounded-2xl border border-[#4d444b] hover:border-[#eac34a]/60 shadow-xl transition-all space-y-1.5">
+                    <h3 class="text-base font-bold font-serif text-[#e8e0e3]">${m.title}</h3>
+                    <p class="text-xs text-[#d0c3cb] leading-relaxed font-sans">${m.description}</p>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </section>
 
-        </div>
-
-        <!-- TAB 2: SCRAPBOOK -->
-        <div id="revealTabContent-scrapbook" class="hidden max-w-5xl mx-auto px-4 relative z-10 space-y-8">
+        <!-- SECTION 4: PHOTO SCRAPBOOK GALLERY -->
+        <section class="max-w-5xl mx-auto px-4 py-12 relative z-10 space-y-8">
           <div class="text-center space-y-2 mb-8">
             <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">PHOTO MEMORIES</span>
             <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Our Photo Scrapbook</h2>
@@ -623,10 +674,10 @@ try {
               </div>
             `).join('')}
           </div>
-        </div>
+        </section>
 
-        <!-- TAB 3: SEALED LETTERS -->
-        <div id="revealTabContent-letters" class="hidden max-w-4xl mx-auto px-4 relative z-10 space-y-8">
+        <!-- SECTION 5: SEALED LETTERS -->
+        <section class="max-w-4xl mx-auto px-4 py-12 relative z-10 space-y-8">
           <div class="text-center space-y-2 mb-8">
             <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ENCHANTED LETTER JAR</span>
             <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Wax-Sealed Love Letters 💌</h2>
@@ -657,10 +708,10 @@ try {
               </div>
             `).join('')}
           </div>
-        </div>
+        </section>
 
-        <!-- TAB 4: LOVE TOKENS -->
-        <div id="revealTabContent-tokens" class="hidden max-w-4xl mx-auto px-4 relative z-10 space-y-8">
+        <!-- SECTION 6: LOVE TOKENS & REDEEMABLE COUPONS -->
+        <section class="max-w-4xl mx-auto px-4 py-12 relative z-10 space-y-8">
           <div class="text-center space-y-2 mb-8">
             <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">REDEEMABLE COUPONS</span>
             <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Romantic Love Tokens 🎟️</h2>
@@ -684,7 +735,7 @@ try {
               </div>
             `).join('')}
           </div>
-        </div>
+        </section>
 
         <!-- Footer Bar -->
         <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
