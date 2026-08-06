@@ -118,6 +118,20 @@ $isAdminPage = $isAdminPage ?? false;
     }
   }
 
+  function initHeaderIcons() {
+    if (typeof lucide === 'object' && typeof lucide.createIcons === 'function') {
+      lucide.createIcons();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeaderIcons);
+  } else {
+    initHeaderIcons();
+  }
+  setTimeout(initHeaderIcons, 100);
+  setTimeout(initHeaderIcons, 500);
+
   (function() {
     let lastScrollY = window.scrollY;
     const header = document.getElementById('mainHeader');
