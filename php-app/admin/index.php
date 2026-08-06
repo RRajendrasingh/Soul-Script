@@ -56,7 +56,7 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
   </div>
 
   <!-- Navbar (Smart Auto-Hiding Header) -->
-  <header id="adminHeader" class="sticky top-0 z-50 bg-[#151215]/90 backdrop-blur-xl border-b border-[#4d444b]/30 transition-transform duration-300 ease-in-out">
+  <header id="adminHeader" class="fixed top-0 left-0 right-0 w-full z-50 bg-[#151215]/90 backdrop-blur-xl border-b border-[#4d444b]/30 transition-transform duration-300 ease-in-out transform translate-y-0">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <a href="<?php echo APP_URL; ?>" class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 flex items-center justify-center">

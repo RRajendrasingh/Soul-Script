@@ -122,7 +122,7 @@ try {
 </style>
 
 <!-- Navbar (Smart Auto-Hiding Header) -->
-<header id="revealHeader" class="sticky top-0 z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md transition-transform duration-300 ease-in-out">
+<header id="revealHeader" class="fixed top-0 left-0 right-0 w-full z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md transition-transform duration-300 ease-in-out transform translate-y-0">
   <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
     <a href="<?php echo APP_URL; ?>" class="flex items-center gap-1.5 text-xs font-bold text-[#e8e0e3] hover:text-[#eac34a] transition-colors shrink-0">
       <i data-lucide="arrow-left" class="w-4 h-4 text-[#eac34a]"></i>

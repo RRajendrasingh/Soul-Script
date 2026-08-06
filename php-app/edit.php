@@ -39,7 +39,7 @@ $token = trim($_GET['token'] ?? '');
   </div>
 
   <!-- Navbar (Smart Auto-Hiding Header) -->
-  <header id="editHeader" class="sticky top-0 z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out">
+  <header id="editHeader" class="fixed top-0 left-0 right-0 w-full z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out transform translate-y-0">
     <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
       <a href="<?php echo APP_URL; ?>" class="flex items-center gap-2 sm:gap-3 text-left group shrink-0">
         <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] shadow-[0_0_15px_rgba(234,195,74,0.3)] group-hover:scale-105 transition-transform duration-300">

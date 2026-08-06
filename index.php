@@ -49,7 +49,7 @@ require_once __DIR__ . '/config/config.php';
   </div>
 
   <!-- Navbar (Smart Auto-Hiding Header) -->
-  <header id="mainHeader" class="sticky top-0 z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out">
+  <header id="mainHeader" class="fixed top-0 left-0 right-0 w-full z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out transform translate-y-0">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
       <!-- Brand Logo -->
       <a href="<?php echo APP_URL; ?>" class="flex items-center gap-2.5 text-left group shrink-0">
