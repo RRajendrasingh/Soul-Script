@@ -584,8 +584,29 @@ $token = trim($_GET['token'] ?? '');
           if (document.getElementById('secHintQuestion')) document.getElementById('secHintQuestion').value = p.hint_question || '';
           document.getElementById('loveNoteText').value = p.love_note_text || '';
           document.getElementById('taglineQuote').value = p.tagline_quote || 'Safar Khubsurat h manjil se bhi 🌹';
-          document.getElementById('bgMusicUrl').value = p.bg_music_url || '';
-          document.getElementById('receiverPhotoUrl').value = p.receiver_photo || '';
+          // Bind Music Engine State from Database
+          const songTitle = p.song_title || 'Tum Hi Ho';
+          const songArtist = p.song_artist || 'Arijit Singh';
+          const musicUrl = p.bg_music_url || '';
+
+          dashCurrentSongTitle = songTitle;
+          dashCurrentArtist = songArtist;
+          dashCurrentMusicUrl = musicUrl;
+
+          const isYt = musicUrl.includes('youtube.com') || musicUrl.includes('youtu.be');
+          if (isYt) {
+            toggleDashMusicMode('youtube_link');
+            const ytRadio = document.querySelector('input[name="dash_music_mode"][value="youtube_link"]');
+            if (ytRadio) ytRadio.checked = true;
+            document.getElementById('dashYoutubeUrlInput').value = musicUrl;
+          } else {
+            toggleDashMusicMode('itunes_search');
+            const itunesRadio = document.querySelector('input[name="dash_music_mode"][value="itunes_search"]');
+            if (itunesRadio) itunesRadio.checked = true;
+
+            document.getElementById('dashSelectedTrackTitle').innerText = songTitle;
+            document.getElementById('dashSelectedTrackArtist').innerText = 'Artist: ' + songArtist;
+          }
 
           document.getElementById('viewLivePageBtn').href = data.share_url;
           document.getElementById('dashPartnerTitle').innerText = (p.partner_name || 'Partner') + "'s Gift Dashboard";
@@ -1219,15 +1240,18 @@ $token = trim($_GET['token'] ?? '');
       const dashMusicMode = document.querySelector('input[name="dash_music_mode"]:checked')?.value || 'itunes_search';
       let finalBgMusicUrl = document.getElementById('bgMusicUrl').value;
       let finalSongTitle = dashCurrentSongTitle || 'Selected Song';
+      let finalSongArtist = dashCurrentArtist || 'Artist';
 
       if (dashMusicMode === 'itunes_search') {
         finalBgMusicUrl = dashCurrentMusicUrl || finalBgMusicUrl;
       } else if (dashMusicMode === 'youtube_link') {
         finalBgMusicUrl = document.getElementById('dashYoutubeUrlInput').value.trim() || finalBgMusicUrl;
         finalSongTitle = 'Custom YouTube Song';
+        finalSongArtist = 'YouTube';
       }
 
       templateFields.song_title = finalSongTitle;
+      templateFields.song_artist = finalSongArtist;
 
       const currentPass = document.getElementById('currentBuyerPassword')?.value.trim() || '';
       const newPass = document.getElementById('newBuyerPassword')?.value.trim() || '';
@@ -1270,6 +1294,8 @@ $token = trim($_GET['token'] ?? '');
         love_note_text: document.getElementById('loveNoteText').value,
         tagline_quote: document.getElementById('taglineQuote').value,
         bg_music_url: finalBgMusicUrl,
+        song_title: finalSongTitle,
+        song_artist: finalSongArtist,
         receiver_photo: document.getElementById('receiverPhotoUrl').value,
         letters: letters,
         tokens: tokens,
