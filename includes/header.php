@@ -94,7 +94,7 @@ $isAdminPage = $isAdminPage ?? false;
       </a>
       <a href="<?php echo APP_URL; ?>/admin/index.php" onclick="toggleMobileNavMenu()" class="px-4 py-3 rounded-xl bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] flex items-center gap-2.5">
         <i data-lucide="shield-check" class="w-4 h-4"></i>
-        <span>Admin Portal</span>
+        <span>Admin Panel</span>
       </a>
     </nav>
 
@@ -106,3 +106,51 @@ $isAdminPage = $isAdminPage ?? false;
     </div>
   </div>
 </header>
+
+<!-- Smart Unified Header JavaScript -->
+<script>
+  function toggleMobileNavMenu() {
+    const menu = document.getElementById('mobileDrawerMenu');
+    const icon = document.getElementById('hamburgerIcon');
+    if (menu) {
+      menu.classList.toggle('hidden');
+      const isOpen = !menu.classList.contains('hidden');
+      if (icon) {
+        icon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
+        if (typeof lucide === 'object') lucide.createIcons();
+      }
+    }
+  }
+
+  (function() {
+    let lastScrollY = window.scrollY;
+    const header = document.getElementById('mainHeader');
+    const scrollThreshold = 5;
+
+    if (!header) return;
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      const mobileDrawer = document.getElementById('mobileDrawerMenu');
+      const isMobileMenuOpen = mobileDrawer && !mobileDrawer.classList.contains('hidden');
+
+      if (currentScrollY <= 60 || isMobileMenuOpen) {
+        header.classList.remove('-translate-y-full');
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) {
+        return;
+      }
+
+      if (currentScrollY > lastScrollY) {
+        header.classList.add('-translate-y-full');
+      } else if (currentScrollY < lastScrollY) {
+        header.classList.remove('-translate-y-full');
+      }
+
+      lastScrollY = currentScrollY;
+    }, { passive: true });
+  })();
+</script>
