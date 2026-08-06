@@ -65,7 +65,7 @@ $token = trim($_GET['token'] ?? '');
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 space-y-8">
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 relative z-10 space-y-8">
     
     <!-- VIEW A: LOGIN SCREEN (When no token provided) -->
     <div id="loginView" class="<?php echo $token ? 'hidden' : ''; ?> max-w-md mx-auto space-y-6">

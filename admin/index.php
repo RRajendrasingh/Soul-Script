@@ -78,7 +78,7 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
     </div>
   </header>
 
-  <main class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 space-y-8">
+  <main class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 relative z-10 space-y-8">
     <?php if (!$isLoggedIn): ?>
       <!-- Admin Login Form Card -->
       <div class="max-w-md mx-auto bg-[#221f21] p-8 rounded-3xl border border-[#4d444b] shadow-2xl space-y-6 text-left">

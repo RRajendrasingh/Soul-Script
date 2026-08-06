@@ -83,7 +83,7 @@ if ($order_id) {
     </div>
   </header>
 
-  <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 space-y-8">
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 relative z-10 space-y-8">
 
   <?php if ($error): ?>
     <div class="bg-[#221f21] rounded-3xl border border-[#eac34a]/30 p-8 text-center space-y-4 shadow-2xl">
