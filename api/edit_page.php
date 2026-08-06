@@ -2,6 +2,31 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
+function saveUploadedBase64Image($photoData, $page_id, $filePrefix) {
+    if (strpos($photoData, 'data:image') === 0) {
+        preg_match('/data:image\/(.*?);base64,(.*)/', $photoData, $matches);
+        $rawExt = strtolower($matches[1] ?? 'jpg');
+        if ($rawExt === 'jpeg') $rawExt = 'jpg';
+        
+        $allowedExts = ['jpg', 'png', 'webp', 'gif'];
+        $ext = in_array($rawExt, $allowedExts) ? $rawExt : 'jpg';
+
+        $imageData = base64_decode($matches[2] ?? '');
+        
+        $targetDir = UPLOAD_DIR . '/' . $page_id;
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0755, true);
+        }
+
+        $fileName = $filePrefix . '_' . time() . '_' . rand(100, 999) . '.' . $ext;
+        $fullDiskPath = $targetDir . '/' . $fileName;
+        file_put_contents($fullDiskPath, $imageData);
+        
+        return APP_URL . '/uploads/' . $page_id . '/' . $fileName;
+    }
+    return $photoData;
+}
+
 $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
 $token = trim($_GET['token'] ?? $input['token'] ?? $_POST['token'] ?? '');
 
@@ -122,6 +147,9 @@ try {
         $favorite_singers = trim($input['favorite_singers'] ?? ($template_fields['favorite_singers'] ?? $page['favorite_singers']));
         $bg_music_url     = trim($input['bg_music_url'] ?? ($template_fields['bg_music_url'] ?? $page['bg_music_url']));
         $receiver_photo   = trim($input['receiver_photo'] ?? ($template_fields['receiver_photo'] ?? $page['receiver_photo']));
+        if (!empty($receiver_photo)) {
+            $receiver_photo = saveUploadedBase64Image($receiver_photo, $page_id, 'partner_avatar');
+        }
 
         $letters_json     = isset($input['letters']) ? json_encode($input['letters']) : (isset($template_fields['letters']) ? json_encode($template_fields['letters']) : $page['letters_json']);
         $tokens_json      = isset($input['tokens']) ? json_encode($input['tokens']) : (isset($template_fields['tokens']) ? json_encode($template_fields['tokens']) : $page['tokens_json']);
@@ -185,8 +213,9 @@ try {
             $stmtMedia = $db->prepare("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES (?, ?, ?, ?, ?)");
             foreach ($input['media_photos'] as $idx => $photoUrl) {
                 if (!empty($photoUrl)) {
+                    $finalUrl = saveUploadedBase64Image($photoUrl, $page_id, 'scrapbook_' . ($idx + 1));
                     $media_id = 'media_' . $page_id . '_' . time() . '_' . ($idx + 1);
-                    $stmtMedia->execute([$media_id, $page_id, $photoUrl, $idx + 1, 'Moments of Joy']);
+                    $stmtMedia->execute([$media_id, $page_id, $finalUrl, $idx + 1, 'Moments of Joy']);
                 }
             }
         }
