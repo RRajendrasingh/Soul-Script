@@ -135,7 +135,6 @@ try {
   </button>
   <div class="text-[11px] pr-3 border-r border-[#4d444b]">
     <span class="block font-bold text-[#e8e0e3] line-clamp-1" id="musicBoxTitle">Tum Hi Ho</span>
-    <span class="block text-[#eac34a] text-[10px] font-medium" id="musicBoxSinger">🎙️ Artist: Arijit Singh</span>
   </div>
   <button id="audioMuteBtn" onclick="toggleAudioMute()" class="p-1.5 text-[#d0c3cb] hover:text-white transition-colors cursor-pointer">
     <i data-lucide="volume-2" class="w-4 h-4 text-[#eac34a]"></i>
@@ -440,23 +439,15 @@ try {
         ]
       };
 
-      // Resolve Music Track & Singer Badge
+      // Resolve Music Track
       let finalAudioUrl = content.bg_music_url || 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3';
       let finalSongTitle = tf.song_title || 'Acoustic Sunset Love';
-      let singerName = content.favorite_singers || 'Arijit Singh & KK';
 
       if (finalAudioUrl === 'random_singer' || !finalAudioUrl || finalAudioUrl.includes('pixabay')) {
-        const key = (singerName || 'arijit singh').toLowerCase();
-        let matchedList = SINGER_PLAYLISTS['arijit singh'];
-        for (const sKey in SINGER_PLAYLISTS) {
-          if (key.includes(sKey)) {
-            matchedList = SINGER_PLAYLISTS[sKey];
-            break;
-          }
-        }
+        const matchedList = SINGER_PLAYLISTS['arijit singh'];
         const randomTrack = matchedList[Math.floor(Math.random() * matchedList.length)];
         finalAudioUrl = randomTrack.url;
-        finalSongTitle = randomTrack.title + ' (Random Hit)';
+        finalSongTitle = randomTrack.title;
       }
 
       // Check if bg_music_url is a YouTube Video or Shorts URL
@@ -480,7 +471,6 @@ try {
       }
 
       if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
-      if (document.getElementById('musicBoxSinger')) document.getElementById('musicBoxSinger').innerText = '🎙️ ' + singerName;
 
       const startDate = tf.relationship_start_date ? new Date(tf.relationship_start_date) : new Date();
       const dobStr = tf.partner_dob || '1998-11-20';
@@ -606,11 +596,11 @@ try {
             <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-2"></div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
             ${media.map(m => `
-              <div onclick="openLightbox('${m.file_path}')" class="aspect-4/5 rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#221f21] shadow-xl">
-                <img src="${m.file_path}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                <div class="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/80 to-transparent text-left">
+              <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
+                <img src="${m.file_path}" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
                   <span class="text-[10px] uppercase font-bold text-[#eac34a]">${m.caption || 'Sweet Moments'}</span>
                 </div>
               </div>
@@ -738,10 +728,10 @@ try {
           <!-- Photo Gallery -->
           <section class="max-w-4xl mx-auto px-4 py-12 relative z-10 space-y-8">
             <h2 class="text-2xl font-bold font-serif text-center text-[#e8e0e3]">Captured Memories</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
               ${media.map(m => `
-                <div onclick="openLightbox('${m.file_path}')" class="aspect-4/5 rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all">
-                  <img src="${m.file_path}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
+                  <img src="${m.file_path}" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
                 </div>
               `).join('')}
             </div>
@@ -881,10 +871,10 @@ try {
                 <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-2"></div>
               </div>
 
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
                 ${media.map(m => `
-                  <div onclick="openLightbox('${m.file_path}')" class="relative aspect-square rounded-2xl overflow-hidden group cursor-pointer bg-[#221f21] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
-                    <img src="${m.file_path}" alt="Moments of joy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                  <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden group cursor-pointer bg-[#151215] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
+                    <img src="${m.file_path}" alt="Moments of joy" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
                   </div>
                 `).join('')}
               </div>
@@ -1035,10 +1025,10 @@ try {
                 <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-2"></div>
               </div>
 
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
                 ${media.map(m => `
-                  <div onclick="openLightbox('${m.file_path}')" class="relative aspect-square rounded-2xl overflow-hidden group cursor-pointer bg-[#221f21] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
-                    <img src="${m.file_path}" alt="Distance memory" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                  <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden group cursor-pointer bg-[#151215] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
+                    <img src="${m.file_path}" alt="Distance memory" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
                   </div>
                 `).join('')}
               </div>

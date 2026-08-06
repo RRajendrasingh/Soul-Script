@@ -208,7 +208,7 @@ if ($order_id) {
           </div>
 
           <!-- Choice Mode Radios -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label class="flex items-center gap-2 p-3 bg-[#221f21] border border-[#4d444b] rounded-xl cursor-pointer hover:border-[#eac34a]">
               <input type="radio" name="music_mode" value="itunes_search" checked onchange="toggleMusicMode('itunes_search')" class="text-[#eac34a]">
               <div class="text-xs">
@@ -222,14 +222,6 @@ if ($order_id) {
               <div class="text-xs">
                 <strong class="block text-[#e8e0e3]">🎥 YouTube Link</strong>
                 <span class="text-[10px] text-[#d0c3cb]">Paste YouTube URL</span>
-              </div>
-            </label>
-
-            <label class="flex items-center gap-2 p-3 bg-[#221f21] border border-[#4d444b] rounded-xl cursor-pointer hover:border-[#eac34a]">
-              <input type="radio" name="music_mode" value="random_singer" onchange="toggleMusicMode('random_singer')" class="text-[#eac34a]">
-              <div class="text-xs">
-                <strong class="block text-[#e8e0e3]">🎙️ Favorite Singer</strong>
-                <span class="text-[10px] text-[#d0c3cb]">Auto-plays random hit</span>
               </div>
             </label>
           </div>
@@ -265,21 +257,7 @@ if ($order_id) {
               <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Paste any public YouTube video link for your partner's favorite song.</p>
             </div>
           </div>
-
-          <!-- Favorite Singer Random Play Section -->
-          <div id="randomSingerBox" class="hidden space-y-3">
-            <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Select Partner's Favorite Singer 🎙️</label>
-              <select id="favoriteSingerChoice" name="favorite_singer_choice" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
-                <option value="Arijit Singh">🎤 Arijit Singh (Auto-plays random hit: Tum Hi Ho, Kesariya, Apna Bana Le)</option>
-                <option value="KK">🎤 KK (Auto-plays random hit: Zara Sa, Labon Ko, Dil Ibadat)</option>
-                <option value="Atif Aslam">🎤 Atif Aslam (Auto-plays random hit: Tera Hone Laga Hoon, Jeene Laga Hoon)</option>
-                <option value="Shreya Ghoshal">🎤 Shreya Ghoshal (Auto-plays random hit: Sun Raha Hai, Piyu Bole)</option>
-                <option value="Darshan Raval">🎤 Darshan Raval</option>
-                <option value="Mohit Chauhan">🎤 Mohit Chauhan</option>
-              </select>
-            </div>
-          </div>
+        </div>
         </div>
 
         <div>

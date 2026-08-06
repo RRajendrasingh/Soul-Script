@@ -107,9 +107,9 @@ $token = trim($_GET['token'] ?? '');
       <!-- Dashboard Section Navigation Tabs -->
       <div class="flex items-center justify-center gap-2 overflow-x-auto pb-2">
         <button onclick="switchTab('general')" id="tabBtn-general" class="px-4 py-2 rounded-full text-xs font-bold bg-[#eac34a] text-[#241a00] transition-all">⚙️ General &amp; Music</button>
-        <button onclick="switchTab('theme')" id="tabBtn-theme" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">📍 Theme Settings</button>
-        <button onclick="switchTab('security')" id="tabBtn-security" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🔐 Security &amp; Passwords</button>
+        <button onclick="switchTab('theme')" id="tabBtn-theme" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">💍 Love Letter &amp; Answer</button>
         <button onclick="switchTab('photos')" id="tabBtn-photos" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🖼️ Scrapbook</button>
+        <button onclick="switchTab('security')" id="tabBtn-security" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🔐 Security &amp; Passwords</button>
         <button onclick="switchTab('letters')" id="tabBtn-letters" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">✉️ Sealed Letters</button>
         <button onclick="switchTab('tokens')" id="tabBtn-tokens" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🎟️ Love Tokens</button>
       </div>
@@ -125,16 +125,9 @@ $token = trim($_GET['token'] ?? '');
             <h3 class="text-base font-bold font-serif text-[#e8e0e3]">⚙️ General &amp; Music Settings</h3>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Partner's First Name</label>
-              <input type="text" id="partnerName" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" required>
-            </div>
-
-            <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Partner's Favorite Singers 🎙️</label>
-              <input type="text" id="favoriteSingers" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Arijit Singh & KK">
-            </div>
+          <div>
+            <label class="block font-semibold text-[#d0c3cb] mb-1">Partner's First Name *</label>
+            <input type="text" id="partnerName" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" required>
           </div>
 
           <div>
@@ -178,7 +171,7 @@ $token = trim($_GET['token'] ?? '');
             </div>
 
             <!-- Choice Mode Radios -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <label class="flex items-center gap-2 p-3 bg-[#221f21] border border-[#4d444b] rounded-xl cursor-pointer hover:border-[#eac34a]">
                 <input type="radio" name="dash_music_mode" value="itunes_search" checked onchange="toggleDashMusicMode('itunes_search')" class="text-[#eac34a]">
                 <div class="text-xs">
@@ -192,14 +185,6 @@ $token = trim($_GET['token'] ?? '');
                 <div class="text-xs">
                   <strong class="block text-[#e8e0e3]">🎥 YouTube / Shorts Link</strong>
                   <span class="text-[10px] text-[#d0c3cb]">Paste YouTube or Shorts URL</span>
-                </div>
-              </label>
-
-              <label class="flex items-center gap-2 p-3 bg-[#221f21] border border-[#4d444b] rounded-xl cursor-pointer hover:border-[#eac34a]">
-                <input type="radio" name="dash_music_mode" value="random_singer" onchange="toggleDashMusicMode('random_singer')" class="text-[#eac34a]">
-                <div class="text-xs">
-                  <strong class="block text-[#e8e0e3]">🎙️ Favorite Singer</strong>
-                  <span class="text-[10px] text-[#d0c3cb]">Auto-plays random hit</span>
                 </div>
               </label>
             </div>
@@ -233,21 +218,6 @@ $token = trim($_GET['token'] ?? '');
                 <label class="block font-semibold text-[#d0c3cb] mb-1">Paste YouTube Video / Shorts / Audio URL 🎥</label>
                 <input type="url" id="dashYoutubeUrlInput" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="https://www.youtube.com/watch?v=... or https://youtube.com/shorts/... or https://youtu.be/...">
                 <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Paste any public YouTube video or YouTube Shorts link. Video ID will be extracted automatically.</p>
-              </div>
-            </div>
-
-            <!-- Favorite Singer Random Play Section -->
-            <div id="dashRandomSingerBox" class="hidden space-y-3">
-              <div>
-                <label class="block font-semibold text-[#d0c3cb] mb-1">Select Partner's Favorite Singer 🎙️</label>
-                <select id="dashFavoriteSingerChoice" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
-                  <option value="Arijit Singh">🎤 Arijit Singh (Auto-plays random hit: Tum Hi Ho, Kesariya, Apna Bana Le)</option>
-                  <option value="KK">🎤 KK (Auto-plays random hit: Zara Sa, Labon Ko, Dil Ibadat)</option>
-                  <option value="Atif Aslam">🎤 Atif Aslam (Auto-plays random hit: Tera Hone Laga Hoon, Jeene Laga Hoon)</option>
-                  <option value="Shreya Ghoshal">🎤 Shreya Ghoshal (Auto-plays random hit: Sun Raha Hai, Piyu Bole)</option>
-                  <option value="Darshan Raval">🎤 Darshan Raval</option>
-                  <option value="Mohit Chauhan">🎤 Mohit Chauhan</option>
-                </select>
               </div>
             </div>
             <input type="hidden" id="bgMusicUrl" value="">
@@ -614,7 +584,6 @@ $token = trim($_GET['token'] ?? '');
           if (document.getElementById('secHintQuestion')) document.getElementById('secHintQuestion').value = p.hint_question || '';
           document.getElementById('loveNoteText').value = p.love_note_text || '';
           document.getElementById('taglineQuote').value = p.tagline_quote || 'Safar Khubsurat h manjil se bhi 🌹';
-          document.getElementById('favoriteSingers').value = p.favorite_singers || 'Arijit Singh & KK';
           document.getElementById('bgMusicUrl').value = p.bg_music_url || '';
           document.getElementById('receiverPhotoUrl').value = p.receiver_photo || '';
 
@@ -1249,19 +1218,13 @@ $token = trim($_GET['token'] ?? '');
 
       const dashMusicMode = document.querySelector('input[name="dash_music_mode"]:checked')?.value || 'itunes_search';
       let finalBgMusicUrl = document.getElementById('bgMusicUrl').value;
-      let finalFavoriteSingers = document.getElementById('dashFavoriteSingerChoice')?.value || 'Arijit Singh & KK';
       let finalSongTitle = dashCurrentSongTitle || 'Selected Song';
 
       if (dashMusicMode === 'itunes_search') {
         finalBgMusicUrl = dashCurrentMusicUrl || finalBgMusicUrl;
-        if (dashCurrentArtist) finalFavoriteSingers = dashCurrentArtist;
       } else if (dashMusicMode === 'youtube_link') {
         finalBgMusicUrl = document.getElementById('dashYoutubeUrlInput').value.trim() || finalBgMusicUrl;
         finalSongTitle = 'Custom YouTube Song';
-      } else if (dashMusicMode === 'random_singer') {
-        finalBgMusicUrl = 'random_singer';
-        finalFavoriteSingers = document.getElementById('dashFavoriteSingerChoice').value;
-        finalSongTitle = 'Random Hit';
       }
 
       templateFields.song_title = finalSongTitle;
@@ -1306,7 +1269,6 @@ $token = trim($_GET['token'] ?? '');
         new_buyer_password: newPass,
         love_note_text: document.getElementById('loveNoteText').value,
         tagline_quote: document.getElementById('taglineQuote').value,
-        favorite_singers: finalFavoriteSingers,
         bg_music_url: finalBgMusicUrl,
         receiver_photo: document.getElementById('receiverPhotoUrl').value,
         letters: letters,
