@@ -92,10 +92,6 @@ $isAdminPage = $isAdminPage ?? false;
         <i data-lucide="key-round" class="w-4 h-4"></i>
         <span>Buyer Login Portal</span>
       </a>
-      <a href="<?php echo APP_URL; ?>/admin/index.php" onclick="toggleMobileNavMenu()" class="px-4 py-3 rounded-xl bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] flex items-center gap-2.5">
-        <i data-lucide="shield-check" class="w-4 h-4"></i>
-        <span>Admin Panel</span>
-      </a>
     </nav>
 
     <div class="pt-2 border-t border-[#4d444b]/40">
