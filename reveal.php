@@ -97,37 +97,8 @@ try {
   }
 </style>
 
-<?php if ($isEditMode): ?>
-<!-- Sticky Top Live Edit Banner Bar -->
-<div class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#3b1e3b] via-[#4d224d] to-[#3b1e3b] border-b border-[#eac34a]/60 text-[#eac34a] px-3 sm:px-6 py-2 text-xs font-bold flex items-center justify-between shadow-2xl backdrop-blur-md">
-  <div class="flex items-center gap-2">
-    <span class="px-2.5 py-1 rounded-full bg-[#eac34a] text-[#241a00] font-extrabold text-[10px] uppercase tracking-wider shadow-md animate-pulse">
-      ✏️ LIVE EDIT MODE ACTIVE
-    </span>
-    <span class="hidden md:inline text-[#e8e0e3] font-normal text-[11px]">
-      Click any section's ✏️ icon or photo to edit live.
-    </span>
-  </div>
-  <div class="flex items-center gap-2">
-    <button onclick="openLiveSectionEditor('security')" class="px-2.5 py-1 bg-[#221f21] hover:bg-[#eac34a] hover:text-[#241a00] text-[#e8e0e3] border border-[#4d444b] rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer">
-      <i data-lucide="key" class="w-3 h-3 text-[#eac34a]"></i>
-      <span class="hidden sm:inline">Security &amp; Passwords</span>
-      <span class="inline sm:hidden">Security</span>
-    </button>
-    <a href="<?php echo APP_URL . '/gift/' . $slug; ?>" target="_blank" class="px-2.5 py-1 bg-[#221f21] hover:bg-[#eac34a] hover:text-[#241a00] text-[#e8e0e3] border border-[#4d444b] rounded-lg text-[10px] font-bold transition-all flex items-center gap-1">
-      <i data-lucide="eye" class="w-3 h-3 text-[#e4b9df]"></i>
-      <span class="hidden sm:inline">Partner View ↗</span>
-      <span class="inline sm:hidden">Preview</span>
-    </a>
-    <a href="<?php echo APP_URL . '/edit.php?token=' . $editToken; ?>" class="px-2.5 py-1 bg-[#eac34a] text-[#241a00] font-bold rounded-lg text-[10px] hover:bg-[#ffe088] transition-all">
-      Portal ➔
-    </a>
-  </div>
-</div>
-<?php endif; ?>
-
 <!-- Navbar Header -->
-<header id="revealHeader" class="fixed <?php echo $isEditMode ? 'top-10' : 'top-0'; ?> left-0 right-0 w-full z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md">
+<header id="revealHeader" class="fixed top-0 left-0 right-0 w-full z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md">
   <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
     <a href="<?php echo APP_URL; ?>" class="flex items-center gap-1.5 text-xs font-bold text-[#e8e0e3] hover:text-[#eac34a] transition-colors shrink-0">
       <i data-lucide="arrow-left" class="w-4 h-4 text-[#eac34a]"></i>
@@ -142,16 +113,10 @@ try {
         <span id="musicBtnLabel">Music</span>
       </button>
 
-      <?php if ($isEditMode): ?>
-        <span class="px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40">
-          ✏️ Edit Active
-        </span>
-      <?php else: ?>
-        <a href="<?php echo APP_URL; ?>/edit.php" class="px-2.5 sm:px-3.5 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-[#eac34a]/60 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center gap-1">
-          <i data-lucide="key-round" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
-          <span>Buyer Login</span>
-        </a>
-      <?php endif; ?>
+      <a href="<?php echo APP_URL; ?>/edit.php" class="px-2.5 sm:px-3.5 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-[#eac34a]/60 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center gap-1">
+        <i data-lucide="key-round" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
+        <span>Buyer Login</span>
+      </a>
     </div>
   </div>
 </header>
@@ -439,43 +404,8 @@ try {
       }
     }
 
-    // AUTO-BYPASS LOCK SCREEN FOR BUYER EDIT MODE
-    document.addEventListener('DOMContentLoaded', async () => {
-      const isEditMode = <?php echo $isEditMode ? 'true' : 'false'; ?>;
-      const editToken  = '<?php echo htmlspecialchars($editToken); ?>';
-      if (isEditMode && editToken) {
-        try {
-          const res = await fetch('<?php echo APP_URL; ?>/api/verify_hint.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slug: currentSlug, bypass_edit_token: editToken })
-          });
-          const data = await res.json();
-          if (data.success) {
-            lockData = data;
-            document.getElementById('lockPartnerName').innerText = data.partner_name;
-            document.getElementById('lockBuyerName').innerText = data.buyer_name;
-            document.getElementById('askBuyerName').innerText = data.buyer_name;
-            document.getElementById('lockHintQuestion').innerText = `"${data.hint_question}"`;
-
-            const pName = data.partner_name || 'Partner';
-            const pInitial = pName.charAt(0).toUpperCase();
-            const avatarContainer = document.getElementById('lockAvatarContainer');
-            if (avatarContainer) {
-              if (data.receiver_photo && data.receiver_photo.trim() !== '') {
-                avatarContainer.innerHTML = `<img id="lockReceiverPhotoImg" src="${data.receiver_photo}" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">`;
-              } else {
-                avatarContainer.innerHTML = `<span id="lockReceiverFallback" class="text-2xl font-bold font-serif text-[#eac34a]">${pInitial}</span>`;
-              }
-            }
-            document.getElementById('lockScreenView').classList.add('hidden');
-            document.getElementById('resultPageView').classList.remove('hidden');
-            renderResultPage(data);
-          }
-        } catch (err) {
-          console.warn('Edit mode auto-bypass error:', err);
-        }
-      }
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLockMetadata();
     });
 
     function renderResultPage(data) {
@@ -784,9 +714,10 @@ try {
                 ` : ''}
               </div>
 
-              <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-[#e4b9df] text-xs font-semibold shadow-md">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-                <span class="uppercase tracking-widest text-[11px]">A Special Question</span>
+              <!-- Floating Romantic Quote Banner -->
+              <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#e4b9df]/40 text-[#eac34a] text-xs font-bold shadow-lg backdrop-blur-md">
+                <i data-lucide="sparkles" class="w-4 h-4 text-[#eac34a]"></i>
+                <span class="font-serif italic text-sm tracking-wide">"${content.tagline_quote || 'Safar Khubsurat h manjil se bhi 🌹'}"</span>
               </div>
               <h1 class="text-4xl sm:text-6xl font-extrabold font-serif text-[#e8e0e3]">
                 Will You Marry Me, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#e4b9df]">${content.partner_name}</span>?
@@ -1366,299 +1297,7 @@ try {
       if (!str) return '';
       return String(str).replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
-
-    function openLiveSectionEditor(section) {
-      const modal = document.getElementById('liveEditorModal');
-      const titleElem = document.getElementById('liveEditorTitle');
-      const bodyElem = document.getElementById('liveEditorBody');
-
-      if (!modal || !lockData) return;
-
-      const content = lockData.content || {};
-      const tf = content.template_fields || {};
-
-      let html = '';
-
-      if (section === 'quote') {
-        titleElem.innerText = '✏️ Edit Tagline Quote & Note';
-        html = `
-          <div class="space-y-4 text-xs text-left">
-            <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Partner Name</label>
-              <input type="text" id="livePartnerName" value="${escapeHtml(content.partner_name || '')}" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]">
-            </div>
-
-            <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Tagline Quote Banner 🌹</label>
-              <input type="text" id="liveTaglineQuote" value="${escapeHtml(content.tagline_quote || '')}" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]">
-              
-              <div class="pt-2 flex flex-wrap gap-1.5">
-                <button type="button" onclick="document.getElementById('liveTaglineQuote').value='Safar Khubsurat h manjil se bhi 🌹'" class="px-2 py-1 bg-[#3b1e3b] text-[#eac34a] text-[10px] rounded-lg">Preset 1</button>
-                <button type="button" onclick="document.getElementById('liveTaglineQuote').value='In your smile, I see something more beautiful than stars ✨'" class="px-2 py-1 bg-[#3b1e3b] text-[#eac34a] text-[10px] rounded-lg">Preset 2</button>
-                <button type="button" onclick="document.getElementById('liveTaglineQuote').value='You are my favorite notification 💖'" class="px-2 py-1 bg-[#3b1e3b] text-[#eac34a] text-[10px] rounded-lg">Preset 3</button>
-              </div>
-            </div>
-
-            <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Love Note Message</label>
-              <textarea id="liveLoveNoteText" rows="3" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl p-3 text-xs text-[#e8e0e3]">${escapeHtml(content.love_note_text || '')}</textarea>
-            </div>
-          </div>
-        `;
-      } else if (section === 'music') {
-        titleElem.innerText = '🎵 Universal Live Song Search & Music';
-        html = `
-          <div class="space-y-4 text-xs text-left">
-            <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Search iTunes Song Database 🔍</label>
-              <input type="text" oninput="handleItunesLiveSearch(this.value)" placeholder="Type song title or artist (e.g. Arijit Singh - Tum Hi Ho)..." class="w-full bg-[#151215] border border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]">
-              <div id="liveItunesResults" class="hidden mt-2 max-h-48 overflow-y-auto space-y-1 bg-[#151215] border border-[#4d444b] p-2 rounded-xl"></div>
-            </div>
-
-            <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Or YouTube Song URL 🎥</label>
-              <input type="url" id="liveYoutubeUrl" value="${content.bg_music_url && content.bg_music_url.includes('youtube') ? escapeHtml(content.bg_music_url) : ''}" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3]">
-            </div>
-
-            <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Selected Singer / Artist Name</label>
-              <input type="text" id="liveFavoriteSingers" value="${escapeHtml(content.favorite_singers || 'Arijit Singh & KK')}" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3]">
-            </div>
-          </div>
-        `;
-      } else if (section === 'security') {
-        titleElem.innerText = '🔒 Edit Buyer Password & Hint Lock';
-        html = `
-          <div class="space-y-4 text-xs text-left">
-            <div class="p-3 bg-[#3b1e3b]/60 border border-[#eac34a]/30 rounded-xl space-y-1">
-              <span class="font-bold text-[#eac34a] block">🔑 Buyer Account Password</span>
-              <p class="text-[10px] text-[#d0c3cb]">Password used to log in at soulscript.in/edit</p>
-              <input type="password" id="liveBuyerPassword" placeholder="Enter new secret edit password (optional)" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3]">
-            </div>
-
-            <div class="p-3 bg-[#151215] border border-[#4d444b] rounded-xl space-y-3">
-              <span class="font-bold text-[#e8e0e3] block">🔐 Recipient Hint Question &amp; Secret Answer</span>
-              <div>
-                <label class="block font-semibold text-[#d0c3cb] mb-1">Hint Question (Shown on lock screen)</label>
-                <input type="text" id="liveHintQuestion" value="${escapeHtml(content.hint_question || '')}" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3]">
-              </div>
-              <div>
-                <label class="block font-semibold text-[#d0c3cb] mb-1">Hint Secret Answer (Used to unlock)</label>
-                <input type="text" id="liveHintAnswer" placeholder="Type new secret answer (leave blank to keep current)" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3]">
-              </div>
-            </div>
-          </div>
-        `;
-      } else {
-        titleElem.innerText = '✏️ Live Section Customization';
-        html = `<div class="text-xs text-[#d0c3cb]">Update content live. Click save below.</div>`;
-      }
-
-      bodyElem.innerHTML = html;
-      document.getElementById('liveEditorSaveBtn').onclick = () => saveLiveSectionChanges(section);
-
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function closeLiveEditorModal() {
-      const modal = document.getElementById('liveEditorModal');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      }
-    }
-
-    let liveItunesTimer = null;
-    let liveChosenMusicUrl = '';
-    let liveChosenSongTitle = '';
-    let liveChosenArtist = '';
-
-    function handleItunesLiveSearch(query) {
-      clearTimeout(liveItunesTimer);
-      const container = document.getElementById('liveItunesResults');
-      if (!query.trim()) {
-        container.classList.add('hidden');
-        return;
-      }
-
-      liveItunesTimer = setTimeout(async () => {
-        try {
-          container.innerHTML = '<div class="p-2 text-center text-xs text-[#eac34a]">Searching iTunes...</div>';
-          container.classList.remove('hidden');
-
-          const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=6`);
-          const data = await res.json();
-
-          if (data.results && data.results.length > 0) {
-            container.innerHTML = data.results.map(item => `
-              <div class="p-2 bg-[#221f21] hover:bg-[#3b1e3b] rounded-lg flex items-center justify-between transition-all">
-                <div class="flex items-center gap-2 overflow-hidden">
-                  <img src="${item.artworkUrl60 || item.artworkUrl100}" class="w-8 h-8 rounded-md object-cover">
-                  <div class="truncate">
-                    <span class="block font-bold text-xs text-[#e8e0e3] truncate">${escapeHtml(item.trackName)}</span>
-                    <span class="block text-[10px] text-[#d0c3cb] truncate">${escapeHtml(item.artistName)}</span>
-                  </div>
-                </div>
-                <button type="button" onclick="selectLiveItunesSong('${escapeHtml(item.previewUrl)}', '${escapeHtml(item.trackName)}', '${escapeHtml(item.artistName)}')" class="px-2.5 py-1 bg-[#eac34a] text-[#241a00] font-bold text-[10px] rounded-md">
-                  + Select
-                </button>
-              </div>
-            `).join('');
-          } else {
-            container.innerHTML = '<div class="p-2 text-center text-xs text-[#d0c3cb]">No songs found</div>';
-          }
-        } catch (err) {
-          container.innerHTML = '<div class="p-2 text-center text-xs text-rose-400">Search error</div>';
-        }
-      }, 350);
-    }
-
-    function selectLiveItunesSong(url, title, artist) {
-      liveChosenMusicUrl = url;
-      liveChosenSongTitle = title;
-      liveChosenArtist = artist;
-      document.getElementById('liveFavoriteSingers').value = artist;
-      document.getElementById('liveItunesResults').classList.add('hidden');
-      alert(`Selected "${title}" by ${artist}! Click Save to update live.`);
-    }
-
-    async function saveLiveSectionChanges(section) {
-      const btn = document.getElementById('liveEditorSaveBtn');
-      btn.innerText = 'Saving Live...';
-      btn.disabled = true;
-
-      const payload = { token: activeEditToken };
-
-      if (section === 'quote') {
-        payload.partner_name = document.getElementById('livePartnerName').value.trim();
-        payload.tagline_quote = document.getElementById('liveTaglineQuote').value.trim();
-        payload.love_note_text = document.getElementById('liveLoveNoteText').value.trim();
-      } else if (section === 'music') {
-        const ytUrl = document.getElementById('liveYoutubeUrl').value.trim();
-        payload.favorite_singers = document.getElementById('liveFavoriteSingers').value.trim();
-        payload.bg_music_url = ytUrl || liveChosenMusicUrl || lockData.content.bg_music_url;
-        payload.template_fields = { song_title: liveChosenSongTitle || lockData.content.template_fields.song_title };
-      } else if (section === 'security') {
-        const pass = document.getElementById('liveBuyerPassword').value.trim();
-        const hintQ = document.getElementById('liveHintQuestion').value.trim();
-        const hintA = document.getElementById('liveHintAnswer').value.trim();
-        payload.hint_question = hintQ;
-        if (hintA) payload.hint_answer = hintA;
-        if (pass) payload.buyer_password = pass;
-      }
-
-      try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/edit_page.php?token=' + encodeURIComponent(activeEditToken), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
-          closeLiveEditorModal();
-          // Reload fresh lock data
-          const lockRes = await fetch('<?php echo APP_URL; ?>/api/get_page_lock.php?slug=' + encodeURIComponent(currentSlug));
-          const lockJson = await lockRes.json();
-          if (lockJson.success) {
-            lockData = lockJson;
-            renderSurpriseContent(lockData);
-          }
-        } else {
-          alert('Save Error: ' + data.message);
-        }
-      } catch (err) {
-        alert('Server Error: ' + err.message);
-      } finally {
-        btn.innerText = 'Save & Apply Live ✨';
-        btn.disabled = false;
-      }
-    }
-
-    function triggerReceiverPhotoUpload() {
-      const modal = document.getElementById('liveEditorModal');
-      const title = document.getElementById('liveEditorTitle');
-      const body = document.getElementById('liveEditorBody');
-      const saveBtn = document.getElementById('liveEditorSaveBtn');
-
-      title.innerText = '📷 Change Gift Receiver Photo';
-      const currentPhoto = (lockData && lockData.content && lockData.content.receiver_photo) ? lockData.content.receiver_photo : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400';
-
-      body.innerHTML = `
-        <div class="space-y-4 text-left">
-          <div class="flex items-center gap-4 bg-[#151215] p-3 rounded-2xl border border-[#4d444b]">
-            <img id="livePhotoPreview" src="${currentPhoto}" class="w-16 h-16 rounded-full border-2 border-[#eac34a] object-cover shrink-0">
-            <div class="flex-1">
-              <input type="file" id="livePhotoFileInput" accept="image/*" onchange="handleLivePhotoSelect(this)" class="hidden">
-              <button type="button" onclick="document.getElementById('livePhotoFileInput').click()" class="px-4 py-2 bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 font-bold text-xs rounded-xl hover:bg-[#eac34a] hover:text-[#241a00] transition-all cursor-pointer flex items-center gap-1.5">
-                <i data-lucide="camera" class="w-4 h-4"></i>
-                <span>Choose New Photo</span>
-              </button>
-              <input type="hidden" id="livePhotoBase64" value="${currentPhoto}">
-              <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Upload portrait photo of your partner/friend.</p>
-            </div>
-          </div>
-        </div>
-      `;
-
-      window.handleLivePhotoSelect = function(input) {
-        if (input.files && input.files[0]) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            const tempImg = new Image();
-            tempImg.onload = function() {
-              const canvas = document.createElement('canvas');
-              canvas.width = 400;
-              canvas.height = 400;
-              const ctx = canvas.getContext('2d');
-              const baseScale = Math.max(400 / tempImg.width, 400 / tempImg.height);
-              const drawW = tempImg.width * baseScale;
-              const drawH = tempImg.height * baseScale;
-              ctx.drawImage(tempImg, (400 - drawW) / 2, (400 - drawH) / 2, drawW, drawH);
-              const compressedUrl = canvas.toDataURL('image/jpeg', 0.85);
-              document.getElementById('livePhotoPreview').src = compressedUrl;
-              document.getElementById('livePhotoBase64').value = compressedUrl;
-            };
-            tempImg.src = e.target.result;
-          };
-          reader.readAsDataURL(input.files[0]);
-        }
-      };
-
-      saveBtn.onclick = function() {
-        const newPhoto = document.getElementById('livePhotoBase64').value;
-        saveLiveField('receiver_photo', newPhoto);
-      };
-
-      modal.classList.remove('hidden');
-      if (typeof lucide === 'object') lucide.createIcons();
-    }
   </script>
-
-  <!-- In-Place Live Visual Editor Modal -->
-  <div id="liveEditorModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6 flex items-start sm:items-center justify-center py-8 sm:py-12" onclick="closeLiveEditorModal()">
-    <div class="relative max-w-lg w-full bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/60 shadow-2xl space-y-6 text-center my-auto max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
-      <div class="flex items-center justify-between border-b border-[#4d444b] pb-3">
-        <h3 id="liveEditorTitle" class="text-lg font-bold font-serif text-[#e8e0e3]"></h3>
-        <button onclick="closeLiveEditorModal()" class="text-[#d0c3cb] hover:text-white p-1 cursor-pointer">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      
-      <div id="liveEditorBody"></div>
-
-      <div class="flex items-center justify-end gap-3 pt-2">
-        <button onclick="closeLiveEditorModal()" class="px-4 py-2 bg-[#151215] text-[#d0c3cb] font-bold text-xs rounded-xl border border-[#4d444b] cursor-pointer">
-          Cancel
-        </button>
-        <button id="liveEditorSaveBtn" class="px-6 py-2.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all cursor-pointer">
-          Save &amp; Apply Live ✨
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- Letter Reading Modal -->
   <div id="letterModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6 flex items-start sm:items-center justify-center py-8 sm:py-12" onclick="closeLetterModal()">

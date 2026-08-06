@@ -108,6 +108,7 @@ $token = trim($_GET['token'] ?? '');
       <div class="flex items-center justify-center gap-2 overflow-x-auto pb-2">
         <button onclick="switchTab('general')" id="tabBtn-general" class="px-4 py-2 rounded-full text-xs font-bold bg-[#eac34a] text-[#241a00] transition-all">⚙️ General &amp; Music</button>
         <button onclick="switchTab('theme')" id="tabBtn-theme" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">📍 Theme Settings</button>
+        <button onclick="switchTab('security')" id="tabBtn-security" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🔐 Security &amp; Passwords</button>
         <button onclick="switchTab('photos')" id="tabBtn-photos" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🖼️ Scrapbook</button>
         <button onclick="switchTab('letters')" id="tabBtn-letters" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">✉️ Sealed Letters</button>
         <button onclick="switchTab('tokens')" id="tabBtn-tokens" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🎟️ Love Tokens</button>
@@ -274,6 +275,44 @@ $token = trim($_GET['token'] ?? '');
         <div id="tabContent-theme" class="hidden space-y-4 text-xs">
           <div id="themeContainer">
             <!-- Dynamically populated based on template_id -->
+          </div>
+        </div>
+
+        <!-- TAB 3: SECURITY & PASSWORDS MANAGEMENT -->
+        <div id="tabContent-security" class="hidden space-y-4 text-xs">
+          <div class="border-b border-[#4d444b]/40 pb-3">
+            <h3 class="text-base font-bold font-serif text-[#e8e0e3]">🔐 Security &amp; Passwords Management</h3>
+          </div>
+
+          <div class="bg-[#151215] p-5 rounded-2xl border border-[#eac34a]/30 space-y-5">
+            <!-- Buyer Portal Login Password Box -->
+            <div class="bg-[#221f21] p-4.5 rounded-2xl border border-[#4d444b] space-y-2">
+              <label class="block font-bold text-[#e8e0e3] text-xs flex items-center gap-1.5">
+                <i data-lucide="key" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Buyer Account Password (Portal Access) 🔑</span>
+              </label>
+              <p class="text-[11px] text-[#d0c3cb]">Set a new password used to log in at <code>soulscript.in/edit</code>. Leave blank to keep current password.</p>
+              <input type="password" id="buyerAccountPassword" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="Enter new secret login password (leave blank to keep current)">
+            </div>
+
+            <!-- Lock Screen Recipient Security & Hint Question Box -->
+            <div class="bg-[#221f21] p-4.5 rounded-2xl border border-[#4d444b] space-y-4">
+              <label class="block font-bold text-[#e8e0e3] text-xs flex items-center gap-1.5">
+                <i data-lucide="shield-check" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Recipient Lock Screen Security &amp; Hint Lock 🔓</span>
+              </label>
+
+              <div>
+                <label class="block font-semibold text-[#d0c3cb] mb-1">Secret Hint Question (Shown on lock screen)</label>
+                <input type="text" id="secHintQuestion" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="e.g. Where did we take our very first trip together in 2022?">
+              </div>
+
+              <div>
+                <label class="block font-semibold text-[#d0c3cb] mb-1">New Hint Answer / Secret Unlock Password (Case-insensitive)</label>
+                <input type="text" id="secHintAnswer" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="Enter new secret answer (leave blank to keep current)">
+                <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Leave blank if you don't want to change the secret unlock answer.</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -504,6 +543,7 @@ $token = trim($_GET['token'] ?? '');
           document.getElementById('activeTemplateId').value = p.template_id;
           document.getElementById('partnerName').value = p.partner_name || '';
           document.getElementById('hintQuestion').value = p.hint_question || '';
+          if (document.getElementById('secHintQuestion')) document.getElementById('secHintQuestion').value = p.hint_question || '';
           document.getElementById('loveNoteText').value = p.love_note_text || '';
           document.getElementById('taglineQuote').value = p.tagline_quote || 'Safar Khubsurat h manjil se bhi 🌹';
           document.getElementById('favoriteSingers').value = p.favorite_singers || 'Arijit Singh & KK';
@@ -848,7 +888,7 @@ $token = trim($_GET['token'] ?? '');
     function switchTab(tabName) {
       const activeTemplateId = document.getElementById('activeTemplateId')?.value;
 
-      ['general', 'theme', 'photos', 'letters', 'tokens'].forEach(t => {
+      ['general', 'theme', 'security', 'photos', 'letters', 'tokens'].forEach(t => {
         const btn = document.getElementById('tabBtn-' + t);
         const content = document.getElementById('tabContent-' + t);
         if (!btn || !content) return;
@@ -1049,11 +1089,19 @@ $token = trim($_GET['token'] ?? '');
 
       templateFields.song_title = finalSongTitle;
 
+      const secHintQ = document.getElementById('secHintQuestion')?.value.trim();
+      const secHintA = document.getElementById('secHintAnswer')?.value.trim();
+      const buyerPass = document.getElementById('buyerAccountPassword')?.value.trim();
+
+      const finalHintQuestion = (secHintQ !== undefined && secHintQ !== '') ? secHintQ : document.getElementById('hintQuestion').value;
+      const finalHintAnswer = (secHintA !== undefined && secHintA !== '') ? secHintA : document.getElementById('hintAnswer').value;
+
       const payload = {
         token: activeToken,
         partner_name: document.getElementById('partnerName').value,
-        hint_question: document.getElementById('hintQuestion').value,
-        hint_answer: document.getElementById('hintAnswer').value,
+        hint_question: finalHintQuestion,
+        hint_answer: finalHintAnswer,
+        buyer_password: buyerPass || '',
         love_note_text: document.getElementById('loveNoteText').value,
         tagline_quote: document.getElementById('taglineQuote').value,
         favorite_singers: finalFavoriteSingers,
