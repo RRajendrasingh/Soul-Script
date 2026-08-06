@@ -38,8 +38,8 @@ $token = trim($_GET['token'] ?? '');
     <div class="absolute bottom-[-10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-[#cca830]/10 blur-[130px]"></div>
   </div>
 
-  <!-- Navbar -->
-  <header class="sticky top-0 z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+  <!-- Navbar (Smart Auto-Hiding Header) -->
+  <header id="editHeader" class="sticky top-0 z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out">
     <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
       <a href="<?php echo APP_URL; ?>" class="flex items-center gap-2 sm:gap-3 text-left group shrink-0">
         <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] shadow-[0_0_15px_rgba(234,195,74,0.3)] group-hover:scale-105 transition-transform duration-300">
@@ -264,8 +264,8 @@ $token = trim($_GET['token'] ?? '');
         if (data.success) {
           if (data.redirect_url) {
             window.location.href = data.redirect_url;
-          } else {
-            window.location.href = `<?php echo APP_URL; ?>/gift/${data.url_slug}?edit_token=${data.edit_token}`;
+          } else if (data.edit_token) {
+            window.location.href = `<?php echo APP_URL; ?>/edit.php?token=${encodeURIComponent(data.edit_token)}`;
           }
         } else {
           msg.classList.remove('hidden');
@@ -283,13 +283,9 @@ $token = trim($_GET['token'] ?? '');
     async function loadDashboardData(token) {
       if (!token) return;
 
-      try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/edit_page.php?token=' + encodeURIComponent(token));
-        const data = await res.json();
-
-        if (data.success) {
-          window.location.href = `<?php echo APP_URL; ?>/gift/${data.page.url_slug}?edit_token=${token}`;
-        }
+      activeToken = token;
+      document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('dashboardView').classList.remove('hidden');
 
       try {
         const res = await fetch('<?php echo APP_URL; ?>/api/edit_page.php?token=' + encodeURIComponent(token));
@@ -322,7 +318,11 @@ $token = trim($_GET['token'] ?? '');
 
           lucide.createIcons();
         } else {
-          alert('Error: ' + data.message);
+          const msg = document.getElementById('loginMsg');
+          document.getElementById('loginView').classList.remove('hidden');
+          document.getElementById('dashboardView').classList.add('hidden');
+          msg.classList.remove('hidden');
+          msg.innerText = data.message || 'Invalid or expired edit link token';
         }
       } catch (err) {
         console.error(err);
@@ -512,6 +512,41 @@ $token = trim($_GET['token'] ?? '');
     if (activeToken) {
       loadDashboardData(activeToken);
     }
+
+    // Smart Smooth Auto-Hiding Header Script
+    (function() {
+      let lastScrollY = window.scrollY;
+      const header = document.getElementById('editHeader');
+      const scrollThreshold = 5;
+
+      if (!header) return;
+
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+
+        // Always show header near top of page (0 to 60px)
+        if (currentScrollY <= 60) {
+          header.classList.remove('-translate-y-full');
+          lastScrollY = currentScrollY;
+          return;
+        }
+
+        // Ignore micro scroll jitter
+        if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) {
+          return;
+        }
+
+        if (currentScrollY > lastScrollY) {
+          // Scrolling Down -> Smoothly Hide Header
+          header.classList.add('-translate-y-full');
+        } else if (currentScrollY < lastScrollY) {
+          // Scrolling Up -> Smoothly Reveal Header
+          header.classList.remove('-translate-y-full');
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    })();
   </script>
 </body>
 </html>

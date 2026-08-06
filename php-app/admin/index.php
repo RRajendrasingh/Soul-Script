@@ -55,8 +55,8 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
     <div class="absolute bottom-[-10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-[#cca830]/10 blur-[130px]"></div>
   </div>
 
-  <!-- Navbar -->
-  <header class="sticky top-0 z-50 bg-[#151215]/90 backdrop-blur-xl border-b border-[#4d444b]/30">
+  <!-- Navbar (Smart Auto-Hiding Header) -->
+  <header id="adminHeader" class="sticky top-0 z-50 bg-[#151215]/90 backdrop-blur-xl border-b border-[#4d444b]/30 transition-transform duration-300 ease-in-out">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <a href="<?php echo APP_URL; ?>" class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 flex items-center justify-center">
@@ -300,6 +300,41 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
     }
 
     fetchOrders();
+
+    // Smart Smooth Auto-Hiding Header Script
+    (function() {
+      let lastScrollY = window.scrollY;
+      const header = document.getElementById('adminHeader');
+      const scrollThreshold = 5;
+
+      if (!header) return;
+
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+
+        // Always show header near top of page (0 to 60px)
+        if (currentScrollY <= 60) {
+          header.classList.remove('-translate-y-full');
+          lastScrollY = currentScrollY;
+          return;
+        }
+
+        // Ignore micro scroll jitter
+        if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) {
+          return;
+        }
+
+        if (currentScrollY > lastScrollY) {
+          // Scrolling Down -> Smoothly Hide Header
+          header.classList.add('-translate-y-full');
+        } else if (currentScrollY < lastScrollY) {
+          // Scrolling Up -> Smoothly Reveal Header
+          header.classList.remove('-translate-y-full');
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    })();
   </script>
 </body>
 </html>
