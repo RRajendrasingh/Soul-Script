@@ -14,7 +14,7 @@ if (!$slug) {
     exit;
 }
 
-$editToken = trim($_GET['edit_token'] ?? '');
+$editToken = trim($_GET['edit_token'] ?? $_GET['token'] ?? '');
 $isEditMode = false;
 $editPageData = null;
 
@@ -121,8 +121,37 @@ try {
   }
 </style>
 
+<?php if ($isEditMode): ?>
+<!-- Sticky Top Live Edit Banner Bar -->
+<div class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#3b1e3b] via-[#4d224d] to-[#3b1e3b] border-b border-[#eac34a]/60 text-[#eac34a] px-3 sm:px-6 py-2 text-xs font-bold flex items-center justify-between shadow-2xl backdrop-blur-md">
+  <div class="flex items-center gap-2">
+    <span class="px-2.5 py-1 rounded-full bg-[#eac34a] text-[#241a00] font-extrabold text-[10px] uppercase tracking-wider shadow-md animate-pulse">
+      ✏️ LIVE EDIT MODE ACTIVE
+    </span>
+    <span class="hidden md:inline text-[#e8e0e3] font-normal text-[11px]">
+      Click any section's ✏️ icon or photo to edit live.
+    </span>
+  </div>
+  <div class="flex items-center gap-2">
+    <button onclick="openLiveSectionEditor('security')" class="px-2.5 py-1 bg-[#221f21] hover:bg-[#eac34a] hover:text-[#241a00] text-[#e8e0e3] border border-[#4d444b] rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer">
+      <i data-lucide="key" class="w-3 h-3 text-[#eac34a]"></i>
+      <span class="hidden sm:inline">Security &amp; Passwords</span>
+      <span class="inline sm:hidden">Security</span>
+    </button>
+    <a href="<?php echo APP_URL . '/gift/' . $slug; ?>" target="_blank" class="px-2.5 py-1 bg-[#221f21] hover:bg-[#eac34a] hover:text-[#241a00] text-[#e8e0e3] border border-[#4d444b] rounded-lg text-[10px] font-bold transition-all flex items-center gap-1">
+      <i data-lucide="eye" class="w-3 h-3 text-[#e4b9df]"></i>
+      <span class="hidden sm:inline">Partner View ↗</span>
+      <span class="inline sm:hidden">Preview</span>
+    </a>
+    <a href="<?php echo APP_URL . '/edit.php?token=' . $editToken; ?>" class="px-2.5 py-1 bg-[#eac34a] text-[#241a00] font-bold rounded-lg text-[10px] hover:bg-[#ffe088] transition-all">
+      Portal ➔
+    </a>
+  </div>
+</div>
+<?php endif; ?>
+
 <!-- Navbar (Smart Auto-Hiding Header) -->
-<header id="revealHeader" class="fixed top-0 left-0 right-0 w-full z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md transition-transform duration-300 ease-in-out transform translate-y-0">
+<header id="revealHeader" class="fixed <?php echo $isEditMode ? 'top-10' : 'top-0'; ?> left-0 right-0 w-full z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md transition-transform duration-300 ease-in-out transform translate-y-0">
   <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
     <a href="<?php echo APP_URL; ?>" class="flex items-center gap-1.5 text-xs font-bold text-[#e8e0e3] hover:text-[#eac34a] transition-colors shrink-0">
       <i data-lucide="arrow-left" class="w-4 h-4 text-[#eac34a]"></i>
