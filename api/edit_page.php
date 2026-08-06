@@ -182,10 +182,11 @@ try {
         // Update Media / Scrapbook Photos if provided
         if (isset($input['media_photos']) && is_array($input['media_photos'])) {
             $db->prepare("DELETE FROM page_media WHERE page_id = ?")->execute([$page_id]);
-            $stmtMedia = $db->prepare("INSERT INTO page_media (page_id, display_order, file_path, media_type) VALUES (?, ?, ?, 'image')");
+            $stmtMedia = $db->prepare("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES (?, ?, ?, ?, ?)");
             foreach ($input['media_photos'] as $idx => $photoUrl) {
                 if (!empty($photoUrl)) {
-                    $stmtMedia->execute([$page_id, $idx + 1, $photoUrl]);
+                    $media_id = 'media_' . $page_id . '_' . time() . '_' . ($idx + 1);
+                    $stmtMedia->execute([$media_id, $page_id, $photoUrl, $idx + 1, 'Moments of Joy']);
                 }
             }
         }
