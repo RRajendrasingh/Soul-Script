@@ -81,17 +81,22 @@ $token = trim($_GET['token'] ?? '');
     <!-- VIEW B: BUYER DASHBOARD (When logged in / token active) -->
     <div id="dashboardView" class="<?php echo $token ? '' : 'hidden'; ?> space-y-6">
       
-      <!-- Dashboard Header -->
-      <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="space-y-1 text-center sm:text-left">
-          <span class="text-[10px] uppercase tracking-[0.2em] text-[#eac34a] font-bold bg-[#3b1e3b] px-3 py-1 rounded-full border border-[#e4b9df]/20">
-            🔑 Buyer Manage Dashboard
-          </span>
-          <h1 class="text-2xl font-bold font-serif text-[#e8e0e3]">Edit Your Surprise Reveal Page</h1>
-          <p class="text-xs text-[#d0c3cb]">Update quotes, background music, story milestones, photos, letters, and tokens anytime.</p>
+      <!-- Active Plan Badge Banner & Share Link -->
+      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3 text-left">
+          <div class="w-12 h-12 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center shrink-0">
+            <i data-lucide="sparkles" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <span id="activePlanBadge" class="text-[10px] uppercase font-bold tracking-widest text-[#eac34a] bg-[#3b1e3b] px-3 py-0.5 rounded-full border border-[#e4b9df]/20 inline-block mb-1">
+              Active Plan
+            </span>
+            <h2 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]" id="dashPartnerTitle">Partner Gift Dashboard</h2>
+            <p class="text-xs text-[#d0c3cb]">Update your gift contents in real-time below.</p>
+          </div>
         </div>
 
-        <div class="flex gap-2">
+        <div class="flex items-center gap-2">
           <a id="viewLivePageBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#ffe088] transition-all">
             <span>View Live Gift</span>
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
@@ -102,7 +107,7 @@ $token = trim($_GET['token'] ?? '');
       <!-- Dashboard Section Navigation Tabs -->
       <div class="flex items-center justify-center gap-2 overflow-x-auto pb-2">
         <button onclick="switchTab('general')" id="tabBtn-general" class="px-4 py-2 rounded-full text-xs font-bold bg-[#eac34a] text-[#241a00] transition-all">⚙️ General &amp; Music</button>
-        <button onclick="switchTab('milestones')" id="tabBtn-milestones" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">📍 Story Road</button>
+        <button onclick="switchTab('theme')" id="tabBtn-theme" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">📍 Theme Settings</button>
         <button onclick="switchTab('photos')" id="tabBtn-photos" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🖼️ Scrapbook</button>
         <button onclick="switchTab('letters')" id="tabBtn-letters" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">✉️ Sealed Letters</button>
         <button onclick="switchTab('tokens')" id="tabBtn-tokens" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🎟️ Love Tokens</button>
@@ -111,6 +116,7 @@ $token = trim($_GET['token'] ?? '');
       <!-- Main Edit Form -->
       <form id="editPageForm" onsubmit="saveDashboardChanges(event)" class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#4d444b]/50 shadow-2xl space-y-6">
         <input type="hidden" id="activeEditToken" value="<?php echo htmlspecialchars($token); ?>">
+        <input type="hidden" id="activeTemplateId" value="">
 
         <!-- TAB 1: GENERAL & MUSIC -->
         <div id="tabContent-general" class="space-y-4 text-xs">
@@ -136,6 +142,11 @@ $token = trim($_GET['token'] ?? '');
           </div>
 
           <div>
+            <label class="block font-semibold text-[#d0c3cb] mb-1">Gift Receiver / Partner Photo URL 🖼️</label>
+            <input type="text" id="receiverPhotoUrl" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="https://... or base64 photo data">
+          </div>
+
+          <div>
             <label class="block font-semibold text-[#d0c3cb] mb-1">Background Audio MP3 URL 🎵</label>
             <input type="url" id="bgMusicUrl" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="https://example.com/song.mp3">
           </div>
@@ -156,17 +167,10 @@ $token = trim($_GET['token'] ?? '');
             <label class="block font-semibold text-[#d0c3cb] mb-1">Short Love Note / Signature Message</label>
             <textarea id="loveNoteText" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl p-4 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" rows="3"></textarea>
           </div>
-        </div>
-
-        <!-- TAB 2: STORY MILESTONES -->
-        <div id="tabContent-milestones" class="hidden space-y-4 text-xs">
-          <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3">
-            <h3 class="text-base font-bold font-serif text-[#e8e0e3]">📍 Story Road Milestones</h3>
-            <button type="button" onclick="addMilestoneRow()" class="px-3 py-1 rounded-lg bg-[#3b1e3b] text-[#eac34a] font-bold text-[11px] border border-[#eac34a]/30 hover:bg-[#eac34a] hover:text-black transition-all">+ Add Milestone</button>
-          </div>
-
-          <div id="editMilestonesList" class="space-y-3">
-            <!-- Dynamic Rows -->
+        <!-- TAB 2: DYNAMIC TEMPLATE-ISOLATED THEME SETTINGS -->
+        <div id="tabContent-theme" class="hidden space-y-4 text-xs">
+          <div id="themeContainer">
+            <!-- Dynamically populated based on template_id -->
           </div>
         </div>
 
@@ -272,17 +276,20 @@ $token = trim($_GET['token'] ?? '');
 
         if (data.success) {
           const p = data.page;
+          document.getElementById('activeTemplateId').value = p.template_id;
           document.getElementById('partnerName').value = p.partner_name || '';
           document.getElementById('hintQuestion').value = p.hint_question || '';
           document.getElementById('loveNoteText').value = p.love_note_text || '';
           document.getElementById('taglineQuote').value = p.tagline_quote || 'Safar Khubsurat h manjil se bhi 🌹';
           document.getElementById('favoriteSingers').value = p.favorite_singers || 'Arijit Singh & KK';
           document.getElementById('bgMusicUrl').value = p.bg_music_url || '';
+          document.getElementById('receiverPhotoUrl').value = p.receiver_photo || '';
 
           document.getElementById('viewLivePageBtn').href = data.share_url;
+          document.getElementById('dashPartnerTitle').innerText = (p.partner_name || 'Partner') + "'s Gift Dashboard";
 
-          // Render Milestones
-          renderMilestonesList(data.milestones || []);
+          // Render Template Isolated Theme Tab
+          renderThemeContainer(p, data);
 
           // Render Photos
           renderPhotosList(data.media || []);
@@ -308,8 +315,135 @@ $token = trim($_GET['token'] ?? '');
       }
     }
 
+    function renderThemeContainer(p, data) {
+      const templateId = p.template_id;
+      const themeContainer = document.getElementById('themeContainer');
+      const badge = document.getElementById('activePlanBadge');
+      const tabBtn = document.getElementById('tabBtn-theme');
+
+      if (templateId === 'birthday_magic') {
+        badge.innerText = '✨ Managing: Birthday Magic Plan (Active)';
+        tabBtn.innerText = '🎂 Birthday & Reasons';
+
+        themeContainer.innerHTML = `
+          <div class="space-y-4">
+            <div class="border-b border-[#4d444b]/40 pb-3">
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">🎂 Birthday Settings &amp; Reasons</h3>
+            </div>
+            <div>
+              <label class="block font-semibold text-[#d0c3cb] mb-1">Partner Date of Birth (Next Birthday Countdown)</label>
+              <input type="date" id="partnerDob" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]" value="${p.partner_dob || ''}">
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-[#4d444b]/30">
+              <label class="block font-semibold text-[#d0c3cb]">Reasons I Love Celebrating You (Dynamic List)</label>
+              <button type="button" onclick="addReasonRow()" class="px-3 py-1 rounded-lg bg-[#3b1e3b] text-[#eac34a] font-bold text-[11px] border border-[#eac34a]/30 hover:bg-[#eac34a] hover:text-black transition-all">+ Add Reason</button>
+            </div>
+            <div id="editReasonsList" class="space-y-2"></div>
+          </div>
+        `;
+        renderReasonsList(data.reasons || []);
+
+      } else if (templateId === 'perfect_proposal') {
+        badge.innerText = '✨ Managing: Perfect Proposal Plan (Active)';
+        tabBtn.innerText = '💍 Love Letter & Answer';
+
+        const resp = data.proposal_response;
+        const answerStatusHtml = resp ? 
+          `<span class="text-xs font-bold text-[#eac34a]">💍 Partner Answered: "${resp.response.toUpperCase() === 'YES' ? 'YES! A Thousand Times Yes' : 'Let\'s Talk & Celebrate'}" (${resp.created_at || 'Recent'})</span>` : 
+          `<span class="text-xs text-[#d0c3cb] font-medium">⏳ Partner has not answered the proposal question yet.</span>`;
+
+        themeContainer.innerHTML = `
+          <div class="space-y-4">
+            <div class="border-b border-[#4d444b]/40 pb-3">
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">💍 Proposal Love Letter &amp; Live Answer Status</h3>
+            </div>
+            <div>
+              <label class="block font-semibold text-[#d0c3cb] mb-1">Full Proposal Love Letter Centerpiece</label>
+              <textarea id="loveLetterText" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl p-4 text-xs text-[#e8e0e3]" rows="6">${p.love_letter_text || ''}</textarea>
+            </div>
+            <div class="bg-[#151215] p-5 rounded-2xl border border-[#eac34a]/40 text-center space-y-2">
+              <span class="text-[10px] uppercase font-bold text-[#eac34a] block tracking-widest">LIVE PROPOSAL RESPONSE STATUS</span>
+              ${answerStatusHtml}
+            </div>
+          </div>
+        `;
+
+      } else if (templateId === 'long_distance_love') {
+        badge.innerText = '✨ Managing: Long Distance Love Plan (Active)';
+        tabBtn.innerText = '🌍 Cities & Reunion Date';
+
+        themeContainer.innerHTML = `
+          <div class="space-y-4">
+            <div class="border-b border-[#4d444b]/40 pb-3">
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">🌍 Dual Cities, Clocks &amp; Reunion Date</h3>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-semibold text-[#d0c3cb] mb-1">Buyer City Name</label>
+                <input type="text" id="buyerCity" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]" placeholder="e.g. London" value="${p.buyer_city || ''}">
+              </div>
+              <div>
+                <label class="block font-semibold text-[#d0c3cb] mb-1">Partner City Name</label>
+                <input type="text" id="partnerCity" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]" placeholder="e.g. Bangalore" value="${p.partner_city || ''}">
+              </div>
+            </div>
+            <div>
+              <label class="block font-semibold text-[#d0c3cb] mb-1">Next Reunion Date (Live Countdown)</label>
+              <input type="date" id="reunionDate" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]" value="${p.reunion_date || ''}">
+            </div>
+            <div>
+              <label class="block font-semibold text-[#d0c3cb] mb-1">Shared Spotify / Music Playlist URL</label>
+              <input type="url" id="playlistUrl" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]" placeholder="https://open.spotify.com/playlist/..." value="${p.playlist_url || ''}">
+            </div>
+          </div>
+        `;
+
+      } else {
+        // Default: anniversary_reveal
+        badge.innerText = '✨ Managing: Anniversary Reveal Plan (Active)';
+        tabBtn.innerText = '📍 Story Road Milestones';
+
+        themeContainer.innerHTML = `
+          <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3">
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">📍 Story Road Milestones</h3>
+              <button type="button" onclick="addMilestoneRow()" class="px-3 py-1 rounded-lg bg-[#3b1e3b] text-[#eac34a] font-bold text-[11px] border border-[#eac34a]/30 hover:bg-[#eac34a] hover:text-black transition-all">+ Add Milestone</button>
+            </div>
+            <div>
+              <label class="block font-semibold text-[#d0c3cb] mb-1">Relationship Start Date (Live Together Counter)</label>
+              <input type="date" id="relationshipStartDate" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]" value="${p.relationship_start_date || ''}">
+            </div>
+            <div id="editMilestonesList" class="space-y-3"></div>
+          </div>
+        `;
+        renderMilestonesList(data.milestones || []);
+      }
+    }
+
+    function renderReasonsList(reasons) {
+      const container = document.getElementById('editReasonsList');
+      if (!container) return;
+      if (reasons.length === 0) {
+        reasons = ['Your contagious smile', 'The way you care for everyone', 'Our hilarious inside jokes'];
+      }
+      container.innerHTML = reasons.map((r, i) => `
+        <div class="flex items-center gap-2">
+          <input type="text" class="edit-reason-item w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2.5 text-xs text-[#e8e0e3]" value="${r}" placeholder="Reason ${i + 1}">
+        </div>
+      `).join('');
+    }
+
+    function addReasonRow() {
+      const container = document.getElementById('editReasonsList');
+      if (!container) return;
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-2';
+      div.innerHTML = `<input type="text" class="edit-reason-item w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2.5 text-xs text-[#e8e0e3]" placeholder="New reason to celebrate">`;
+      container.appendChild(div);
+    }
+
     function switchTab(tabName) {
-      ['general', 'milestones', 'photos', 'letters', 'tokens'].forEach(t => {
+      ['general', 'theme', 'photos', 'letters', 'tokens'].forEach(t => {
         const btn = document.getElementById('tabBtn-' + t);
         const content = document.getElementById('tabContent-' + t);
         if (t === tabName) {
@@ -324,6 +458,7 @@ $token = trim($_GET['token'] ?? '');
 
     function renderMilestonesList(milestones) {
       const container = document.getElementById('editMilestonesList');
+      if (!container) return;
       if (milestones.length === 0) {
         milestones = [{ title: '', milestone_date: '', description: '' }];
       }
@@ -339,6 +474,7 @@ $token = trim($_GET['token'] ?? '');
 
     function addMilestoneRow() {
       const container = document.getElementById('editMilestonesList');
+      if (!container) return;
       const div = document.createElement('div');
       div.className = 'bg-[#151215] p-4 rounded-2xl border border-[#4d444b] space-y-2';
       div.innerHTML = `
@@ -427,14 +563,6 @@ $token = trim($_GET['token'] ?? '');
       btn.disabled = true;
       msg.innerText = '';
 
-      const milestones = [];
-      document.querySelectorAll('#editMilestonesList > div').forEach(div => {
-        const title = div.querySelector('.edit-m-title')?.value;
-        const date = div.querySelector('.edit-m-date')?.value;
-        const desc = div.querySelector('.edit-m-desc')?.value;
-        if (title) milestones.push({ title: title, date: date || '', description: desc || '' });
-      });
-
       const letters = [];
       document.querySelectorAll('#editLettersList > div').forEach(div => {
         const title = div.querySelector('.edit-l-title')?.value;
@@ -451,6 +579,40 @@ $token = trim($_GET['token'] ?? '');
         if (title) tokens.push({ id: tokens.length + 1, title: title, badge: badge || 'Coupon', description: desc || '' });
       });
 
+      const templateId = document.getElementById('activeTemplateId').value;
+      const templateFields = {};
+
+      if (templateId === 'birthday_magic') {
+        const pDob = document.getElementById('partnerDob')?.value;
+        const reasons = [];
+        document.querySelectorAll('#editReasonsList .edit-reason-item').forEach(inp => {
+          if (inp.value.trim()) reasons.push(inp.value.trim());
+        });
+        templateFields.partner_dob = pDob;
+        templateFields.reasons = reasons;
+
+      } else if (templateId === 'perfect_proposal') {
+        templateFields.love_letter_text = document.getElementById('loveLetterText')?.value;
+
+      } else if (templateId === 'long_distance_love') {
+        templateFields.buyer_city = document.getElementById('buyerCity')?.value;
+        templateFields.partner_city = document.getElementById('partnerCity')?.value;
+        templateFields.reunion_date = document.getElementById('reunionDate')?.value;
+        templateFields.playlist_url = document.getElementById('playlistUrl')?.value;
+
+      } else {
+        // anniversary_reveal
+        templateFields.relationship_start_date = document.getElementById('relationshipStartDate')?.value;
+        const milestones = [];
+        document.querySelectorAll('#editMilestonesList > div').forEach(div => {
+          const title = div.querySelector('.edit-m-title')?.value;
+          const date = div.querySelector('.edit-m-date')?.value;
+          const desc = div.querySelector('.edit-m-desc')?.value;
+          if (title) milestones.push({ title: title, date: date || '', description: desc || '' });
+        });
+        templateFields.milestones = milestones;
+      }
+
       const payload = {
         token: activeToken,
         partner_name: document.getElementById('partnerName').value,
@@ -460,11 +622,10 @@ $token = trim($_GET['token'] ?? '');
         tagline_quote: document.getElementById('taglineQuote').value,
         favorite_singers: document.getElementById('favoriteSingers').value,
         bg_music_url: document.getElementById('bgMusicUrl').value,
+        receiver_photo: document.getElementById('receiverPhotoUrl').value,
         letters: letters,
         tokens: tokens,
-        template_fields: {
-          milestones: milestones
-        }
+        template_fields: templateFields
       };
 
       try {
