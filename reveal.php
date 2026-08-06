@@ -185,8 +185,12 @@ try {
       <!-- Header Icon / Receiver Avatar -->
       <div class="text-center space-y-3">
         <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[2px] mx-auto shadow-[0_0_25px_rgba(234,195,74,0.4)]">
-          <div class="w-full h-full bg-[#151215] rounded-full flex items-center justify-center overflow-hidden">
-            <img id="lockReceiverPhotoImg" src="<?php echo htmlspecialchars(!empty($initialLockData['receiver_photo']) ? $initialLockData['receiver_photo'] : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'); ?>" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">
+          <div class="w-full h-full bg-[#151215] rounded-full flex items-center justify-center overflow-hidden" id="lockAvatarContainer">
+            <?php if (!empty($initialLockData['receiver_photo'])): ?>
+              <img id="lockReceiverPhotoImg" src="<?php echo htmlspecialchars($initialLockData['receiver_photo']); ?>" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">
+            <?php else: ?>
+              <span id="lockReceiverFallback" class="text-2xl font-bold font-serif text-[#eac34a]"><?php echo htmlspecialchars(strtoupper(substr($initialLockData['partner_name'] ?? 'P', 0, 1))); ?></span>
+            <?php endif; ?>
           </div>
         </div>
 
@@ -291,6 +295,17 @@ try {
           document.getElementById('lockBuyerName').innerText = data.buyer_name;
           document.getElementById('askBuyerName').innerText = data.buyer_name;
           document.getElementById('lockHintQuestion').innerText = `"${data.hint_question}"`;
+
+          const pName = data.partner_name || 'Partner';
+          const pInitial = pName.charAt(0).toUpperCase();
+          const avatarContainer = document.getElementById('lockAvatarContainer');
+          if (avatarContainer) {
+            if (data.receiver_photo && data.receiver_photo.trim() !== '') {
+              avatarContainer.innerHTML = `<img id="lockReceiverPhotoImg" src="${data.receiver_photo}" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">`;
+            } else {
+              avatarContainer.innerHTML = `<span id="lockReceiverFallback" class="text-2xl font-bold font-serif text-[#eac34a]">${pInitial}</span>`;
+            }
+          }
 
           if (data.is_locked) {
             triggerCooldown(data.locked_until_seconds);
@@ -404,6 +419,21 @@ try {
           const data = await res.json();
           if (data.success) {
             lockData = data;
+            document.getElementById('lockPartnerName').innerText = data.partner_name;
+            document.getElementById('lockBuyerName').innerText = data.buyer_name;
+            document.getElementById('askBuyerName').innerText = data.buyer_name;
+            document.getElementById('lockHintQuestion').innerText = `"${data.hint_question}"`;
+
+            const pName = data.partner_name || 'Partner';
+            const pInitial = pName.charAt(0).toUpperCase();
+            const avatarContainer = document.getElementById('lockAvatarContainer');
+            if (avatarContainer) {
+              if (data.receiver_photo && data.receiver_photo.trim() !== '') {
+                avatarContainer.innerHTML = `<img id="lockReceiverPhotoImg" src="${data.receiver_photo}" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">`;
+              } else {
+                avatarContainer.innerHTML = `<span id="lockReceiverFallback" class="text-2xl font-bold font-serif text-[#eac34a]">${pInitial}</span>`;
+              }
+            }
             document.getElementById('lockScreenView').classList.add('hidden');
             document.getElementById('resultPageView').classList.remove('hidden');
             renderResultPage(data);
@@ -477,6 +507,12 @@ try {
       const startDate = tf.relationship_start_date ? new Date(tf.relationship_start_date) : new Date();
       const dobStr = tf.partner_dob || '1998-11-20';
 
+      const pName = content.partner_name || 'Partner';
+      const pInitial = pName.charAt(0).toUpperCase();
+      const photoAvatarHtml = content.receiver_photo && content.receiver_photo.trim() !== '' ?
+        `<img id="receiverPhotoImg" src="${content.receiver_photo}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">` :
+        `<div id="receiverPhotoImg" class="w-full h-full rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#151215] flex items-center justify-center font-bold text-3xl sm:text-4xl font-serif shadow-inner">${pInitial}</div>`;
+
       if (templateId === 'anniversary_reveal') {
 
         let html = `
@@ -487,7 +523,7 @@ try {
             <!-- Circular Gift Receiver Avatar Frame -->
             <div class="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto group mb-2">
               <div class="w-full h-full rounded-full p-1 bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] shadow-[0_0_30px_rgba(234,195,74,0.4)] transition-transform duration-300 group-hover:scale-105">
-                <img id="receiverPhotoImg" src="${content.receiver_photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">
+                ${photoAvatarHtml}
               </div>
               ${isEditMode ? `
                 <button onclick="triggerReceiverPhotoUpload()" class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-2 border-[#eac34a]">
@@ -690,7 +726,7 @@ try {
               <!-- Circular Gift Receiver Avatar Frame -->
               <div class="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto group mb-2">
                 <div class="w-full h-full rounded-full p-1 bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] shadow-[0_0_30px_rgba(234,195,74,0.4)] transition-transform duration-300 group-hover:scale-105">
-                  <img id="receiverPhotoImg" src="${content.receiver_photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">
+                  ${photoAvatarHtml}
                 </div>
                 ${isEditMode ? `
                   <button onclick="triggerReceiverPhotoUpload()" class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-2 border-[#eac34a]">
@@ -770,7 +806,7 @@ try {
               <!-- Circular Gift Receiver Avatar Frame -->
               <div class="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto group mb-2">
                 <div class="w-full h-full rounded-full p-1 bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] shadow-[0_0_30px_rgba(234,195,74,0.4)] transition-transform duration-300 group-hover:scale-105">
-                  <img id="receiverPhotoImg" src="${content.receiver_photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">
+                  ${photoAvatarHtml}
                 </div>
                 ${isEditMode ? `
                   <button onclick="triggerReceiverPhotoUpload()" class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-2 border-[#eac34a]">
@@ -905,7 +941,7 @@ try {
               <!-- Circular Gift Receiver Avatar Frame -->
               <div class="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto group mb-2">
                 <div class="w-full h-full rounded-full p-1 bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] shadow-[0_0_30px_rgba(234,195,74,0.4)] transition-transform duration-300 group-hover:scale-105">
-                  <img id="receiverPhotoImg" src="${content.receiver_photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400'}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">
+                  ${photoAvatarHtml}
                 </div>
                 ${isEditMode ? `
                   <button onclick="triggerReceiverPhotoUpload()" class="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-2 border-[#eac34a]">

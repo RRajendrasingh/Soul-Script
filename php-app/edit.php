@@ -141,9 +141,30 @@ $token = trim($_GET['token'] ?? '');
             <input type="text" id="taglineQuote" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Safar Khubsurat h manjil se bhi 🌹" required>
           </div>
 
+          <!-- Visual Gift Receiver Avatar Photo Manager -->
           <div>
-            <label class="block font-semibold text-[#d0c3cb] mb-1">Gift Receiver / Partner Photo URL 🖼️</label>
-            <input type="text" id="receiverPhotoUrl" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="https://... or base64 photo data">
+            <label class="block font-semibold text-[#d0c3cb] mb-1.5">Gift Receiver / Partner Profile Photo 🖼️</label>
+            <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] flex flex-col sm:flex-row items-center gap-4">
+              <div id="partnerAvatarContainer" class="w-16 h-16 rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#eac34a] flex items-center justify-center font-bold text-2xl shadow-[0_0_20px_rgba(234,195,74,0.3)] shrink-0 overflow-hidden">
+                <span id="partnerAvatarFallback">A</span>
+                <img id="partnerAvatarImg" src="" class="w-full h-full object-cover hidden">
+              </div>
+              <div class="flex-1 text-center sm:text-left space-y-2">
+                <input type="file" id="dashPhotoInput" accept="image/*" onchange="handleDashPhotoSelect(this)" class="hidden">
+                <input type="hidden" id="receiverPhotoUrl" value="">
+                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <button type="button" onclick="document.getElementById('dashPhotoInput').click()" class="px-4 py-2 bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-md">
+                    <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                    <span>Upload / Change Photo</span>
+                  </button>
+                  <button type="button" onclick="removeDashPhoto()" id="removePhotoBtn" class="px-3 py-2 bg-[#221f21] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs rounded-xl transition-all cursor-pointer hidden flex items-center gap-1.5">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    <span>Remove Photo</span>
+                  </button>
+                </div>
+                <p class="text-[10px] text-[#d0c3cb]/70">Upload a portrait photo to show at the top of the surprise page. If no photo is added, partner's initial character will be displayed.</p>
+              </div>
+            </div>
           </div>
 
           <div>
@@ -288,6 +309,9 @@ $token = trim($_GET['token'] ?? '');
           document.getElementById('viewLivePageBtn').href = data.share_url;
           document.getElementById('dashPartnerTitle').innerText = (p.partner_name || 'Partner') + "'s Gift Dashboard";
 
+          // Update Partner Photo Avatar Manager UI
+          updatePartnerPhotoAvatar(p.receiver_photo, p.partner_name);
+
           // Render Template Isolated Theme Tab
           renderThemeContainer(p, data);
 
@@ -315,11 +339,66 @@ $token = trim($_GET['token'] ?? '');
       }
     }
 
+    function updatePartnerPhotoAvatar(photoUrl, partnerName) {
+      const fallback = document.getElementById('partnerAvatarFallback');
+      const img = document.getElementById('partnerAvatarImg');
+      const removeBtn = document.getElementById('removePhotoBtn');
+      const hiddenInput = document.getElementById('receiverPhotoUrl');
+
+      const nameChar = (partnerName || 'P').charAt(0).toUpperCase();
+      fallback.innerText = nameChar;
+
+      if (photoUrl && photoUrl.trim() !== '') {
+        hiddenInput.value = photoUrl;
+        img.src = photoUrl;
+        img.classList.remove('hidden');
+        fallback.classList.add('hidden');
+        removeBtn.classList.remove('hidden');
+        removeBtn.classList.add('flex');
+      } else {
+        hiddenInput.value = '';
+        img.src = '';
+        img.classList.add('hidden');
+        fallback.classList.remove('hidden');
+        removeBtn.classList.add('hidden');
+        removeBtn.classList.remove('flex');
+      }
+    }
+
+    function handleDashPhotoSelect(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const partnerName = document.getElementById('partnerName').value || 'Partner';
+          updatePartnerPhotoAvatar(e.target.result, partnerName);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removeDashPhoto() {
+      const partnerName = document.getElementById('partnerName').value || 'Partner';
+      document.getElementById('dashPhotoInput').value = '';
+      updatePartnerPhotoAvatar('', partnerName);
+    }
+
     function renderThemeContainer(p, data) {
       const templateId = p.template_id;
       const themeContainer = document.getElementById('themeContainer');
       const badge = document.getElementById('activePlanBadge');
       const tabBtn = document.getElementById('tabBtn-theme');
+      const tabBtnLetters = document.getElementById('tabBtn-letters');
+      const tabBtnTokens = document.getElementById('tabBtn-tokens');
+
+      // Hide Sealed Letters & Love Tokens for non-anniversary themes
+      if (templateId === 'anniversary_reveal') {
+        tabBtnLetters.classList.remove('hidden');
+        tabBtnTokens.classList.remove('hidden');
+      } else {
+        tabBtnLetters.classList.add('hidden');
+        tabBtnTokens.classList.add('hidden');
+      }
 
       if (templateId === 'birthday_magic') {
         badge.innerText = '✨ Managing: Birthday Magic Plan (Active)';
