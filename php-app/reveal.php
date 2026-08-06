@@ -282,6 +282,23 @@ try {
       if (typeof lucide === 'object') lucide.createIcons();
     }
 
+    function relockGiftSession() {
+      const audio = document.getElementById('bgAudio');
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+      document.getElementById('resultPageView')?.classList.add('hidden');
+      document.getElementById('lockScreenView')?.classList.remove('hidden');
+      if (document.getElementById('answerInput')) {
+        document.getElementById('answerInput').value = '';
+      }
+      const msg = document.getElementById('lockMessage');
+      if (msg) msg.classList.add('hidden');
+      loadLockMetadata();
+      window.scrollTo(0, 0);
+    }
+
     async function loadLockMetadata() {
       try {
         const res = await fetch('<?php echo APP_URL; ?>/api/get_page_lock.php?slug=' + encodeURIComponent(currentSlug));
@@ -673,10 +690,10 @@ try {
         <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
           <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
           <div class="flex items-center justify-center gap-3">
-            <a href="${APP_URL}/edit" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all">
-              <i data-lucide="edit" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+            <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+              <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
               <span>Unlock Editor Access 🔑</span>
-            </a>
+            </button>
           </div>
         </footer>
       `;
@@ -901,6 +918,17 @@ try {
               </div>
             </div>
           </section>
+
+          <!-- Footer Bar -->
+          <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
+            <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
+            <div class="flex items-center justify-center gap-3">
+              <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span>Unlock Editor Access 🔑</span>
+              </button>
+            </div>
+          </footer>
         `;
 
         container.innerHTML = html;
@@ -1055,6 +1083,17 @@ try {
               </div>
             </div>
           </section>
+
+          <!-- Footer Bar -->
+          <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
+            <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
+            <div class="flex items-center justify-center gap-3">
+              <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span>Unlock Editor Access 🔑</span>
+              </button>
+            </div>
+          </footer>
         `;
 
         container.innerHTML = html;
@@ -1074,6 +1113,17 @@ try {
               </div>
             </div>
           </section>
+
+          <!-- Footer Bar -->
+          <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
+            <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
+            <div class="flex items-center justify-center gap-3">
+              <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span>Unlock Editor Access 🔑</span>
+              </button>
+            </div>
+          </footer>
         `;
         container.innerHTML = html;
         lucide.createIcons();

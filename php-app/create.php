@@ -375,6 +375,38 @@ Today, I want to ask you the most important question of my life. Will you take m
             <!-- Rendered by JS -->
           </div>
         </div>
+      </div>
+
+      <!-- Sealed Letters Section ("Open When..." Cards) -->
+      <div class="space-y-4 pt-4 border-t border-[#4d444b]/40">
+        <div class="flex items-center justify-between">
+          <div>
+            <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">✉️ SEALED LETTERS ("OPEN WHEN..." CARDS)</label>
+            <span class="text-[11px] text-[#d0c3cb]">Create emotional notes your partner can unseal</span>
+          </div>
+          <button type="button" onclick="addCreateLetter()" class="px-4 py-2 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>Add Letter</span>
+          </button>
+        </div>
+        <div id="createLettersList" class="space-y-3"></div>
+      </div>
+
+      <!-- Love Tokens & Redeemable Coupons Section -->
+      <div class="space-y-4 pt-4 border-t border-[#4d444b]/40">
+        <div class="flex items-center justify-between">
+          <div>
+            <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">🎟️ LOVE TOKENS &amp; REDEEMABLE COUPONS</label>
+            <span class="text-[11px] text-[#d0c3cb]">Create fun coupons your partner can redeem anytime</span>
+          </div>
+          <button type="button" onclick="addCreateToken()" class="px-4 py-2 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>Add Coupon</span>
+          </button>
+        </div>
+        <div id="createTokensList" class="space-y-3"></div>
+      </div>
+
       <div class="border-b border-[#4d444b]/40 pb-4 pt-4">
         <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">4. Hint Security Gate &amp; Secret Password Setup</h3>
       </div>
@@ -625,10 +657,114 @@ Today, I want to ask you the most important question of my life. Will you take m
 
     let selectedPhotoUrls = [SAMPLE_PHOTOS[0], SAMPLE_PHOTOS[1], SAMPLE_PHOTOS[2]];
 
-    // Initialize Milestones & Sample Photos on DOM load
+    let createLettersList = [
+      { id: "let_1", title: "Open When You Miss Me 💌", category: "Romantic", unlock_condition: "immediate", content: "Remember that no matter the distance, my heart is always right there with you." },
+      { id: "let_2", title: "Open When You Feel Stressed 🌸", category: "Support", unlock_condition: "immediate", content: "Take a deep breath. You are capable of amazing things and I am always proud of you!" }
+    ];
+
+    let createTokensList = [
+      { id: "tok_1", title: "1x Midnight Ice Cream Run 🍦", code: "ICECREAM", description: "Valid anytime, no questions asked!" },
+      { id: "tok_2", title: "1x Movie Night Choice 🎬", code: "MOVIENIGHT", description: "You pick the movie, I make the popcorn!" },
+      { id: "tok_3", title: "1x Unlimited Warm Hugs 🫂", code: "HUGS", description: "Redeemable for 10 minutes of uninterrupted tight hugs." }
+    ];
+
+    function renderCreateLetters() {
+      const container = document.getElementById('createLettersList');
+      if (!container) return;
+      container.innerHTML = createLettersList.map((letObj, i) => `
+        <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#eac34a]">Letter #${i + 1}</span>
+            <button type="button" onclick="removeCreateLetter(${i})" class="text-rose-400 hover:text-rose-300 text-xs font-bold flex items-center gap-1 cursor-pointer">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Remove
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-[#d0c3cb] text-[11px] mb-1">Letter Title ("Open When...")</label>
+              <input type="text" class="create-letter-title w-full bg-[#221f21] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3]" value="${escapeHtml(letObj.title)}">
+            </div>
+            <div>
+              <label class="block font-semibold text-[#d0c3cb] text-[11px] mb-1">Category / Tag</label>
+              <input type="text" class="create-letter-cat w-full bg-[#221f21] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3]" value="${escapeHtml(letObj.category)}">
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold text-[#d0c3cb] text-[11px] mb-1">Letter Content / Secret Message</label>
+            <textarea rows="2" class="create-letter-content w-full bg-[#221f21] border border-[#4d444b] rounded-xl p-3 text-xs text-[#e8e0e3]">${escapeHtml(letObj.content)}</textarea>
+          </div>
+        </div>
+      `).join('');
+      if (typeof lucide === 'object') lucide.createIcons();
+    }
+
+    function addCreateLetter() {
+      createLettersList.push({
+        id: "let_" + Date.now(),
+        title: "Open When You Need A Smile 😊",
+        category: "Love",
+        unlock_condition: "immediate",
+        content: "I love you more than words can express!"
+      });
+      renderCreateLetters();
+    }
+
+    function removeCreateLetter(index) {
+      createLettersList.splice(index, 1);
+      renderCreateLetters();
+    }
+
+    function renderCreateTokens() {
+      const container = document.getElementById('createTokensList');
+      if (!container) return;
+      container.innerHTML = createTokensList.map((tok, i) => `
+        <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#eac34a]">Token #${i + 1}</span>
+            <button type="button" onclick="removeCreateToken(${i})" class="text-rose-400 hover:text-rose-300 text-xs font-bold flex items-center gap-1 cursor-pointer">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Remove
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-[#d0c3cb] text-[11px] mb-1">Coupon Title</label>
+              <input type="text" class="create-token-title w-full bg-[#221f21] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3]" value="${escapeHtml(tok.title)}">
+            </div>
+            <div>
+              <label class="block font-semibold text-[#d0c3cb] text-[11px] mb-1">Coupon Code</label>
+              <input type="text" class="create-token-code w-full bg-[#221f21] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3]" value="${escapeHtml(tok.code)}">
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold text-[#d0c3cb] text-[11px] mb-1">Coupon Description / Rule</label>
+            <input type="text" class="create-token-desc w-full bg-[#221f21] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3]" value="${escapeHtml(tok.description)}">
+          </div>
+        </div>
+      `).join('');
+      if (typeof lucide === 'object') lucide.createIcons();
+    }
+
+    function addCreateToken() {
+      createTokensList.push({
+        id: "tok_" + Date.now(),
+        title: "1x Romantic Dinner Out 🍷",
+        code: "DINNER",
+        description: "Redeemable for a candle-light dinner at your favorite restaurant!"
+      });
+      renderCreateTokens();
+    }
+
+    function removeCreateToken(index) {
+      createTokensList.splice(index, 1);
+      renderCreateTokens();
+    }
+
+    // Initialize Milestones, Letters, Tokens & Sample Photos on DOM load
     document.addEventListener('DOMContentLoaded', () => {
       initDefaultMilestones();
       renderPhotoPicker();
+      renderCreateLetters();
+      renderCreateTokens();
     });
 
     // --- DYNAMIC MILESTONES MANAGER (Matches 1st & 3rd SS) ---
@@ -907,9 +1043,45 @@ Today, I want to ask you the most important question of my life. Will you take m
         songTitle = 'Random Hit Track';
       }
 
+      // Collect Sealed Letters
+      const letterCards = document.querySelectorAll('#createLettersList > div');
+      const letters = [];
+      letterCards.forEach((card, idx) => {
+        const title = card.querySelector('.create-letter-title')?.value.trim();
+        const category = card.querySelector('.create-letter-cat')?.value.trim() || 'General';
+        const content = card.querySelector('.create-letter-content')?.value.trim();
+        if (title && content) {
+          letters.push({
+            id: 'let_' + (idx + 1),
+            title: title,
+            category: category,
+            unlock_condition: 'immediate',
+            content: content
+          });
+        }
+      });
+
+      // Collect Love Tokens
+      const tokenCards = document.querySelectorAll('#createTokensList > div');
+      const tokens = [];
+      tokenCards.forEach((card, idx) => {
+        const title = card.querySelector('.create-token-title')?.value.trim();
+        const code = card.querySelector('.create-token-code')?.value.trim() || ('TOKEN' + (idx + 1));
+        const desc = card.querySelector('.create-token-desc')?.value.trim();
+        if (title) {
+          tokens.push({
+            id: 'tok_' + (idx + 1),
+            title: title,
+            code: code,
+            description: desc || ''
+          });
+        }
+      });
+
       const payload = {
         order_id: formData.get('order_id'),
         partner_name: formData.get('partner_name'),
+        receiver_photo: document.getElementById('receiverPhotoData')?.value || '',
         tagline_quote: formData.get('tagline_quote'),
         favorite_singers: favoriteSingers,
         bg_music_url: bgMusicUrl,
@@ -919,6 +1091,8 @@ Today, I want to ask you the most important question of my life. Will you take m
         hint_answer: formData.get('hint_answer'),
         custom_slug: formData.get('custom_slug'),
         photos: selectedPhotoUrls,
+        letters: letters,
+        tokens: tokens,
         template_fields: {
           relationship_start_date: formData.get('relationship_start_date') || null,
           partner_dob: formData.get('partner_dob') || null,
@@ -928,7 +1102,9 @@ Today, I want to ask you the most important question of my life. Will you take m
           reunion_date: formData.get('reunion_date') || null,
           playlist_url: formData.get('playlist_url') || null,
           milestones: milestones,
-          reasons: reasons
+          reasons: reasons,
+          letters: letters,
+          tokens: tokens
         }
       };
 

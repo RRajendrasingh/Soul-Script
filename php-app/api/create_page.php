@@ -2,6 +2,31 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
+if (!defined('UPLOAD_DIR')) {
+    define('UPLOAD_DIR', __DIR__ . '/../uploads');
+}
+
+function saveUploadedBase64Image($photoData, $page_id, $filePrefix = 'photo') {
+    if (!$photoData || trim($photoData) === '') return '';
+    if (strpos($photoData, 'data:image/') === 0) {
+        $targetDir = UPLOAD_DIR . '/' . $page_id;
+        if (!file_exists($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+        $parts = explode(',', $photoData);
+        $imageData = base64_decode($parts[1] ?? '');
+        $ext = 'jpg';
+        if (preg_match('/data:image\/(png|jpg|jpeg|gif|webp);base64/', $parts[0], $matches)) {
+            $ext = $matches[1] == 'jpeg' ? 'jpg' : $matches[1];
+        }
+        $fileName = $filePrefix . '_' . time() . '_' . rand(100, 999) . '.' . $ext;
+        $fullDiskPath = $targetDir . '/' . $fileName;
+        file_put_contents($fullDiskPath, $imageData);
+        return APP_URL . '/uploads/' . $page_id . '/' . $fileName;
+    }
+    return $photoData;
+}
+
 $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
 
 $order_id       = trim($input['order_id'] ?? '');
@@ -123,6 +148,9 @@ try {
     $song_title              = $template_fields['song_title'] ?? null;
     $song_artist             = $template_fields['song_artist'] ?? null;
     $receiver_photo          = $input['receiver_photo'] ?? null;
+    if (!empty($receiver_photo)) {
+        $receiver_photo = saveUploadedBase64Image($receiver_photo, $page_id, 'partner_avatar');
+    }
 
     $stmt = $db->prepare("
         INSERT INTO page_content (
