@@ -121,8 +121,8 @@ try {
   }
 </style>
 
-<!-- Navbar -->
-<header class="sticky top-0 z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md">
+<!-- Navbar (Smart Auto-Hiding Header) -->
+<header id="revealHeader" class="sticky top-0 z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md transition-transform duration-300 ease-in-out">
   <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
     <a href="<?php echo APP_URL; ?>" class="flex items-center gap-1.5 text-xs font-bold text-[#e8e0e3] hover:text-[#eac34a] transition-colors shrink-0">
       <i data-lucide="arrow-left" class="w-4 h-4 text-[#eac34a]"></i>
@@ -1450,11 +1450,47 @@ try {
   <!-- Image Lightbox Modal -->
   <div id="imageLightboxModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox()">
     <div class="relative max-w-3xl w-full max-h-[85vh] flex items-center justify-center" onclick="event.stopPropagation()">
-      <img id="lightboxImg" src="" alt="Enlarged view" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl border border-[#eac34a]/30">
       <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-[#e8e0e3] hover:text-[#eac34a] p-2 cursor-pointer">
         <i data-lucide="x" class="w-6 h-6"></i>
       </button>
     </div>
   </div>
+
+  <!-- Smart Smooth Auto-Hiding Header Script -->
+  <script>
+    (function() {
+      let lastScrollY = window.scrollY;
+      const header = document.getElementById('revealHeader');
+      const scrollThreshold = 5;
+
+      if (!header) return;
+
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+
+        // Always show header near top of page (0 to 60px)
+        if (currentScrollY <= 60) {
+          header.classList.remove('-translate-y-full');
+          lastScrollY = currentScrollY;
+          return;
+        }
+
+        // Ignore micro scroll jitter
+        if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) {
+          return;
+        }
+
+        if (currentScrollY > lastScrollY) {
+          // Scrolling Down -> Smoothly Hide Header
+          header.classList.add('-translate-y-full');
+        } else if (currentScrollY < lastScrollY) {
+          // Scrolling Up -> Smoothly Reveal Header
+          header.classList.remove('-translate-y-full');
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    })();
+  </script>
 </body>
 </html>

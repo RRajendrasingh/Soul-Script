@@ -48,8 +48,8 @@ require_once __DIR__ . '/config/config.php';
     <div class="absolute bottom-0 right-0 w-[45vw] h-[45vw] rounded-full bg-[#cca830]/10 blur-[130px]"></div>
   </div>
 
-  <!-- Navbar -->
-  <header class="sticky top-0 z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+  <!-- Navbar (Smart Auto-Hiding Header) -->
+  <header id="mainHeader" class="sticky top-0 z-50 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
       <!-- Brand Logo -->
       <a href="<?php echo APP_URL; ?>" class="flex items-center gap-2.5 text-left group shrink-0">
@@ -1067,6 +1067,43 @@ require_once __DIR__ . '/config/config.php';
         }
       }
     }
+
+    // Smart Smooth Auto-Hiding Header on Scroll (Mobile & Desktop)
+    (function() {
+      let lastScrollY = window.scrollY;
+      const header = document.getElementById('mainHeader');
+      const scrollThreshold = 8;
+
+      if (!header) return;
+
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        const mobileDrawer = document.getElementById('mobileDrawerMenu');
+        const isMobileMenuOpen = mobileDrawer && !mobileDrawer.classList.contains('hidden');
+
+        // Always show header at top of page or when mobile drawer menu is open
+        if (currentScrollY <= 60 || isMobileMenuOpen) {
+          header.classList.remove('-translate-y-full');
+          lastScrollY = currentScrollY;
+          return;
+        }
+
+        // Ignore micro scroll jitter
+        if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) {
+          return;
+        }
+
+        if (currentScrollY > lastScrollY) {
+          // Scrolling Down -> Smoothly Hide Header
+          header.classList.add('-translate-y-full');
+        } else {
+          // Scrolling Up -> Smoothly Reveal Header
+          header.classList.remove('-translate-y-full');
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    })();
   </script>
 </body>
 </html>
