@@ -18,6 +18,24 @@ function getDB() {
                 PDO::ATTR_EMULATE_PREPARES => false,
             ];
             $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+
+            // Auto-Migration check for production database schema synchronization
+            $autoMigrateCols = [
+                'receiver_photo' => 'LONGTEXT DEFAULT NULL',
+                'tagline_quote' => 'VARCHAR(500) DEFAULT NULL',
+                'favorite_singers' => 'VARCHAR(255) DEFAULT NULL',
+                'song_title' => 'VARCHAR(255) DEFAULT NULL',
+                'song_artist' => 'VARCHAR(255) DEFAULT NULL',
+                'letters_json' => 'LONGTEXT DEFAULT NULL',
+                'tokens_json' => 'LONGTEXT DEFAULT NULL'
+            ];
+            foreach ($autoMigrateCols as $colName => $colDef) {
+                try {
+                    $pdo->exec("ALTER TABLE page_content ADD COLUMN {$colName} {$colDef}");
+                } catch (Exception $ex) {
+                    // Column already exists or ignore
+                }
+            }
         } catch (PDOException $e) {
             // Return JSON error response if accessed via API
             if (strpos($_SERVER['REQUEST_URI'] ?? '', '/api/') !== false) {

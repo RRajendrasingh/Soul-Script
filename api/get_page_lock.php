@@ -16,8 +16,7 @@ try {
 
     // Fetch page & lock screen metadata ONLY
     $stmt = $db->prepare("
-        SELECT p.page_id, p.template_id, p.url_slug, p.status, p.expires_at,
-               c.partner_name, c.buyer_name, c.hint_question, c.receiver_photo
+        SELECT p.page_id, p.template_id, p.url_slug, p.status, p.expires_at, c.*
         FROM pages p
         JOIN page_content c ON p.page_id = c.page_id
         WHERE LOWER(p.url_slug) = LOWER(?)
