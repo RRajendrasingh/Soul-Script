@@ -991,17 +991,6 @@ Today, I want to ask you the most important question of my life. Will you take m
       }
     }
 
-    function handleReceiverPhotoUpload(input) {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('receiverPhotoPreview').src = e.target.result;
-          document.getElementById('receiverPhotoData').value = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    }
   </script>
 
   <!-- Mobile QR Code Modal -->
