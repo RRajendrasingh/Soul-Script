@@ -15,7 +15,7 @@ try {
     $db = getDB();
 
     $stmt = $db->prepare("
-        SELECT p.*, c.*, o.buyer_name as order_buyer_name, o.buyer_phone, o.buyer_email
+        SELECT p.*, c.*, o.buyer_name as order_buyer_name, o.buyer_phone, o.buyer_email, o.buyer_password_hash
         FROM pages p
         JOIN page_content c ON p.page_id = c.page_id
         JOIN orders o ON p.order_id = o.order_id
@@ -83,10 +83,37 @@ try {
         }
 
         // Check if buyer account password is being updated
-        $buyer_password = trim($input['buyer_password'] ?? '');
-        if (!empty($buyer_password)) {
-            $buyer_password_hash = hashHintAnswer($buyer_password);
-            $db->prepare("UPDATE orders SET buyer_password_hash = ? WHERE order_id = ?")->execute([$buyer_password_hash, $page['order_id']]);
+        $current_buyer_password = trim($input['current_buyer_password'] ?? '');
+        $new_buyer_password     = trim($input['new_buyer_password'] ?? '');
+
+        if (!empty($current_buyer_password) || !empty($new_buyer_password)) {
+            if (empty($current_buyer_password)) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Please enter your current account password to change your password.']);
+                exit;
+            }
+            if (empty($new_buyer_password)) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Please enter your new account password.']);
+                exit;
+            }
+            if (strlen($new_buyer_password) < 4) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'New password must be at least 4 characters long.']);
+                exit;
+            }
+
+            // Verify current password hash against orders table
+            $currentHash = hashHintAnswer($current_buyer_password);
+            if ($currentHash !== $page['buyer_password_hash']) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Current account password is incorrect. Please try again.']);
+                exit;
+            }
+
+            // Password verified! Update to new password hash
+            $newHash = hashHintAnswer($new_buyer_password);
+            $db->prepare("UPDATE orders SET buyer_password_hash = ? WHERE order_id = ?")->execute([$newHash, $page['order_id']]);
         }
 
         $template_fields = $input['template_fields'] ?? [];

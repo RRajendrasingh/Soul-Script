@@ -279,20 +279,82 @@ $token = trim($_GET['token'] ?? '');
         </div>
 
         <!-- TAB 3: SECURITY & PASSWORDS MANAGEMENT -->
-        <div id="tabContent-security" class="hidden space-y-4 text-xs">
-          <div class="border-b border-[#4d444b]/40 pb-3">
-            <h3 class="text-base font-bold font-serif text-[#e8e0e3]">🔐 Security &amp; Passwords Management</h3>
+        <div id="tabContent-security" class="hidden space-y-6 text-xs">
+          <div class="border-b border-[#4d444b]/40 pb-3 flex items-center justify-between">
+            <div>
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-5 h-5 text-[#eac34a]"></i>
+                <span>Account Security &amp; Password Management</span>
+              </h3>
+              <p class="text-[11px] text-[#d0c3cb] mt-0.5">Manage your SoulScript buyer portal login password safely.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 font-bold text-[10px] uppercase tracking-wider hidden sm:inline-block">
+              🔐 Encrypted Storage
+            </span>
           </div>
 
-          <div class="bg-[#151215] p-5 rounded-2xl border border-[#eac34a]/30 space-y-5">
-            <!-- Buyer Portal Login Password Box -->
-            <div class="bg-[#221f21] p-4.5 rounded-2xl border border-[#4d444b] space-y-2">
-              <label class="block font-bold text-[#e8e0e3] text-xs flex items-center gap-1.5">
-                <i data-lucide="key" class="w-4 h-4 text-[#eac34a]"></i>
-                <span>Buyer Account Password (Portal Access) 🔑</span>
-              </label>
-              <p class="text-[11px] text-[#d0c3cb]">Set a new password used to log in at <code>soulscript.in/edit</code>. Leave blank to keep current password.</p>
-              <input type="password" id="buyerAccountPassword" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="Enter new secret login password (leave blank to keep current)">
+          <div class="bg-[#151215] p-5 sm:p-7 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-6">
+            <!-- Buyer Portal Login Password Header -->
+            <div class="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-[#221f21] via-[#2d222d] to-[#221f21] border border-[#eac34a]/30">
+              <div class="w-12 h-12 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center shrink-0 shadow-md">
+                <i data-lucide="key-round" class="w-6 h-6 text-[#eac34a]"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-[#e8e0e3]">Update Buyer Account Password 🔑</h4>
+                <p class="text-[11px] text-[#d0c3cb]">Change the secret password used to log in at <code>soulscript.in/edit</code>. Leave all fields blank if you don't wish to change your password.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <!-- Current Password -->
+              <div class="space-y-1.5">
+                <label class="block font-semibold text-[#d0c3cb] flex items-center gap-1.5 text-xs">
+                  <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                  <span>Current Account Password</span>
+                </label>
+                <div class="relative">
+                  <input type="password" id="currentBuyerPassword" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none transition-all pr-10" placeholder="Type current password">
+                  <button type="button" onclick="togglePasswordVisibility('currentBuyerPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#d0c3cb] hover:text-[#eac34a] p-1 cursor-pointer">
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- New Password -->
+              <div class="space-y-1.5">
+                <label class="block font-semibold text-[#d0c3cb] flex items-center gap-1.5 text-xs">
+                  <i data-lucide="key" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                  <span>New Account Password</span>
+                </label>
+                <div class="relative">
+                  <input type="password" id="newBuyerPassword" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none transition-all pr-10" placeholder="Type new password">
+                  <button type="button" onclick="togglePasswordVisibility('newBuyerPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#d0c3cb] hover:text-[#eac34a] p-1 cursor-pointer">
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Confirm New Password -->
+              <div class="space-y-1.5">
+                <label class="block font-semibold text-[#d0c3cb] flex items-center gap-1.5 text-xs">
+                  <i data-lucide="check-check" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                  <span>Re-enter New Password</span>
+                </label>
+                <div class="relative">
+                  <input type="password" id="confirmBuyerPassword" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none transition-all pr-10" placeholder="Re-enter new password">
+                  <button type="button" onclick="togglePasswordVisibility('confirmBuyerPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#d0c3cb] hover:text-[#eac34a] p-1 cursor-pointer">
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Password Requirements Badge Footer -->
+            <div class="p-3.5 bg-[#221f21] rounded-2xl border border-[#4d444b]/60 flex items-center justify-between text-[11px] text-[#d0c3cb]">
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="info" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Leave fields blank if keeping current password. Minimum 4 characters required.</span>
+              </span>
             </div>
           </div>
         </div>
@@ -1070,19 +1132,44 @@ $token = trim($_GET['token'] ?? '');
 
       templateFields.song_title = finalSongTitle;
 
-      const secHintQ = document.getElementById('secHintQuestion')?.value.trim();
-      const secHintA = document.getElementById('secHintAnswer')?.value.trim();
-      const buyerPass = document.getElementById('buyerAccountPassword')?.value.trim();
+      const currentPass = document.getElementById('currentBuyerPassword')?.value.trim() || '';
+      const newPass = document.getElementById('newBuyerPassword')?.value.trim() || '';
+      const confirmPass = document.getElementById('confirmBuyerPassword')?.value.trim() || '';
 
-      const finalHintQuestion = (secHintQ !== undefined && secHintQ !== '') ? secHintQ : document.getElementById('hintQuestion').value;
-      const finalHintAnswer = (secHintA !== undefined && secHintA !== '') ? secHintA : document.getElementById('hintAnswer').value;
+      if (currentPass || newPass || confirmPass) {
+        if (!currentPass) {
+          msg.innerText = '❌ Please enter your current account password.';
+          btn.disabled = false;
+          btn.innerText = 'Save All Changes';
+          return;
+        }
+        if (!newPass) {
+          msg.innerText = '❌ Please enter your new account password.';
+          btn.disabled = false;
+          btn.innerText = 'Save All Changes';
+          return;
+        }
+        if (newPass !== confirmPass) {
+          msg.innerText = '❌ New password and confirmation password do not match.';
+          btn.disabled = false;
+          btn.innerText = 'Save All Changes';
+          return;
+        }
+        if (newPass.length < 4) {
+          msg.innerText = '❌ New password must be at least 4 characters long.';
+          btn.disabled = false;
+          btn.innerText = 'Save All Changes';
+          return;
+        }
+      }
 
       const payload = {
         token: activeToken,
         partner_name: document.getElementById('partnerName').value,
-        hint_question: finalHintQuestion,
-        hint_answer: finalHintAnswer,
-        buyer_password: buyerPass || '',
+        hint_question: document.getElementById('hintQuestion').value,
+        hint_answer: document.getElementById('hintAnswer').value,
+        current_buyer_password: currentPass,
+        new_buyer_password: newPass,
         love_note_text: document.getElementById('loveNoteText').value,
         tagline_quote: document.getElementById('taglineQuote').value,
         favorite_singers: finalFavoriteSingers,
@@ -1103,6 +1190,11 @@ $token = trim($_GET['token'] ?? '');
 
         if (data.success) {
           msg.innerText = '✅ All changes saved successfully!';
+          if (newPass) {
+            document.getElementById('currentBuyerPassword').value = '';
+            document.getElementById('newBuyerPassword').value = '';
+            document.getElementById('confirmBuyerPassword').value = '';
+          }
         } else {
           msg.innerText = '❌ Error: ' + data.message;
         }
@@ -1112,6 +1204,19 @@ $token = trim($_GET['token'] ?? '');
         btn.innerText = 'Save All Changes';
         btn.disabled = false;
       }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = '<i data-lucide="eye-off" class="w-4 h-4 text-[#eac34a]"></i>';
+      } else {
+        input.type = 'password';
+        btn.innerHTML = '<i data-lucide="eye" class="w-4 h-4 text-[#d0c3cb]"></i>';
+      }
+      if (typeof lucide === 'object') lucide.createIcons();
     }
 
     if (activeToken) {
