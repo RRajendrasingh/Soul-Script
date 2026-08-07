@@ -1,7 +1,6 @@
 # Dependencies & Locks
 node_modules/
 package-lock.json
-package.json
 yarn.lock
 
 # Temporary & Diagnostic files
