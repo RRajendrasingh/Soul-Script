@@ -128,12 +128,12 @@ $token = trim($_GET['token'] ?? '');
           </div>
 
           <div>
-            <label class="block font-semibold text-[#d0c3cb] mb-1">Partner's First Name *</label>
+            <label id="partnerNameLabel" class="block font-semibold text-[#d0c3cb] mb-1">Partner's First Name *</label>
             <input type="text" id="partnerName" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" required>
           </div>
 
           <div>
-            <label class="block font-semibold text-[#d0c3cb] mb-1">Custom Romantic Quote / Tagline Banner *</label>
+            <label id="taglineQuoteLabel" class="block font-semibold text-[#d0c3cb] mb-1">Custom Romantic Quote / Tagline Banner *</label>
             <input type="text" id="taglineQuote" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Safar Khubsurat h manjil se bhi 🌹" required>
           </div>
 
@@ -238,7 +238,7 @@ $token = trim($_GET['token'] ?? '');
           </div>
 
           <div>
-            <label class="block font-semibold text-[#d0c3cb] mb-1">Short Love Note / Signature Message</label>
+            <label id="loveNoteLabel" class="block font-semibold text-[#d0c3cb] mb-1">Short Love Note / Signature Message</label>
             <textarea id="loveNoteText" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl p-4 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" rows="3"></textarea>
           </div>
         </div>
@@ -795,6 +795,20 @@ $token = trim($_GET['token'] ?? '');
       const tabBtnLetters = document.getElementById('tabBtn-letters');
       const tabBtnTokens = document.getElementById('tabBtn-tokens');
 
+      const nameLabel = document.getElementById('partnerNameLabel');
+      const taglineLabel = document.getElementById('taglineQuoteLabel');
+      const noteLabel = document.getElementById('loveNoteLabel');
+
+      if (templateId === 'birthday_magic') {
+        if (nameLabel) nameLabel.innerText = "Birthday Person's Name *";
+        if (taglineLabel) taglineLabel.innerText = "Custom Birthday Tagline / Motto *";
+        if (noteLabel) noteLabel.innerText = "Birthday Wish / Personal Message *";
+      } else {
+        if (nameLabel) nameLabel.innerText = "Partner's First Name *";
+        if (taglineLabel) taglineLabel.innerText = "Custom Romantic Quote / Tagline Banner *";
+        if (noteLabel) noteLabel.innerText = "Short Love Note / Signature Message *";
+      }
+
       // Hide Sealed Letters & Love Tokens for non-anniversary themes
       if (templateId === 'anniversary_reveal') {
         tabBtnLetters.classList.remove('hidden');
@@ -814,7 +828,7 @@ $token = trim($_GET['token'] ?? '');
               <h3 class="text-base font-bold font-serif text-[#e8e0e3]">🎂 Birthday Settings &amp; Reasons</h3>
             </div>
             <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Partner Date of Birth (Next Birthday Countdown)</label>
+              <label class="block font-semibold text-[#d0c3cb] mb-1">Date of Birth (Next Birthday Countdown)</label>
               <input type="date" id="partnerDob" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3]" value="${p.partner_dob || ''}">
             </div>
             <div class="flex items-center justify-between pt-2 border-t border-[#4d444b]/30">

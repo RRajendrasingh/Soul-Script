@@ -156,22 +156,41 @@ if ($order_id) {
       <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order['order_id']); ?>">
       <input type="hidden" name="template_id" value="<?php echo htmlspecialchars($order['template_id']); ?>">
 
+      <?php
+      $tId = $order['template_id'] ?? 'anniversary_reveal';
+      $isBirthday = ($tId === 'birthday_magic');
+      $isProposal = ($tId === 'perfect_proposal');
+      $isLdr = ($tId === 'long_distance_love');
+
+      $recipientLabel = $isBirthday ? "Birthday Person's First Name (Friend / Loved One) *" : "Partner's First Name *";
+      $recipientPlaceholder = $isBirthday ? "e.g. Rohan" : ($isProposal ? "e.g. Priya" : "e.g. Ananya");
+      $recipientDefaultVal = $isBirthday ? "Rohan" : ($isProposal ? "Priya" : "Ananya");
+      
+      $taglineLabel = $isBirthday ? "Custom Birthday Tagline / Motto *" : "Custom Romantic Quote / Tagline Banner *";
+      $taglineDefault = $isBirthday ? "Cheers to another year of awesome memories! 🥂" : "Safar Khubsurat h manjil se bhi 🌹";
+      $taglinePresetText = $isBirthday ? "Cheers to another year of awesome memories! 🥂" : "Safar Khubsurat h manjil se bhi 🌹";
+
+      $messageLabel = $isBirthday ? "Birthday Wish / Personal Message *" : "Short Love Note / Signature Message *";
+      $messagePlaceholder = $isBirthday ? "e.g. Happy Birthday Rohan! Wishing you a year filled with crazy adventures and endless joy! 🎂" : "e.g. Ananya, every second with you feels like home. Happy Anniversary!";
+      $messageDefaultVal = $isBirthday ? "Wishing you the happiest of birthdays filled with joy, laughter, and endless good times!" : "Every single day spent with you has been a beautiful gift. Happy Anniversary my love!";
+      ?>
+
       <div class="border-b border-[#4d444b]/40 pb-4">
         <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">1. General Details</h3>
       </div>
 
       <div class="space-y-4 text-xs">
         <div>
-          <label class="block font-semibold text-[#d0c3cb] mb-1">Partner's First Name *</label>
-          <input type="text" name="partner_name" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Ananya" value="Ananya" required>
+          <label class="block font-semibold text-[#d0c3cb] mb-1"><?php echo $recipientLabel; ?></label>
+          <input type="text" name="partner_name" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="<?php echo $recipientPlaceholder; ?>" value="<?php echo $recipientDefaultVal; ?>" required>
         </div>
 
         <!-- Gift Receiver Avatar Profile Photo Upload -->
         <div>
-          <label class="block font-semibold text-[#d0c3cb] mb-1.5">Gift Receiver / Partner Profile Photo 🖼️ (Optional)</label>
+          <label class="block font-semibold text-[#d0c3cb] mb-1.5"><?php echo $isBirthday ? 'Birthday Person Profile Photo 🖼️ (Optional)' : 'Gift Receiver / Partner Profile Photo 🖼️ (Optional)'; ?></label>
           <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] flex flex-col sm:flex-row items-center gap-4">
             <div id="partnerAvatarContainer" class="w-16 h-16 rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#eac34a] flex items-center justify-center font-bold text-2xl shadow-[0_0_20px_rgba(234,195,74,0.3)] shrink-0 overflow-hidden">
-              <span id="partnerAvatarFallback">A</span>
+              <span id="partnerAvatarFallback"><?php echo strtoupper(substr($recipientDefaultVal, 0, 1)); ?></span>
               <img id="partnerAvatarImg" src="" class="w-full h-full object-cover hidden">
             </div>
             <div class="flex-1 text-center sm:text-left space-y-2">
@@ -187,17 +206,17 @@ if ($order_id) {
                   <span>Remove Photo</span>
                 </button>
               </div>
-              <p class="text-[10px] text-[#d0c3cb]/70">Upload a portrait photo to show at the top of the surprise page. If no photo is added, partner's initial character will be displayed.</p>
+              <p class="text-[10px] text-[#d0c3cb]/70">Upload a portrait photo to show at the top of the surprise page. If no photo is added, their initial character will be displayed.</p>
             </div>
           </div>
         </div>
 
         <div>
           <div class="flex items-center justify-between mb-1">
-            <label class="block font-semibold text-[#d0c3cb]">Custom Romantic Quote / Tagline Banner *</label>
-            <button type="button" onclick="setPresetQuote('Safar Khubsurat h manjil se bhi 🌹')" class="text-[10px] text-[#eac34a] hover:underline font-bold">✨ Use "Safar Khubsurat..." Preset</button>
+            <label class="block font-semibold text-[#d0c3cb]"><?php echo $taglineLabel; ?></label>
+            <button type="button" onclick="setPresetQuote('<?php echo addslashes($taglinePresetText); ?>')" class="text-[10px] text-[#eac34a] hover:underline font-bold">✨ Use Preset Tagline</button>
           </div>
-          <input type="text" id="taglineQuoteInput" name="tagline_quote" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Safar Khubsurat h manjil se bhi 🌹" value="Safar Khubsurat h manjil se bhi 🌹" required>
+          <input type="text" id="taglineQuoteInput" name="tagline_quote" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. <?php echo htmlspecialchars($taglineDefault); ?>" value="<?php echo htmlspecialchars($taglineDefault); ?>" required>
         </div>
 
         <!-- Universal Music Engine (iTunes Live Search + YouTube Link + Favorite Singer) -->
@@ -231,8 +250,8 @@ if ($order_id) {
           <!-- iTunes Live Search Container -->
           <div id="itunesSearchBox" class="space-y-3">
             <div>
-              <label class="block font-semibold text-[#d0c3cb] mb-1">Search &amp; Select Song (Bollywood, Romantic, English, Punjabi) 🎶</label>
-              <input type="text" id="itunesQueryInput" oninput="handleItunesSearch(this.value)" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="🔍 Type song name or singer e.g. Tum Hi Ho, Arijit Singh, Zara Sa, Kesariya, Taylor Swift...">
+              <label class="block font-semibold text-[#d0c3cb] mb-1">Search &amp; Select Song (Birthday Anthems, Party, Bollywood, English) 🎶</label>
+              <input type="text" id="itunesQueryInput" oninput="handleItunesSearch(this.value)" class="w-full bg-[#100d10] border border-[#4d444b] focus:border-[#eac34a] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:outline-none" placeholder="🔍 Type song name or singer e.g. Happy Birthday, Tum Hi Ho, Arijit Singh, Taylor Swift...">
             </div>
 
             <!-- Selected Track Card -->
@@ -256,15 +275,15 @@ if ($order_id) {
             <div>
               <label class="block font-semibold text-[#d0c3cb] mb-1">Paste YouTube Video / Audio URL 🎥</label>
               <input type="url" id="youtubeUrlInput" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/...">
-              <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Paste any public YouTube video link for your partner's favorite song.</p>
+              <p class="text-[10px] text-[#d0c3cb]/70 mt-1">Paste any public YouTube video link for their favorite song.</p>
             </div>
           </div>
         </div>
         </div>
 
         <div>
-          <label class="block font-semibold text-[#d0c3cb] mb-1">Short Love Note / Signature Message</label>
-          <textarea name="love_note_text" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl p-4 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" rows="3" placeholder="e.g. Ananya, every second with you feels like home. Happy Anniversary!">Every single day spent with you has been a beautiful gift. Happy Anniversary my love!</textarea>
+          <label class="block font-semibold text-[#d0c3cb] mb-1"><?php echo $messageLabel; ?></label>
+          <textarea name="love_note_text" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl p-4 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" rows="3" placeholder="<?php echo htmlspecialchars($messagePlaceholder); ?>"><?php echo htmlspecialchars($messageDefaultVal); ?></textarea>
         </div>
       </div>
 

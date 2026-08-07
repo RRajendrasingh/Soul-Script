@@ -879,7 +879,7 @@ try {
               </h1>
 
               <p class="text-xs sm:text-sm text-[#d0c3cb] max-w-md mx-auto leading-relaxed">
-                A special celebration page created with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong>.
+                A special celebration page created with love &amp; best wishes by <strong class="text-[#eac34a]">${content.buyer_name}</strong>.
               </p>
 
               <!-- Next Birthday Countdown -->
@@ -969,7 +969,7 @@ try {
               </div>
 
               <div class="pt-4 border-t border-[#4d444b]/50">
-                <span class="text-xs uppercase tracking-widest text-[#eac34a] font-bold block">With Endless Love,</span>
+                <span class="text-xs uppercase tracking-widest text-[#eac34a] font-bold block">With Love &amp; Best Wishes,</span>
                 <span class="text-xl font-bold font-serif text-[#e8e0e3] mt-1 block">${content.buyer_name}</span>
               </div>
             </div>
@@ -977,7 +977,7 @@ try {
 
           <!-- Footer Bar -->
           <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
-            <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
+            <p class="text-xs text-[#d0c3cb]">Made with love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
             <div class="flex items-center justify-center gap-3">
               <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
                 <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
