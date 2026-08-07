@@ -58,6 +58,8 @@ function getDB() {
                     $passHashJuly = hashHintAnswer('july');
                     $pdo->exec("INSERT INTO page_content (page_id, partner_name, buyer_name, hint_question, hint_answer_hash, tagline_quote, favorite_singers, bg_music_url, song_title, song_artist, love_note_text, partner_dob) VALUES ('page_demo_03', 'Kavya', 'Aarav', 'What is Kavya\'s favorite birthday month?', '$passHashJuly', 'Wishing the happiest birthday to my sunshine 🎂', 'Shreya Ghoshal', 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/4a/01/2b/4a012b07-6b60-5629-234b-4bbf5287e07a/mzaf_10915606473185368541.plus.aac.p.m4a', 'Sun Raha Hai Na Tu', 'Shreya Ghoshal', 'Happy Birthday Kavya! May your year ahead be full of endless laughter, dream trips, and warm chai dates!', '2001-07-20') ON DUPLICATE KEY UPDATE tagline_quote=VALUES(tagline_quote)");
                 }
+                // Auto-heal double HTML entity encoded hint questions in page_content table
+                $pdo->exec("UPDATE page_content SET hint_question = REPLACE(REPLACE(hint_question, '&amp;#039;', '\''), '&#039;', '\'') WHERE hint_question LIKE '%&#039;%' OR hint_question LIKE '%&amp;%'");
 
                 // Demo 3: Perfect Proposal (priya-aman)
                 $chk3 = $pdo->prepare("SELECT COUNT(*) FROM pages WHERE url_slug = 'priya-aman'");

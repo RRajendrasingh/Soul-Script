@@ -198,7 +198,7 @@ try {
           <span>Hint Question</span>
         </div>
         <p class="text-sm sm:text-base text-[#e8e0e3] font-serif leading-relaxed italic" id="lockHintQuestion">
-          "<?php echo htmlspecialchars($initialLockData['hint_question'] ?? 'Where did we take our very first trip together in 2022?'); ?>"
+          "<?php echo htmlspecialchars(htmlspecialchars_decode($initialLockData['hint_question'] ?? 'Where did we take our very first trip together in 2022?', ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>"
         </p>
       </div>
 
