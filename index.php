@@ -298,15 +298,21 @@ require_once __DIR__ . '/config/config.php';
               </ul>
             </div>
           </div>
-          <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
-            <button onclick="openCheckout('anniversary_reveal', 'Anniversary Reveal', 499)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-              <i data-lucide="gift" class="w-4 h-4"></i>
-              <span>Customize (₹499)</span>
-            </button>
-            <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
-              <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
-              <span>Live Sample</span>
-            </a>
+          <div class="pt-2 flex flex-col gap-2">
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <button onclick="openCheckout('anniversary_reveal', 'Anniversary Reveal', 499)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="gift" class="w-4 h-4"></i>
+                <span>Customize (₹499)</span>
+              </button>
+              <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
+                <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Live Sample</span>
+              </a>
+            </div>
+            <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
+              <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+              <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider">SHIMLA</strong></span>
+            </div>
           </div>
         </div>
       </div>
@@ -357,15 +363,21 @@ require_once __DIR__ . '/config/config.php';
               </ul>
             </div>
           </div>
-          <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
-            <button onclick="openCheckout('birthday_magic', 'Birthday Magic', 399)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-              <i data-lucide="gift" class="w-4 h-4"></i>
-              <span>Customize (₹399)</span>
-            </button>
-            <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
-              <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
-              <span>Live Sample</span>
-            </a>
+          <div class="pt-2 flex flex-col gap-2">
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <button onclick="openCheckout('birthday_magic', 'Birthday Magic', 399)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="gift" class="w-4 h-4"></i>
+                <span>Customize (₹399)</span>
+              </button>
+              <a href="<?php echo APP_URL; ?>/gift/kavya-aarav" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
+                <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Live Sample</span>
+              </a>
+            </div>
+            <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
+              <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+              <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider">JULY</strong></span>
+            </div>
           </div>
         </div>
       </div>
@@ -415,15 +427,21 @@ require_once __DIR__ . '/config/config.php';
               </ul>
             </div>
           </div>
-          <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
-            <button onclick="openCheckout('perfect_proposal', 'Perfect Proposal', 599)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-              <i data-lucide="gift" class="w-4 h-4"></i>
-              <span>Customize (₹599)</span>
-            </button>
-            <a href="<?php echo APP_URL; ?>/gift/priya-aman" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
-              <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
-              <span>Live Sample</span>
-            </a>
+          <div class="pt-2 flex flex-col gap-2">
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <button onclick="openCheckout('perfect_proposal', 'Perfect Proposal', 599)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="gift" class="w-4 h-4"></i>
+                <span>Customize (₹599)</span>
+              </button>
+              <a href="<?php echo APP_URL; ?>/gift/priya-aman" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
+                <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Live Sample</span>
+              </a>
+            </div>
+            <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
+              <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+              <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider">PARIS</strong></span>
+            </div>
           </div>
         </div>
       </div>
@@ -474,15 +492,21 @@ require_once __DIR__ . '/config/config.php';
               </ul>
             </div>
           </div>
-          <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
-            <button onclick="openCheckout('long_distance_love', 'Long Distance Love', 449)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-              <i data-lucide="gift" class="w-4 h-4"></i>
-              <span>Customize (₹449)</span>
-            </button>
-            <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
-              <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
-              <span>Live Sample</span>
-            </a>
+          <div class="pt-2 flex flex-col gap-2">
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <button onclick="openCheckout('long_distance_love', 'Long Distance Love', 449)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="gift" class="w-4 h-4"></i>
+                <span>Customize (₹449)</span>
+              </button>
+              <a href="<?php echo APP_URL; ?>/gift/aanya-kabir" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
+                <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Live Sample</span>
+              </a>
+            </div>
+            <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
+              <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+              <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider">MUMBAI</strong></span>
+            </div>
           </div>
         </div>
       </div>
