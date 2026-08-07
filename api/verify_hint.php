@@ -53,6 +53,17 @@ if ($slug && $bypass_edit_token) {
             $lettersData = !empty($page['letters_json']) ? json_decode($page['letters_json'], true) : [];
             $tokensData  = !empty($page['tokens_json'])  ? json_decode($page['tokens_json'], true)  : [];
 
+            // Normalize receiver photo & media file paths
+            if (!empty($page['receiver_photo'])) {
+                $page['receiver_photo'] = normalizeMediaUrl($page['receiver_photo']);
+            }
+            foreach ($media as &$m) {
+                if (!empty($m['file_path'])) {
+                    $m['file_path'] = normalizeMediaUrl($m['file_path']);
+                }
+            }
+            unset($m);
+
             echo json_encode([
                 'success' => true,
                 'message' => 'Buyer edit mode — page loaded.',
@@ -221,6 +232,17 @@ try {
     // Return Full Result Page Payload
     $lettersData = !empty($page['letters_json']) ? json_decode($page['letters_json'], true) : [];
     $tokensData = !empty($page['tokens_json']) ? json_decode($page['tokens_json'], true) : [];
+
+    // Normalize receiver photo & media file paths
+    if (!empty($page['receiver_photo'])) {
+        $page['receiver_photo'] = normalizeMediaUrl($page['receiver_photo']);
+    }
+    foreach ($media as &$m) {
+        if (!empty($m['file_path'])) {
+            $m['file_path'] = normalizeMediaUrl($m['file_path']);
+        }
+    }
+    unset($m);
 
     echo json_encode([
         'success' => true,

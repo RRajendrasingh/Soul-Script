@@ -21,3 +21,7 @@ verify_*.php
 .idea/
 .DS_Store
 Thumbs.db
+
+# Playwright Test Outputs
+playwright-report/
+test-results/

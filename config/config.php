@@ -56,3 +56,26 @@ define('UPLOAD_URL', APP_URL . '/uploads');
 
 // Security & Salt
 define('HASH_SALT', 'soulscript_secure_salt_2026');
+
+/**
+ * Normalizes image & media URLs so localhost/127.0.0.1 or relative paths automatically convert to current APP_URL
+ */
+function normalizeMediaUrl($url) {
+    if (empty($url)) return '';
+    $url = trim($url);
+
+    // If it's a relative path starting with /uploads/ or uploads/
+    if (strpos($url, 'uploads/') === 0) {
+        return APP_URL . '/' . $url;
+    }
+    if (strpos($url, '/uploads/') === 0) {
+        return APP_URL . $url;
+    }
+
+    // Replace any legacy domain or localhost/127.0.0.1 URL containing /uploads/ with current APP_URL
+    if (preg_match('#https?://[^/]+(?:/soulscript)?(/uploads/.*)$#i', $url, $matches)) {
+        return APP_URL . $matches[1];
+    }
+
+    return $url;
+}

@@ -73,6 +73,17 @@ try {
         $stmtMedia->execute([$page_id]);
         $media = $stmtMedia->fetchAll();
 
+        // Normalize receiver photo & media file paths
+        if (!empty($page['receiver_photo'])) {
+            $page['receiver_photo'] = normalizeMediaUrl($page['receiver_photo']);
+        }
+        foreach ($media as &$m) {
+            if (!empty($m['file_path'])) {
+                $m['file_path'] = normalizeMediaUrl($m['file_path']);
+            }
+        }
+        unset($m);
+
         // Fetch Proposal Response
         $stmtP = $db->prepare("SELECT * FROM proposal_responses WHERE page_id = ?");
         $stmtP->execute([$page_id]);
