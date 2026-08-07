@@ -58,13 +58,14 @@ define('UPLOAD_URL', APP_URL . '/uploads');
 define('HASH_SALT', 'soulscript_secure_salt_2026');
 
 /**
- * Normalizes image & media URLs so localhost/127.0.0.1 or relative paths automatically convert to current APP_URL
+ * Normalizes image & media URLs so localhost/127.0.0.1 or relative paths
+ * automatically convert to current APP_URL on any server environment.
  */
 function normalizeMediaUrl($url) {
     if (empty($url)) return '';
     $url = trim($url);
 
-    // If it's a relative path starting with /uploads/ or uploads/
+    // If it's a relative path starting with uploads/ or /uploads/
     if (strpos($url, 'uploads/') === 0) {
         return APP_URL . '/' . $url;
     }
@@ -72,9 +73,16 @@ function normalizeMediaUrl($url) {
         return APP_URL . $url;
     }
 
-    // Replace any legacy domain or localhost/127.0.0.1 URL containing /uploads/ with current APP_URL
-    if (preg_match('#https?://[^/]+(?:/soulscript)?(/uploads/.*)$#i', $url, $matches)) {
+    // Extract just the /uploads/... path from ANY local/dev/staging URL
+    // Covers: localhost, 127.0.0.1 (with or without port), any other origin
+    // preserving only the /uploads/... path segment onwards
+    if (preg_match('#https?://(?:localhost|127\.0\.0\.1)(?::\d+)?(?:/[^/]*)?(/uploads/.*)$#i', $url, $matches)) {
         return APP_URL . $matches[1];
+    }
+
+    // If it's already an absolute URL starting with http(s), pass through unchanged
+    if (preg_match('#^https?://#i', $url)) {
+        return $url;
     }
 
     return $url;
