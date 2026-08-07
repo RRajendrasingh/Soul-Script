@@ -9,14 +9,22 @@ php-app/scratch/
 *.log
 *.stackdump
 test_*.php
+test_*.js
 run_*.php
 check_*.php
 import_*.php
 fix_*.php
 verify_*.php
 
+# Dev server only (PHP built-in server router — not needed on Hostinger/Apache)
+router.php
+
+# Duplicate mirror folder (local dev only)
+php-app/
+
 # Environment & IDE
 .env
+config/config.env.php
 .vscode/
 .idea/
 .DS_Store
