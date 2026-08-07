@@ -21,21 +21,32 @@ function getDB() {
 
             // Auto-Migration check for production database schema synchronization
             $autoMigrateCols = [
-                'receiver_photo' => 'LONGTEXT DEFAULT NULL',
-                'tagline_quote' => 'VARCHAR(500) DEFAULT NULL',
-                'favorite_singers' => 'VARCHAR(255) DEFAULT NULL',
-                'song_title' => 'VARCHAR(255) DEFAULT NULL',
-                'song_artist' => 'VARCHAR(255) DEFAULT NULL',
-                'letters_json' => 'LONGTEXT DEFAULT NULL',
-                'tokens_json' => 'LONGTEXT DEFAULT NULL'
+                'receiver_photo'  => 'LONGTEXT DEFAULT NULL',
+                'tagline_quote'   => 'VARCHAR(500) DEFAULT NULL',
+                'favorite_singers'=> 'VARCHAR(255) DEFAULT NULL',
+                'song_title'      => 'VARCHAR(255) DEFAULT NULL',
+                'song_artist'     => 'VARCHAR(255) DEFAULT NULL',
+                'letters_json'    => 'LONGTEXT DEFAULT NULL',
+                'tokens_json'     => 'LONGTEXT DEFAULT NULL',
+                'reunion_date'    => 'DATE DEFAULT NULL'
             ];
             foreach ($autoMigrateCols as $colName => $colDef) {
                 try {
                     $pdo->exec("ALTER TABLE page_content ADD COLUMN {$colName} {$colDef}");
                 } catch (Exception $ex) {
-                    // Column already exists or ignore
+                    // Column already exists — safe to ignore
                 }
             }
+            // Auto-migrate reasons_list table if missing
+            try {
+                $pdo->exec("CREATE TABLE IF NOT EXISTS reasons_list (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    page_id VARCHAR(100) NOT NULL,
+                    entry_order INT DEFAULT 0,
+                    reason_text TEXT NOT NULL,
+                    INDEX idx_reasons_page_id (page_id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+            } catch (Exception $exRl) { /* ignore */ }
 
             // Auto-Seed Rich Content Demo Pages for all 4 templates
             try {
@@ -149,10 +160,7 @@ function getDB() {
                 // Auto-heal double HTML entity encoded hint questions in page_content table
                 $pdo->exec("UPDATE page_content SET hint_question = REPLACE(REPLACE(hint_question, '&amp;#039;', '\''), '&#039;', '\'') WHERE hint_question LIKE '%&#039;%' OR hint_question LIKE '%&amp;%'");
             } catch (Exception $exSeed) {
-                // Ignore seed errors
-            }
-            } catch (Exception $exSeed) {
-                // Ignore seed errors
+                // Ignore seed errors silently
             }
         } catch (PDOException $e) {
             // Return JSON error response if accessed via API
