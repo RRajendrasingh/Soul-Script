@@ -207,10 +207,7 @@ try {
         <div id="lockMessage" class="hidden bg-[#3b1e3b] border border-[#e4b9df]/40 text-[#e4b9df] p-3.5 rounded-xl font-medium text-center text-xs"></div>
 
         <div>
-          <label class="block text-[11px] uppercase tracking-wider text-[#d0c3cb] font-semibold mb-2 text-center">
-            Enter Secret Password / Hint Answer
-          </label>
-          <input type="text" id="answerInput" class="w-full bg-[#151215] border border-[#4d444b] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] rounded-xl px-4 py-3.5 text-sm text-[#e8e0e3] placeholder-[#d0c3cb]/40 font-mono text-center font-bold tracking-wider uppercase transition-all" placeholder="e.g. SHIMLA" required autocomplete="off">
+          <input type="text" id="answerInput" class="w-full bg-[#151215] border border-[#4d444b] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] rounded-xl px-3 sm:px-4 py-3.5 text-xs sm:text-sm text-[#e8e0e3] placeholder-[#d0c3cb]/50 placeholder:text-[10px] sm:placeholder:text-xs placeholder:font-sans placeholder:normal-case placeholder:tracking-normal text-center font-bold tracking-wider uppercase transition-all" placeholder="Enter Secret Password / Hint Answer" required autocomplete="off">
         </div>
 
         <button type="submit" id="unlockBtn" class="w-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-sans font-bold text-xs uppercase tracking-[0.2em] py-4 rounded-xl shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">

@@ -28,15 +28,15 @@ if (file_exists(__DIR__ . '/config.env.php')) {
 
 $isLocal = true;
 if (isset($_SERVER['HTTP_HOST'])) {
-    $host = strtolower($_SERVER['HTTP_HOST']);
-    if ($host !== 'localhost' && $host !== '127.0.0.1' && strpos($host, 'localhost:') !== 0) {
+    $host = strtolower(explode(':', $_SERVER['HTTP_HOST'])[0]);
+    if ($host !== 'localhost' && $host !== '127.0.0.1') {
         $isLocal = false;
     }
 }
 
 // Database Credentials (Auto-switch between Local XAMPP and Hostinger Production)
 define('DB_HOST', defined('PROD_DB_HOST') && !$isLocal ? PROD_DB_HOST : (getenv('DB_HOST') ?: '127.0.0.1'));
-define('DB_PORT', defined('PROD_DB_PORT') && !$isLocal ? PROD_DB_PORT : (getenv('DB_PORT') ?: '3306'));
+define('DB_PORT', defined('PROD_DB_PORT') && !$isLocal ? PROD_DB_PORT : (getenv('DB_PORT') ?: '3307'));
 define('DB_NAME', defined('PROD_DB_NAME') && !$isLocal ? PROD_DB_NAME : (getenv('DB_NAME') ?: 'soulscript_db'));
 define('DB_USER', defined('PROD_DB_USER') && !$isLocal ? PROD_DB_USER : (getenv('DB_USER') ?: 'root'));
 define('DB_PASS', defined('PROD_DB_PASS') && !$isLocal ? PROD_DB_PASS : (getenv('DB_PASS') ?: ''));
