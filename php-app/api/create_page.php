@@ -239,7 +239,7 @@ try {
             $filePath = APP_URL . '/uploads/' . $page_id . '/' . $fileName;
         } else {
             // Standard URL fallback (e.g. Unsplash sample photos)
-            $filePath = $photoData;
+            $filePath = normalizeMediaUrl($photoData);
         }
 
         $stmtMedia->execute([$media_id, $page_id, $filePath, $idx + 1, 'Moments of Joy']);

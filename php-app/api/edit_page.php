@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
 function saveUploadedBase64Image($photoData, $page_id, $filePrefix) {
+    if (empty($photoData)) return '';
     if (strpos($photoData, 'data:image') === 0) {
         preg_match('/data:image\/(.*?);base64,(.*)/', $photoData, $matches);
         $rawExt = strtolower($matches[1] ?? 'jpg');
@@ -24,7 +25,7 @@ function saveUploadedBase64Image($photoData, $page_id, $filePrefix) {
         
         return APP_URL . '/uploads/' . $page_id . '/' . $fileName;
     }
-    return $photoData;
+    return normalizeMediaUrl($photoData);
 }
 
 $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;

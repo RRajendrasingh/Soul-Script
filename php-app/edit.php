@@ -1054,7 +1054,7 @@ $token = trim($_GET['token'] ?? '');
       } else {
         container.innerHTML = dashPhotosList.map((url, i) => `
           <div class="aspect-square rounded-2xl overflow-hidden border border-[#4d444b] relative group bg-[#100d10] shadow-md hover:border-[#eac34a] transition-all">
-            <img src="${url}" class="w-full h-full object-cover">
+            <img src="${url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
             <button type="button" onclick="deleteDashPhoto(${i})" class="absolute top-2 right-2 bg-rose-900/90 hover:bg-rose-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shadow-lg transition-colors cursor-pointer border border-rose-400/40">
               ✕
             </button>
@@ -1067,7 +1067,7 @@ $token = trim($_GET['token'] ?? '');
           const isSel = dashPhotosList.includes(url);
           return `
             <div onclick="toggleDashSamplePhoto('${url}')" class="aspect-square rounded-xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/40' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-105 transition-all">
-              <img src="${url}" class="w-full h-full object-cover">
+              <img src="${url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
               <div class="absolute inset-0 bg-black/40 flex items-center justify-center ${isSel ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity">
                 <span class="px-2 py-1 rounded-md ${isSel ? 'bg-[#eac34a] text-[#241a00]' : 'bg-[#3b1e3b] text-[#eac34a]'} font-bold text-[10px]">
                   ${isSel ? '✓ Added' : '+ Add'}
