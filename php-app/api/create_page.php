@@ -145,8 +145,8 @@ try {
     $partner_timezone        = $template_fields['partner_timezone'] ?? null;
     $reunion_date            = $template_fields['reunion_date'] ?? null;
     $playlist_url            = $template_fields['playlist_url'] ?? null;
-    $song_title              = $template_fields['song_title'] ?? null;
-    $song_artist             = $template_fields['song_artist'] ?? null;
+    $song_title              = isset($input['song_title']) && trim($input['song_title']) !== '' ? trim($input['song_title']) : ($template_fields['song_title'] ?? null);
+    $song_artist             = isset($input['song_artist']) && trim($input['song_artist']) !== '' ? trim($input['song_artist']) : ($template_fields['song_artist'] ?? ($favorite_singers ?: null));
     $receiver_photo          = $input['receiver_photo'] ?? null;
     if (!empty($receiver_photo)) {
         $receiver_photo = saveUploadedBase64Image($receiver_photo, $page_id, 'partner_avatar');

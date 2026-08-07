@@ -481,16 +481,24 @@ try {
 
       // Resolve Music Track & Titles
       let finalAudioUrl = content.bg_music_url || 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3';
-      let finalSongTitle = content.song_title || tf.song_title || 'Acoustic Sunset Love';
+      let finalSongTitle = content.song_title || tf.song_title || '';
       let finalArtist = content.song_artist || '';
 
       if (finalAudioUrl === 'random_singer' || !finalAudioUrl || finalAudioUrl.includes('pixabay')) {
-        const matchedList = SINGER_PLAYLISTS['arijit singh'];
+        const singerKey = (content.favorite_singers || 'arijit singh').toLowerCase();
+        const matchedList = SINGER_PLAYLISTS[singerKey] || SINGER_PLAYLISTS['arijit singh'];
         const randomTrack = matchedList[Math.floor(Math.random() * matchedList.length)];
         finalAudioUrl = randomTrack.url;
-        finalSongTitle = randomTrack.title;
-        finalArtist = 'Arijit Singh';
+        if (!finalSongTitle || finalSongTitle === 'Random Hit Track') {
+          finalSongTitle = randomTrack.title;
+        }
+        if (!finalArtist) {
+          finalArtist = content.favorite_singers || 'Arijit Singh';
+        }
       }
+
+      if (!finalSongTitle) finalSongTitle = 'Acoustic Sunset Love';
+      if (!finalArtist) finalArtist = 'Romantic Track';
 
       // Check if bg_music_url is a YouTube Video or Shorts URL
       const ytVideoId = extractYouTubeId(content.bg_music_url);
