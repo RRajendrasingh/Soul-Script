@@ -837,6 +837,10 @@ Today, I want to ask you the most important question of my life. Will you take m
     async function handleFileSelect(e) {
       const files = Array.from(e.target.files);
       for (let file of files) {
+        if (selectedPhotoUrls.length >= 10) {
+          alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
+          break;
+        }
         try {
           const compressed = await compressImage(file, 1600, 1600, 0.82);
           selectedPhotoUrls.push(compressed);
@@ -865,6 +869,10 @@ Today, I want to ask you the most important question of my life. Will you take m
         }
         selectedPhotoUrls.splice(idx, 1);
       } else {
+        if (selectedPhotoUrls.length >= 10) {
+          alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
+          return;
+        }
         selectedPhotoUrls.push(url);
       }
       renderPhotoPicker();

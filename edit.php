@@ -1077,6 +1077,10 @@ $token = trim($_GET['token'] ?? '');
       if (idx > -1) {
         dashPhotosList.splice(idx, 1);
       } else {
+        if (dashPhotosList.length >= 10) {
+          alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
+          return;
+        }
         dashPhotosList.push(url);
       }
       renderDashScrapbookPhotos();
@@ -1087,10 +1091,18 @@ $token = trim($_GET['token'] ?? '');
       if (!files || files.length === 0) return;
 
       Array.from(files).forEach(file => {
+        if (dashPhotosList.length >= 10) {
+          alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
+          return;
+        }
         const reader = new FileReader();
         reader.onload = function(evt) {
           const tempImg = new Image();
           tempImg.onload = function() {
+            if (dashPhotosList.length >= 10) {
+              alert('⚠️ Maximum limit of 10 photos reached!');
+              return;
+            }
             const canvas = document.createElement('canvas');
             const maxDim = 800;
             let w = tempImg.width;

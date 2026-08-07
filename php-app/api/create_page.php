@@ -36,6 +36,9 @@ $hint_answer    = trim($input['hint_answer'] ?? '');
 $love_note_text = trim($input['love_note_text'] ?? '');
 $custom_slug    = trim($input['custom_slug'] ?? '');
 $photos         = $input['photos'] ?? []; // Array of base64 data URLs or uploaded URLs
+if (is_array($photos) && count($photos) > 10) {
+    $photos = array_slice($photos, 0, 10);
+}
 
 if (!$order_id || !$partner_name || !$hint_question || !$hint_answer) {
     http_response_code(400);
