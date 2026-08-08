@@ -34,13 +34,17 @@ $buyer_password_hash = $buyer_password ? hashHintAnswer($buyer_password) : null;
 try {
     $db = getDB();
 
-    // Smart Multi-Gift Account Handling: If email exists, link password
-    $stmtCheck = $db->prepare("SELECT buyer_password_hash FROM orders WHERE LOWER(buyer_email) = LOWER(?) AND buyer_password_hash IS NOT NULL LIMIT 1");
-    $stmtCheck->execute([$buyer_email]);
-    $existingAccount = $stmtCheck->fetch();
-
-    if ($existingAccount && !empty($existingAccount['buyer_password_hash'])) {
-        if (empty($buyer_password_hash)) {
+    // Smart Multi-Gift Account Handling: Sync master password for this email address
+    if (!empty($buyer_password_hash)) {
+        // Update all previous gifts under this email to use the latest master account password
+        $db->prepare("UPDATE orders SET buyer_password_hash = ? WHERE LOWER(buyer_email) = LOWER(?)")
+           ->execute([$buyer_password_hash, strtolower($buyer_email)]);
+    } else {
+        // If no password provided, inherit existing master password for this email
+        $stmtCheck = $db->prepare("SELECT buyer_password_hash FROM orders WHERE LOWER(buyer_email) = LOWER(?) AND buyer_password_hash IS NOT NULL LIMIT 1");
+        $stmtCheck->execute([$buyer_email]);
+        $existingAccount = $stmtCheck->fetch();
+        if ($existingAccount && !empty($existingAccount['buyer_password_hash'])) {
             $buyer_password_hash = $existingAccount['buyer_password_hash'];
         }
     }
