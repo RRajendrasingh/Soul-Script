@@ -641,6 +641,16 @@ if (!empty($_GET['token'])) {
       }
     }
 
+    function normalizeMediaUrlJs(url) {
+      if (!url) return '';
+      if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+        return url;
+      }
+      const appUrl = '<?php echo APP_URL; ?>';
+      const cleanPath = url.replace(/^\/+/, '');
+      return appUrl + '/' + cleanPath;
+    }
+
     function updatePartnerPhotoAvatar(photoUrl, partnerName) {
       const fallback = document.getElementById('partnerAvatarFallback');
       const img = document.getElementById('partnerAvatarImg');
@@ -648,22 +658,35 @@ if (!empty($_GET['token'])) {
       const hiddenInput = document.getElementById('receiverPhotoUrl');
 
       const nameChar = (partnerName || 'P').charAt(0).toUpperCase();
-      fallback.innerText = nameChar;
+      if (fallback) fallback.innerText = nameChar;
 
       if (photoUrl && photoUrl.trim() !== '') {
-        hiddenInput.value = photoUrl;
-        img.src = photoUrl;
-        img.classList.remove('hidden');
-        fallback.classList.add('hidden');
-        removeBtn.classList.remove('hidden');
-        removeBtn.classList.add('flex');
+        if (hiddenInput) hiddenInput.value = photoUrl;
+        const fullUrl = normalizeMediaUrlJs(photoUrl);
+        if (img) {
+          img.src = fullUrl;
+          img.onerror = function() {
+            this.classList.add('hidden');
+            if (fallback) fallback.classList.remove('hidden');
+          };
+          img.classList.remove('hidden');
+        }
+        if (fallback) fallback.classList.add('hidden');
+        if (removeBtn) {
+          removeBtn.classList.remove('hidden');
+          removeBtn.classList.add('flex');
+        }
       } else {
-        hiddenInput.value = '';
-        img.src = '';
-        img.classList.add('hidden');
-        fallback.classList.remove('hidden');
-        removeBtn.classList.add('hidden');
-        removeBtn.classList.remove('flex');
+        if (hiddenInput) hiddenInput.value = '';
+        if (img) {
+          img.src = '';
+          img.classList.add('hidden');
+        }
+        if (fallback) fallback.classList.remove('hidden');
+        if (removeBtn) {
+          removeBtn.classList.add('hidden');
+          removeBtn.classList.remove('flex');
+        }
       }
     }
 
@@ -1071,7 +1094,7 @@ if (!empty($_GET['token'])) {
         container.innerHTML = dashPhotosList.map((item, i) => `
           <div class="rounded-2xl overflow-hidden border border-[#4d444b] relative group bg-[#100d10] p-1.5 shadow-md hover:border-[#eac34a] transition-all flex flex-col">
             <div class="relative w-full aspect-square rounded-xl overflow-hidden">
-              <img src="${item.url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
+              <img src="${normalizeMediaUrlJs(item.url)}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
               <button type="button" onclick="deleteDashPhoto(${i})" class="absolute top-2 right-2 bg-rose-900/90 hover:bg-rose-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shadow-lg transition-colors cursor-pointer border border-rose-400/40">
                 ✕
               </button>
