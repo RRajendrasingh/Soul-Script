@@ -14,6 +14,14 @@ $action = trim($input['action'] ?? $_GET['action'] ?? 'request_reset');
 try {
     $db = getDB();
 
+    // Self-Healing Schema: Automatically add reset_token and reset_expires_at columns to orders if missing
+    try {
+        $db->exec("ALTER TABLE orders ADD COLUMN reset_token VARCHAR(255) NULL");
+    } catch (Exception $e) {}
+    try {
+        $db->exec("ALTER TABLE orders ADD COLUMN reset_expires_at DATETIME NULL");
+    } catch (Exception $e) {}
+
     if ($action === 'request_reset') {
         $email = trim($input['email'] ?? '');
         if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
