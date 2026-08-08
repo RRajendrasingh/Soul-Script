@@ -2,8 +2,19 @@
 require_once __DIR__ . '/config/db.php';
 
 $order_id = $_GET['order_id'] ?? '';
+$preselected_template = $_GET['template'] ?? '';
 $order = null;
 $error = null;
+$show_checkout_form = false;
+
+// Valid templates list
+$valid_templates = [
+    'anniversary_reveal'    => ['name' => 'Anniversary Reveal',    'price' => 499],
+    'birthday_magic'        => ['name' => 'Birthday Magic',        'price' => 399],
+    'perfect_proposal'      => ['name' => 'Perfect Proposal',      'price' => 599],
+    'long_distance_love'    => ['name' => 'Long Distance Love',    'price' => 449],
+    'raksha_bandhan_special'=> ['name' => 'Raksha Bandhan Special','price' => 449],
+];
 
 if ($order_id) {
     $db = getDB();
@@ -16,6 +27,9 @@ if ($order_id) {
     } else if ($order['payment_status'] !== 'paid') {
         $error = "Payment required: The partner details form is only unlocked for paid orders.";
     }
+} elseif ($preselected_template && isset($valid_templates[$preselected_template])) {
+    // User came from homepage Customize link — show checkout form
+    $show_checkout_form = true;
 } else {
     $error = "Missing order ID. Please select a template and complete checkout first.";
 }
@@ -43,7 +57,63 @@ if ($order_id) {
 
   <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 relative z-10 space-y-8">
 
-  <?php if ($error): ?>
+
+  <?php if ($show_checkout_form):
+    $tpl = $valid_templates[$preselected_template];
+  ?>
+    <!-- Inline Checkout Form (from homepage Customize link) -->
+    <div class="bg-[#221f21] rounded-3xl border border-[#eac34a]/30 p-8 shadow-2xl space-y-6">
+      <div class="text-center space-y-2">
+        <span class="text-[10px] uppercase tracking-[0.2em] text-[#eac34a] font-bold">Complete Your Order</span>
+        <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]"><?php echo htmlspecialchars($tpl['name']); ?></h1>
+        <p class="text-xs text-[#d0c3cb]">Enter your details below to unlock your personalization form after payment.</p>
+      </div>
+
+      <div id="checkoutErrorMsg" class="hidden p-3 bg-[#3b1e3b] border border-[#e4b9df]/40 text-[#e4b9df] rounded-xl text-xs font-semibold text-center"></div>
+
+      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
+        <input type="hidden" id="selectedTemplateId" value="<?php echo htmlspecialchars($preselected_template); ?>">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Your Full Name *</label>
+            <input type="text" id="buyerName" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Rohan Sharma" required>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">WhatsApp Number *</label>
+            <div class="flex rounded-xl overflow-hidden border border-[#4d444b] focus-within:border-[#eac34a] bg-[#100d10]">
+              <div class="bg-[#221f21] text-[#eac34a] font-mono text-xs font-bold px-3 flex items-center border-r border-[#4d444b] shrink-0">IN +91</div>
+              <input type="tel" id="buyerPhone" class="w-full bg-transparent px-3 py-2.5 text-sm text-[#e8e0e3] focus:outline-none font-mono" placeholder="9876543210" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')" required>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Email Address *</label>
+            <input type="email" id="buyerEmail" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="you@example.com" required>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Secret Edit Password * <span class="text-[10px] text-[#eac34a]">(min 6 chars)</span></label>
+            <input type="password" id="buyerPassword" minlength="6" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <div class="p-4 bg-[#100d10] border border-[#4d444b] rounded-2xl flex items-center justify-between gap-4">
+          <div>
+            <span class="text-[11px] uppercase font-extrabold text-[#d0c3cb]/70 tracking-wider block">Total</span>
+            <span class="font-serif text-3xl font-extrabold text-[#eac34a]">₹<?php echo $tpl['price']; ?></span>
+          </div>
+          <button type="submit" id="checkoutBtn" class="px-6 py-3.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg flex items-center gap-2 hover:bg-[#ffe088] transition-all">
+            <span>Proceed to Pay & Personalize</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <button type="button" onclick="simulateDevPayment()" class="w-full bg-transparent text-[#eac34a] border border-[#eac34a]/40 text-xs font-semibold py-2.5 rounded-xl hover:border-[#eac34a] transition-all cursor-pointer">
+          ⚡ Test Mode: Instant Skip Payment & Personalize
+        </button>
+      </form>
+    </div>
+
+  <?php elseif ($error): ?>
     <div class="bg-[#221f21] rounded-3xl border border-[#eac34a]/30 p-8 text-center space-y-4 shadow-2xl">
       <div class="w-12 h-12 rounded-full bg-[#3b1e3b] text-[#eac34a] flex items-center justify-center mx-auto border border-[#eac34a]/30">
         <i data-lucide="lock" class="w-6 h-6"></i>
@@ -51,7 +121,7 @@ if ($order_id) {
       <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">Payment Verification Required</h3>
       <p class="text-xs text-[#d0c3cb]"><?php echo htmlspecialchars($error); ?></p>
       <a href="<?php echo APP_URL; ?>/#gallery" class="inline-block px-6 py-2.5 rounded-full bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider shadow-md hover:bg-[#ffe088]">
-        Browse Templates &amp; Complete Order
+        Browse Templates & Complete Order
       </a>
     </div>
   <?php else: ?>
@@ -1298,6 +1368,101 @@ Today, I want to ask you the most important question of my life. Will you take m
         lastScrollY = currentScrollY;
       }, { passive: true });
     })();
+
+    <?php if ($show_checkout_form): ?>
+    // Inline checkout form JS (for create.php?template= flow)
+    let currentTemplateId = document.getElementById('selectedTemplateId')?.value || '';
+    let currentPrice = <?php echo $show_checkout_form ? $tpl['price'] : 0; ?>;
+
+    async function handleCheckoutSubmit(e) {
+      e.preventDefault();
+      const errBox = document.getElementById('checkoutErrorMsg');
+      if (errBox) errBox.classList.add('hidden');
+
+      const rawPhone = document.getElementById('buyerPhone')?.value.trim() || '';
+      const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+      if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+        if (errBox) { errBox.innerText = 'Please enter a valid 10-digit Indian mobile number.'; errBox.classList.remove('hidden'); }
+        return;
+      }
+      const buyerPassword = document.getElementById('buyerPassword')?.value || '';
+      if (buyerPassword.length < 6) {
+        if (errBox) { errBox.innerText = 'Secret Edit Password must be at least 6 characters.'; errBox.classList.remove('hidden'); }
+        return;
+      }
+
+      const btn = document.getElementById('checkoutBtn');
+      if (btn) { btn.innerText = 'Creating Order...'; btn.disabled = true; }
+
+      const payload = {
+        buyer_name: document.getElementById('buyerName')?.value || '',
+        buyer_phone: '+91' + cleanPhone,
+        buyer_email: document.getElementById('buyerEmail')?.value || '',
+        buyer_password: buyerPassword,
+        template_id: currentTemplateId
+      };
+
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/create_order.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          const options = {
+            key: data.razorpay_key_id,
+            amount: currentPrice * 100,
+            currency: 'INR',
+            name: 'SoulScript',
+            description: 'Surprise Reveal Page Order',
+            order_id: data.order.razorpay_order_id,
+            handler: async function(response) {
+              await fetch('<?php echo APP_URL; ?>/api/webhook_razorpay.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_id: data.order.order_id, razorpay_payment_id: response.razorpay_payment_id, status: 'paid' })
+              });
+              window.location.href = '<?php echo APP_URL; ?>/create.php?order_id=' + data.order.order_id;
+            },
+            prefill: { name: payload.buyer_name, email: payload.buyer_email, contact: payload.buyer_phone },
+            theme: { color: '#eac34a' }
+          };
+          const rzp = new Razorpay(options);
+          rzp.open();
+        } else {
+          if (errBox) { errBox.innerText = 'Error: ' + data.message; errBox.classList.remove('hidden'); }
+        }
+      } catch (err) {
+        if (errBox) { errBox.innerText = 'Server error: ' + err.message; errBox.classList.remove('hidden'); }
+      } finally {
+        if (btn) { btn.innerText = 'Proceed to Pay & Personalize'; btn.disabled = false; }
+      }
+    }
+
+    async function simulateDevPayment() {
+      const cleanPhone = (document.getElementById('buyerPhone')?.value || '9876543210').replace(/[^0-9]/g, '');
+      const fullPhone = '+91' + (cleanPhone.length === 10 ? cleanPhone : '9876543210');
+      const payload = {
+        buyer_name: document.getElementById('buyerName')?.value || 'Test Buyer',
+        buyer_phone: fullPhone,
+        buyer_email: document.getElementById('buyerEmail')?.value || 'test@example.com',
+        buyer_password: document.getElementById('buyerPassword')?.value || '123456',
+        template_id: currentTemplateId
+      };
+      const res = await fetch('<?php echo APP_URL; ?>/api/create_order.php', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        await fetch('<?php echo APP_URL; ?>/api/webhook_razorpay.php', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id: data.order.order_id, razorpay_payment_id: 'sim_pay_' + Date.now(), status: 'paid' })
+        });
+        window.location.href = '<?php echo APP_URL; ?>/create.php?order_id=' + data.order.order_id;
+      }
+    }
+    <?php endif; ?>
   </script>
 </body>
 </html>

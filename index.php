@@ -268,10 +268,10 @@ require_once __DIR__ . '/config/config.php';
           </div>
           <div class="space-y-3">
             <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button type="button" data-open-checkout="true" data-template-id="raksha_bandhan_special" data-template-name="Raksha Bandhan Special" data-template-price="449" onclick="openCheckout('raksha_bandhan_special', 'Raksha Bandhan Special', 449)" class="relative z-20 w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 cursor-pointer">
-                <i data-lucide="gift" class="w-4 h-4 pointer-events-none"></i>
-                <span class="pointer-events-none">Customize (₹449)</span>
-              </button>
+              <a href="<?php echo APP_URL; ?>/create.php?template=raksha_bandhan_special" class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 no-underline">
+                <i data-lucide="gift" class="w-4 h-4"></i>
+                <span>Customize (₹449)</span>
+              </a>
               <a href="<?php echo APP_URL; ?>/gift/mona-aman" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#eac34a]/60 transition-all flex items-center justify-center gap-1.5 shrink-0">
                 <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
                 <span>Live Sample</span>
@@ -333,10 +333,10 @@ require_once __DIR__ . '/config/config.php';
           </div>
           <div class="pt-2 flex flex-col gap-2">
             <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button type="button" onclick="openCheckout('anniversary_reveal', 'Anniversary Reveal', 499)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <a href="<?php echo APP_URL; ?>/create.php?template=anniversary_reveal" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 no-underline">
                 <i data-lucide="gift" class="w-4 h-4"></i>
                 <span>Customize (₹499)</span>
-              </button>
+              </a>
               <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
                 <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
                 <span>Live Sample</span>
@@ -398,10 +398,10 @@ require_once __DIR__ . '/config/config.php';
           </div>
           <div class="pt-2 flex flex-col gap-2">
             <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button type="button" onclick="openCheckout('birthday_magic', 'Birthday Magic', 399)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <a href="<?php echo APP_URL; ?>/create.php?template=birthday_magic" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 no-underline">
                 <i data-lucide="gift" class="w-4 h-4"></i>
                 <span>Customize (₹399)</span>
-              </button>
+              </a>
               <a href="<?php echo APP_URL; ?>/gift/kavya-aarav" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
                 <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
                 <span>Live Sample</span>
@@ -462,10 +462,10 @@ require_once __DIR__ . '/config/config.php';
           </div>
           <div class="pt-2 flex flex-col gap-2">
             <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button type="button" onclick="openCheckout('perfect_proposal', 'Perfect Proposal', 599)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <a href="<?php echo APP_URL; ?>/create.php?template=perfect_proposal" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 no-underline">
                 <i data-lucide="gift" class="w-4 h-4"></i>
                 <span>Customize (₹599)</span>
-              </button>
+              </a>
               <a href="<?php echo APP_URL; ?>/gift/priya-aman" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
                 <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
                 <span>Live Sample</span>
@@ -527,10 +527,10 @@ require_once __DIR__ . '/config/config.php';
           </div>
           <div class="pt-2 flex flex-col gap-2">
             <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button type="button" onclick="openCheckout('long_distance_love', 'Long Distance Love', 449)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <a href="<?php echo APP_URL; ?>/create.php?template=long_distance_love" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 no-underline">
                 <i data-lucide="gift" class="w-4 h-4"></i>
                 <span>Customize (₹449)</span>
-              </button>
+              </a>
               <a href="<?php echo APP_URL; ?>/gift/aanya-kabir" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
                 <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
                 <span>Live Sample</span>
