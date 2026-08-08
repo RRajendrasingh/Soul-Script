@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../includes/media_helper.php';
 
 $slug = trim($_GET['slug'] ?? '');
 $userIp = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
@@ -61,7 +62,7 @@ try {
         'partner_name' => htmlspecialchars_decode($page['partner_name'] ?? '', ENT_QUOTES),
         'buyer_name' => htmlspecialchars_decode($page['buyer_name'] ?? '', ENT_QUOTES),
         'hint_question' => htmlspecialchars_decode($page['hint_question'] ?? '', ENT_QUOTES),
-        'receiver_photo' => $page['receiver_photo'] ?? '',
+        'receiver_photo' => !empty($page['receiver_photo']) ? resolveMediaUrl($page['receiver_photo']) : '',
         'status' => $page['status'],
         'expires_at' => $page['expires_at'],
         'is_locked' => $isLocked,

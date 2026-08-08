@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/includes/media_helper.php';
 
 $slug = trim($_GET['slug'] ?? '');
 if (!$slug) {
@@ -44,13 +45,16 @@ try {
     $db = getDB();
     $stmt = $db->prepare("
         SELECT p.page_id, p.template_id, p.url_slug, p.status, p.expires_at,
-               c.partner_name, c.buyer_name, c.hint_question
+               c.partner_name, c.buyer_name, c.hint_question, c.receiver_photo
         FROM pages p
         JOIN page_content c ON p.page_id = c.page_id
         WHERE LOWER(p.url_slug) = LOWER(?)
     ");
     $stmt->execute([$slug]);
     $initialLockData = $stmt->fetch();
+    if ($initialLockData && !empty($initialLockData['receiver_photo'])) {
+        $initialLockData['receiver_photo'] = resolveMediaUrl($initialLockData['receiver_photo']);
+    }
 } catch (Exception $e) {
     $initialLockData = null;
 }
