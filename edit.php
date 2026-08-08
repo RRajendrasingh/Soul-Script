@@ -801,18 +801,23 @@ if (!empty($_GET['token'])) {
       const nameChar = (partnerName || 'P').charAt(0).toUpperCase();
       if (fallback) fallback.innerText = nameChar;
 
-      if (photoUrl && photoUrl.trim() !== '') {
-        if (hiddenInput) hiddenInput.value = photoUrl;
-        const fullUrl = normalizeMediaUrlJs(photoUrl);
+      const isValidPhoto = photoUrl && typeof photoUrl === 'string' && photoUrl.trim() !== '' && photoUrl !== 'null' && photoUrl !== 'undefined';
+
+      if (isValidPhoto) {
+        const cleanUrl = photoUrl.trim();
+        if (hiddenInput) hiddenInput.value = cleanUrl;
+        const fullUrl = normalizeMediaUrlJs(cleanUrl);
         if (img) {
-          img.src = fullUrl;
           img.onerror = function() {
             this.classList.add('hidden');
             if (fallback) fallback.classList.remove('hidden');
           };
-          img.classList.remove('hidden');
+          img.onload = function() {
+            this.classList.remove('hidden');
+            if (fallback) fallback.classList.add('hidden');
+          };
+          img.src = fullUrl;
         }
-        if (fallback) fallback.classList.add('hidden');
         if (removeBtn) {
           removeBtn.classList.remove('hidden');
           removeBtn.classList.add('flex');
