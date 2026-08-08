@@ -66,26 +66,35 @@ if (!empty($_GET['token'])) {
       </div>
     </div>
 
-    <!-- VIEW B: BUYER DASHBOARD (When logged in / token active) -->
-    <div id="dashboardView" class="<?php echo $token ? '' : 'hidden'; ?> space-y-6">
-      
-      <!-- Multi-Gift Website Selector Bar (Hidden if 1 gift owned) -->
-      <div id="multiGiftSelectorCard" class="hidden bg-gradient-to-r from-[#2a1d28] via-[#221f21] to-[#2a1d28] p-4 sm:p-5 rounded-3xl border border-[#eac34a]/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="flex items-center gap-3 text-left w-full sm:w-auto">
-          <div class="w-9 h-9 rounded-2xl bg-[#eac34a] text-[#241a00] flex items-center justify-center font-bold shrink-0 shadow-md">
-            🎁
+    <!-- VIEW B: PURCHASED GIFTS HUB (When logged in / managing multiple gifts) -->
+    <div id="hubView" class="hidden space-y-6">
+      <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#4d444b]/40 pb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center text-xl shrink-0 shadow-md">
+              🎁
+            </div>
+            <div>
+              <span class="text-[10px] uppercase font-extrabold tracking-[0.2em] text-[#eac34a] block">Buyer Portal Hub</span>
+              <h2 class="text-2xl font-bold font-serif text-[#e8e0e3]" id="hubTitleLabel">Your Purchased Gift Websites</h2>
+              <p class="text-xs text-[#d0c3cb]">Manage all your romantic surprise pages in one single private portal.</p>
+            </div>
           </div>
-          <div>
-            <span class="text-[10px] uppercase font-bold tracking-wider text-[#eac34a] block">Your Purchased Gifts</span>
-            <span class="text-xs font-semibold text-[#e8e0e3]" id="multiGiftCountLabel">You own 2 surprise websites</span>
-          </div>
+          <button type="button" onclick="handleBuyerLogout()" class="px-4 py-2.5 rounded-xl bg-[#151215] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-md shrink-0">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>Log Out</span>
+          </button>
         </div>
-        <div class="w-full sm:w-auto">
-          <select id="multiGiftDropdown" onchange="switchActiveGiftWebsite(this.value)" class="w-full sm:w-auto bg-[#100d10] border border-[#eac34a]/60 text-[#e8e0e3] text-xs font-bold rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#eac34a] cursor-pointer shadow-inner">
-            <!-- Dynamic Gift Options -->
-          </select>
+
+        <!-- Purchased Gifts Visual Cards Grid -->
+        <div id="hubGiftsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <!-- Dynamic Purchased Gift Cards -->
         </div>
       </div>
+    </div>
+
+    <!-- VIEW C: BUYER VISUAL EDITOR DASHBOARD -->
+    <div id="dashboardView" class="<?php echo $token ? '' : 'hidden'; ?> space-y-6">
 
       <!-- Active Plan Badge Banner & Share Link -->
       <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -102,7 +111,11 @@ if (!empty($_GET['token'])) {
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" id="backToHubBtn" onclick="showHubView()" class="hidden px-3.5 py-2.5 rounded-xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-md">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span>All Gifts</span>
+          </button>
           <a id="viewLivePageBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#ffe088] transition-all shadow-md">
             <span>View Live Gift</span>
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
@@ -472,11 +485,12 @@ if (!empty($_GET['token'])) {
         if (data.success) {
           if (data.redirect_url) {
             window.location.href = data.redirect_url;
+          } else if (data.pages && data.pages.length > 1) {
+            document.getElementById('loginView').classList.add('hidden');
+            document.getElementById('dashboardView').classList.add('hidden');
+            renderPurchasedGiftsHub(data.pages);
+            document.getElementById('hubView').classList.remove('hidden');
           } else {
-            // Render Multi-Gift Selector if pages returned
-            if (data.pages && data.pages.length > 0) {
-              renderMultiGiftSelector(data.pages, data.edit_token);
-            }
             window.location.href = '<?php echo APP_URL; ?>/edit.php';
           }
         } else {
@@ -649,9 +663,17 @@ if (!empty($_GET['token'])) {
           const tokens = p.tokens_json ? JSON.parse(p.tokens_json) : [];
           renderTokensList(tokens);
 
-          // Render Multi-Gift Website Selector if 2+ gifts owned
-          if (data.buyer_pages) {
-            renderMultiGiftSelector(data.buyer_pages, activeToken);
+          // Store buyer_pages list if returned
+          if (data.buyer_pages && Array.isArray(data.buyer_pages)) {
+            allBuyerPages = data.buyer_pages;
+            const backBtn = document.getElementById('backToHubBtn');
+            if (backBtn) {
+              if (allBuyerPages.length > 1) {
+                backBtn.classList.remove('hidden');
+              } else {
+                backBtn.classList.add('hidden');
+              }
+            }
           }
 
           lucide.createIcons();
@@ -667,39 +689,92 @@ if (!empty($_GET['token'])) {
       }
     }
 
-    function renderMultiGiftSelector(pages, currentToken) {
-      const card = document.getElementById('multiGiftSelectorCard');
-      const select = document.getElementById('multiGiftDropdown');
-      const label = document.getElementById('multiGiftCountLabel');
+    let allBuyerPages = [];
 
-      if (!card || !select || !Array.isArray(pages) || pages.length <= 1) {
-        if (card) card.classList.add('hidden');
-        return;
+    function renderPurchasedGiftsHub(pages) {
+      allBuyerPages = pages || [];
+      const grid = document.getElementById('hubGiftsGrid');
+      const backBtn = document.getElementById('backToHubBtn');
+
+      if (allBuyerPages.length > 1 && backBtn) {
+        backBtn.classList.remove('hidden');
+      } else if (backBtn) {
+        backBtn.classList.add('hidden');
       }
 
-      card.classList.remove('hidden');
-      if (label) label.innerText = `You own ${pages.length} surprise websites under this account`;
+      if (!grid) return;
 
-      const tplNames = {
-        'anniversary_reveal': '🌹 Anniversary Reveal',
-        'birthday_magic': '🎂 Birthday Magic',
-        'perfect_proposal': '💍 Perfect Proposal',
-        'long_distance_love': '🌍 Long Distance Love',
-        'raksha_bandhan_special': '🪔 Raksha Bandhan Special'
+      const tplMeta = {
+        'anniversary_reveal': { name: 'Anniversary Reveal', emoji: '🌹', color: 'from-[#3b1e3b] to-[#221f21]' },
+        'birthday_magic': { name: 'Birthday Magic', emoji: '🎂', color: 'from-[#1e3b30] to-[#221f21]' },
+        'perfect_proposal': { name: 'Perfect Proposal', emoji: '💍', color: 'from-[#3b2d1e] to-[#221f21]' },
+        'long_distance_love': { name: 'Long Distance Love', emoji: '🌍', color: 'from-[#1e2a3b] to-[#221f21]' },
+        'raksha_bandhan_special': { name: 'Raksha Bandhan Special', emoji: '🪔', color: 'from-[#3b1e22] to-[#221f21]' }
       };
 
-      select.innerHTML = pages.map(p => {
-        const tName = tplNames[p.template_id] || '🎁 Gift Website';
+      grid.innerHTML = allBuyerPages.map(p => {
+        const meta = tplMeta[p.template_id] || { name: 'Gift Website', emoji: '🎁', color: 'from-[#221f21] to-[#151215]' };
         const partner = p.partner_name || 'Partner';
-        const isSel = p.edit_token === currentToken ? 'selected' : '';
-        return `<option value="${p.edit_token}" ${isSel}>${tName} — For ${partner} (/gift/${p.url_slug})</option>`;
+        const shareUrl = '<?php echo APP_URL; ?>/gift/' + p.url_slug;
+
+        return `
+          <div class="bg-gradient-to-b ${meta.color} p-5 rounded-2xl border border-[#eac34a]/30 shadow-xl flex flex-col justify-between gap-4 group hover:border-[#eac34a] transition-all">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#100d10] px-2.5 py-1 rounded-full border border-[#eac34a]/30 flex items-center gap-1">
+                  <span>${meta.emoji}</span>
+                  <span>${meta.name}</span>
+                </span>
+                <span class="text-[10px] text-[#d0c3cb]/70 font-mono">/gift/${p.url_slug}</span>
+              </div>
+              <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">Surprise Page for <span class="text-[#eac34a]">${escapeHtml(partner)}</span></h3>
+              <p class="text-xs text-[#d0c3cb]/80 truncate">Private Link: <a href="${shareUrl}" target="_blank" class="underline hover:text-[#eac34a]">${shareUrl}</a></p>
+            </div>
+
+            <div class="flex items-center gap-2 pt-2 border-t border-[#4d444b]/30">
+              <button type="button" onclick="openSelectedGiftEditor('${p.edit_token}')" class="flex-1 py-2.5 px-3 rounded-xl bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                <span>Edit &amp; Manage</span>
+              </button>
+              <a href="${shareUrl}" target="_blank" class="py-2.5 px-3 rounded-xl bg-[#100d10] hover:bg-[#3b1e3b] text-[#e8e0e3] border border-[#4d444b] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1 shrink-0">
+                <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span>View</span>
+              </a>
+            </div>
+          </div>
+        `;
       }).join('');
+
+      if (typeof lucide === 'object') lucide.createIcons();
     }
 
-    async function switchActiveGiftWebsite(newToken) {
-      if (!newToken || newToken === activeToken) return;
-      activeToken = newToken;
-      document.getElementById('activeEditToken').value = newToken;
+    function showHubView() {
+      const loginView = document.getElementById('loginView');
+      const hubView = document.getElementById('hubView');
+      const dashView = document.getElementById('dashboardView');
+
+      if (loginView) loginView.classList.add('hidden');
+      if (dashView) dashView.classList.add('hidden');
+      if (hubView) hubView.classList.remove('hidden');
+
+      if (allBuyerPages.length > 0) {
+        renderPurchasedGiftsHub(allBuyerPages);
+      }
+    }
+
+    async function openSelectedGiftEditor(token) {
+      if (!token) return;
+      activeToken = token;
+      document.getElementById('activeEditToken').value = token;
+
+      const loginView = document.getElementById('loginView');
+      const hubView = document.getElementById('hubView');
+      const dashView = document.getElementById('dashboardView');
+
+      if (loginView) loginView.classList.add('hidden');
+      if (hubView) hubView.classList.add('hidden');
+      if (dashView) dashView.classList.remove('hidden');
+
       loadDashboardData();
     }
 
