@@ -28,12 +28,17 @@ if (!defined('APP_URL')) {
 }
 
 // ── Database ──────────────────────────────────────────────────────────────────
-// All values come from config.env.php. Defaults here are fallback-only.
-if (!defined('DB_HOST')) define('DB_HOST', '127.0.0.1');
-if (!defined('DB_PORT')) define('DB_PORT', '3306');
-if (!defined('DB_NAME')) define('DB_NAME', 'soulscript_db');
-if (!defined('DB_USER')) define('DB_USER', 'root');
-if (!defined('DB_PASS')) define('DB_PASS', '');
+// All values come from config.env.php. Defaults auto-detect Local vs Production if config.env.php is missing.
+$isLocalHost = isset($_SERVER['HTTP_HOST']) && (
+    strpos($_SERVER['HTTP_HOST'], 'localhost') !== false ||
+    strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false
+);
+
+if (!defined('DB_HOST')) define('DB_HOST', $isLocalHost ? '127.0.0.1' : 'localhost');
+if (!defined('DB_PORT')) define('DB_PORT', $isLocalHost ? '3307' : '3306');
+if (!defined('DB_NAME')) define('DB_NAME', $isLocalHost ? 'soulscript_db' : 'u810420317_SoulScript');
+if (!defined('DB_USER')) define('DB_USER', $isLocalHost ? 'root' : 'u810420317_soulscript');
+if (!defined('DB_PASS')) define('DB_PASS', $isLocalHost ? '' : 'Soulscript@#@32');
 
 // ── Razorpay ──────────────────────────────────────────────────────────────────
 // Currently test-mode keys. Update config.env.php to switch to live keys later.
