@@ -27,13 +27,10 @@ function resolveMediaUrl($url, $fallback = '') {
         return $url;
     }
 
-    // 2. Extract /uploads/ relative path from ANY previous URL domain/host
-    $pos = strpos($url, '/uploads/');
+    // 2. Extract uploads/ relative path from ANY previous URL domain/host
+    $pos = strpos($url, 'uploads/');
     if ($pos !== false) {
-        return APP_URL . substr($url, $pos);
-    }
-    if (strpos($url, 'uploads/') === 0) {
-        return APP_URL . '/' . $url;
+        return APP_URL . '/' . substr($url, $pos);
     }
 
     // 3. Absolute HTTP/HTTPS URLs (external Unsplash, etc.)

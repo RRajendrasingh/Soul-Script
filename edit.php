@@ -856,13 +856,9 @@ if (!empty($_GET['token'])) {
       if (!url) return '';
       if (url.startsWith('data:image')) return url;
 
-      const uploadIdx = url.indexOf('/uploads/');
+      const uploadIdx = url.indexOf('uploads/');
       if (uploadIdx !== -1) {
-        return '<?php echo APP_URL; ?>' + url.substring(uploadIdx);
-      }
-      const rawUploadIdx = url.indexOf('uploads/');
-      if (rawUploadIdx === 0) {
-        return '<?php echo APP_URL; ?>/' + url;
+        return '<?php echo APP_URL; ?>/' + url.substring(uploadIdx);
       }
       if (url.startsWith('http://') || url.startsWith('https://')) {
         return url;
