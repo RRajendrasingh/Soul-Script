@@ -731,20 +731,20 @@ Today, I want to ask you the most important question of my life. Will you take m
       updatePartnerPhotoAvatar('', partnerName);
     }
 
-    // Sample Photos Registry (Exact match with 4th SS)
+    // Sample Photos Registry — each image has its own matching caption
     const SAMPLE_PHOTOS = [
-      'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80'
+      { url: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80', caption: 'Our First Date ☕' },
+      { url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80', caption: 'Sunset Memories 🌅' },
+      { url: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80', caption: 'Together Always 💑' },
+      { url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80', caption: 'Best Friends Forever 👫' },
+      { url: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80', caption: 'Celebration Time 🎉' },
+      { url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80', caption: 'Squad Goals 🌟' }
     ];
 
     let selectedPhotoObjects = [
-      { url: SAMPLE_PHOTOS[0], caption: 'Our First Date ☕' },
-      { url: SAMPLE_PHOTOS[1], caption: 'Sunset Memories 🌅' },
-      { url: SAMPLE_PHOTOS[2], caption: 'Moments of Joy ✨' }
+      { url: SAMPLE_PHOTOS[0].url, caption: SAMPLE_PHOTOS[0].caption },
+      { url: SAMPLE_PHOTOS[1].url, caption: SAMPLE_PHOTOS[1].caption },
+      { url: SAMPLE_PHOTOS[2].url, caption: SAMPLE_PHOTOS[2].caption }
     ];
 
     let createLettersList = [
@@ -967,7 +967,9 @@ Today, I want to ask you the most important question of my life. Will you take m
           alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
           return;
         }
-        selectedPhotoObjects.push({ url: url, caption: 'Moments of Joy' });
+        // Use image-specific caption, not generic one
+        const sampleObj = SAMPLE_PHOTOS.find(p => p.url === url);
+        selectedPhotoObjects.push({ url: url, caption: sampleObj ? sampleObj.caption : 'A Beautiful Memory' });
       }
       renderPhotoPicker();
     }
@@ -995,11 +997,12 @@ Today, I want to ask you the most important question of my life. Will you take m
       // Render Quick Pick Sample Gallery with Golden Checkmark
       const sampleGrid = document.getElementById('samplePhotosGrid');
       if (sampleGrid) {
-        sampleGrid.innerHTML = SAMPLE_PHOTOS.map((url, idx) => {
-          const isSelected = selectedPhotoObjects.some(p => p.url === url);
+        sampleGrid.innerHTML = SAMPLE_PHOTOS.map((photo) => {
+          const isSelected = selectedPhotoObjects.some(p => p.url === photo.url);
           return `
-            <div onclick="toggleSamplePhoto('${url}')" class="relative aspect-square rounded-2xl overflow-hidden border-2 cursor-pointer transition-all ${isSelected ? 'border-[#eac34a] shadow-[0_0_15px_rgba(234,195,74,0.4)] scale-95' : 'border-[#4d444b] opacity-60 hover:opacity-100'}">
-              <img src="${url}" class="w-full h-full object-cover">
+            <div onclick="toggleSamplePhoto('${photo.url}')" class="relative aspect-square rounded-2xl overflow-hidden border-2 cursor-pointer transition-all ${isSelected ? 'border-[#eac34a] shadow-[0_0_15px_rgba(234,195,74,0.4)] scale-95' : 'border-[#4d444b] opacity-60 hover:opacity-100'}">
+              <img src="${photo.url}" class="w-full h-full object-cover">
+              <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] text-center py-0.5 px-1 truncate">${photo.caption}</div>
               ${isSelected ? `
                 <div class="absolute inset-0 bg-[#eac34a]/20 flex items-center justify-center">
                   <div class="w-6 h-6 rounded-full bg-[#eac34a] text-[#241a00] flex items-center justify-center text-xs font-extrabold shadow-md">✓</div>
