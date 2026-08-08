@@ -1,7 +1,14 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . '/config/db.php';
 
-$token = trim($_GET['token'] ?? '');
+// Option 2: Password-Gated Session Login (Clean URL, token stored in session)
+$token = trim($_SESSION['edit_token'] ?? $_GET['token'] ?? '');
+if (!empty($_GET['token'])) {
+    $_SESSION['edit_token'] = $_GET['token'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,10 +85,14 @@ $token = trim($_GET['token'] ?? '');
         </div>
 
         <div class="flex items-center gap-2">
-          <a id="viewLivePageBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#ffe088] transition-all">
+          <a id="viewLivePageBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#ffe088] transition-all shadow-md">
             <span>View Live Gift</span>
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           </a>
+          <button type="button" onclick="handleBuyerLogout()" class="px-4 py-2.5 rounded-xl bg-[#221f21] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-md">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>Log Out</span>
+          </button>
         </div>
       </div>
 
@@ -443,8 +454,9 @@ $token = trim($_GET['token'] ?? '');
         if (data.success) {
           if (data.redirect_url) {
             window.location.href = data.redirect_url;
-          } else if (data.edit_token) {
-            window.location.href = `<?php echo APP_URL; ?>/edit.php?token=${encodeURIComponent(data.edit_token)}`;
+          } else {
+            // Option 2: Clean URL (No Token in URL bar)
+            window.location.href = '<?php echo APP_URL; ?>/edit.php';
           }
         } else {
           msg.classList.remove('hidden');
@@ -457,6 +469,13 @@ $token = trim($_GET['token'] ?? '');
         btn.innerText = 'Log In To Live Visual Editor';
         btn.disabled = false;
       }
+    }
+
+    async function handleBuyerLogout() {
+      try {
+        await fetch('<?php echo APP_URL; ?>/api/buyer_logout.php', { method: 'POST' });
+      } catch (e) {}
+      window.location.href = '<?php echo APP_URL; ?>/edit.php';
     }
 
     let dashMusicSearchTimer = null;

@@ -259,13 +259,18 @@ try {
         ];
     }
 
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $_SESSION['edit_token'] = $edit_token;
+
     echo json_encode([
         'success' => true,
         'page_id' => $page_id,
         'url_slug' => $slug,
         'share_url' => APP_URL . '/gift/' . $slug,
         'edit_token' => $edit_token,
-        'edit_url' => APP_URL . '/edit/' . $edit_token,
+        'edit_url' => APP_URL . '/edit.php',
         'message' => 'Surprise reveal page created successfully!'
     ]);
 

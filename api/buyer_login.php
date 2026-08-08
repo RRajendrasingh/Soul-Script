@@ -37,6 +37,12 @@ try {
     $result = $stmt->fetch();
 
     if ($result) {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $_SESSION['edit_token'] = $result['edit_token'];
+        $_SESSION['buyer_email'] = $result['buyer_email'];
+
         echo json_encode([
             'success' => true,
             'message' => 'Login successful!',
