@@ -1648,6 +1648,9 @@ if (!empty($_GET['token'])) {
         }
 
         lastScrollY = currentScrollY;
+      }, { passive: true });
+    })();
+
     function showForgotPasswordModal() {
       const email = document.getElementById('loginEmail')?.value || '';
       if (email && document.getElementById('forgotPassEmail')) {
