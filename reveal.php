@@ -686,7 +686,7 @@ try {
               const capText = escapeHtml(m.caption || 'Sweet Moments');
               return `
                 <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
-                  <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                  <img src="${imgUrl}" onerror="this.onerror=null; this.style.background='#221f21'; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23221f21%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23eac34a%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
                   <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
                     <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
                   </div>
@@ -822,7 +822,7 @@ try {
                 const capText = escapeHtml(m.caption || 'Precious Moments');
                 return `
                   <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
-                    <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                    <img src="${imgUrl}" onerror="this.onerror=null; this.style.background='#221f21'; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23221f21%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23eac34a%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
                     <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
                       <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
                     </div>
@@ -973,7 +973,7 @@ try {
                   const capText = escapeHtml(m.caption || 'Birthday Memory');
                   return `
                     <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden group cursor-pointer bg-[#151215] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
-                      <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" alt="Moments of joy" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                      <img src="${imgUrl}" onerror="this.onerror=null; this.style.background='#221f21'; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23221f21%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23eac34a%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'" alt="Moments of joy" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
                       <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
                         <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
                       </div>
@@ -1146,7 +1146,7 @@ try {
                   const capText = escapeHtml(m.caption || 'Distance Memory');
                   return `
                     <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden group cursor-pointer bg-[#151215] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
-                      <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" alt="Distance memory" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                      <img src="${imgUrl}" onerror="this.onerror=null; this.style.background='#221f21'; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23221f21%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23eac34a%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'" alt="Distance memory" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
                       <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
                         <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
                       </div>
@@ -1350,7 +1350,7 @@ try {
               const capText = escapeHtml(m.caption || 'Childhood Memory');
               return `
                 <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
-                  <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                  <img src="${imgUrl}" onerror="this.onerror=null; this.style.background='#221f21'; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23221f21%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23eac34a%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
                   <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
                     <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
                   </div>
