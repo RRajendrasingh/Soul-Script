@@ -167,12 +167,12 @@ function getDB() {
                 // Demo 5: Raksha Bandhan Special (mona-aman)
                 $chk5 = $pdo->prepare("SELECT COUNT(*) FROM pages WHERE url_slug = 'mona-aman'");
                 $chk5->execute();
-                if (true) {
+                if ($chk5->fetchColumn() == 0) {
                     $pdo->exec("INSERT INTO orders (order_id, buyer_name, buyer_phone, buyer_email, template_id, amount_paid, payment_status) VALUES ('ord_demo_rakhi_05', 'Aman Sharma', '+91 97777 88888', 'aman@example.com', 'raksha_bandhan_special', 449.00, 'paid') ON DUPLICATE KEY UPDATE payment_status='paid'");
                     $pdo->exec("INSERT INTO pages (page_id, order_id, template_id, url_slug, edit_token, status, expires_at) VALUES ('page_demo_05', 'ord_demo_rakhi_05', 'raksha_bandhan_special', 'mona-aman', 'token_demo_edit_05', 'live', DATE_ADD(NOW(), INTERVAL 10 YEAR)) ON DUPLICATE KEY UPDATE status='live'");
                     $passHashRakhi = hashHintAnswer('rakhi');
                     $shagunTokensJson = json_encode([['shagun_voucher_code' => 'AMZ-RAKHI-9876']]);
-                    $pdo->exec("INSERT INTO page_content (page_id, partner_name, buyer_name, hint_question, hint_answer_hash, tagline_quote, favorite_singers, bg_music_url, song_title, song_artist, love_note_text, tokens_json, receiver_photo) VALUES ('page_demo_05', 'Mona', 'Aman', 'What sweet dish did Aman steal from Mona on last Diwali? (Hint: rakhi)', '$passHashRakhi', 'World\'s Best Sister 👑', 'Arijit Singh', 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3', 'Phoolon Ka Taron Ka', 'Kishore Kumar', 'Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)', '$shagunTokensJson', '{$demoPhotos[2]}') ON DUPLICATE KEY UPDATE partner_name=VALUES(partner_name), buyer_name=VALUES(buyer_name), hint_question=VALUES(hint_question), hint_answer_hash=VALUES(hint_answer_hash), tagline_quote=VALUES(tagline_quote), bg_music_url=VALUES(bg_music_url), song_title=VALUES(song_title), song_artist=VALUES(song_artist), love_note_text=VALUES(love_note_text), tokens_json=VALUES(tokens_json), receiver_photo=VALUES(receiver_photo)");
+                    $pdo->exec("INSERT INTO page_content (page_id, partner_name, buyer_name, hint_question, hint_answer_hash, tagline_quote, favorite_singers, bg_music_url, song_title, song_artist, love_note_text, tokens_json, receiver_photo) VALUES ('page_demo_05', 'Mona', 'Aman', 'What sweet dish did Aman steal from Mona on last Diwali? (Hint: rakhi)', '$passHashRakhi', 'World\'s Best Sister 👑', 'Kishore Kumar', 'https://www.youtube.com/watch?v=5rO60K0bT_E', 'Phoolon Ka Taron Ka', 'Kishore Kumar', 'Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)', '$shagunTokensJson', '{$demoPhotos[2]}') ON DUPLICATE KEY UPDATE partner_name=VALUES(partner_name), buyer_name=VALUES(buyer_name), hint_question=VALUES(hint_question), hint_answer_hash=VALUES(hint_answer_hash), tagline_quote=VALUES(tagline_quote), bg_music_url=VALUES(bg_music_url), song_title=VALUES(song_title), song_artist=VALUES(song_artist), love_note_text=VALUES(love_note_text), tokens_json=VALUES(tokens_json), receiver_photo=VALUES(receiver_photo)");
 
                     // Seed 5 Sibling Promises
                     $pdo->exec("DELETE FROM reasons_list WHERE page_id = 'page_demo_05'");
@@ -203,19 +203,6 @@ function getDB() {
                         $pdo->exec("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES ('$mId', 'page_demo_05', '$pUrl', " . ($idx + 1) . ", " . $pdo->quote($cap) . ")");
                     }
                 }
-
-                // Update legacy /gift/mona slug if present to raksha_bandhan_special
-                try {
-                    $chkMona = $pdo->prepare("SELECT page_id FROM pages WHERE url_slug = 'mona'");
-                    $chkMona->execute();
-                    $monaPageId = $chkMona->fetchColumn();
-                    if ($monaPageId) {
-                        $pdo->exec("UPDATE pages SET template_id = 'raksha_bandhan_special' WHERE page_id = '$monaPageId'");
-                        $passHashMona = hashHintAnswer('rakhi');
-                        $shagunTokensJson = json_encode([['shagun_voucher_code' => 'AMZ-RAKHI-9876']]);
-                        $pdo->exec("UPDATE page_content SET partner_name = 'Mona', buyer_name = 'Aman', hint_question = 'What sweet dish did Aman steal from Mona on last Diwali? (Hint: rakhi)', hint_answer_hash = '$passHashMona', tagline_quote = 'World\'s Best Sister 👑', receiver_photo = '{$demoPhotos[2]}', tokens_json = '$shagunTokensJson' WHERE page_id = '$monaPageId'");
-                    }
-                } catch (Exception $exMona) { /* ignore */ }
 
                 // Auto-heal double HTML entity encoded hint questions in page_content table
                 $pdo->exec("UPDATE page_content SET hint_question = REPLACE(REPLACE(hint_question, '&amp;#039;', '\''), '&#039;', '\'') WHERE hint_question LIKE '%&#039;%' OR hint_question LIKE '%&amp;%'");
