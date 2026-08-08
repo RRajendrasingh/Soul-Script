@@ -1016,11 +1016,20 @@ $token = trim($_GET['token'] ?? '');
 
     function renderPhotosList(media) {
       if (Array.isArray(media)) {
-        dashPhotosList = media.map(m => typeof m === 'string' ? m : m.file_path);
+        dashPhotosList = media.map(m => {
+          if (typeof m === 'string') return { url: m, caption: 'Moments of Joy' };
+          return { url: m.file_path || '', caption: m.caption || 'Moments of Joy' };
+        });
       } else {
         dashPhotosList = [];
       }
       renderDashScrapbookPhotos();
+    }
+
+    function updateDashPhotoCaption(index, val) {
+      if (dashPhotosList[index]) {
+        dashPhotosList[index].caption = val;
+      }
     }
 
     function renderDashScrapbookPhotos() {
@@ -1039,19 +1048,22 @@ $token = trim($_GET['token'] ?? '');
           </div>
         `;
       } else {
-        container.innerHTML = dashPhotosList.map((url, i) => `
-          <div class="aspect-square rounded-2xl overflow-hidden border border-[#4d444b] relative group bg-[#100d10] shadow-md hover:border-[#eac34a] transition-all">
-            <img src="${url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
-            <button type="button" onclick="deleteDashPhoto(${i})" class="absolute top-2 right-2 bg-rose-900/90 hover:bg-rose-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shadow-lg transition-colors cursor-pointer border border-rose-400/40">
-              ✕
-            </button>
+        container.innerHTML = dashPhotosList.map((item, i) => `
+          <div class="rounded-2xl overflow-hidden border border-[#4d444b] relative group bg-[#100d10] p-1.5 shadow-md hover:border-[#eac34a] transition-all flex flex-col">
+            <div class="relative w-full aspect-square rounded-xl overflow-hidden">
+              <img src="${item.url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
+              <button type="button" onclick="deleteDashPhoto(${i})" class="absolute top-2 right-2 bg-rose-900/90 hover:bg-rose-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shadow-lg transition-colors cursor-pointer border border-rose-400/40">
+                ✕
+              </button>
+            </div>
+            <input type="text" placeholder="✍️ Memory caption..." value="${escapeHtml(item.caption || '')}" oninput="updateDashPhotoCaption(${i}, this.value)" class="w-full bg-[#1b171b] border border-[#4d444b] rounded-lg px-2 py-1 text-[10px] text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none placeholder-[#8a7b85] mt-1.5">
           </div>
         `).join('');
       }
 
       if (sampleGrid) {
         sampleGrid.innerHTML = SAMPLE_SCRAPBOOK_PHOTOS.map(url => {
-          const isSel = dashPhotosList.includes(url);
+          const isSel = dashPhotosList.some(p => p.url === url);
           return `
             <div onclick="toggleDashSamplePhoto('${url}')" class="aspect-square rounded-xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/40' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-105 transition-all">
               <img src="${url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
@@ -1074,7 +1086,7 @@ $token = trim($_GET['token'] ?? '');
     }
 
     function toggleDashSamplePhoto(url) {
-      const idx = dashPhotosList.indexOf(url);
+      const idx = dashPhotosList.findIndex(p => p.url === url);
       if (idx > -1) {
         dashPhotosList.splice(idx, 1);
       } else {
@@ -1082,7 +1094,7 @@ $token = trim($_GET['token'] ?? '');
           alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
           return;
         }
-        dashPhotosList.push(url);
+        dashPhotosList.push({ url: url, caption: 'Moments of Joy' });
       }
       renderDashScrapbookPhotos();
     }
@@ -1123,7 +1135,7 @@ $token = trim($_GET['token'] ?? '');
             ctx.drawImage(tempImg, 0, 0, w, h);
             const compressedUrl = canvas.toDataURL('image/jpeg', 0.85);
 
-            dashPhotosList.push(compressedUrl);
+            dashPhotosList.push({ url: compressedUrl, caption: 'Moments of Joy' });
             renderDashScrapbookPhotos();
           };
           tempImg.src = evt.target.result;

@@ -216,9 +216,11 @@ try {
     $savedMedia = [];
     $stmtMedia = $db->prepare("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES (?, ?, ?, ?, ?)");
 
-    foreach ($photos as $idx => $photoData) {
+    foreach ($photos as $idx => $photoItem) {
         $media_id = 'media_' . $page_id . '_' . ($idx + 1);
         $filePath = '';
+        $photoData = is_array($photoItem) ? ($photoItem['url'] ?? '') : $photoItem;
+        $photoCaption = is_array($photoItem) ? trim($photoItem['caption'] ?? '') : '';
 
         if (strpos($photoData, 'data:image') === 0) {
             // Base64 image payload from client compressor
@@ -242,10 +244,12 @@ try {
             $filePath = normalizeMediaUrl($photoData);
         }
 
-        $stmtMedia->execute([$media_id, $page_id, $filePath, $idx + 1, 'Moments of Joy']);
+        $finalCaption = !empty($photoCaption) ? $photoCaption : 'Moments of Joy';
+        $stmtMedia->execute([$media_id, $page_id, $filePath, $idx + 1, $finalCaption]);
         $savedMedia[] = [
             'media_id' => $media_id,
             'file_path' => $filePath,
+            'caption' => $finalCaption,
             'display_order' => $idx + 1
         ];
     }

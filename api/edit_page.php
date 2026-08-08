@@ -226,11 +226,14 @@ try {
             }
             $db->prepare("DELETE FROM page_media WHERE page_id = ?")->execute([$page_id]);
             $stmtMedia = $db->prepare("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES (?, ?, ?, ?, ?)");
-            foreach ($input['media_photos'] as $idx => $photoUrl) {
-                if (!empty($photoUrl)) {
-                    $finalUrl = saveUploadedBase64Image($photoUrl, $page_id, 'scrapbook_' . ($idx + 1));
+            foreach ($input['media_photos'] as $idx => $photoItem) {
+                $photoData = is_array($photoItem) ? ($photoItem['url'] ?? '') : $photoItem;
+                $photoCaption = is_array($photoItem) ? trim($photoItem['caption'] ?? '') : '';
+                if (!empty($photoData)) {
+                    $finalUrl = saveUploadedBase64Image($photoData, $page_id, 'scrapbook_' . ($idx + 1));
                     $media_id = 'media_' . $page_id . '_' . time() . '_' . ($idx + 1);
-                    $stmtMedia->execute([$media_id, $page_id, $finalUrl, $idx + 1, 'Moments of Joy']);
+                    $finalCaption = !empty($photoCaption) ? $photoCaption : 'Moments of Joy';
+                    $stmtMedia->execute([$media_id, $page_id, $finalUrl, $idx + 1, $finalCaption]);
                 }
             }
         }

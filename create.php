@@ -654,7 +654,11 @@ Today, I want to ask you the most important question of my life. Will you take m
       'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80'
     ];
 
-    let selectedPhotoUrls = [SAMPLE_PHOTOS[0], SAMPLE_PHOTOS[1], SAMPLE_PHOTOS[2]];
+    let selectedPhotoObjects = [
+      { url: SAMPLE_PHOTOS[0], caption: 'Our First Date ☕' },
+      { url: SAMPLE_PHOTOS[1], caption: 'Sunset Memories 🌅' },
+      { url: SAMPLE_PHOTOS[2], caption: 'Moments of Joy ✨' }
+    ];
 
     let createLettersList = [
       { id: "let_1", title: "Open When You Miss Me 💌", category: "Romantic", unlock_condition: "immediate", content: "Remember that no matter the distance, my heart is always right there with you." },
@@ -834,13 +838,13 @@ Today, I want to ask you the most important question of my life. Will you take m
     async function handleFileSelect(e) {
       const files = Array.from(e.target.files);
       for (let file of files) {
-        if (selectedPhotoUrls.length >= 10) {
+        if (selectedPhotoObjects.length >= 10) {
           alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
           break;
         }
         try {
           const compressed = await compressImage(file, 1600, 1600, 0.82);
-          selectedPhotoUrls.push(compressed);
+          selectedPhotoObjects.push({ url: compressed, caption: 'Moments of Joy' });
         } catch (err) {
           console.error(err);
         }
@@ -849,45 +853,54 @@ Today, I want to ask you the most important question of my life. Will you take m
     }
 
     function removePhoto(idx) {
-      if (selectedPhotoUrls.length <= 1) {
+      if (selectedPhotoObjects.length <= 1) {
         alert('Please keep at least 1 photo!');
         return;
       }
-      selectedPhotoUrls.splice(idx, 1);
+      selectedPhotoObjects.splice(idx, 1);
       renderPhotoPicker();
     }
 
+    function updatePhotoCaption(idx, val) {
+      if (selectedPhotoObjects[idx]) {
+        selectedPhotoObjects[idx].caption = val;
+      }
+    }
+
     function toggleSamplePhoto(url) {
-      const idx = selectedPhotoUrls.indexOf(url);
+      const idx = selectedPhotoObjects.findIndex(p => p.url === url);
       if (idx > -1) {
-        if (selectedPhotoUrls.length <= 1) {
+        if (selectedPhotoObjects.length <= 1) {
           alert('Please keep at least 1 photo!');
           return;
         }
-        selectedPhotoUrls.splice(idx, 1);
+        selectedPhotoObjects.splice(idx, 1);
       } else {
-        if (selectedPhotoUrls.length >= 10) {
+        if (selectedPhotoObjects.length >= 10) {
           alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
           return;
         }
-        selectedPhotoUrls.push(url);
+        selectedPhotoObjects.push({ url: url, caption: 'Moments of Joy' });
       }
       renderPhotoPicker();
     }
 
     function renderPhotoPicker() {
       const countElem = document.getElementById('selectedPhotoCount');
-      if (countElem) countElem.innerText = `Selected: ${selectedPhotoUrls.length}/10 photos`;
+      if (countElem) countElem.innerText = `Selected: ${selectedPhotoObjects.length}/10 photos`;
 
-      // Render Selected Uploads
+      // Render Selected Uploads with Caption Inputs
       const prevContainer = document.getElementById('photoPreviewContainer');
       if (prevContainer) {
-        prevContainer.innerHTML = selectedPhotoUrls.map((url, idx) => `
-          <div class="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-[#eac34a]/60 group bg-[#100d10] shrink-0">
-            <img src="${url}" class="w-full h-full object-cover">
-            <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/80 text-white flex items-center justify-center text-xs font-bold hover:bg-rose-600 transition-colors">
-              ✕
-            </button>
+        prevContainer.innerHTML = selectedPhotoObjects.map((item, idx) => `
+          <div class="relative w-28 flex-col flex shrink-0 group bg-[#100d10] p-1.5 rounded-2xl border-2 border-[#eac34a]/60">
+            <div class="relative w-full h-20 rounded-xl overflow-hidden">
+              <img src="${item.url}" class="w-full h-full object-cover">
+              <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/80 text-white flex items-center justify-center text-xs font-bold hover:bg-rose-600 transition-colors">
+                ✕
+              </button>
+            </div>
+            <input type="text" placeholder="✍️ Memory caption..." value="${escapeHtml(item.caption || '')}" oninput="updatePhotoCaption(${idx}, this.value)" class="w-full bg-[#1b171b] border border-[#4d444b] rounded-lg px-2 py-1 text-[10px] text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none placeholder-[#8a7b85] mt-1.5">
           </div>
         `).join('');
       }
@@ -896,7 +909,7 @@ Today, I want to ask you the most important question of my life. Will you take m
       const sampleGrid = document.getElementById('samplePhotosGrid');
       if (sampleGrid) {
         sampleGrid.innerHTML = SAMPLE_PHOTOS.map((url, idx) => {
-          const isSelected = selectedPhotoUrls.includes(url);
+          const isSelected = selectedPhotoObjects.some(p => p.url === url);
           return `
             <div onclick="toggleSamplePhoto('${url}')" class="relative aspect-square rounded-2xl overflow-hidden border-2 cursor-pointer transition-all ${isSelected ? 'border-[#eac34a] shadow-[0_0_15px_rgba(234,195,74,0.4)] scale-95' : 'border-[#4d444b] opacity-60 hover:opacity-100'}">
               <img src="${url}" class="w-full h-full object-cover">
@@ -1098,7 +1111,7 @@ Today, I want to ask you the most important question of my life. Will you take m
         hint_question: formData.get('hint_question'),
         hint_answer: formData.get('hint_answer'),
         custom_slug: formData.get('custom_slug'),
-        photos: selectedPhotoUrls,
+        photos: selectedPhotoObjects,
         letters: letters,
         tokens: tokens,
         template_fields: {
