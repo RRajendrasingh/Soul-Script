@@ -33,7 +33,18 @@ $buyer_password_hash = $buyer_password ? hashHintAnswer($buyer_password) : null;
 
 try {
     $db = getDB();
-    
+
+    // Smart Multi-Gift Account Handling: If email exists, link password
+    $stmtCheck = $db->prepare("SELECT buyer_password_hash FROM orders WHERE LOWER(buyer_email) = LOWER(?) AND buyer_password_hash IS NOT NULL LIMIT 1");
+    $stmtCheck->execute([$buyer_email]);
+    $existingAccount = $stmtCheck->fetch();
+
+    if ($existingAccount && !empty($existingAccount['buyer_password_hash'])) {
+        if (empty($buyer_password_hash)) {
+            $buyer_password_hash = $existingAccount['buyer_password_hash'];
+        }
+    }
+
     // Fetch template price
     $stmt = $db->prepare("SELECT price_inr FROM templates WHERE template_id = ? AND active = 1");
     $stmt->execute([$template_id]);

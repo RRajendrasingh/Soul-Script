@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../includes/email_helper.php';
 
 if (!defined('UPLOAD_DIR')) {
     define('UPLOAD_DIR', __DIR__ . '/../uploads');
@@ -263,6 +264,20 @@ try {
         session_start();
     }
     $_SESSION['edit_token'] = $edit_token;
+
+    // Dispatch Automated Payment Receipt & Access Email to Buyer (non-blocking)
+    try {
+        sendOrderReceiptEmail([
+            'buyer_name' => $order['buyer_name'],
+            'buyer_email' => $order['buyer_email'],
+            'order_id' => $order['order_id'],
+            'template_name' => $order['template_id'],
+            'amount_paid' => $order['amount_paid'],
+            'url_slug' => $slug
+        ]);
+    } catch (Exception $mailErr) {
+        error_log("Receipt email notice: " . $mailErr->getMessage());
+    }
 
     echo json_encode([
         'success' => true,

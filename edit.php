@@ -53,7 +53,10 @@ if (!empty($_GET['token'])) {
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Secret Edit Password</label>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-bold text-[#d0c3cb]">Secret Edit Password</label>
+              <button type="button" onclick="showForgotPasswordModal()" class="text-[11px] text-[#eac34a] hover:underline cursor-pointer">Forgot Password?</button>
+            </div>
             <input type="password" id="loginPassword" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="Enter your edit password" required>
           </div>
 
@@ -63,6 +66,39 @@ if (!empty($_GET['token'])) {
             Log In To Live Visual Editor
           </button>
         </form>
+      </div>
+    </div>
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div id="forgotPasswordModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 max-w-md w-full space-y-5 shadow-2xl relative">
+        <button type="button" onclick="closeForgotPasswordModal()" class="absolute top-4 right-4 text-[#d0c3cb] hover:text-white p-1 text-lg">✕</button>
+        <div class="text-center space-y-1">
+          <div class="w-12 h-12 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 flex items-center justify-center mx-auto mb-2">
+            <i data-lucide="key-round" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">Reset Password 🔑</h3>
+          <p class="text-xs text-[#d0c3cb]">Enter your registered email to reset your account password in 10 seconds.</p>
+        </div>
+
+        <form id="forgotPassForm" onsubmit="handleRequestPasswordReset(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Registered Email Address</label>
+            <input type="email" id="forgotPassEmail" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. rohan@example.com" required>
+          </div>
+
+          <div id="forgotPassMsg" class="hidden text-xs text-center p-3 rounded-xl"></div>
+
+          <button type="submit" id="forgotPassBtn" class="w-full py-3 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-md">
+            Send Password Reset Link
+          </button>
+        </form>
+
+        <div id="forgotPassOptions" class="hidden space-y-2 pt-2 border-t border-[#4d444b]/40 text-center">
+          <a id="forgotWaBtn" href="#" target="_blank" class="w-full py-2.5 bg-[#25D366] text-black font-bold text-xs rounded-xl flex items-center justify-center gap-2 text-decoration-none font-bold">
+            <span>💬 1-Click WhatsApp Support Reset</span>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -1612,8 +1648,65 @@ if (!empty($_GET['token'])) {
         }
 
         lastScrollY = currentScrollY;
-      }, { passive: true });
-    })();
+    function showForgotPasswordModal() {
+      const email = document.getElementById('loginEmail')?.value || '';
+      if (email && document.getElementById('forgotPassEmail')) {
+        document.getElementById('forgotPassEmail').value = email;
+      }
+      document.getElementById('forgotPasswordModal').classList.remove('hidden');
+      if (typeof lucide === 'object') lucide.createIcons();
+    }
+
+    function closeForgotPasswordModal() {
+      document.getElementById('forgotPasswordModal').classList.add('hidden');
+      document.getElementById('forgotPassMsg').classList.add('hidden');
+      document.getElementById('forgotPassOptions').classList.add('hidden');
+    }
+
+    async function handleRequestPasswordReset(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgotPassEmail').value.trim();
+      const btn = document.getElementById('forgotPassBtn');
+      const msg = document.getElementById('forgotPassMsg');
+      const options = document.getElementById('forgotPassOptions');
+      const waBtn = document.getElementById('forgotWaBtn');
+
+      if (!email) return;
+      btn.innerText = 'Sending Reset Link...';
+      btn.disabled = true;
+      msg.classList.add('hidden');
+
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/forgot_password.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'request_reset', email: email })
+        });
+        const data = await res.json();
+
+        msg.classList.remove('hidden');
+        btn.disabled = false;
+        btn.innerText = 'Send Password Reset Link';
+
+        if (data.success) {
+          msg.className = 'text-xs text-center p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300';
+          msg.innerText = '✅ Password reset instructions sent! You can also use 1-Click WhatsApp support reset below.';
+          if (data.whatsapp_link && waBtn) {
+            waBtn.href = data.whatsapp_link;
+            options.classList.remove('hidden');
+          }
+        } else {
+          msg.className = 'text-xs text-center p-3 rounded-xl bg-rose-950/70 border border-rose-500/40 text-rose-300';
+          msg.innerText = '❌ ' + (data.message || 'Email not found. Please check your email address.');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerText = 'Send Password Reset Link';
+        msg.classList.remove('hidden');
+        msg.className = 'text-xs text-center p-3 rounded-xl bg-rose-950/70 border border-rose-500/40 text-rose-300';
+        msg.innerText = '❌ Network error. Please try again.';
+      }
+    }
   </script>
 </body>
 </html>
