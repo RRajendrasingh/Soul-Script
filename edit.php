@@ -178,15 +178,15 @@ $token = trim($_GET['token'] ?? '');
               </div>
 
               <!-- Selected Track Card -->
-              <div id="dashSelectedTrackCard" class="bg-[#100d10] p-3 rounded-xl border border-[#eac34a]/60 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <img id="dashSelectedTrackImg" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-lg object-cover border border-[#4d444b]">
-                  <div>
-                    <span class="block font-bold text-xs text-[#e8e0e3]" id="dashSelectedTrackTitle">Tum Hi Ho</span>
-                    <span class="block text-[10px] text-[#eac34a]" id="dashSelectedTrackArtist">Artist: Arijit Singh</span>
+              <div id="dashSelectedTrackCard" class="bg-[#100d10] p-3 rounded-xl border border-[#eac34a]/60 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                  <img id="dashSelectedTrackImg" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-lg object-cover border border-[#4d444b] shrink-0">
+                  <div class="min-w-0 flex-1">
+                    <span class="block font-bold text-xs text-[#e8e0e3] truncate" id="dashSelectedTrackTitle">Tum Hi Ho</span>
+                    <span class="block text-[10px] text-[#eac34a] truncate" id="dashSelectedTrackArtist">Artist: Arijit Singh</span>
                   </div>
                 </div>
-                <span class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] px-2.5 py-1 rounded-full border border-[#e4b9df]/20 font-bold">✓ Selected</span>
+                <span class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] px-2.5 py-1 rounded-full border border-[#e4b9df]/20 font-bold shrink-0">✓ Selected</span>
               </div>
 
               <!-- Live Search Results Container -->
@@ -231,7 +231,7 @@ $token = trim($_GET['token'] ?? '');
 
         <!-- TAB 3: SECURITY & PASSWORDS MANAGEMENT -->
         <div id="tabContent-security" class="hidden space-y-6 text-xs">
-          <div class="border-b border-[#4d444b]/40 pb-3 flex items-center justify-between">
+          <div class="border-b border-[#4d444b]/40 pb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
               <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
                 <i data-lucide="shield-check" class="w-5 h-5 text-[#eac34a]"></i>
@@ -244,15 +244,15 @@ $token = trim($_GET['token'] ?? '');
             </span>
           </div>
 
-          <div class="bg-[#151215] p-5 sm:p-7 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-6">
+          <div class="bg-[#151215] p-4 sm:p-7 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-6">
             <!-- Buyer Portal Login Password Header -->
-            <div class="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-[#221f21] via-[#2d222d] to-[#221f21] border border-[#eac34a]/30">
-              <div class="w-12 h-12 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center shrink-0 shadow-md">
-                <i data-lucide="key-round" class="w-6 h-6 text-[#eac34a]"></i>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#221f21] via-[#2d222d] to-[#221f21] border border-[#eac34a]/30">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center shrink-0 shadow-md">
+                <i data-lucide="key-round" class="w-5 h-5 sm:w-6 sm:h-6 text-[#eac34a]"></i>
               </div>
-              <div>
+              <div class="space-y-0.5">
                 <h4 class="font-bold text-sm text-[#e8e0e3]">Update Buyer Account Password 🔑</h4>
-                <p class="text-[11px] text-[#d0c3cb]">Change the secret password used to log in at <code>soulscript.in/edit</code>. Leave all fields blank if you don't wish to change your password.</p>
+                <p class="text-[11px] text-[#d0c3cb] leading-relaxed">Change the secret password used to log in at <code>soulscript.in/edit</code>. Leave all fields blank if you don't wish to change your password.</p>
               </div>
             </div>
 
@@ -312,7 +312,7 @@ $token = trim($_GET['token'] ?? '');
 
         <!-- TAB 4: SCRAPBOOK PHOTOS MANAGEMENT -->
         <div id="tabContent-photos" class="hidden space-y-5 text-xs">
-          <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#4d444b]/40 pb-3">
             <div>
               <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
                 <i data-lucide="image" class="w-5 h-5 text-[#eac34a]"></i>
@@ -320,7 +320,7 @@ $token = trim($_GET['token'] ?? '');
               </h3>
               <span class="text-[11px] text-[#d0c3cb]" id="dashSelectedPhotoCount">Selected: 0 photos</span>
             </div>
-            <button type="button" onclick="document.getElementById('dashScrapbookFileInput').click()" class="px-4 py-2 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center gap-1.5 cursor-pointer shadow-md">
+            <button type="button" onclick="document.getElementById('dashScrapbookFileInput').click()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0">
               <i data-lucide="upload" class="w-3.5 h-3.5"></i>
               <span>Upload Photos</span>
             </button>
