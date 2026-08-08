@@ -271,30 +271,125 @@ try {
       if (lbl) lbl.textContent = isPlaying ? '⏸ Pause' : '▶ Music';
     }
 
+    function showSongBadge(songTitle, artist, audioUrl, ytVideoId) {
+      // Find the result content container and inject the badge at top
+      const container = document.getElementById('resultContentContainer');
+      if (!container) return;
+
+      // Remove existing badge if any
+      const old = document.getElementById('songForYouBadge');
+      if (old) old.remove();
+
+      const badge = document.createElement('div');
+      badge.id = 'songForYouBadge';
+      badge.className = 'relative z-10 mx-4 mt-6 mb-2';
+      badge.innerHTML = `
+        <div id="songBadgeInner" onclick="playSongFromBadge('${audioUrl || ''}', '${ytVideoId || ''}', '${(songTitle || '').replace(/'/g, '')}', '${(artist || '').replace(/'/g, '')}')"
+             class="cursor-pointer group flex items-center gap-4 bg-gradient-to-r from-[#3b1e3b] to-[#221f21] border border-[#eac34a]/40 rounded-2xl p-4 shadow-[0_0_30px_rgba(234,195,74,0.15)] hover:border-[#eac34a]/80 hover:shadow-[0_0_40px_rgba(234,195,74,0.3)] transition-all duration-300 select-none">
+          <!-- Animated Music Icon -->
+          <div class="w-12 h-12 rounded-xl bg-[#eac34a] flex items-center justify-center shadow-lg shrink-0 group-hover:scale-110 transition-transform duration-300">
+            <svg id="songBadgeIcon" class="w-6 h-6 fill-[#241a00] ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          </div>
+          <!-- Song Info -->
+          <div class="flex-1 min-w-0">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-[#eac34a] mb-0.5">🎵 A Song Just For You</p>
+            <p id="songBadgeTitle" class="text-sm font-bold text-[#e8e0e3] truncate">${songTitle || 'Romantic Track'}</p>
+            <p id="songBadgeArtist" class="text-[10px] text-[#d0c3cb] truncate">${artist || 'Special for you'}</p>
+          </div>
+          <!-- Tap Hint -->
+          <div id="songBadgeTapHint" class="text-[9px] text-[#eac34a]/70 font-bold uppercase tracking-wider shrink-0 text-right">
+            Tap to<br>Play ▶
+          </div>
+        </div>
+      `;
+      // Insert at the very beginning of result content
+      container.insertBefore(badge, container.firstChild);
+    }
+
+    function playSongFromBadge(audioUrl, ytVideoId, songTitle, artist) {
+      // Update badge to playing state
+      const tapHint = document.getElementById('songBadgeTapHint');
+      const badgeIcon = document.getElementById('songBadgeIcon');
+      const badgeInner = document.getElementById('songBadgeInner');
+
+      if (ytVideoId) {
+        // YouTube audio
+        let ytContainer = document.getElementById('ytAudioIframeContainer');
+        if (!ytContainer) {
+          ytContainer = document.createElement('div');
+          ytContainer.id = 'ytAudioIframeContainer';
+          ytContainer.className = 'fixed top-0 left-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden';
+          document.body.appendChild(ytContainer);
+        }
+        ytContainer.innerHTML = `<iframe id="ytAudioIframe" width="100" height="100" src="https://www.youtube.com/embed/${ytVideoId}?enablejsapi=1&autoplay=1&loop=1&playlist=${ytVideoId}" allow="autoplay"></iframe>`;
+        isPlaying = true;
+      } else {
+        // Regular audio
+        const audio = document.getElementById('bgAudio');
+        if (audio) {
+          audio.play().then(() => {
+            isPlaying = true;
+            const btn = document.getElementById('audioPlayBtn');
+            if (btn) btn.innerHTML = PAUSE_SVG;
+            syncMusicBtnLabel();
+          }).catch(e => console.log('Play error:', e));
+        }
+      }
+
+      // Update badge UI to show playing state
+      if (badgeIcon) badgeIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+      if (tapHint) tapHint.innerHTML = 'Now<br>Playing ♪';
+      if (badgeInner) {
+        badgeInner.onclick = () => toggleAudioPlay();
+        badgeInner.classList.add('border-[#eac34a]/80');
+      }
+
+      // Show floating music box
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) {
+        musicBox.classList.remove('hidden');
+        musicBox.classList.add('flex');
+      }
+
+      // Update mobile top bar button
+      isPlaying = true;
+      syncMusicBtnLabel();
+    }
+
     function toggleAudioPlay() {
       const audio = document.getElementById('bgAudio');
       const btn = document.getElementById('audioPlayBtn');
       const ytIframe = document.getElementById('ytAudioIframe');
+      const badgeIcon = document.getElementById('songBadgeIcon');
+      const tapHint = document.getElementById('songBadgeTapHint');
 
       if (ytIframe) {
         if (isPlaying) {
           ytIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
           isPlaying = false;
           if (btn) btn.innerHTML = PLAY_SVG;
+          if (badgeIcon) badgeIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+          if (tapHint) tapHint.innerHTML = 'Tap to<br>Play ▶';
         } else {
           ytIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
           isPlaying = true;
           if (btn) btn.innerHTML = PAUSE_SVG;
+          if (badgeIcon) badgeIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+          if (tapHint) tapHint.innerHTML = 'Now<br>Playing ♪';
         }
       } else if (audio) {
         if (isPlaying) {
           audio.pause();
           isPlaying = false;
           if (btn) btn.innerHTML = PLAY_SVG;
+          if (badgeIcon) badgeIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+          if (tapHint) tapHint.innerHTML = 'Tap to<br>Play ▶';
         } else {
           audio.play().then(() => {
             isPlaying = true;
             if (btn) btn.innerHTML = PAUSE_SVG;
+            if (badgeIcon) badgeIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+            if (tapHint) tapHint.innerHTML = 'Now<br>Playing ♪';
           }).catch(err => console.log('Audio playback allowed on interaction:', err));
         }
       }
@@ -516,37 +611,21 @@ try {
 
       // Check if bg_music_url is a YouTube Video or Shorts URL
       const ytVideoId = extractYouTubeId(content.bg_music_url);
-      if (ytVideoId) {
-        let ytContainer = document.getElementById('ytAudioIframeContainer');
-        if (!ytContainer) {
-          ytContainer = document.createElement('div');
-          ytContainer.id = 'ytAudioIframeContainer';
-          ytContainer.className = 'fixed top-0 left-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden';
-          document.body.appendChild(ytContainer);
-        }
-        ytContainer.innerHTML = `<iframe id="ytAudioIframe" width="100" height="100" src="https://www.youtube.com/embed/${ytVideoId}?enablejsapi=1&autoplay=1&loop=1&playlist=${ytVideoId}" allow="autoplay"></iframe>`;
-        finalSongTitle = (content.song_title && content.song_title !== 'Random Hit Track') ? content.song_title : 'YouTube Romantic Track';
-        finalArtist = 'YouTube Audio Track';
-      } else {
+
+      // Preload audio silently — no autoplay (blocked on mobile)
+      if (!ytVideoId) {
         const audioElem = document.getElementById('bgAudio');
         if (audioElem) {
           audioElem.volume = 0.5;
           const volSlider = document.getElementById('volumeSlider');
           if (volSlider) volSlider.value = 0.5;
           audioElem.src = finalAudioUrl;
-          audioElem.play().then(() => {
-            isPlaying = true;
-            const btn = document.getElementById('audioPlayBtn');
-            if (btn) btn.innerHTML = PAUSE_SVG;
-            syncMusicBtnLabel();
-          }).catch(e => {
-            console.log('Auto-play ready on user tap:', e);
-            const btn = document.getElementById('audioPlayBtn');
-            if (btn) btn.innerHTML = PLAY_SVG;
-            syncMusicBtnLabel();
-          });
+          audioElem.load(); // preload only — no play yet
         }
       }
+
+      // Show the Song-For-You tap badge
+      showSongBadge(finalSongTitle, finalArtist, finalAudioUrl, ytVideoId);
 
       if (!finalArtist) {
         if (content.favorite_singers && !content.favorite_singers.includes('Tony!')) {
@@ -556,12 +635,7 @@ try {
         }
       }
 
-      // Unhide and populate Floating Music Player Widget
-      const musicBox = document.getElementById('desktopMusicBox');
-      if (musicBox) {
-        musicBox.classList.remove('hidden');
-        musicBox.classList.add('flex');
-      }
+      // Music box stays hidden until user taps Song badge
 
       if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
       if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').innerText = finalArtist;
