@@ -674,14 +674,18 @@ try {
           </div>
 
           <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
-            ${media.map(m => `
-              <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
-                <img src="${m.file_path}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
-                <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
-                  <span class="text-[10px] uppercase font-bold text-[#eac34a]">${m.caption || 'Sweet Moments'}</span>
+            ${media.map(m => {
+              const imgUrl = normalizeMediaUrlJs(m.file_path);
+              const capText = escapeHtml(m.caption || 'Sweet Moments');
+              return `
+                <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
+                  <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                  <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
+                    <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
+                  </div>
                 </div>
-              </div>
-            `).join('')}
+              `;
+            }).join('')}
           </div>
         </section>
 
@@ -806,11 +810,18 @@ try {
           <section class="max-w-4xl mx-auto px-4 py-12 relative z-10 space-y-8">
             <h2 class="text-2xl font-bold font-serif text-center text-[#e8e0e3]">Captured Memories</h2>
             <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
-              ${media.map(m => `
-                <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
-                  <img src="${m.file_path}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
-                </div>
-              `).join('')}
+              ${media.map(m => {
+                const imgUrl = normalizeMediaUrlJs(m.file_path);
+                const capText = escapeHtml(m.caption || 'Precious Moments');
+                return `
+                  <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
+                    <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                    <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
+                      <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
             </div>
           </section>
 
@@ -950,11 +961,18 @@ try {
               </div>
 
               <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
-                ${media.map(m => `
-                  <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden group cursor-pointer bg-[#151215] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
-                    <img src="${m.file_path}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" alt="Moments of joy" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
-                  </div>
-                `).join('')}
+                ${media.map(m => {
+                  const imgUrl = normalizeMediaUrlJs(m.file_path);
+                  const capText = escapeHtml(m.caption || 'Birthday Memory');
+                  return `
+                    <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden group cursor-pointer bg-[#151215] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
+                      <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" alt="Moments of joy" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                      <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
+                        <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
               </div>
             </section>
           ` : ''}
@@ -1116,11 +1134,18 @@ try {
               </div>
 
               <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
-                ${media.map(m => `
-                  <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden group cursor-pointer bg-[#151215] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
-                    <img src="${m.file_path}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" alt="Distance memory" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
-                  </div>
-                `).join('')}
+                ${media.map(m => {
+                  const imgUrl = normalizeMediaUrlJs(m.file_path);
+                  const capText = escapeHtml(m.caption || 'Distance Memory');
+                  return `
+                    <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden group cursor-pointer bg-[#151215] border border-[#4d444b] shadow-xl hover:border-[#eac34a]/70 transition-all">
+                      <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" alt="Distance memory" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                      <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
+                        <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
               </div>
             </section>
           ` : ''}
