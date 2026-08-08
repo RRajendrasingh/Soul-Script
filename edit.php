@@ -601,11 +601,15 @@ if (!empty($_GET['token'])) {
     }
 
     async function loadDashboardData(token) {
+      token = token || activeToken || document.getElementById('activeEditToken')?.value;
       if (!token) return;
 
       activeToken = token;
-      document.getElementById('loginView').classList.add('hidden');
-      document.getElementById('dashboardView').classList.remove('hidden');
+      const activeInput = document.getElementById('activeEditToken');
+      if (activeInput) activeInput.value = token;
+
+      document.getElementById('loginView')?.classList.add('hidden');
+      document.getElementById('dashboardView')?.classList.remove('hidden');
 
       try {
         const res = await fetch('<?php echo APP_URL; ?>/api/edit_page.php?token=' + encodeURIComponent(token));
@@ -775,7 +779,7 @@ if (!empty($_GET['token'])) {
       if (hubView) hubView.classList.add('hidden');
       if (dashView) dashView.classList.remove('hidden');
 
-      loadDashboardData();
+      loadDashboardData(token);
     }
 
     function normalizeMediaUrlJs(url) {
