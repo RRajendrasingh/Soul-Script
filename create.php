@@ -977,6 +977,29 @@ Today, I want to ask you the most important question of my life. Will you take m
       renderPhotoPicker();
     }
 
+    function generateWhatsAppShareUrl(templateId, partnerName, shareUrl) {
+      const pName = (partnerName || '').trim();
+      const nameSnippet = pName ? ` for ${pName}` : '';
+      let msg = '';
+      const tid = (templateId || '').toLowerCase();
+      
+      if (tid.includes('rakhi') || tid.includes('raksha')) {
+        msg = `I created a special Raksha Bandhan surprise website${nameSnippet}! 🪔🧵 Open your gift link here: ${shareUrl}`;
+      } else if (tid.includes('birthday')) {
+        msg = `I created a special Birthday surprise website${nameSnippet}! 🎂🎁 Open your gift link here: ${shareUrl}`;
+      } else if (tid.includes('friendship') || tid.includes('friend')) {
+        msg = `I created a special Friendship memory website${nameSnippet}! 🌟✨ Open your gift link here: ${shareUrl}`;
+      } else if (tid.includes('proposal') || tid.includes('propose')) {
+        msg = `I created a special Proposal surprise website${nameSnippet}! 💍💖 Open your gift link here: ${shareUrl}`;
+      } else if (tid.includes('anniversary')) {
+        msg = `I created a special Anniversary surprise website${nameSnippet}! 💕✨ Open your gift link here: ${shareUrl}`;
+      } else {
+        msg = `I created a secret romantic surprise${nameSnippet}! ❤️ Open your gift link here: ${shareUrl}`;
+      }
+
+      return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+    }
+
     async function checkExistingBuyerEmail(email) {
       const notice = document.getElementById('existingEmailNotice');
       if (!email || !email.includes('@')) {
@@ -1260,9 +1283,10 @@ Today, I want to ask you the most important question of my life. Will you take m
           document.getElementById('shareUrlInput').value = data.share_url;
           document.getElementById('previewBtn').href = data.share_url;
 
-          // WhatsApp Share Link
-          const waText = encodeURIComponent(`I created a secret romantic surprise for you! ❤️ Open your gift link here: ${data.share_url}`);
-          document.getElementById('whatsappShareBtn').href = `https://api.whatsapp.com/send?text=${waText}`;
+          // Dynamic Occasion-Based WhatsApp Share Link
+          const partnerName = document.getElementById('partnerName')?.value || '';
+          const templateId = '<?php echo htmlspecialchars($tpl_id); ?>';
+          document.getElementById('whatsappShareBtn').href = generateWhatsAppShareUrl(templateId, partnerName, data.share_url);
 
           // Set QR image URL
           const qrImg = document.getElementById('qrCodeImg');

@@ -184,6 +184,9 @@ if (!empty($_GET['token'])) {
             <span>View Live</span>
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           </a>
+          <a id="dashWaShareBtn" href="#" target="_blank" class="px-3.5 py-2.5 rounded-xl bg-[#25D366] text-black font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#20bd5a] transition-all shadow-md">
+            <span>💬 Share</span>
+          </a>
           <button type="button" onclick="handleBuyerLogout()" class="px-3.5 py-2.5 rounded-xl bg-[#221f21] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-md">
             <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
             <span>Log Out</span>
@@ -711,6 +714,10 @@ if (!empty($_GET['token'])) {
           }
 
           document.getElementById('viewLivePageBtn').href = data.share_url;
+          const dashWaBtn = document.getElementById('dashWaShareBtn');
+          if (dashWaBtn) {
+            dashWaBtn.href = generateWhatsAppShareUrl(p.template_id, p.partner_name, data.share_url);
+          }
           document.getElementById('dashPartnerTitle').innerText = (p.partner_name || 'Partner') + "'s Gift Dashboard";
 
           // Update Partner Photo Avatar Manager UI
@@ -1771,6 +1778,29 @@ if (!empty($_GET['token'])) {
         if (typeof lucide === 'object') lucide.createIcons();
       }
     });
+
+    function generateWhatsAppShareUrl(templateId, partnerName, shareUrl) {
+      const pName = (partnerName || '').trim();
+      const nameSnippet = pName ? ` for ${pName}` : '';
+      let msg = '';
+      const tid = (templateId || '').toLowerCase();
+      
+      if (tid.includes('rakhi') || tid.includes('raksha')) {
+        msg = `I created a special Raksha Bandhan surprise website${nameSnippet}! 🪔🧵 Open your gift link here: ${shareUrl}`;
+      } else if (tid.includes('birthday')) {
+        msg = `I created a special Birthday surprise website${nameSnippet}! 🎂🎁 Open your gift link here: ${shareUrl}`;
+      } else if (tid.includes('friendship') || tid.includes('friend')) {
+        msg = `I created a special Friendship memory website${nameSnippet}! 🌟✨ Open your gift link here: ${shareUrl}`;
+      } else if (tid.includes('proposal') || tid.includes('propose')) {
+        msg = `I created a special Proposal surprise website${nameSnippet}! 💍💖 Open your gift link here: ${shareUrl}`;
+      } else if (tid.includes('anniversary')) {
+        msg = `I created a special Anniversary surprise website${nameSnippet}! 💕✨ Open your gift link here: ${shareUrl}`;
+      } else {
+        msg = `I created a secret romantic surprise${nameSnippet}! ❤️ Open your gift link here: ${shareUrl}`;
+      }
+
+      return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+    }
 
     function closeSetNewPasswordModal() {
       document.getElementById('setNewPasswordModal').classList.add('hidden');
