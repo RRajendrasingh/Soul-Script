@@ -131,7 +131,7 @@ if (!empty($_GET['token'])) {
       <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none w-full whitespace-nowrap">
         <button type="button" onclick="switchTab('general')" id="tabBtn-general" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#eac34a] text-[#241a00] shadow-[0_0_15px_rgba(234,195,74,0.3)] transition-all whitespace-nowrap shrink-0 cursor-pointer">General &amp; Music</button>
         <button type="button" onclick="switchTab('theme')" id="tabBtn-theme" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Story Milestones</button>
-        <button type="button" onclick="switchTab('photos')" id="tabBtn-photos" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Scrapbook</button>
+        <button type="button" onclick="switchTab('photos')" id="tabBtn-photos" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Photo Gallery</button>
         <button type="button" onclick="switchTab('letters')" id="tabBtn-letters" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Sealed Letters</button>
         <button type="button" onclick="switchTab('tokens')" id="tabBtn-tokens" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Love Tokens</button>
         <button type="button" onclick="switchTab('security')" id="tabBtn-security" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Security &amp; Passwords</button>
@@ -358,7 +358,7 @@ if (!empty($_GET['token'])) {
             <div>
               <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
                 <i data-lucide="image" class="w-5 h-5 text-[#eac34a]"></i>
-                <span>Photo Scrapbook Management 🖼️</span>
+                <span>Photo Gallery Management 🖼️</span>
               </h3>
               <span class="text-[11px] text-[#d0c3cb]" id="dashSelectedPhotoCount">Selected: 0 photos</span>
             </div>
@@ -1093,6 +1093,20 @@ if (!empty($_GET['token'])) {
       } else if (templateId === 'raksha_bandhan_special') {
         badge.innerText = '✨ Managing: Raksha Bandhan Special Plan (Active)';
         tabBtn.innerText = 'Sibling Promises & Vows';
+
+        themeContainer.innerHTML = `
+          <div class="space-y-4">
+            <div class="border-b border-[#4d444b]/40 pb-3">
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">🪔 Sibling Promises &amp; Protection Vows</h3>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <label class="block font-semibold text-[#d0c3cb]">Promises &amp; Protection Vows for Sibling (Dynamic List)</label>
+              <button type="button" onclick="addReasonRow()" class="px-3 py-1 rounded-lg bg-[#3b1e3b] text-[#eac34a] font-bold text-[11px] border border-[#eac34a]/30 hover:bg-[#eac34a] hover:text-black transition-all">+ Add Promise</button>
+            </div>
+            <div id="editReasonsList" class="space-y-2"></div>
+          </div>
+        `;
+        renderReasonsList(data.reasons || []);
       } else {
         // Default: anniversary_reveal
         badge.innerText = '✨ Managing: Anniversary Reveal Plan (Active)';
@@ -1425,13 +1439,13 @@ if (!empty($_GET['token'])) {
       const templateId = document.getElementById('activeTemplateId').value;
       const templateFields = {};
 
-      if (templateId === 'birthday_magic') {
+      if (templateId === 'birthday_magic' || templateId === 'raksha_bandhan_special') {
         const pDob = document.getElementById('partnerDob')?.value;
         const reasons = [];
         document.querySelectorAll('#editReasonsList .edit-reason-item').forEach(inp => {
           if (inp.value.trim()) reasons.push(inp.value.trim());
         });
-        templateFields.partner_dob = pDob;
+        if (pDob) templateFields.partner_dob = pDob;
         templateFields.reasons = reasons;
 
       } else if (templateId === 'perfect_proposal') {
