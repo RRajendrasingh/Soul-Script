@@ -268,7 +268,7 @@ require_once __DIR__ . '/config/config.php';
           </div>
           <div class="space-y-3">
             <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button onclick="selectTemplate('raksha_bandhan_special', 'Raksha Bandhan Special', 449)" class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 cursor-pointer">
+              <button onclick="openCheckout('raksha_bandhan_special', 'Raksha Bandhan Special', 449)" class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 cursor-pointer">
                 <i data-lucide="gift" class="w-4 h-4"></i>
                 <span>Customize (₹449)</span>
               </button>
@@ -902,6 +902,10 @@ require_once __DIR__ . '/config/config.php';
       const modal = document.getElementById('checkoutModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+    }
+
+    function selectTemplate(templateId, name, price) {
+      openCheckout(templateId, name, price);
     }
 
     function closeCheckout() {
