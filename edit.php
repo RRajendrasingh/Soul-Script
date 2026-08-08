@@ -852,7 +852,17 @@ if (!empty($_GET['token'])) {
             this.classList.remove('hidden');
             if (fallback) fallback.classList.add('hidden');
           };
+
+          // Unhide immediately so cached or freshly loaded images display seamlessly
+          img.classList.remove('hidden');
+          if (fallback) fallback.classList.add('hidden');
+
           img.src = fullUrl;
+
+          if (img.complete && img.naturalWidth > 0) {
+            img.classList.remove('hidden');
+            if (fallback) fallback.classList.add('hidden');
+          }
         }
         if (removeBtn) {
           removeBtn.classList.remove('hidden');
