@@ -108,7 +108,8 @@ try {
   <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] shrink-0 shadow-md">
     <div class="w-full h-full bg-[#151215] rounded-[10px] overflow-hidden flex items-center justify-center" id="playerAvatarContainer">
       <?php if (!empty($initialLockData['receiver_photo'])): ?>
-        <img id="playerReceiverPhotoImg" src="<?php echo htmlspecialchars($initialLockData['receiver_photo']); ?>" alt="Partner Photo" class="w-full h-full object-cover rounded-[10px]">
+        <img id="playerReceiverPhotoImg" src="<?php echo htmlspecialchars($initialLockData['receiver_photo']); ?>" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='block';" alt="Partner Photo" class="w-full h-full object-cover rounded-[10px]">
+        <span id="playerReceiverFallback" class="text-base font-bold font-serif text-[#eac34a] hidden"><?php echo htmlspecialchars(strtoupper(substr($initialLockData['partner_name'] ?? 'P', 0, 1))); ?></span>
       <?php else: ?>
         <span id="playerReceiverFallback" class="text-base font-bold font-serif text-[#eac34a]"><?php echo htmlspecialchars(strtoupper(substr($initialLockData['partner_name'] ?? 'P', 0, 1))); ?></span>
       <?php endif; ?>
@@ -149,7 +150,8 @@ try {
         <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[2px] mx-auto shadow-[0_0_25px_rgba(234,195,74,0.4)]">
           <div class="w-full h-full bg-[#151215] rounded-full flex items-center justify-center overflow-hidden" id="lockAvatarContainer">
             <?php if (!empty($initialLockData['receiver_photo'])): ?>
-              <img id="lockReceiverPhotoImg" src="<?php echo htmlspecialchars($initialLockData['receiver_photo']); ?>" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">
+              <img id="lockReceiverPhotoImg" src="<?php echo htmlspecialchars($initialLockData['receiver_photo']); ?>" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='block';" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">
+              <span id="lockReceiverFallback" class="text-2xl font-bold font-serif text-[#eac34a] hidden"><?php echo htmlspecialchars(strtoupper(substr($initialLockData['partner_name'] ?? 'P', 0, 1))); ?></span>
             <?php else: ?>
               <span id="lockReceiverFallback" class="text-2xl font-bold font-serif text-[#eac34a]"><?php echo htmlspecialchars(strtoupper(substr($initialLockData['partner_name'] ?? 'P', 0, 1))); ?></span>
             <?php endif; ?>
@@ -314,7 +316,7 @@ try {
           const avatarContainer = document.getElementById('lockAvatarContainer');
           if (avatarContainer) {
             if (data.receiver_photo && data.receiver_photo.trim() !== '') {
-              avatarContainer.innerHTML = `<img id="lockReceiverPhotoImg" src="${data.receiver_photo}" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">`;
+              avatarContainer.innerHTML = `<img id="lockReceiverPhotoImg" src="${data.receiver_photo}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-2xl font-bold font-serif text-[#eac34a]\\'>${pInitial}</span>';" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">`;
             } else {
               avatarContainer.innerHTML = `<span id="lockReceiverFallback" class="text-2xl font-bold font-serif text-[#eac34a]">${pInitial}</span>`;
             }
@@ -542,7 +544,7 @@ try {
       const pName = content.partner_name || 'Partner';
       const pInitial = pName.charAt(0).toUpperCase();
       const photoAvatarHtml = content.receiver_photo && content.receiver_photo.trim() !== '' ?
-        `<img id="receiverPhotoImg" src="${content.receiver_photo}" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">` :
+        `<img id="receiverPhotoImg" src="${content.receiver_photo}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#151215] flex items-center justify-center font-bold text-3xl sm:text-4xl font-serif shadow-inner\\'>${pInitial}</div>';" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">` :
         `<div id="receiverPhotoImg" class="w-full h-full rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#151215] flex items-center justify-center font-bold text-3xl sm:text-4xl font-serif shadow-inner">${pInitial}</div>`;
 
       if (templateId === 'anniversary_reveal') {
