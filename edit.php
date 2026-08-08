@@ -1532,6 +1532,7 @@ if (!empty($_GET['token'])) {
 
         if (data.success) {
           msg.innerText = '✅ All changes saved successfully!';
+          loadDashboardData(activeToken);
           if (newPass) {
             document.getElementById('currentBuyerPassword').value = '';
             document.getElementById('newBuyerPassword').value = '';
