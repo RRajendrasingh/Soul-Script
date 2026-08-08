@@ -102,6 +102,40 @@ if (!empty($_GET['token'])) {
       </div>
     </div>
 
+    <!-- SET NEW PASSWORD MODAL (Triggered via Email Reset Link ?reset_token=xyz) -->
+    <div id="setNewPasswordModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 max-w-md w-full space-y-5 shadow-2xl relative">
+        <button type="button" onclick="closeSetNewPasswordModal()" class="absolute top-4 right-4 text-[#d0c3cb] hover:text-white p-1 text-lg cursor-pointer">✕</button>
+        <div class="text-center space-y-1">
+          <div class="w-12 h-12 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 flex items-center justify-center mx-auto mb-2">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">Set New Account Password 🔑</h3>
+          <p class="text-xs text-[#d0c3cb]">Type your new secret edit password below to update your account access.</p>
+        </div>
+
+        <form id="setNewPassForm" onsubmit="handlePerformPasswordReset(event)" class="space-y-4">
+          <input type="hidden" id="newPassTokenInput" value="">
+          
+          <div>
+            <label class="block text-xs font-bold text-[#d0c3cb] mb-1">New Secret Password</label>
+            <input type="password" id="newPassInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="Min 4 characters" required>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Confirm New Password</label>
+            <input type="password" id="confirmNewPassInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="Re-type new password" required>
+          </div>
+
+          <div id="setNewPassMsg" class="hidden text-xs text-center p-3 rounded-xl"></div>
+
+          <button type="submit" id="setNewPassBtn" class="w-full py-3.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-md">
+            Save New Password &amp; Log In
+          </button>
+        </form>
+      </div>
+    </div>
+
     <!-- VIEW B: PURCHASED GIFTS HUB (When logged in / managing multiple gifts) -->
     <div id="hubView" class="hidden space-y-6">
       <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-4">
@@ -1738,6 +1772,77 @@ if (!empty($_GET['token'])) {
         msg.classList.remove('hidden');
         msg.className = 'text-xs text-center p-3 rounded-xl bg-rose-950/70 border border-rose-500/40 text-rose-300';
         msg.innerText = '❌ Network error. Please try again.';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const resetToken = urlParams.get('reset_token');
+      if (resetToken) {
+        document.getElementById('newPassTokenInput').value = resetToken;
+        document.getElementById('setNewPasswordModal').classList.remove('hidden');
+        if (typeof lucide === 'object') lucide.createIcons();
+      }
+    });
+
+    function closeSetNewPasswordModal() {
+      document.getElementById('setNewPasswordModal').classList.add('hidden');
+    }
+
+    async function handlePerformPasswordReset(e) {
+      e.preventDefault();
+      const token = document.getElementById('newPassTokenInput').value;
+      const pass = document.getElementById('newPassInput').value.trim();
+      const confirmPass = document.getElementById('confirmNewPassInput').value.trim();
+      const btn = document.getElementById('setNewPassBtn');
+      const msg = document.getElementById('setNewPassMsg');
+
+      if (!pass || pass.length < 4) {
+        msg.classList.remove('hidden');
+        msg.className = 'text-xs text-center p-3 rounded-xl bg-rose-950/70 border border-rose-500/40 text-rose-300';
+        msg.innerText = '❌ Password must be at least 4 characters.';
+        return;
+      }
+
+      if (pass !== confirmPass) {
+        msg.classList.remove('hidden');
+        msg.className = 'text-xs text-center p-3 rounded-xl bg-rose-950/70 border border-rose-500/40 text-rose-300';
+        msg.innerText = '❌ Passwords do not match. Please re-type.';
+        return;
+      }
+
+      btn.innerText = 'Updating Password...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/forgot_password.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'perform_reset', reset_token: token, new_password: pass })
+        });
+        const data = await res.json();
+
+        msg.classList.remove('hidden');
+        btn.disabled = false;
+        btn.innerText = 'Save New Password & Log In';
+
+        if (data.success) {
+          msg.className = 'text-xs text-center p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300';
+          msg.innerText = '✅ Password updated successfully! Redirecting...';
+          setTimeout(() => {
+            closeSetNewPasswordModal();
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }, 1500);
+        } else {
+          msg.className = 'text-xs text-center p-3 rounded-xl bg-rose-950/70 border border-rose-500/40 text-rose-300';
+          msg.innerText = '❌ ' + (data.message || 'Invalid or expired reset link.');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerText = 'Save New Password & Log In';
+        msg.classList.remove('hidden');
+        msg.className = 'text-xs text-center p-3 rounded-xl bg-rose-950/70 border border-rose-500/40 text-rose-300';
+        msg.innerText = '❌ Connection error. Please try again.';
       }
     }
   </script>
