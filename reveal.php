@@ -347,8 +347,9 @@ try {
           const pInitial = pName.charAt(0).toUpperCase();
           const avatarContainer = document.getElementById('lockAvatarContainer');
           if (avatarContainer) {
-            if (data.receiver_photo && data.receiver_photo.trim() !== '') {
-              avatarContainer.innerHTML = `<img id="lockReceiverPhotoImg" src="${data.receiver_photo}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-2xl font-bold font-serif text-[#eac34a]\\'>${pInitial}</span>';" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">`;
+            const cleanPhoto = data.receiver_photo ? normalizeMediaUrlJs(data.receiver_photo) : '';
+            if (cleanPhoto && cleanPhoto.trim() !== '') {
+              avatarContainer.innerHTML = `<img id="lockReceiverPhotoImg" src="${cleanPhoto}" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-2xl font-bold font-serif text-[#eac34a]\\'>${pInitial}</span>';" alt="Receiver Photo" class="w-full h-full object-cover rounded-full">`;
             } else {
               avatarContainer.innerHTML = `<span id="lockReceiverFallback" class="text-2xl font-bold font-serif text-[#eac34a]">${pInitial}</span>`;
             }

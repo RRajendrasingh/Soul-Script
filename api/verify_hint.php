@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../includes/media_helper.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 
@@ -55,11 +56,11 @@ if ($slug && $bypass_edit_token) {
 
             // Normalize receiver photo & media file paths
             if (!empty($page['receiver_photo'])) {
-                $page['receiver_photo'] = normalizeMediaUrl($page['receiver_photo']);
+                $page['receiver_photo'] = resolveMediaUrl($page['receiver_photo']);
             }
             foreach ($media as &$m) {
                 if (!empty($m['file_path'])) {
-                    $m['file_path'] = normalizeMediaUrl($m['file_path']);
+                    $m['file_path'] = resolveMediaUrl($m['file_path']);
                 }
             }
             unset($m);
@@ -235,11 +236,11 @@ try {
 
     // Normalize receiver photo & media file paths
     if (!empty($page['receiver_photo'])) {
-        $page['receiver_photo'] = normalizeMediaUrl($page['receiver_photo']);
+        $page['receiver_photo'] = resolveMediaUrl($page['receiver_photo']);
     }
     foreach ($media as &$m) {
         if (!empty($m['file_path'])) {
-            $m['file_path'] = normalizeMediaUrl($m['file_path']);
+            $m['file_path'] = resolveMediaUrl($m['file_path']);
         }
     }
     unset($m);
