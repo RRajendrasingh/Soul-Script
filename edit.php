@@ -199,8 +199,7 @@ if (!empty($_GET['token'])) {
             <label class="block font-semibold text-[#d0c3cb] mb-1.5">Gift Receiver / Partner Profile Photo 🖼️</label>
             <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] flex flex-col sm:flex-row items-center gap-4">
               <div id="partnerAvatarContainer" class="w-16 h-16 rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#eac34a] flex items-center justify-center font-bold text-2xl shadow-[0_0_20px_rgba(234,195,74,0.3)] shrink-0 overflow-hidden">
-                <span id="partnerAvatarFallback">A</span>
-                <img id="partnerAvatarImg" src="" class="w-full h-full object-cover hidden">
+                <span class="w-full h-full flex items-center justify-center font-bold text-2xl text-[#eac34a] bg-[#3b1e3b] rounded-full">P</span>
               </div>
               <div class="flex-1 text-center sm:text-left space-y-2">
                 <input type="file" id="dashPhotoInput" accept="image/*" onchange="handleDashPhotoSelect(this)" class="hidden">
@@ -829,52 +828,34 @@ if (!empty($_GET['token'])) {
     }
 
     function updatePartnerPhotoAvatar(photoUrl, partnerName) {
-      const fallback = document.getElementById('partnerAvatarFallback');
-      const img = document.getElementById('partnerAvatarImg');
-      const removeBtn = document.getElementById('removePhotoBtn');
+      const container = document.getElementById('partnerAvatarContainer');
       const hiddenInput = document.getElementById('receiverPhotoUrl');
+      const removeBtn = document.getElementById('removePhotoBtn');
 
       const nameChar = (partnerName || 'P').charAt(0).toUpperCase();
-      if (fallback) fallback.innerText = nameChar;
-
       const isValidPhoto = photoUrl && typeof photoUrl === 'string' && photoUrl.trim() !== '' && photoUrl !== 'null' && photoUrl !== 'undefined';
 
       if (isValidPhoto) {
         const cleanUrl = photoUrl.trim();
         if (hiddenInput) hiddenInput.value = cleanUrl;
         const fullUrl = normalizeMediaUrlJs(cleanUrl);
-        if (img) {
-          img.onerror = function() {
-            this.classList.add('hidden');
-            if (fallback) fallback.classList.remove('hidden');
-          };
-          img.onload = function() {
-            this.classList.remove('hidden');
-            if (fallback) fallback.classList.add('hidden');
-          };
 
-          // Unhide immediately so cached or freshly loaded images display seamlessly
-          img.classList.remove('hidden');
-          if (fallback) fallback.classList.add('hidden');
-
-          img.src = fullUrl;
-
-          if (img.complete && img.naturalWidth > 0) {
-            img.classList.remove('hidden');
-            if (fallback) fallback.classList.add('hidden');
-          }
+        if (container) {
+          container.innerHTML = `
+            <img src="${fullUrl}" alt="${nameChar}" class="w-full h-full object-cover rounded-full" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+            <span style="display:none;" class="w-full h-full flex items-center justify-center font-bold text-2xl text-[#eac34a] bg-[#3b1e3b] rounded-full">${nameChar}</span>
+          `;
         }
+
         if (removeBtn) {
           removeBtn.classList.remove('hidden');
           removeBtn.classList.add('flex');
         }
       } else {
         if (hiddenInput) hiddenInput.value = '';
-        if (img) {
-          img.src = '';
-          img.classList.add('hidden');
+        if (container) {
+          container.innerHTML = `<span class="w-full h-full flex items-center justify-center font-bold text-2xl text-[#eac34a] bg-[#3b1e3b] rounded-full">${nameChar}</span>`;
         }
-        if (fallback) fallback.classList.remove('hidden');
         if (removeBtn) {
           removeBtn.classList.add('hidden');
           removeBtn.classList.remove('flex');
