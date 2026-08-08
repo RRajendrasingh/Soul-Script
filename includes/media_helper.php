@@ -27,20 +27,16 @@ function resolveMediaUrl($url, $fallback = '') {
         return $url;
     }
 
-    // 2. Relative upload paths -> attach APP_URL
+    // 2. Extract /uploads/ relative path from ANY previous URL domain/host
+    $pos = strpos($url, '/uploads/');
+    if ($pos !== false) {
+        return APP_URL . substr($url, $pos);
+    }
     if (strpos($url, 'uploads/') === 0) {
         return APP_URL . '/' . $url;
     }
-    if (strpos($url, '/uploads/') === 0) {
-        return APP_URL . $url;
-    }
 
-    // 3. Rewrite legacy localhost / 127.0.0.1 origins to current production APP_URL
-    if (preg_match('#https?://(?:localhost|127\.0\.0\.1)(?::\d+)?(?:/[^/]*)?(/uploads/.*)$#i', $url, $m)) {
-        return APP_URL . $m[1];
-    }
-
-    // 4. Absolute HTTP/HTTPS URLs
+    // 3. Absolute HTTP/HTTPS URLs (external Unsplash, etc.)
     if (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0) {
         return $url;
     }

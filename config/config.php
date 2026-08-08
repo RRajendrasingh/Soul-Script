@@ -65,20 +65,17 @@ function normalizeMediaUrl($url) {
     if (empty($url)) return '';
     $url = trim($url);
 
-    // Relative path: uploads/... or /uploads/...
+    if (strpos($url, 'data:image') === 0) {
+        return $url;
+    }
+
+    $pos = strpos($url, '/uploads/');
+    if ($pos !== false) {
+        return APP_URL . substr($url, $pos);
+    }
     if (strpos($url, 'uploads/') === 0) {
         return APP_URL . '/' . $url;
     }
-    if (strpos($url, '/uploads/') === 0) {
-        return APP_URL . $url;
-    }
 
-    // Any localhost / 127.0.0.1 URL (with or without port, with or without sub-path)
-    // → strip the origin and rebuild with current APP_URL
-    if (preg_match('#https?://(?:localhost|127\.0\.0\.1)(?::\d+)?(?:/[^/]*)?(/uploads/.*)$#i', $url, $m)) {
-        return APP_URL . $m[1];
-    }
-
-    // Already an absolute external URL — pass through unchanged
     return $url;
 }

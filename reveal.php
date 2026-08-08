@@ -224,14 +224,20 @@ try {
 
     function normalizeMediaUrlJs(url) {
       if (!url) return '';
-      url = url.trim();
-      if (url.startsWith('uploads/')) return '<?php echo APP_URL; ?>/' + url;
-      if (url.startsWith('/uploads/')) return '<?php echo APP_URL; ?>' + url;
-      if (/https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?(?:\/[^/]*)?(\/uploads\/.*)/i.test(url)) {
-        const match = url.match(/https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?(?:\/[^/]*)?(\/uploads\/.*)/i);
-        return '<?php echo APP_URL; ?>' + match[1];
+      if (url.startsWith('data:image')) return url;
+
+      const uploadIdx = url.indexOf('/uploads/');
+      if (uploadIdx !== -1) {
+        return '<?php echo APP_URL; ?>' + url.substring(uploadIdx);
       }
-      return url;
+      const rawUploadIdx = url.indexOf('uploads/');
+      if (rawUploadIdx === 0) {
+        return '<?php echo APP_URL; ?>/' + url;
+      }
+      if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+      }
+      return '<?php echo APP_URL; ?>/' + url.replace(/^\/+/, '');
     }
 
     function escapeHtml(str) {

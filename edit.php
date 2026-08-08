@@ -819,12 +819,20 @@ if (!empty($_GET['token'])) {
 
     function normalizeMediaUrlJs(url) {
       if (!url) return '';
-      if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      if (url.startsWith('data:image')) return url;
+
+      const uploadIdx = url.indexOf('/uploads/');
+      if (uploadIdx !== -1) {
+        return '<?php echo APP_URL; ?>' + url.substring(uploadIdx);
+      }
+      const rawUploadIdx = url.indexOf('uploads/');
+      if (rawUploadIdx === 0) {
+        return '<?php echo APP_URL; ?>/' + url;
+      }
+      if (url.startsWith('http://') || url.startsWith('https://')) {
         return url;
       }
-      const appUrl = '<?php echo APP_URL; ?>';
-      const cleanPath = url.replace(/^\/+/, '');
-      return appUrl + '/' + cleanPath;
+      return '<?php echo APP_URL; ?>/' + url.replace(/^\/+/, '');
     }
 
     function updatePartnerPhotoAvatar(photoUrl, partnerName) {
