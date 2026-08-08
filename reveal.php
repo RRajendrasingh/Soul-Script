@@ -869,11 +869,6 @@ try {
                 ` : ''}
               </div>
 
-              <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-[#eac34a] text-xs font-semibold shadow-md">
-                <i data-lucide="cake" class="w-4 h-4 text-[#eac34a]"></i>
-                <span class="uppercase tracking-widest text-[11px]">It's Time To Celebrate!</span>
-              </div>
-
               <!-- Floating Tagline / Motto Banner -->
               <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#e4b9df]/40 text-[#eac34a] text-xs font-bold shadow-lg backdrop-blur-md">
                 <i data-lucide="sparkles" class="w-4 h-4 text-[#eac34a]"></i>
@@ -1019,11 +1014,6 @@ try {
                     <span>Change Photo</span>
                   </button>
                 ` : ''}
-              </div>
-
-              <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-[#eac34a] text-xs font-semibold shadow-md">
-                <i data-lucide="globe" class="w-4 h-4 text-[#eac34a]"></i>
-                <span class="uppercase tracking-widest text-[11px]">Miles Apart, Joined At Heart</span>
               </div>
 
               <!-- Floating Tagline / Quote Banner -->
