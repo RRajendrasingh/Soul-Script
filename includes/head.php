@@ -11,6 +11,9 @@ $pageTitle = $pageTitle ?? (defined('APP_NAME') ? APP_NAME . ' — Romantic Surp
 <meta name="googlebot" content="noindex, nofollow">
 <title><?php echo htmlspecialchars($pageTitle); ?></title>
 
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="<?php echo defined('APP_URL') ? APP_URL : ''; ?>/assets/favicon.svg">
+
 <!-- Google Fonts Preconnect & Preload (Eliminates FOUT / Font Jump) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
