@@ -1252,11 +1252,25 @@ if (!empty($_GET['token'])) {
       { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', caption: 'Always Stunning 💫' }
     ];
 
+    const DEFAULT_PHOTO_CAPTIONS = [
+      'Our Special Smile ✨',
+      'Sweet Memories 💖',
+      'Unforgettable Day 🌹',
+      'Together Forever 💫',
+      'Laughter & Joy 😄',
+      'Pure Happiness 🌸',
+      'Precious Moments 💎',
+      'Golden Memories 🌟',
+      'Forever & Always 💓',
+      'Beautiful Journey ✈️'
+    ];
+
     function renderPhotosList(media) {
       if (Array.isArray(media)) {
-        dashPhotosList = media.map(m => {
-          if (typeof m === 'string') return { url: m, caption: 'Moments of Joy' };
-          return { url: m.file_path || '', caption: m.caption || 'Moments of Joy' };
+        dashPhotosList = media.map((m, idx) => {
+          const defaultCap = DEFAULT_PHOTO_CAPTIONS[idx % DEFAULT_PHOTO_CAPTIONS.length];
+          if (typeof m === 'string') return { url: m, caption: defaultCap };
+          return { url: m.file_path || '', caption: m.caption || defaultCap };
         });
       } else {
         dashPhotosList = [];
@@ -1376,7 +1390,8 @@ if (!empty($_GET['token'])) {
             ctx.drawImage(tempImg, 0, 0, w, h);
             const compressedUrl = canvas.toDataURL('image/jpeg', 0.85);
 
-            dashPhotosList.push({ url: compressedUrl, caption: 'Moments of Joy' });
+            const nextCap = DEFAULT_PHOTO_CAPTIONS[dashPhotosList.length % DEFAULT_PHOTO_CAPTIONS.length];
+            dashPhotosList.push({ url: compressedUrl, caption: nextCap });
             renderDashScrapbookPhotos();
           };
           tempImg.src = evt.target.result;
