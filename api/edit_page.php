@@ -1,32 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
-
-function saveUploadedBase64Image($photoData, $page_id, $filePrefix) {
-    if (empty($photoData)) return '';
-    if (strpos($photoData, 'data:image') === 0) {
-        preg_match('/data:image\/(.*?);base64,(.*)/', $photoData, $matches);
-        $rawExt = strtolower($matches[1] ?? 'jpg');
-        if ($rawExt === 'jpeg') $rawExt = 'jpg';
-        
-        $allowedExts = ['jpg', 'png', 'webp', 'gif'];
-        $ext = in_array($rawExt, $allowedExts) ? $rawExt : 'jpg';
-
-        $imageData = base64_decode($matches[2] ?? '');
-        
-        $targetDir = UPLOAD_DIR . '/' . $page_id;
-        if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0755, true);
-        }
-
-        $fileName = $filePrefix . '_' . time() . '_' . rand(100, 999) . '.' . $ext;
-        $fullDiskPath = $targetDir . '/' . $fileName;
-        file_put_contents($fullDiskPath, $imageData);
-        
-        return APP_URL . '/uploads/' . $page_id . '/' . $fileName;
-    }
-    return normalizeMediaUrl($photoData);
-}
+require_once __DIR__ . '/../includes/media_helper.php';
 
 $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
 $token = trim($_GET['token'] ?? $input['token'] ?? $_POST['token'] ?? '');
