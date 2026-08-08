@@ -1262,7 +1262,23 @@ if (!empty($_GET['token'])) {
       'Precious Moments 💎',
       'Golden Memories 🌟',
       'Forever & Always 💓',
-      'Beautiful Journey ✈️'
+      'Beautiful Journey ✈️',
+      'Magical Evening 🌙',
+      'Endless Sunshine ☀️',
+      'Charming Smile 😊',
+      'Soulmates Vow 💍',
+      'Heartfelt Hugs 🤗',
+      'Starry Night ✨',
+      'Sunset Kiss 🌅',
+      'Warm Embrace 🤗',
+      'Fun & Laughter 🎉',
+      'Treasured Days 🏆',
+      'Romantic Stroll 🚶‍♂️🚶‍♀️',
+      'Candlelight Vibe 🕯️',
+      'Love in the Air 💞',
+      'Special Birthday 🎂',
+      'Best Day Ever 🥳',
+      'Lifetime Memories ♾️'
     ];
 
     function renderPhotosList(media) {
@@ -1343,8 +1359,8 @@ if (!empty($_GET['token'])) {
       if (idx > -1) {
         dashPhotosList.splice(idx, 1);
       } else {
-        if (dashPhotosList.length >= 10) {
-          alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
+        if (dashPhotosList.length >= 25) {
+          alert('⚠️ Maximum limit of 25 gallery photos reached! Please remove a photo before adding more.');
           return;
         }
         // Use image-specific caption
@@ -1359,16 +1375,16 @@ if (!empty($_GET['token'])) {
       if (!files || files.length === 0) return;
 
       Array.from(files).forEach(file => {
-        if (dashPhotosList.length >= 10) {
-          alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
+        if (dashPhotosList.length >= 25) {
+          alert('⚠️ Maximum limit of 25 gallery photos reached! Please remove a photo before adding more.');
           return;
         }
         const reader = new FileReader();
         reader.onload = function(evt) {
           const tempImg = new Image();
           tempImg.onload = function() {
-            if (dashPhotosList.length >= 10) {
-              alert('⚠️ Maximum limit of 10 photos reached!');
+            if (dashPhotosList.length >= 25) {
+              alert('⚠️ Maximum limit of 25 gallery photos reached!');
               return;
             }
             const canvas = document.createElement('canvas');

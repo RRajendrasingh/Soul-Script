@@ -225,8 +225,8 @@ try {
 
         // Update Media / Scrapbook Photos if provided
         if (isset($input['media_photos']) && is_array($input['media_photos'])) {
-            if (count($input['media_photos']) > 10) {
-                $input['media_photos'] = array_slice($input['media_photos'], 0, 10);
+            if (count($input['media_photos']) > 26) {
+                $input['media_photos'] = array_slice($input['media_photos'], 0, 26);
             }
             $db->prepare("DELETE FROM page_media WHERE page_id = ?")->execute([$page_id]);
             $stmtMedia = $db->prepare("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES (?, ?, ?, ?, ?)");

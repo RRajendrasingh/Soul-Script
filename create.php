@@ -434,8 +434,8 @@ Today, I want to ask you the most important question of my life. Will you take m
       <div class="space-y-4 pt-4 border-t border-[#4d444b]/40">
         <div class="flex items-center justify-between">
           <div>
-            <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">COUPLE PHOTOS (SELECT 3-10 PHOTOS) *</label>
-            <span class="text-[11px] text-[#d0c3cb]" id="selectedPhotoCount">Selected: 3/10 photos</span>
+            <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">COUPLE PHOTOS (SELECT 1-25 PHOTOS) *</label>
+            <span class="text-[11px] text-[#d0c3cb]" id="selectedPhotoCount">Selected: 3/25 photos</span>
           </div>
           <button type="button" onclick="triggerFileInput()" class="px-4 py-2 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center gap-1.5">
             <i data-lucide="upload" class="w-3.5 h-3.5"></i>
@@ -925,8 +925,8 @@ Today, I want to ask you the most important question of my life. Will you take m
     async function handleFileSelect(e) {
       const files = Array.from(e.target.files);
       for (let file of files) {
-        if (selectedPhotoObjects.length >= 10) {
-          alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
+        if (selectedPhotoObjects.length >= 25) {
+          alert('⚠️ Maximum limit of 25 photos reached! Please remove a photo before adding more.');
           break;
         }
         try {
@@ -963,8 +963,8 @@ Today, I want to ask you the most important question of my life. Will you take m
         }
         selectedPhotoObjects.splice(idx, 1);
       } else {
-        if (selectedPhotoObjects.length >= 10) {
-          alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
+        if (selectedPhotoObjects.length >= 25) {
+          alert('⚠️ Maximum limit of 25 photos reached! Please remove a photo before adding more.');
           return;
         }
         // Use image-specific caption, not generic one
@@ -976,7 +976,7 @@ Today, I want to ask you the most important question of my life. Will you take m
 
     function renderPhotoPicker() {
       const countElem = document.getElementById('selectedPhotoCount');
-      if (countElem) countElem.innerText = `Selected: ${selectedPhotoObjects.length}/10 photos`;
+      if (countElem) countElem.innerText = `Selected: ${selectedPhotoObjects.length}/25 photos`;
 
       // Render Selected Uploads with Caption Inputs
       const prevContainer = document.getElementById('photoPreviewContainer');
