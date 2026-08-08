@@ -70,9 +70,9 @@ if (!empty($_GET['token'])) {
     </div>
 
     <!-- FORGOT PASSWORD MODAL -->
-    <div id="forgotPasswordModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-      <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 max-w-md w-full space-y-5 shadow-2xl relative">
-        <button type="button" onclick="closeForgotPasswordModal()" class="absolute top-4 right-4 text-[#d0c3cb] hover:text-white p-1 text-lg">✕</button>
+    <div id="forgotPasswordModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+      <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 max-w-md w-full space-y-5 shadow-2xl relative max-h-[85vh] overflow-y-auto scrollbar-none my-auto">
+        <button type="button" onclick="closeForgotPasswordModal()" class="absolute top-4 right-4 text-[#d0c3cb] hover:text-white p-1 text-lg cursor-pointer">✕</button>
         <div class="text-center space-y-1">
           <div class="w-12 h-12 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 flex items-center justify-center mx-auto mb-2">
             <i data-lucide="key-round" class="w-6 h-6"></i>
@@ -89,22 +89,16 @@ if (!empty($_GET['token'])) {
 
           <div id="forgotPassMsg" class="hidden text-xs text-center p-3 rounded-xl"></div>
 
-          <button type="submit" id="forgotPassBtn" class="w-full py-3 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-md">
+          <button type="submit" id="forgotPassBtn" class="w-full py-3.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-md">
             Send Password Reset Link
           </button>
         </form>
-
-        <div id="forgotPassOptions" class="hidden space-y-2 pt-2 border-t border-[#4d444b]/40 text-center">
-          <a id="forgotWaBtn" href="#" target="_blank" class="w-full py-2.5 bg-[#25D366] text-black font-bold text-xs rounded-xl flex items-center justify-center gap-2 text-decoration-none font-bold">
-            <span>💬 1-Click WhatsApp Support Reset</span>
-          </a>
-        </div>
       </div>
     </div>
 
     <!-- SET NEW PASSWORD MODAL (Triggered via Email Reset Link ?reset_token=xyz) -->
-    <div id="setNewPasswordModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-      <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 max-w-md w-full space-y-5 shadow-2xl relative">
+    <div id="setNewPasswordModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+      <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 max-w-md w-full space-y-5 shadow-2xl relative max-h-[85vh] overflow-y-auto scrollbar-none my-auto">
         <button type="button" onclick="closeSetNewPasswordModal()" class="absolute top-4 right-4 text-[#d0c3cb] hover:text-white p-1 text-lg cursor-pointer">✕</button>
         <div class="text-center space-y-1">
           <div class="w-12 h-12 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 flex items-center justify-center mx-auto mb-2">
@@ -1727,7 +1721,6 @@ if (!empty($_GET['token'])) {
     function closeForgotPasswordModal() {
       document.getElementById('forgotPasswordModal').classList.add('hidden');
       document.getElementById('forgotPassMsg').classList.add('hidden');
-      document.getElementById('forgotPassOptions').classList.add('hidden');
     }
 
     async function handleRequestPasswordReset(e) {
@@ -1735,8 +1728,6 @@ if (!empty($_GET['token'])) {
       const email = document.getElementById('forgotPassEmail').value.trim();
       const btn = document.getElementById('forgotPassBtn');
       const msg = document.getElementById('forgotPassMsg');
-      const options = document.getElementById('forgotPassOptions');
-      const waBtn = document.getElementById('forgotWaBtn');
 
       if (!email) return;
       btn.innerText = 'Sending Reset Link...';
@@ -1757,11 +1748,7 @@ if (!empty($_GET['token'])) {
 
         if (data.success) {
           msg.className = 'text-xs text-center p-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300';
-          msg.innerText = '✅ Password reset instructions sent! You can also use 1-Click WhatsApp support reset below.';
-          if (data.whatsapp_link && waBtn) {
-            waBtn.href = data.whatsapp_link;
-            options.classList.remove('hidden');
-          }
+          msg.innerText = '✅ Password reset instructions sent to your email address!';
         } else {
           msg.className = 'text-xs text-center p-3 rounded-xl bg-rose-950/70 border border-rose-500/40 text-rose-300';
           msg.innerText = '❌ ' + (data.message || 'Email not found. Please check your email address.');

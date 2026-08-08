@@ -51,10 +51,6 @@ try {
 
         $reset_link = APP_URL . '/edit.php?reset_token=' . $reset_token;
 
-        // WhatsApp Direct Help Link for 1-Click Verification
-        $wa_msg  = urlencode("Hi SoulScript Support! I need help resetting my password for email: {$email}. Order ID: {$buyer['order_id']}");
-        $wa_link = "https://wa.me/919999999999?text={$wa_msg}";
-
         // Send Email Reset Notice if mail is available
         $subject = "🔑 Reset Your SoulScript Account Password";
         $htmlBody = "
@@ -77,9 +73,8 @@ try {
 
         echo json_encode([
             'success' => true,
-            'message' => 'Password reset instructions generated successfully!',
-            'reset_link' => $reset_link,
-            'whatsapp_link' => $wa_link
+            'message' => 'Password reset instructions sent to your email address!',
+            'reset_link' => $reset_link
         ]);
         exit;
     }
