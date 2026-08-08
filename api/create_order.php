@@ -34,19 +34,17 @@ $buyer_password_hash = $buyer_password ? hashHintAnswer($buyer_password) : null;
 try {
     $db = getDB();
 
-    // Smart Multi-Gift Account Handling: Sync master password for this email address
-    if (!empty($buyer_password_hash)) {
-        // Update all previous gifts under this email to use the latest master account password
-        $db->prepare("UPDATE orders SET buyer_password_hash = ? WHERE LOWER(buyer_email) = LOWER(?)")
-           ->execute([$buyer_password_hash, strtolower($buyer_email)]);
-    } else {
-        // If no password provided, inherit existing master password for this email
-        $stmtCheck = $db->prepare("SELECT buyer_password_hash FROM orders WHERE LOWER(buyer_email) = LOWER(?) AND buyer_password_hash IS NOT NULL LIMIT 1");
-        $stmtCheck->execute([$buyer_email]);
-        $existingAccount = $stmtCheck->fetch();
-        if ($existingAccount && !empty($existingAccount['buyer_password_hash'])) {
-            $buyer_password_hash = $existingAccount['buyer_password_hash'];
+    // Strict Account Security Check: If email already exists, verify existing account password
+    $stmtCheck = $db->prepare("SELECT buyer_password_hash FROM orders WHERE LOWER(buyer_email) = LOWER(?) AND buyer_password_hash IS NOT NULL LIMIT 1");
+    $stmtCheck->execute([$buyer_email]);
+    $existingAccount = $stmtCheck->fetch();
+
+    if ($existingAccount && !empty($existingAccount['buyer_password_hash'])) {
+        // Account exists! Verify that provided password matches existing account password
+        if (empty($buyer_password) || hashHintAnswer($buyer_password) !== $existingAccount['buyer_password_hash']) {
+            sendJsonError('An account already exists with this email address! Please enter your correct existing account password, or log in at digitalyogi24.com/edit.php', 400);
         }
+        $buyer_password_hash = $existingAccount['buyer_password_hash'];
     }
 
     // Fetch template price

@@ -88,7 +88,10 @@ if ($order_id) {
           </div>
           <div>
             <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Email Address *</label>
-            <input type="email" id="buyerEmail" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="you@example.com" required>
+            <input type="email" id="buyerEmail" onchange="checkExistingBuyerEmail(this.value)" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="you@example.com" required>
+            <div id="existingEmailNotice" class="hidden mt-2 p-3 bg-amber-950/80 border border-amber-500/40 rounded-xl text-amber-300 text-xs leading-relaxed">
+              🔑 <strong>Account Found:</strong> An account already exists for this email. Please enter your existing account password below, or <a href="<?php echo APP_URL; ?>/edit.php" target="_blank" class="underline font-bold text-[#eac34a]">Log In at Portal</a>.
+            </div>
           </div>
           <div>
             <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Secret Edit Password * <span class="text-[10px] text-[#eac34a]">(min 6 chars)</span></label>
@@ -972,6 +975,25 @@ Today, I want to ask you the most important question of my life. Will you take m
         selectedPhotoObjects.push({ url: url, caption: sampleObj ? sampleObj.caption : 'A Beautiful Memory' });
       }
       renderPhotoPicker();
+    }
+
+    async function checkExistingBuyerEmail(email) {
+      const notice = document.getElementById('existingEmailNotice');
+      if (!email || !email.includes('@')) {
+        if (notice) notice.classList.add('hidden');
+        return;
+      }
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/check_email.php?email=' + encodeURIComponent(email));
+        const data = await res.json();
+        if (data.exists && notice) {
+          notice.classList.remove('hidden');
+        } else if (notice) {
+          notice.classList.add('hidden');
+        }
+      } catch (e) {
+        if (notice) notice.classList.add('hidden');
+      }
     }
 
     function renderPhotoPicker() {
