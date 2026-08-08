@@ -69,6 +69,24 @@ if (!empty($_GET['token'])) {
     <!-- VIEW B: BUYER DASHBOARD (When logged in / token active) -->
     <div id="dashboardView" class="<?php echo $token ? '' : 'hidden'; ?> space-y-6">
       
+      <!-- Multi-Gift Website Selector Bar (Hidden if 1 gift owned) -->
+      <div id="multiGiftSelectorCard" class="hidden bg-gradient-to-r from-[#2a1d28] via-[#221f21] to-[#2a1d28] p-4 sm:p-5 rounded-3xl border border-[#eac34a]/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-3 text-left w-full sm:w-auto">
+          <div class="w-9 h-9 rounded-2xl bg-[#eac34a] text-[#241a00] flex items-center justify-center font-bold shrink-0 shadow-md">
+            🎁
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-wider text-[#eac34a] block">Your Purchased Gifts</span>
+            <span class="text-xs font-semibold text-[#e8e0e3]" id="multiGiftCountLabel">You own 2 surprise websites</span>
+          </div>
+        </div>
+        <div class="w-full sm:w-auto">
+          <select id="multiGiftDropdown" onchange="switchActiveGiftWebsite(this.value)" class="w-full sm:w-auto bg-[#100d10] border border-[#eac34a]/60 text-[#e8e0e3] text-xs font-bold rounded-xl px-4 py-2.5 focus:outline-none focus:border-[#eac34a] cursor-pointer shadow-inner">
+            <!-- Dynamic Gift Options -->
+          </select>
+        </div>
+      </div>
+
       <!-- Active Plan Badge Banner & Share Link -->
       <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-3 text-left">
@@ -455,7 +473,10 @@ if (!empty($_GET['token'])) {
           if (data.redirect_url) {
             window.location.href = data.redirect_url;
           } else {
-            // Option 2: Clean URL (No Token in URL bar)
+            // Render Multi-Gift Selector if pages returned
+            if (data.pages && data.pages.length > 0) {
+              renderMultiGiftSelector(data.pages, data.edit_token);
+            }
             window.location.href = '<?php echo APP_URL; ?>/edit.php';
           }
         } else {
@@ -628,6 +649,11 @@ if (!empty($_GET['token'])) {
           const tokens = p.tokens_json ? JSON.parse(p.tokens_json) : [];
           renderTokensList(tokens);
 
+          // Render Multi-Gift Website Selector if 2+ gifts owned
+          if (data.buyer_pages) {
+            renderMultiGiftSelector(data.buyer_pages, activeToken);
+          }
+
           lucide.createIcons();
         } else {
           const msg = document.getElementById('loginMsg');
@@ -639,6 +665,42 @@ if (!empty($_GET['token'])) {
       } catch (err) {
         console.error(err);
       }
+    }
+
+    function renderMultiGiftSelector(pages, currentToken) {
+      const card = document.getElementById('multiGiftSelectorCard');
+      const select = document.getElementById('multiGiftDropdown');
+      const label = document.getElementById('multiGiftCountLabel');
+
+      if (!card || !select || !Array.isArray(pages) || pages.length <= 1) {
+        if (card) card.classList.add('hidden');
+        return;
+      }
+
+      card.classList.remove('hidden');
+      if (label) label.innerText = `You own ${pages.length} surprise websites under this account`;
+
+      const tplNames = {
+        'anniversary_reveal': '🌹 Anniversary Reveal',
+        'birthday_magic': '🎂 Birthday Magic',
+        'perfect_proposal': '💍 Perfect Proposal',
+        'long_distance_love': '🌍 Long Distance Love',
+        'raksha_bandhan_special': '🪔 Raksha Bandhan Special'
+      };
+
+      select.innerHTML = pages.map(p => {
+        const tName = tplNames[p.template_id] || '🎁 Gift Website';
+        const partner = p.partner_name || 'Partner';
+        const isSel = p.edit_token === currentToken ? 'selected' : '';
+        return `<option value="${p.edit_token}" ${isSel}>${tName} — For ${partner} (/gift/${p.url_slug})</option>`;
+      }).join('');
+    }
+
+    async function switchActiveGiftWebsite(newToken) {
+      if (!newToken || newToken === activeToken) return;
+      activeToken = newToken;
+      document.getElementById('activeEditToken').value = newToken;
+      loadDashboardData();
     }
 
     function normalizeMediaUrlJs(url) {

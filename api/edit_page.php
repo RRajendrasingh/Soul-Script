@@ -93,6 +93,29 @@ try {
             $proposal_response['responded_at_formatted'] = date('j M, h:i a', strtotime($proposal_response['responded_at']));
         }
 
+        // Fetch all buyer gifts for Multi-Gift Switcher
+        $stmtBuyerPages = $db->prepare("
+            SELECT p.edit_token, p.page_id, p.template_id, p.url_slug, p.page_content, p.created_at
+            FROM pages p
+            JOIN orders o ON p.order_id = o.order_id
+            WHERE LOWER(o.buyer_email) = LOWER(?)
+            ORDER BY p.created_at DESC
+        ");
+        $stmtBuyerPages->execute([$page['buyer_email']]);
+        $allBuyerPages = $stmtBuyerPages->fetchAll();
+
+        $buyerPagesList = array_map(function($bp) {
+            $c = !empty($bp['page_content']) ? json_decode($bp['page_content'], true) : [];
+            return [
+                'edit_token' => $bp['edit_token'],
+                'page_id' => $bp['page_id'],
+                'template_id' => $bp['template_id'],
+                'url_slug' => $bp['url_slug'],
+                'partner_name' => $c['partner_name'] ?? 'Partner',
+                'created_at' => $bp['created_at']
+            ];
+        }, $allBuyerPages);
+
         echo json_encode([
             'success' => true,
             'page' => $page,
@@ -100,7 +123,8 @@ try {
             'reasons' => $reasons,
             'media' => $media,
             'proposal_response' => $proposal_response,
-            'share_url' => APP_URL . '/gift/' . $page['url_slug']
+            'share_url' => APP_URL . '/gift/' . $page['url_slug'],
+            'buyer_pages' => $buyerPagesList
         ]);
         exit;
     }

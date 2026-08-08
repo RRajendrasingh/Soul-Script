@@ -24,32 +24,46 @@ try {
     $db = getDB();
     $passHash = hashHintAnswer($password); // SHA-256 with salt
 
-    // 1. Try finding an order WITH a created page
+    // 1. Fetch ALL created pages for this buyer
     $stmt = $db->prepare("
-        SELECT p.edit_token, p.page_id, p.url_slug, o.buyer_name, o.buyer_email, o.order_id
+        SELECT p.edit_token, p.page_id, p.template_id, p.url_slug, c.partner_name, p.created_at, o.buyer_name, o.buyer_email, o.order_id
         FROM orders o
         JOIN pages p ON o.order_id = p.order_id
+        LEFT JOIN page_content c ON p.page_id = c.page_id
         WHERE LOWER(o.buyer_email) = LOWER(?) AND o.buyer_password_hash = ?
         ORDER BY p.created_at DESC
-        LIMIT 1
     ");
     $stmt->execute([$email, $passHash]);
-    $result = $stmt->fetch();
+    $pages = $stmt->fetchAll();
 
-    if ($result) {
+    if ($pages && count($pages) > 0) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        $_SESSION['edit_token'] = $result['edit_token'];
-        $_SESSION['buyer_email'] = $result['buyer_email'];
+
+        $firstPage = $pages[0];
+        $_SESSION['edit_token'] = $firstPage['edit_token'];
+        $_SESSION['buyer_email'] = $firstPage['buyer_email'];
+
+        $pagesList = array_map(function($p) {
+            return [
+                'edit_token' => $p['edit_token'],
+                'page_id' => $p['page_id'],
+                'template_id' => $p['template_id'],
+                'url_slug' => $p['url_slug'],
+                'partner_name' => htmlspecialchars_decode($p['partner_name'] ?? 'Partner', ENT_QUOTES),
+                'created_at' => $p['created_at']
+            ];
+        }, $pages);
 
         echo json_encode([
             'success' => true,
             'message' => 'Login successful!',
-            'edit_token' => $result['edit_token'],
-            'page_id' => $result['page_id'],
-            'url_slug' => $result['url_slug'],
-            'buyer_name' => $result['buyer_name']
+            'edit_token' => $firstPage['edit_token'],
+            'page_id' => $firstPage['page_id'],
+            'url_slug' => $firstPage['url_slug'],
+            'buyer_name' => $firstPage['buyer_name'],
+            'pages' => $pagesList
         ]);
         exit;
     }
