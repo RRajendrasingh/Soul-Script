@@ -406,7 +406,7 @@ if (!empty($_GET['token'])) {
 
           <!-- Current Selected Uploads Grid -->
           <div class="bg-[#151215] p-4 sm:p-5 rounded-3xl border border-[#4d444b] min-h-[140px] space-y-3">
-            <div id="dashScrapbookContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+            <div id="dashScrapbookContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
               <!-- Dynamic Photo Thumbnails with Delete X Button -->
             </div>
           </div>
