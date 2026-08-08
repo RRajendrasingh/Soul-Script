@@ -449,7 +449,7 @@ Today, I want to ask you the most important question of my life. Will you take m
 
         <!-- Selected Uploads Grid -->
         <div class="bg-[#151215] p-4 rounded-3xl border border-[#4d444b] min-h-[120px]">
-          <div id="photoPreviewContainer" class="flex flex-wrap gap-3">
+          <div id="photoPreviewContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             <!-- Dynamic Upload Thumbnails with X -->
           </div>
         </div>
@@ -1004,8 +1004,8 @@ Today, I want to ask you the most important question of my life. Will you take m
       const prevContainer = document.getElementById('photoPreviewContainer');
       if (prevContainer) {
         prevContainer.innerHTML = selectedPhotoObjects.map((item, idx) => `
-          <div class="relative w-28 flex-col flex shrink-0 group bg-[#100d10] p-1.5 rounded-2xl border-2 border-[#eac34a]/60">
-            <div class="relative w-full h-20 rounded-xl overflow-hidden">
+          <div class="relative w-full flex-col flex group bg-[#100d10] p-1.5 rounded-2xl border-2 border-[#eac34a]/60 shadow-md">
+            <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden">
               <img src="${item.url}" class="w-full h-full object-cover">
               <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/80 text-white flex items-center justify-center text-xs font-bold hover:bg-rose-600 transition-colors">
                 ✕
