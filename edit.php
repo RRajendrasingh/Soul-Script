@@ -585,7 +585,7 @@ $token = trim($_GET['token'] ?? '');
           document.getElementById('hintQuestion').value = p.hint_question || '';
           if (document.getElementById('secHintQuestion')) document.getElementById('secHintQuestion').value = p.hint_question || '';
           document.getElementById('loveNoteText').value = p.love_note_text || '';
-          document.getElementById('taglineQuote').value = p.tagline_quote || 'Safar Khubsurat h manjil se bhi 🌹';
+          document.getElementById('taglineQuote').value = p.tagline_quote || (p.template_id === 'birthday_magic' ? 'Cheers to another year of awesome memories! 🥂' : (p.template_id === 'long_distance_love' ? 'Miles apart but connected by heart ✈️' : 'Safar Khubsurat h manjil se bhi 🌹'));
           // Bind Music Engine State from Database
           const songTitle = p.song_title || 'Tum Hi Ho';
           const songArtist = p.song_artist || 'Arijit Singh';
@@ -798,14 +798,22 @@ $token = trim($_GET['token'] ?? '');
       const nameLabel = document.getElementById('partnerNameLabel');
       const taglineLabel = document.getElementById('taglineQuoteLabel');
       const noteLabel = document.getElementById('loveNoteLabel');
+      const taglineInput = document.getElementById('taglineQuote');
 
       if (templateId === 'birthday_magic') {
         if (nameLabel) nameLabel.innerText = "Birthday Person's Name *";
         if (taglineLabel) taglineLabel.innerText = "Custom Birthday Tagline / Motto *";
+        if (taglineInput) taglineInput.placeholder = "e.g. Cheers to another year of awesome memories! 🥂";
         if (noteLabel) noteLabel.innerText = "Birthday Wish / Personal Message *";
+      } else if (templateId === 'long_distance_love') {
+        if (nameLabel) nameLabel.innerText = "Partner's First Name *";
+        if (taglineLabel) taglineLabel.innerText = "Custom Quote / Tagline Banner *";
+        if (taglineInput) taglineInput.placeholder = "e.g. Miles apart but connected by heart ✈️";
+        if (noteLabel) noteLabel.innerText = "Short Love Note / Signature Message *";
       } else {
         if (nameLabel) nameLabel.innerText = "Partner's First Name *";
         if (taglineLabel) taglineLabel.innerText = "Custom Romantic Quote / Tagline Banner *";
+        if (taglineInput) taglineInput.placeholder = "e.g. Safar Khubsurat h manjil se bhi 🌹";
         if (noteLabel) noteLabel.innerText = "Short Love Note / Signature Message *";
       }
 

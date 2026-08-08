@@ -874,6 +874,12 @@ try {
                 <span class="uppercase tracking-widest text-[11px]">It's Time To Celebrate!</span>
               </div>
 
+              <!-- Floating Tagline / Motto Banner -->
+              <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#e4b9df]/40 text-[#eac34a] text-xs font-bold shadow-lg backdrop-blur-md">
+                <i data-lucide="sparkles" class="w-4 h-4 text-[#eac34a]"></i>
+                <span class="font-serif italic text-sm tracking-wide">"${content.tagline_quote || 'Cheers to another year of awesome memories! 🥂'}"</span>
+              </div>
+
               <h1 class="text-4xl sm:text-6xl font-extrabold font-serif text-[#e8e0e3] tracking-tight leading-tight">
                 Happy Birthday, ${content.partner_name}! 🎉
               </h1>
@@ -1018,6 +1024,12 @@ try {
               <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3b1e3b] border border-[#e4b9df]/30 text-[#eac34a] text-xs font-semibold shadow-md">
                 <i data-lucide="globe" class="w-4 h-4 text-[#eac34a]"></i>
                 <span class="uppercase tracking-widest text-[11px]">Miles Apart, Joined At Heart</span>
+              </div>
+
+              <!-- Floating Tagline / Quote Banner -->
+              <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#e4b9df]/40 text-[#eac34a] text-xs font-bold shadow-lg backdrop-blur-md">
+                <i data-lucide="sparkles" class="w-4 h-4 text-[#eac34a]"></i>
+                <span class="font-serif italic text-sm tracking-wide">"${content.tagline_quote || 'Miles apart but connected by heart ✈️'}"</span>
               </div>
 
               <h1 class="text-4xl sm:text-6xl font-extrabold font-serif text-[#e8e0e3] tracking-tight leading-tight">
