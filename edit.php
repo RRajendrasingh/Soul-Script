@@ -1006,12 +1006,12 @@ $token = trim($_GET['token'] ?? '');
     let dashPhotosList = [];
 
     const SAMPLE_SCRAPBOOK_PHOTOS = [
-      'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'
+      { url: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80', caption: 'Our First Date ☕' },
+      { url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80', caption: 'Best Friends Forever 👫' },
+      { url: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80', caption: 'Together Always 💑' },
+      { url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80', caption: 'Squad Goals 🌟' },
+      { url: 'https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=600&q=80', caption: 'A Beautiful Smile 😊' },
+      { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', caption: 'Always Stunning 💫' }
     ];
 
     function renderPhotosList(media) {
@@ -1062,11 +1062,12 @@ $token = trim($_GET['token'] ?? '');
       }
 
       if (sampleGrid) {
-        sampleGrid.innerHTML = SAMPLE_SCRAPBOOK_PHOTOS.map(url => {
-          const isSel = dashPhotosList.some(p => p.url === url);
+        sampleGrid.innerHTML = SAMPLE_SCRAPBOOK_PHOTOS.map(photo => {
+          const isSel = dashPhotosList.some(p => p.url === photo.url);
           return `
-            <div onclick="toggleDashSamplePhoto('${url}')" class="aspect-square rounded-xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/40' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-105 transition-all">
-              <img src="${url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
+            <div onclick="toggleDashSamplePhoto('${photo.url}')" class="aspect-square rounded-xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/40' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-105 transition-all">
+              <img src="${photo.url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
+              <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] text-center py-0.5 px-1 truncate">${photo.caption}</div>
               <div class="absolute inset-0 bg-black/40 flex items-center justify-center ${isSel ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity">
                 <span class="px-2 py-1 rounded-md ${isSel ? 'bg-[#eac34a] text-[#241a00]' : 'bg-[#3b1e3b] text-[#eac34a]'} font-bold text-[10px]">
                   ${isSel ? '✓ Added' : '+ Add'}
@@ -1094,7 +1095,9 @@ $token = trim($_GET['token'] ?? '');
           alert('⚠️ Maximum limit of 10 photos reached! Please remove a photo before adding more.');
           return;
         }
-        dashPhotosList.push({ url: url, caption: 'Moments of Joy' });
+        // Use image-specific caption
+        const sampleObj = SAMPLE_SCRAPBOOK_PHOTOS.find(p => p.url === url);
+        dashPhotosList.push({ url: url, caption: sampleObj ? sampleObj.caption : 'A Beautiful Memory' });
       }
       renderDashScrapbookPhotos();
     }
