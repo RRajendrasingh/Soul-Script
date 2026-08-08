@@ -222,6 +222,28 @@ try {
     let isPlaying = false;
     let isMuted = false;
 
+    function normalizeMediaUrlJs(url) {
+      if (!url) return '';
+      url = url.trim();
+      if (url.startsWith('uploads/')) return '<?php echo APP_URL; ?>/' + url;
+      if (url.startsWith('/uploads/')) return '<?php echo APP_URL; ?>' + url;
+      if (/https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?(?:\/[^/]*)?(\/uploads\/.*)/i.test(url)) {
+        const match = url.match(/https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?(?:\/[^/]*)?(\/uploads\/.*)/i);
+        return '<?php echo APP_URL; ?>' + match[1];
+      }
+      return url;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     function extractYouTubeId(url) {
       if (!url) return null;
       let match = url.match(/\/shorts\/([a-zA-Z0-9_-]+)/);
@@ -461,7 +483,7 @@ try {
       let finalSongTitle = content.song_title || tf.song_title || '';
       let finalArtist = content.song_artist || '';
 
-      if (finalAudioUrl === 'random_singer' || !finalAudioUrl || finalAudioUrl.includes('pixabay')) {
+      if (finalAudioUrl === 'random_singer' || !finalAudioUrl) {
         const singerKey = (content.favorite_singers || 'arijit singh').toLowerCase();
         const matchedList = SINGER_PLAYLISTS[singerKey] || SINGER_PLAYLISTS['arijit singh'];
         const randomTrack = matchedList[Math.floor(Math.random() * matchedList.length)];
@@ -527,13 +549,16 @@ try {
       if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
       if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').innerText = finalArtist;
 
+      const pName = content.partner_name || 'Partner';
+      const pInitial = pName.charAt(0).toUpperCase();
+      const cleanReceiverPhoto = content.receiver_photo ? normalizeMediaUrlJs(content.receiver_photo) : '';
+
       // Update Partner Photo Avatar inside Music Box
       const playerAvatarContainer = document.getElementById('playerAvatarContainer');
       if (playerAvatarContainer) {
-        if (content.receiver_photo && content.receiver_photo.trim() !== '') {
-          playerAvatarContainer.innerHTML = `<img id="playerReceiverPhotoImg" src="${content.receiver_photo}" alt="${content.partner_name}" class="w-full h-full object-cover rounded-[10px]">`;
+        if (cleanReceiverPhoto && cleanReceiverPhoto.trim() !== '') {
+          playerAvatarContainer.innerHTML = `<img id="playerReceiverPhotoImg" src="${cleanReceiverPhoto}" onerror="this.onerror=null; this.parentElement.innerHTML='<span id=\\'playerReceiverFallback\\' class=\\'text-base font-bold font-serif text-[#eac34a]\\'>${pInitial}</span>';" alt="${content.partner_name}" class="w-full h-full object-cover rounded-[10px]">`;
         } else {
-          const pInitial = (content.partner_name || 'P').charAt(0).toUpperCase();
           playerAvatarContainer.innerHTML = `<span id="playerReceiverFallback" class="text-base font-bold font-serif text-[#eac34a]">${pInitial}</span>`;
         }
       }
@@ -541,10 +566,8 @@ try {
       const startDate = tf.relationship_start_date ? new Date(tf.relationship_start_date) : new Date();
       const dobStr = tf.partner_dob || '1998-11-20';
 
-      const pName = content.partner_name || 'Partner';
-      const pInitial = pName.charAt(0).toUpperCase();
-      const photoAvatarHtml = content.receiver_photo && content.receiver_photo.trim() !== '' ?
-        `<img id="receiverPhotoImg" src="${content.receiver_photo}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#151215] flex items-center justify-center font-bold text-3xl sm:text-4xl font-serif shadow-inner\\'>${pInitial}</div>';" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">` :
+      const photoAvatarHtml = cleanReceiverPhoto && cleanReceiverPhoto.trim() !== '' ?
+        `<img id="receiverPhotoImg" src="${cleanReceiverPhoto}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#151215] flex items-center justify-center font-bold text-3xl sm:text-4xl font-serif shadow-inner\\'>${pInitial}</div>';" alt="${content.partner_name}" class="w-full h-full rounded-full object-cover border-2 border-[#151215]">` :
         `<div id="receiverPhotoImg" class="w-full h-full rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#151215] flex items-center justify-center font-bold text-3xl sm:text-4xl font-serif shadow-inner">${pInitial}</div>`;
 
       if (templateId === 'anniversary_reveal') {
@@ -1289,14 +1312,18 @@ try {
           </div>
 
           <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
-            ${media.map(m => `
-              <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
-                <img src="${m.file_path}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
-                <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
-                  <span class="text-[11px] font-bold text-[#eac34a] block">${m.caption || 'Childhood Memory'}</span>
+            ${media.map(m => {
+              const imgUrl = normalizeMediaUrlJs(m.file_path);
+              const capText = escapeHtml(m.caption || 'Childhood Memory');
+              return `
+                <div onclick="openLightbox('${imgUrl}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
+                  <img src="${imgUrl}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                  <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
+                    <span class="text-[11px] font-bold text-[#eac34a] block">${capText}</span>
+                  </div>
                 </div>
-              </div>
-            `).join('')}
+              `;
+            }).join('')}
           </div>
         </section>
 
