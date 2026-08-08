@@ -90,7 +90,7 @@ if ($order_id) {
             <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Email Address *</label>
             <input type="email" id="buyerEmail" onchange="checkExistingBuyerEmail(this.value)" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="you@example.com" required>
             <div id="existingEmailNotice" class="hidden mt-2 p-3 bg-amber-950/80 border border-amber-500/40 rounded-xl text-amber-300 text-xs leading-relaxed">
-              🔑 <strong>Account Found:</strong> An account already exists for this email. Please enter your existing account password below, or <a href="<?php echo APP_URL; ?>/edit.php" target="_blank" class="underline font-bold text-[#eac34a]">Log In at Portal</a>.
+              🔑 <strong>Account Found:</strong> An account already exists for this email. Please enter your existing account password below, or <a href="<?php echo APP_URL; ?>/edit.php" class="underline font-bold text-[#eac34a]">Log In at Portal</a>.
             </div>
           </div>
           <div>
