@@ -97,30 +97,30 @@ if (!empty($_GET['token'])) {
     <div id="dashboardView" class="<?php echo $token ? '' : 'hidden'; ?> space-y-6">
 
       <!-- Active Plan Badge Banner & Share Link -->
-      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-3 text-left">
-          <div class="w-12 h-12 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center shrink-0">
-            <i data-lucide="sparkles" class="w-6 h-6"></i>
+      <div class="bg-[#221f21] p-5 sm:p-6 rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 text-left min-w-0 flex-1">
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center shrink-0 shadow-md">
+            <i data-lucide="sparkles" class="w-5 h-5 sm:w-6 sm:h-6"></i>
           </div>
-          <div>
-            <span id="activePlanBadge" class="text-[10px] uppercase font-bold tracking-widest text-[#eac34a] bg-[#3b1e3b] px-3 py-0.5 rounded-full border border-[#e4b9df]/20 inline-block mb-1">
+          <div class="space-y-0.5 min-w-0 flex-1">
+            <span id="activePlanBadge" class="text-[9px] sm:text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#3b1e3b] px-2.5 py-0.5 rounded-full border border-[#e4b9df]/20 inline-block">
               Active Plan
             </span>
-            <h2 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]" id="dashPartnerTitle">Partner Gift Dashboard</h2>
-            <p class="text-xs text-[#d0c3cb]">Update your gift contents in real-time below.</p>
+            <h2 class="text-lg sm:text-2xl font-bold font-serif text-[#e8e0e3] truncate" id="dashPartnerTitle">Partner Gift Dashboard</h2>
+            <p class="text-[11px] sm:text-xs text-[#d0c3cb]">Update your gift contents in real-time below.</p>
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-2 w-full md:w-auto justify-start md:justify-end shrink-0">
           <button type="button" id="backToHubBtn" onclick="showHubView()" class="hidden px-3.5 py-2.5 rounded-xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-md">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
             <span>All Gifts</span>
           </button>
-          <a id="viewLivePageBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#ffe088] transition-all shadow-md">
-            <span>View Live Gift</span>
+          <a id="viewLivePageBtn" href="#" target="_blank" class="px-3.5 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#ffe088] transition-all shadow-md">
+            <span>View Live</span>
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           </a>
-          <button type="button" onclick="handleBuyerLogout()" class="px-4 py-2.5 rounded-xl bg-[#221f21] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-md">
+          <button type="button" onclick="handleBuyerLogout()" class="px-3.5 py-2.5 rounded-xl bg-[#221f21] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-md">
             <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
             <span>Log Out</span>
           </button>
@@ -723,13 +723,13 @@ if (!empty($_GET['token'])) {
 
         return `
           <div class="bg-gradient-to-b ${meta.color} p-5 rounded-2xl border border-[#eac34a]/30 shadow-xl flex flex-col justify-between gap-4 group hover:border-[#eac34a] transition-all">
-            <div class="space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#100d10] px-2.5 py-1 rounded-full border border-[#eac34a]/30 flex items-center gap-1">
+            <div class="space-y-2.5">
+              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5">
+                <span class="text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#100d10] px-2.5 py-1 rounded-full border border-[#eac34a]/30 flex items-center gap-1 shrink-0">
                   <span>${meta.emoji}</span>
                   <span>${meta.name}</span>
                 </span>
-                <span class="text-[10px] text-[#d0c3cb]/70 font-mono">/gift/${p.url_slug}</span>
+                <span class="text-[10px] text-[#d0c3cb]/70 font-mono truncate max-w-full">/gift/${p.url_slug}</span>
               </div>
               <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">Surprise Page for <span class="text-[#eac34a]">${escapeHtml(partner)}</span></h3>
               <p class="text-xs text-[#d0c3cb]/80 truncate">Private Link: <a href="${shareUrl}" target="_blank" class="underline hover:text-[#eac34a]">${shareUrl}</a></p>
