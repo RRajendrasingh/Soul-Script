@@ -1139,6 +1139,182 @@ try {
         startLongDistanceClocks(buyerTz, partnerTz);
         startReunionCountdown(reunionDateStr);
 
+      } else if (templateId === 'raksha_bandhan_special') {
+
+        const promisesList = (reasons && reasons.length > 0) ? reasons : [
+          "Always protect you and stand by your side 🛡️",
+          "Keep all your deepest secrets safe 🤫",
+          "Sponsor your favorite food and treat you 🍕",
+          "Never let you feel alone, no matter where I am 💖",
+          "Always be your forever crime partner 🕵️‍♂️"
+        ];
+
+        let voucherCode = '';
+        if (tokensData && tokensData.length > 0) {
+          voucherCode = tokensData[0].shagun_voucher_code || tokensData[0].code || '';
+        }
+
+        html = `
+        <!-- SECTION 1: HERO HEADER & TAGLINE BANNER -->
+        <section class="relative pt-20 pb-8 px-4 text-center z-10">
+          <div class="max-w-4xl mx-auto space-y-6">
+            <div class="w-28 h-28 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[3px] mx-auto shadow-[0_0_35px_rgba(234,195,74,0.4)]">
+              <div class="w-full h-full bg-[#151215] rounded-full overflow-hidden flex items-center justify-center">
+                ${photoAvatarHtml}
+              </div>
+            </div>
+
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-xs sm:text-sm font-bold shadow-lg">
+              <i data-lucide="flame" class="w-4 h-4 text-[#eac34a]"></i>
+              <span>${content.tagline_quote || "World's Best Sister 👑"}</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-extrabold font-serif text-[#e8e0e3] tracking-tight leading-tight">
+              Happy Raksha Bandhan, <span class="text-[#eac34a]">${content.partner_name}</span>! 🪔
+            </h1>
+            <p class="text-xs sm:text-base text-[#d0c3cb] max-w-xl mx-auto">
+              A digital celebration of our unbreakable bond, childhood memories, and sacred vows.
+            </p>
+          </div>
+        </section>
+
+        <!-- SECTION 2: VIRTUAL RAKHI TYING CEREMONY -->
+        <section class="max-w-3xl mx-auto px-4 py-8 relative z-10">
+          <div class="bg-[#221f21]/90 border border-[#eac34a]/40 backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+            <div class="w-16 h-16 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center mx-auto shadow-lg">
+              <i data-lucide="sparkles" class="w-8 h-8 text-[#eac34a]"></i>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block mb-1">SACRED THREAD OF LOVE</span>
+              <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Ceremony 🧵</h2>
+              <p class="text-xs text-[#d0c3cb] max-w-md mx-auto mt-2">Tap the golden thread below to complete the virtual Rakhi ritual with confetti and blessings!</p>
+            </div>
+            <div>
+              <button onclick="tieVirtualRakhi()" id="tieRakhiBtn" type="button" class="px-8 py-4 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] text-[#241a00] font-extrabold text-xs sm:text-sm uppercase tracking-widest shadow-[0_0_30px_rgba(234,195,74,0.4)] hover:scale-105 transition-all cursor-pointer">
+                Tie Virtual Rakhi 🧵
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 3: 5 SIBLING PROMISES FLIP CARDS -->
+        <section class="max-w-5xl mx-auto px-4 py-10 relative z-10 space-y-8">
+          <div class="text-center space-y-2">
+            <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">BROTHER &amp; SISTER VOWS</span>
+            <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">5 Sibling Promises 🛡️</h2>
+            <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-2"></div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${promisesList.map((pText, pIdx) => `
+              <div class="bg-[#221f21] border border-[#4d444b] rounded-2xl p-6 space-y-4 hover:border-[#eac34a]/60 transition-all shadow-xl relative group">
+                <div class="flex items-center justify-between">
+                  <span class="w-8 h-8 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs flex items-center justify-center border border-[#eac34a]/30">#${pIdx + 1}</span>
+                  <i data-lucide="shield-check" class="w-5 h-5 text-[#eac34a]"></i>
+                </div>
+                <p class="text-sm font-serif text-[#e8e0e3] leading-relaxed">
+                  "${pText}"
+                </p>
+                <div class="text-[10px] text-[#eac34a] uppercase tracking-wider font-semibold">Promise to ${content.partner_name}</div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+
+        <!-- SECTION 4: ALWAYS-VISIBLE DIGITAL SHAGUN ENVELOPE -->
+        <section class="max-w-3xl mx-auto px-4 py-10 relative z-10">
+          <div class="text-center space-y-2 mb-8">
+            <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">SPECIAL GIFT &amp; BLESSINGS</span>
+            <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Digital Shagun Envelope 🧧</h2>
+            <p class="text-xs text-[#d0c3cb]">Tap the traditional Indian Shagun Lifafa below to open your message and gift voucher!</p>
+          </div>
+
+          <!-- Closed Envelope UI -->
+          <div id="shagunEnvelopeContainer" onclick="toggleShagunLifafa()" class="bg-gradient-to-br from-[#800f1c] via-[#590a13] to-[#2b0509] border-2 border-[#eac34a] rounded-3xl p-8 text-center cursor-pointer shadow-[0_0_40px_rgba(234,195,74,0.3)] hover:scale-[1.02] transition-all relative overflow-hidden group">
+            <div class="absolute -top-12 -right-12 w-40 h-40 bg-[#eac34a]/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="w-20 h-20 rounded-full bg-[#eac34a] text-[#241a00] flex items-center justify-center mx-auto shadow-[0_0_25px_rgba(234,195,74,0.6)] group-hover:rotate-12 transition-transform">
+              <i data-lucide="mail-open" class="w-10 h-10 text-[#241a00]"></i>
+            </div>
+            <div class="space-y-2 mt-4">
+              <span class="text-xs font-extrabold uppercase tracking-widest text-[#eac34a] bg-[#151215]/80 px-4 py-1 rounded-full border border-[#eac34a]/40 inline-block">ROYAL SHAGUN LIFAFA</span>
+              <h3 class="text-2xl font-bold font-serif text-white">Tap to Open Envelope 🧧</h3>
+              <p class="text-xs text-[#f5d77f]">Contains your personal message &amp; special gift code</p>
+            </div>
+          </div>
+
+          <!-- Opened Envelope Content (Hidden by default, shown on click) -->
+          <div id="shagunLetterContent" class="hidden bg-[#221f21] border-2 border-[#eac34a] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-[#4d444b]/60 pb-4">
+              <span class="text-xs font-bold text-[#eac34a] uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="heart" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Shagun Letter from ${content.buyer_name}</span>
+              </span>
+              <button type="button" onclick="toggleShagunLifafa()" class="text-xs text-[#d0c3cb] hover:text-[#eac34a] font-bold">Close ✕</button>
+            </div>
+
+            <div class="space-y-4">
+              <p class="font-serif text-base sm:text-lg text-[#e8e0e3] leading-relaxed italic bg-[#151215] p-5 rounded-2xl border border-[#4d444b]">
+                "${content.love_note_text || "Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)"}"
+              </p>
+
+              ${voucherCode ? `
+                <div class="p-4 bg-gradient-to-r from-[#eac34a]/20 via-[#e4b9df]/20 to-[#eac34a]/20 border-2 border-[#eac34a] rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
+                  <div class="flex items-center gap-3 text-left">
+                    <div class="w-10 h-10 rounded-xl bg-[#eac34a] text-[#241a00] flex items-center justify-center shrink-0 font-bold">🎁</div>
+                    <div>
+                      <span class="block text-[10px] uppercase font-bold text-[#eac34a] tracking-wider">Gift Voucher Code</span>
+                      <strong class="text-base font-mono text-white tracking-widest">${voucherCode}</strong>
+                    </div>
+                  </div>
+                  <button type="button" onclick="navigator.clipboard.writeText('${voucherCode}'); alert('Voucher code copied to clipboard!');" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider transition-colors shadow-md cursor-pointer">
+                    Copy Code
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="text-right pt-2">
+              <span class="text-xs text-[#d0c3cb]">With lots of love,</span>
+              <span class="block text-lg font-bold font-serif text-[#eac34a]">${content.buyer_name}</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 5: CHILDHOOD MEMORIES SCRAPBOOK -->
+        <section class="max-w-5xl mx-auto px-4 py-12 relative z-10 space-y-8">
+          <div class="text-center space-y-2 mb-8">
+            <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">TV REMOTE FIGHTS TO BEST FRIENDS</span>
+            <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Childhood Memories 📸</h2>
+            <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-2"></div>
+          </div>
+
+          <div class="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
+            ${media.map(m => `
+              <div onclick="openLightbox('${m.file_path}')" class="break-inside-avoid rounded-2xl overflow-hidden border border-[#4d444b] group relative cursor-pointer hover:border-[#eac34a]/70 transition-all bg-[#151215] shadow-xl">
+                <img src="${m.file_path}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'" class="w-full h-auto object-contain block group-hover:scale-[1.02] transition-transform duration-500">
+                <div class="p-3 bg-[#221f21] border-t border-[#4d444b]/40 text-left">
+                  <span class="text-[11px] font-bold text-[#eac34a] block">${m.caption || 'Childhood Memory'}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+
+        <!-- Footer Bar -->
+        <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
+          <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
+          <div class="flex items-center justify-center gap-3">
+            <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+              <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+              <span>Unlock Editor Access 🔑</span>
+            </button>
+          </div>
+        </footer>
+        `;
+
+        container.innerHTML = html;
+        lucide.createIcons();
+
       } else {
         // Fallback layout
         html = `
@@ -1437,6 +1613,28 @@ try {
         lastScrollY = currentScrollY;
       }, { passive: true });
     })();
+    function tieVirtualRakhi() {
+      const btn = document.getElementById('tieRakhiBtn');
+      if (btn) {
+        btn.innerHTML = '✓ Rakhi Tied with Blessings & Love! 🪔';
+        btn.className = 'px-8 py-4 rounded-full bg-emerald-600 text-white font-extrabold text-xs sm:text-sm uppercase tracking-widest shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all';
+      }
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+      }
+    }
+
+    function toggleShagunLifafa() {
+      const envelope = document.getElementById('shagunEnvelopeContainer');
+      const letter = document.getElementById('shagunLetterContent');
+      if (envelope && letter) {
+        envelope.classList.toggle('hidden');
+        letter.classList.toggle('hidden');
+        if (typeof confetti === 'function' && !letter.classList.contains('hidden')) {
+          confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+        }
+      }
+    }
   </script>
 </body>
 </html>

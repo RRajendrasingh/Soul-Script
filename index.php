@@ -478,6 +478,71 @@ require_once __DIR__ . '/config/config.php';
         </div>
       </div>
 
+      <!-- Card 5: Raksha Bandhan Special -->
+      <div class="bg-[#221f21] rounded-3xl border border-[#4d444b]/50 hover:border-[#eac34a]/40 shadow-2xl transition-all duration-300 flex flex-col overflow-hidden group">
+        <div class="relative h-64 bg-[#100d10] overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1597157639073-69284dc0fdaf?auto=format&fit=crop&w=800&q=80" alt="Raksha Bandhan Special" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#221f21] via-transparent to-transparent"></div>
+          <div class="absolute top-4 left-4 bg-[#eac34a] text-[#241a00] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+            Festival Special 🪔
+          </div>
+          <div class="absolute top-4 right-4 bg-[#eac34a] text-[#241a00] font-extrabold text-base px-4 py-1 rounded-xl shadow-md">
+            ₹449
+          </div>
+          <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-1">
+            <h3 class="text-2xl font-bold font-serif">Raksha Bandhan Special</h3>
+            <p class="text-xs text-[#eac34a] font-medium">Celebrate Brother &amp; Sister Love</p>
+          </div>
+        </div>
+        <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
+          <p class="text-xs text-[#d0c3cb] leading-relaxed font-normal">
+            Celebrate the unbreakable sibling bond. Features an interactive Virtual Rakhi tying ceremony with confetti, 5 sibling promise cards, childhood memory scrapbook with captions, and an always-visible 3D Digital Shagun Envelope with optional gift voucher code.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#151215] p-5 rounded-2xl border border-[#4d444b]">
+            <div>
+              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span>Collected Fields:</span>
+              </h4>
+              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Brother/Sister Name &amp; Motto</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>5 Sibling Promises / Vows</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Digital Shagun Note / Voucher Code</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Childhood Photos with Captions</span></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span>Result Features:</span>
+              </h4>
+              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Interactive Virtual Rakhi Tying</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>5 Sibling Promise 3D Cards</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Always-Visible Shagun Envelope</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Sibling Soundtrack &amp; Photo Gallery</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <button onclick="selectTemplate('raksha_bandhan_special', 'Raksha Bandhan Special', 449)" class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 cursor-pointer">
+                <i data-lucide="gift" class="w-4 h-4"></i>
+                <span>Customize (₹449)</span>
+              </button>
+              <a href="<?php echo APP_URL; ?>/gift/mona" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
+                <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Live Sample</span>
+              </a>
+            </div>
+            <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
+              <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+              <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider">RAKHI</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 

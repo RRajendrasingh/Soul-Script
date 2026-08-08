@@ -139,18 +139,19 @@ if ($order_id) {
       $isBirthday = ($tId === 'birthday_magic');
       $isProposal = ($tId === 'perfect_proposal');
       $isLdr = ($tId === 'long_distance_love');
+      $isRakhi = ($tId === 'raksha_bandhan_special');
 
-      $recipientLabel = $isBirthday ? "Birthday Person's First Name (Friend / Loved One) *" : "Partner's First Name *";
-      $recipientPlaceholder = $isBirthday ? "e.g. Rohan" : ($isProposal ? "e.g. Priya" : "e.g. Ananya");
-      $recipientDefaultVal = $isBirthday ? "Rohan" : ($isProposal ? "Priya" : "Ananya");
+      $recipientLabel = $isBirthday ? "Birthday Person's First Name (Friend / Loved One) *" : ($isRakhi ? "Brother / Sister's First Name *" : "Partner's First Name *");
+      $recipientPlaceholder = $isBirthday ? "e.g. Rohan" : ($isProposal ? "e.g. Priya" : ($isRakhi ? "e.g. Mona" : "e.g. Ananya"));
+      $recipientDefaultVal = $isBirthday ? "Rohan" : ($isProposal ? "Priya" : ($isRakhi ? "Mona" : "Ananya"));
       
-      $taglineLabel = $isBirthday ? "Custom Birthday Tagline / Motto *" : "Custom Romantic Quote / Tagline Banner *";
-      $taglineDefault = $isBirthday ? "Cheers to another year of awesome memories! 🥂" : "Safar Khubsurat h manjil se bhi 🌹";
-      $taglinePresetText = $isBirthday ? "Cheers to another year of awesome memories! 🥂" : "Safar Khubsurat h manjil se bhi 🌹";
+      $taglineLabel = $isBirthday ? "Custom Birthday Tagline / Motto *" : ($isRakhi ? "Custom Sibling Motto / Tagline Banner *" : "Custom Romantic Quote / Tagline Banner *");
+      $taglineDefault = $isBirthday ? "Cheers to another year of awesome memories! 🥂" : ($isRakhi ? "World's Best Sister 👑" : "Safar Khubsurat h manjil se bhi 🌹");
+      $taglinePresetText = $isBirthday ? "Cheers to another year of awesome memories! 🥂" : ($isRakhi ? "World's Best Sister 👑" : "Safar Khubsurat h manjil se bhi 🌹");
 
-      $messageLabel = $isBirthday ? "Birthday Wish / Personal Message *" : "Short Love Note / Signature Message *";
-      $messagePlaceholder = $isBirthday ? "e.g. Happy Birthday Rohan! Wishing you a year filled with crazy adventures and endless joy! 🎂" : "e.g. Ananya, every second with you feels like home. Happy Anniversary!";
-      $messageDefaultVal = $isBirthday ? "Wishing you the happiest of birthdays filled with joy, laughter, and endless good times!" : "Every single day spent with you has been a beautiful gift. Happy Anniversary my love!";
+      $messageLabel = $isBirthday ? "Birthday Wish / Personal Message *" : ($isRakhi ? "Shagun Envelope Message / Slogan *" : "Short Love Note / Signature Message *");
+      $messagePlaceholder = $isBirthday ? "e.g. Happy Birthday Rohan! 🎂" : ($isRakhi ? "e.g. Happy Raksha Bandhan Mona Di! 🪔" : "e.g. Ananya, happy anniversary!");
+      $messageDefaultVal = $isBirthday ? "Wishing you the happiest of birthdays filled with joy!" : ($isRakhi ? "Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)" : "Every single day spent with you has been a beautiful gift. Happy Anniversary my love!");
       ?>
 
       <div class="border-b border-[#4d444b]/40 pb-4">
@@ -339,6 +340,22 @@ Today, I want to ask you the most important question of my life. Will you take m
           <div>
             <label class="block font-semibold text-[#d0c3cb] mb-1">Shared Song or Spotify Playlist Link (Optional)</label>
             <input type="url" name="playlist_url" value="https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3]" placeholder="https://open.spotify.com/track/...">
+          </div>
+      <?php elseif ($order['template_id'] === 'raksha_bandhan_special'): ?>
+        <div class="space-y-4 text-xs">
+          <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">5 Sibling Promises / Vows *</label>
+          <div class="space-y-2">
+            <input type="text" name="reasons[]" value="Always protect you and stand by your side 🛡️" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3]" placeholder="Promise 1 e.g. Always protect you 🛡️" required>
+            <input type="text" name="reasons[]" value="Keep all your deepest secrets safe 🤫" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3]" placeholder="Promise 2 e.g. Keep all secrets safe 🤫" required>
+            <input type="text" name="reasons[]" value="Sponsor your favorite food and treat you 🍕" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3]" placeholder="Promise 3 e.g. Sponsor your favorite food 🍕" required>
+            <input type="text" name="reasons[]" value="Never let you feel alone, no matter where I am 💖" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3]" placeholder="Promise 4 e.g. Never let you feel alone 💖" required>
+            <input type="text" name="reasons[]" value="Always be your forever crime partner 🕵️‍♂️" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3]" placeholder="Promise 5 e.g. Always be your crime partner 🕵️‍♂️" required>
+          </div>
+
+          <div class="pt-2">
+            <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider mb-1">Amazon / Gift Voucher Code 🎁 (Optional)</label>
+            <input type="text" name="shagun_voucher_code" id="shagunVoucherCodeInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. AMZ-RAKHI-9876 (Leave blank if no voucher code)">
+            <p class="text-[10px] text-[#d0c3cb] mt-1">If entered, a golden "Claim Gift Voucher" badge with 1-click copy will appear inside the Shagun Envelope!</p>
           </div>
         </div>
       <?php endif; ?>
@@ -1127,7 +1144,8 @@ Today, I want to ask you the most important question of my life. Will you take m
           milestones: milestones,
           reasons: reasons,
           letters: letters,
-          tokens: tokens
+          tokens: tokens,
+          shagun_voucher_code: formData.get('shagun_voucher_code') || ''
         }
       };
 

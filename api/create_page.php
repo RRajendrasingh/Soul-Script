@@ -198,13 +198,18 @@ try {
         }
     }
 
-    if ($template_id === 'birthday_magic' && !empty($template_fields['reasons'])) {
+    if (($template_id === 'birthday_magic' || $template_id === 'raksha_bandhan_special') && !empty($template_fields['reasons'])) {
         $stmtR = $db->prepare("INSERT INTO reasons_list (page_id, entry_order, reason_text) VALUES (?, ?, ?)");
         foreach ($template_fields['reasons'] as $idx => $reason) {
             if (!empty($reason)) {
                 $stmtR->execute([$page_id, $idx + 1, $reason]);
             }
         }
+    }
+
+    if ($template_id === 'raksha_bandhan_special' && !empty($template_fields['shagun_voucher_code'])) {
+        $tokens_json = json_encode([['shagun_voucher_code' => trim($template_fields['shagun_voucher_code'])]]);
+        $db->prepare("UPDATE page_content SET tokens_json = ? WHERE page_id = ?")->execute([$tokens_json, $page_id]);
     }
 
     // 7. Handle Photo Uploads & Saving to Disk

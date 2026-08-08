@@ -219,6 +219,11 @@ try {
             }
         }
 
+        if (isset($template_fields['shagun_voucher_code'])) {
+            $tokens_json = json_encode([['shagun_voucher_code' => trim($template_fields['shagun_voucher_code'])]]);
+            $db->prepare("UPDATE page_content SET tokens_json = ? WHERE page_id = ?")->execute([$tokens_json, $page_id]);
+        }
+
         // Update Media / Scrapbook Photos if provided
         if (isset($input['media_photos']) && is_array($input['media_photos'])) {
             if (count($input['media_photos']) > 10) {

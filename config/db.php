@@ -49,7 +49,13 @@ function getDB() {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
             } catch (Exception $exRl) { /* ignore */ }
 
-            // Auto-Seed Rich Content Demo Pages for all 4 templates
+            // Auto-Seed raksha_bandhan_special template if missing
+            try {
+                $pdo->exec("INSERT IGNORE INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, active) VALUES 
+                ('raksha_bandhan_special', 'Raksha Bandhan Special 🪔', 'Celebrate the timeless bond of brother and sister', 'Interactive Rakhi tying ceremony, 5 sibling promise cards, childhood memory scrapbook, and digital Shagun envelope reveal.', 449, 'https://images.unsplash.com/photo-1597157639073-69284dc0fdaf?auto=format&fit=crop&w=800&q=80', 'Festival Special 🪔', 1)");
+            } catch (Exception $exTpl) { /* ignore */ }
+
+            // Auto-Seed Rich Content Demo Pages for all templates
             try {
                 // Shared Sample Photos
                 $demoPhotos = [

@@ -213,9 +213,9 @@ try {
         $milestones = $stmtM->fetchAll();
     }
 
-    // 7. Fetch Reasons List (if Birthday)
+    // 7. Fetch Reasons / Sibling Promises List
     $reasons = [];
-    if ($page['template_id'] === 'birthday_magic') {
+    if ($page['template_id'] === 'birthday_magic' || $page['template_id'] === 'raksha_bandhan_special') {
         $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
         $stmtR->execute([$page['page_id']]);
         $reasons = $stmtR->fetchAll(PDO::FETCH_COLUMN);
