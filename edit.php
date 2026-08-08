@@ -86,13 +86,13 @@ $token = trim($_GET['token'] ?? '');
       </div>
 
       <!-- Dashboard Section Navigation Tabs -->
-      <div class="flex items-center justify-center gap-2 overflow-x-auto pb-2">
-        <button onclick="switchTab('general')" id="tabBtn-general" class="px-4 py-2 rounded-full text-xs font-bold bg-[#eac34a] text-[#241a00] transition-all">⚙️ General &amp; Music</button>
-        <button onclick="switchTab('theme')" id="tabBtn-theme" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">💍 Love Letter &amp; Answer</button>
-        <button onclick="switchTab('photos')" id="tabBtn-photos" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🖼️ Scrapbook</button>
-        <button onclick="switchTab('security')" id="tabBtn-security" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🔐 Security &amp; Passwords</button>
-        <button onclick="switchTab('letters')" id="tabBtn-letters" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">✉️ Sealed Letters</button>
-        <button onclick="switchTab('tokens')" id="tabBtn-tokens" class="px-4 py-2 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all">🎟️ Love Tokens</button>
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none w-full whitespace-nowrap">
+        <button type="button" onclick="switchTab('general')" id="tabBtn-general" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#eac34a] text-[#241a00] shadow-[0_0_15px_rgba(234,195,74,0.3)] transition-all whitespace-nowrap shrink-0 cursor-pointer">General &amp; Music</button>
+        <button type="button" onclick="switchTab('theme')" id="tabBtn-theme" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Story Milestones</button>
+        <button type="button" onclick="switchTab('photos')" id="tabBtn-photos" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Scrapbook</button>
+        <button type="button" onclick="switchTab('letters')" id="tabBtn-letters" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Sealed Letters</button>
+        <button type="button" onclick="switchTab('tokens')" id="tabBtn-tokens" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Love Tokens</button>
+        <button type="button" onclick="switchTab('security')" id="tabBtn-security" class="px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white transition-all whitespace-nowrap shrink-0 cursor-pointer">Security &amp; Passwords</button>
       </div>
 
       <!-- Main Edit Form -->
@@ -807,7 +807,7 @@ $token = trim($_GET['token'] ?? '');
 
       if (templateId === 'birthday_magic') {
         badge.innerText = '✨ Managing: Birthday Magic Plan (Active)';
-        tabBtn.innerText = '🎂 Birthday & Reasons';
+        tabBtn.innerText = 'Birthday & Reasons';
 
         themeContainer.innerHTML = `
           <div class="space-y-4">
@@ -829,7 +829,7 @@ $token = trim($_GET['token'] ?? '');
 
       } else if (templateId === 'perfect_proposal') {
         badge.innerText = '✨ Managing: Perfect Proposal Plan (Active)';
-        tabBtn.innerText = '💍 Love Letter & Answer';
+        tabBtn.innerText = 'Love Letter & Answer';
 
         const resp = data.proposal_response;
         const answerStatusHtml = resp ? `
@@ -874,7 +874,7 @@ $token = trim($_GET['token'] ?? '');
 
       } else if (templateId === 'long_distance_love') {
         badge.innerText = '✨ Managing: Long Distance Love Plan (Active)';
-        tabBtn.innerText = '🌍 Cities & Reunion Date';
+        tabBtn.innerText = 'Cities & Reunion Date';
 
         themeContainer.innerHTML = `
           <div class="space-y-4">
@@ -902,10 +902,13 @@ $token = trim($_GET['token'] ?? '');
           </div>
         `;
 
+      } else if (templateId === 'raksha_bandhan_special') {
+        badge.innerText = '✨ Managing: Raksha Bandhan Special Plan (Active)';
+        tabBtn.innerText = 'Sibling Promises & Vows';
       } else {
         // Default: anniversary_reveal
         badge.innerText = '✨ Managing: Anniversary Reveal Plan (Active)';
-        tabBtn.innerText = '📍 Story Road Milestones';
+        tabBtn.innerText = 'Story Milestones';
 
         themeContainer.innerHTML = `
           <div class="space-y-4">
@@ -949,18 +952,16 @@ $token = trim($_GET['token'] ?? '');
     function switchTab(tabName) {
       const activeTemplateId = document.getElementById('activeTemplateId')?.value;
 
-      ['general', 'theme', 'security', 'photos', 'letters', 'tokens'].forEach(t => {
+      ['general', 'theme', 'photos', 'letters', 'tokens', 'security'].forEach(t => {
         const btn = document.getElementById('tabBtn-' + t);
         const content = document.getElementById('tabContent-' + t);
         if (!btn || !content) return;
 
         if (t === tabName) {
-          btn.classList.add('bg-[#eac34a]', 'text-[#241a00]');
-          btn.classList.remove('bg-[#221f21]', 'text-[#d0c3cb]', 'border', 'border-[#4d444b]', 'hover:text-white');
+          btn.className = "px-4 py-2.5 rounded-full text-xs font-bold bg-[#eac34a] text-[#241a00] shadow-[0_0_15px_rgba(234,195,74,0.3)] transition-all whitespace-nowrap shrink-0 cursor-pointer";
           content.classList.remove('hidden');
         } else {
-          btn.classList.remove('bg-[#eac34a]', 'text-[#241a00]');
-          btn.classList.add('bg-[#221f21]', 'text-[#d0c3cb]', 'border', 'border-[#4d444b]', 'hover:text-white');
+          btn.className = "px-4 py-2.5 rounded-full text-xs font-bold bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] hover:text-white hover:border-[#eac34a]/40 transition-all whitespace-nowrap shrink-0 cursor-pointer";
           content.classList.add('hidden');
         }
       });
