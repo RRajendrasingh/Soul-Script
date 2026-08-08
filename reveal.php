@@ -455,6 +455,7 @@ try {
       const media = content.media || [];
       const letters = content.letters || [];
       const tokens = content.tokens || [];
+      const reasons = tf.reasons || [];
 
       // SINGER HIT PLAYLIST REGISTRY
       const SINGER_PLAYLISTS = {
@@ -1173,8 +1174,8 @@ try {
         ];
 
         let voucherCode = '';
-        if (tokensData && tokensData.length > 0) {
-          voucherCode = tokensData[0].shagun_voucher_code || tokensData[0].code || '';
+        if (tokens && tokens.length > 0) {
+          voucherCode = tokens[0].shagun_voucher_code || tokens[0].code || '';
         }
 
         html = `
