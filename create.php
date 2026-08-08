@@ -977,6 +977,94 @@ Today, I want to ask you the most important question of my life. Will you take m
       renderPhotoPicker();
     }
 
+    let dragSourceIdx = null;
+    let touchTimer = null;
+    let isTouchDragging = false;
+    let touchTargetIdx = null;
+
+    function handlePhotoDragStart(e, idx, mode) {
+      dragSourceIdx = idx;
+      if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+      if (e.currentTarget) e.currentTarget.style.opacity = '0.4';
+    }
+
+    function handlePhotoDragOver(e) {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+    }
+
+    function handlePhotoDrop(e, targetIdx, mode) {
+      e.preventDefault();
+      if (dragSourceIdx === null || dragSourceIdx === targetIdx) return;
+      
+      let list = (mode === 'edit') ? (typeof dashPhotosList !== 'undefined' ? dashPhotosList : []) : selectedPhotoObjects;
+      if (dragSourceIdx >= 0 && dragSourceIdx < list.length && targetIdx >= 0 && targetIdx < list.length) {
+        const [movedItem] = list.splice(dragSourceIdx, 1);
+        list.splice(targetIdx, 0, movedItem);
+        if (mode === 'edit' && typeof renderDashScrapbookPhotos === 'function') {
+          renderDashScrapbookPhotos();
+        } else if (typeof renderPhotoPicker === 'function') {
+          renderPhotoPicker();
+        }
+      }
+    }
+
+    function handlePhotoDragEnd(e) {
+      dragSourceIdx = null;
+      if (e.currentTarget) e.currentTarget.style.opacity = '1';
+    }
+
+    function handlePhotoTouchStart(e, idx, mode) {
+      dragSourceIdx = idx;
+      touchTargetIdx = idx;
+      isTouchDragging = false;
+      const elem = e.currentTarget;
+      
+      touchTimer = setTimeout(() => {
+        isTouchDragging = true;
+        if (elem) {
+          elem.classList.add('ring-2', 'ring-[#eac34a]', 'scale-95');
+          elem.style.opacity = '0.6';
+        }
+        if (navigator.vibrate) navigator.vibrate(40);
+      }, 250);
+    }
+
+    function handlePhotoTouchMove(e, mode) {
+      if (!isTouchDragging) {
+        clearTimeout(touchTimer);
+        return;
+      }
+      if (e.cancelable) e.preventDefault();
+      const touch = e.touches[0];
+      const targetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (targetElem) {
+        const card = targetElem.closest('[data-photo-index]');
+        if (card && card.getAttribute('data-photo-index') !== null) {
+          touchTargetIdx = parseInt(card.getAttribute('data-photo-index'), 10);
+        }
+      }
+    }
+
+    function handlePhotoTouchEnd(e, mode) {
+      clearTimeout(touchTimer);
+      if (isTouchDragging && dragSourceIdx !== null && touchTargetIdx !== null && dragSourceIdx !== touchTargetIdx) {
+        let list = (mode === 'edit') ? (typeof dashPhotosList !== 'undefined' ? dashPhotosList : []) : selectedPhotoObjects;
+        if (dragSourceIdx >= 0 && dragSourceIdx < list.length && touchTargetIdx >= 0 && touchTargetIdx < list.length) {
+          const [movedItem] = list.splice(dragSourceIdx, 1);
+          list.splice(touchTargetIdx, 0, movedItem);
+          if (mode === 'edit' && typeof renderDashScrapbookPhotos === 'function') {
+            renderDashScrapbookPhotos();
+          } else if (typeof renderPhotoPicker === 'function') {
+            renderPhotoPicker();
+          }
+        }
+      }
+      dragSourceIdx = null;
+      touchTargetIdx = null;
+      isTouchDragging = false;
+    }
+
     function generateWhatsAppShareUrl(templateId, partnerName, shareUrl) {
       const pName = (partnerName || '').trim();
       const nameSnippet = pName ? ` for ${pName}` : '';
@@ -1027,10 +1115,22 @@ Today, I want to ask you the most important question of my life. Will you take m
       const prevContainer = document.getElementById('photoPreviewContainer');
       if (prevContainer) {
         prevContainer.innerHTML = selectedPhotoObjects.map((item, idx) => `
-          <div class="relative w-full flex-col flex group bg-[#100d10] p-1.5 rounded-2xl border-2 border-[#eac34a]/60 shadow-md">
+          <div data-photo-index="${idx}" draggable="true"
+               ondragstart="handlePhotoDragStart(event, ${idx}, 'create')" 
+               ondragover="handlePhotoDragOver(event)" 
+               ondrop="handlePhotoDrop(event, ${idx}, 'create')" 
+               ondragend="handlePhotoDragEnd(event)"
+               ontouchstart="handlePhotoTouchStart(event, ${idx}, 'create')"
+               ontouchmove="handlePhotoTouchMove(event, 'create')"
+               ontouchend="handlePhotoTouchEnd(event, 'create')"
+               class="relative w-full flex-col flex group bg-[#100d10] p-1.5 rounded-2xl border-2 border-[#eac34a]/60 shadow-md cursor-grab active:cursor-grabbing select-none hover:border-[#eac34a] transition-all">
             <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden">
-              <img src="${item.url}" class="w-full h-full object-cover">
-              <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/80 text-white flex items-center justify-center text-xs font-bold hover:bg-rose-600 transition-colors">
+              <img src="${item.url}" class="w-full h-full object-cover pointer-events-none">
+              <div class="absolute top-1.5 left-1.5 bg-black/70 text-[#eac34a] text-[10px] px-1.5 py-0.5 rounded-md font-mono flex items-center gap-1 backdrop-blur-sm pointer-events-none">
+                <span>⠿</span>
+                <span>#${idx + 1}</span>
+              </div>
+              <button type="button" onclick="removePhoto(${idx})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/80 text-white flex items-center justify-center text-xs font-bold hover:bg-rose-600 transition-colors z-10">
                 ✕
               </button>
             </div>

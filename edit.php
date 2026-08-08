@@ -1335,6 +1335,94 @@ if (!empty($_GET['token'])) {
       }
     }
 
+    let dragSourceIdx = null;
+    let touchTimer = null;
+    let isTouchDragging = false;
+    let touchTargetIdx = null;
+
+    function handlePhotoDragStart(e, idx, mode) {
+      dragSourceIdx = idx;
+      if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+      if (e.currentTarget) e.currentTarget.style.opacity = '0.4';
+    }
+
+    function handlePhotoDragOver(e) {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+    }
+
+    function handlePhotoDrop(e, targetIdx, mode) {
+      e.preventDefault();
+      if (dragSourceIdx === null || dragSourceIdx === targetIdx) return;
+      
+      let list = (mode === 'edit') ? dashPhotosList : (typeof selectedPhotoObjects !== 'undefined' ? selectedPhotoObjects : []);
+      if (dragSourceIdx >= 0 && dragSourceIdx < list.length && targetIdx >= 0 && targetIdx < list.length) {
+        const [movedItem] = list.splice(dragSourceIdx, 1);
+        list.splice(targetIdx, 0, movedItem);
+        if (mode === 'edit') {
+          renderDashScrapbookPhotos();
+        } else if (typeof renderPhotoPicker === 'function') {
+          renderPhotoPicker();
+        }
+      }
+    }
+
+    function handlePhotoDragEnd(e) {
+      dragSourceIdx = null;
+      if (e.currentTarget) e.currentTarget.style.opacity = '1';
+    }
+
+    function handlePhotoTouchStart(e, idx, mode) {
+      dragSourceIdx = idx;
+      touchTargetIdx = idx;
+      isTouchDragging = false;
+      const elem = e.currentTarget;
+      
+      touchTimer = setTimeout(() => {
+        isTouchDragging = true;
+        if (elem) {
+          elem.classList.add('ring-2', 'ring-[#eac34a]', 'scale-95');
+          elem.style.opacity = '0.6';
+        }
+        if (navigator.vibrate) navigator.vibrate(40);
+      }, 250);
+    }
+
+    function handlePhotoTouchMove(e, mode) {
+      if (!isTouchDragging) {
+        clearTimeout(touchTimer);
+        return;
+      }
+      if (e.cancelable) e.preventDefault();
+      const touch = e.touches[0];
+      const targetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (targetElem) {
+        const card = targetElem.closest('[data-photo-index]');
+        if (card && card.getAttribute('data-photo-index') !== null) {
+          touchTargetIdx = parseInt(card.getAttribute('data-photo-index'), 10);
+        }
+      }
+    }
+
+    function handlePhotoTouchEnd(e, mode) {
+      clearTimeout(touchTimer);
+      if (isTouchDragging && dragSourceIdx !== null && touchTargetIdx !== null && dragSourceIdx !== touchTargetIdx) {
+        let list = (mode === 'edit') ? dashPhotosList : (typeof selectedPhotoObjects !== 'undefined' ? selectedPhotoObjects : []);
+        if (dragSourceIdx >= 0 && dragSourceIdx < list.length && touchTargetIdx >= 0 && touchTargetIdx < list.length) {
+          const [movedItem] = list.splice(dragSourceIdx, 1);
+          list.splice(touchTargetIdx, 0, movedItem);
+          if (mode === 'edit') {
+            renderDashScrapbookPhotos();
+          } else if (typeof renderPhotoPicker === 'function') {
+            renderPhotoPicker();
+          }
+        }
+      }
+      dragSourceIdx = null;
+      touchTargetIdx = null;
+      isTouchDragging = false;
+    }
+
     function renderDashScrapbookPhotos() {
       const container = document.getElementById('dashScrapbookContainer');
       const countLabel = document.getElementById('dashSelectedPhotoCount');
@@ -1352,10 +1440,22 @@ if (!empty($_GET['token'])) {
         `;
       } else {
         container.innerHTML = dashPhotosList.map((item, i) => `
-          <div class="rounded-2xl overflow-hidden border border-[#4d444b] relative group bg-[#100d10] p-1.5 shadow-md hover:border-[#eac34a] transition-all flex flex-col">
+          <div data-photo-index="${i}" draggable="true" 
+               ondragstart="handlePhotoDragStart(event, ${i}, 'edit')" 
+               ondragover="handlePhotoDragOver(event)" 
+               ondrop="handlePhotoDrop(event, ${i}, 'edit')" 
+               ondragend="handlePhotoDragEnd(event)"
+               ontouchstart="handlePhotoTouchStart(event, ${i}, 'edit')"
+               ontouchmove="handlePhotoTouchMove(event, 'edit')"
+               ontouchend="handlePhotoTouchEnd(event, 'edit')"
+               class="rounded-2xl overflow-hidden border border-[#4d444b] relative group bg-[#100d10] p-1.5 shadow-md hover:border-[#eac34a] transition-all flex flex-col cursor-grab active:cursor-grabbing select-none">
             <div class="relative w-full aspect-square rounded-xl overflow-hidden">
-              <img src="${normalizeMediaUrlJs(item.url)}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
-              <button type="button" onclick="deleteDashPhoto(${i})" class="absolute top-2 right-2 bg-rose-900/90 hover:bg-rose-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shadow-lg transition-colors cursor-pointer border border-rose-400/40">
+              <img src="${normalizeMediaUrlJs(item.url)}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover pointer-events-none">
+              <div class="absolute top-1.5 left-1.5 bg-black/70 text-[#eac34a] text-[10px] px-1.5 py-0.5 rounded-md font-mono flex items-center gap-1 backdrop-blur-sm pointer-events-none">
+                <span>⠿</span>
+                <span>#${i + 1}</span>
+              </div>
+              <button type="button" onclick="deleteDashPhoto(${i})" class="absolute top-2 right-2 bg-rose-900/90 hover:bg-rose-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shadow-lg transition-colors cursor-pointer border border-rose-400/40 z-10">
                 ✕
               </button>
             </div>
