@@ -266,6 +266,11 @@ try {
     const PLAY_SVG = '<svg class="w-4 h-4 fill-[#241a00] ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
     const PAUSE_SVG = '<svg class="w-4 h-4 fill-[#241a00]" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
 
+    function syncMusicBtnLabel() {
+      const lbl = document.getElementById('musicBtnLabel');
+      if (lbl) lbl.textContent = isPlaying ? '⏸ Pause' : '▶ Music';
+    }
+
     function toggleAudioPlay() {
       const audio = document.getElementById('bgAudio');
       const btn = document.getElementById('audioPlayBtn');
@@ -293,6 +298,7 @@ try {
           }).catch(err => console.log('Audio playback allowed on interaction:', err));
         }
       }
+      syncMusicBtnLabel();
     }
 
     function changeAudioVolume(val) {
@@ -311,6 +317,7 @@ try {
       const btn = document.getElementById('audioPlayBtn');
       if (btn) btn.innerHTML = PLAY_SVG;
       isPlaying = false;
+      syncMusicBtnLabel();
       const musicBox = document.getElementById('desktopMusicBox');
       if (musicBox) {
         musicBox.classList.add('hidden');
@@ -531,10 +538,12 @@ try {
             isPlaying = true;
             const btn = document.getElementById('audioPlayBtn');
             if (btn) btn.innerHTML = PAUSE_SVG;
+            syncMusicBtnLabel();
           }).catch(e => {
             console.log('Auto-play ready on user tap:', e);
             const btn = document.getElementById('audioPlayBtn');
             if (btn) btn.innerHTML = PLAY_SVG;
+            syncMusicBtnLabel();
           });
         }
       }
