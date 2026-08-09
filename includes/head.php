@@ -41,7 +41,8 @@ $pageTitle = $pageTitle ?? (defined('APP_NAME') ? APP_NAME . ' — Romantic Surp
 <!-- Global CSS Design Tokens & Layout Rules -->
 <link rel="stylesheet" href="<?php echo defined('APP_URL') ? APP_URL : ''; ?>/assets/css/main.css">
 
-<!-- Lucide Icons -->
+<!-- Client-Side Image Compressor & Lucide Icons -->
+<script src="<?php echo defined('APP_URL') ? APP_URL : ''; ?>/assets/js/compressor.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
   html, body {

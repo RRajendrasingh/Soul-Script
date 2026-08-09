@@ -910,18 +910,26 @@ if (!empty($_GET['token'])) {
     let startDragX = 0;
     let startDragY = 0;
 
-    function handleDashPhotoSelect(input) {
+    async function handleDashPhotoSelect(input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
+        try {
+          const compressedDataUrl = typeof compressImage === 'function' 
+            ? await compressImage(file, 1200, 1200, 0.82) 
+            : await new Promise(resolve => {
+                const r = new FileReader();
+                r.onload = e => resolve(e.target.result);
+                r.readAsDataURL(file);
+              });
+          
           cropImg = new Image();
           cropImg.onload = function() {
             openCircleCropModal();
           };
-          cropImg.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+          cropImg.src = compressedDataUrl;
+        } catch (err) {
+          console.error('Image compression error:', err);
+        }
       }
     }
 
