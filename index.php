@@ -219,7 +219,7 @@ require_once __DIR__ . '/config/config.php';
     $activeTemplates = [];
     try {
         $dbTpl = getDB();
-        $stmtTpl = $dbTpl->query("SELECT * FROM templates WHERE active = 1 ORDER BY sort_order ASC, id ASC");
+        $stmtTpl = $dbTpl->query("SELECT * FROM templates WHERE active = 1 ORDER BY sort_order ASC, template_id ASC");
         $activeTemplates = $stmtTpl->fetchAll();
     } catch (Exception $exT) {}
 
