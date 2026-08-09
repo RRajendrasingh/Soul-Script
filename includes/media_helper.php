@@ -8,6 +8,8 @@ if (!defined('APP_URL')) {
     require_once __DIR__ . '/../config/config.php';
 }
 
+const DEFAULT_MEDIA_FALLBACK = 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80';
+
 /**
  * Universal Media URL Resolver for PHP
  *
@@ -16,11 +18,13 @@ if (!defined('APP_URL')) {
  * @return string Full, absolute, clean web URL
  */
 function resolveMediaUrl($url, $fallback = '') {
+    $fallbackUrl = !empty($fallback) ? $fallback : DEFAULT_MEDIA_FALLBACK;
     if (empty($url)) {
-        return $fallback;
+        return $fallbackUrl;
     }
 
     $url = trim($url);
+    $baseUrl = rtrim(APP_URL, '/');
 
     // 1. Base64 Data Payload -> Return as-is
     if (strpos($url, 'data:image') === 0) {
@@ -30,7 +34,16 @@ function resolveMediaUrl($url, $fallback = '') {
     // 2. Extract uploads/ relative path from ANY previous URL domain/host
     $pos = strpos($url, 'uploads/');
     if ($pos !== false) {
-        return APP_URL . '/' . substr($url, $pos);
+        $relPath = substr($url, $pos); // e.g. uploads/page_id/file.jpg
+        $fullDiskPath = __DIR__ . '/../' . $relPath;
+
+        // Auto-heal: If physical file is missing or 0 bytes on host disk, fallback to sample image
+        if (!file_exists($fullDiskPath) || filesize($fullDiskPath) === 0) {
+            error_log("SoulScript Media Missing: $fullDiskPath missing on disk. Using fallback.");
+            return $fallbackUrl;
+        }
+
+        return $baseUrl . '/' . $relPath;
     }
 
     // 3. Absolute HTTP/HTTPS URLs (external Unsplash, etc.)
@@ -39,7 +52,8 @@ function resolveMediaUrl($url, $fallback = '') {
     }
 
     // Default: prepend APP_URL and clean leading slashes
-    return APP_URL . '/' . ltrim($url, '/');
+    $cleanPath = ltrim($url, '/');
+    return $baseUrl . '/' . $cleanPath;
 }
 
 /**
@@ -78,14 +92,15 @@ function saveUploadedBase64Image($photoData, $page_id, $filePrefix = 'photo') {
         $fullDiskPath = $targetDir . '/' . $fileName;
 
         $bytesWritten = @file_put_contents($fullDiskPath, $imageData);
-        if ($bytesWritten !== false && $bytesWritten > 0) {
+        if ($bytesWritten !== false && $bytesWritten > 0 && file_exists($fullDiskPath)) {
             @chmod($fullDiskPath, 0666);
-            return APP_URL . '/uploads/' . $page_id . '/' . $fileName;
+            return rtrim(APP_URL, '/') . '/uploads/' . $page_id . '/' . $fileName;
         } else {
-            error_log("SoulScript Image Disk Error: Failed writing to $fullDiskPath");
+            error_log("SoulScript Image Disk Error: Failed writing to $fullDiskPath. Preserving Base64 data.");
             return $photoData; // Fail-safe fallback to Base64 data URL
         }
     }
 
     return resolveMediaUrl($photoData);
 }
+

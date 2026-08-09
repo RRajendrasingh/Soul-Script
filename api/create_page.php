@@ -190,50 +190,25 @@ try {
     }
 
     // 7. Handle Photo Uploads & Saving to Disk
-    $targetDir = UPLOAD_DIR . '/' . $page_id;
-    if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0755, true);
-    }
-
     $savedMedia = [];
     $stmtMedia = $db->prepare("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES (?, ?, ?, ?, ?)");
 
     foreach ($photos as $idx => $photoItem) {
         $media_id = 'media_' . $page_id . '_' . ($idx + 1);
-        $filePath = '';
         $photoData = is_array($photoItem) ? ($photoItem['url'] ?? '') : $photoItem;
         $photoCaption = is_array($photoItem) ? trim($photoItem['caption'] ?? '') : '';
 
-        if (strpos($photoData, 'data:image') === 0) {
-            // Base64 image payload from client compressor
-            preg_match('/data:image\/(.*?);base64,(.*)/', $photoData, $matches);
-            $rawExt = strtolower($matches[1] ?? 'jpg');
-            if ($rawExt === 'jpeg') $rawExt = 'jpg';
-            
-            // Security: Strict whitelist of allowed image extensions to prevent RCE
-            $allowedExts = ['jpg', 'png', 'webp', 'gif'];
-            $ext = in_array($rawExt, $allowedExts) ? $rawExt : 'jpg';
-
-            $imageData = base64_decode($matches[2] ?? '');
-            
-            $fileName = ($idx + 1) . '.' . $ext;
-            $fullDiskPath = $targetDir . '/' . $fileName;
-            file_put_contents($fullDiskPath, $imageData);
-            
-            $filePath = APP_URL . '/uploads/' . $page_id . '/' . $fileName;
-        } else {
-            // Standard URL fallback (e.g. Unsplash sample photos)
-            $filePath = normalizeMediaUrl($photoData);
+        if (!empty($photoData)) {
+            $filePath = saveUploadedBase64Image($photoData, $page_id, 'photo_' . ($idx + 1));
+            $finalCaption = !empty($photoCaption) ? $photoCaption : 'Moments of Joy';
+            $stmtMedia->execute([$media_id, $page_id, $filePath, $idx + 1, $finalCaption]);
+            $savedMedia[] = [
+                'media_id' => $media_id,
+                'file_path' => $filePath,
+                'caption' => $finalCaption,
+                'display_order' => $idx + 1
+            ];
         }
-
-        $finalCaption = !empty($photoCaption) ? $photoCaption : 'Moments of Joy';
-        $stmtMedia->execute([$media_id, $page_id, $filePath, $idx + 1, $finalCaption]);
-        $savedMedia[] = [
-            'media_id' => $media_id,
-            'file_path' => $filePath,
-            'caption' => $finalCaption,
-            'display_order' => $idx + 1
-        ];
     }
 
     if (session_status() === PHP_SESSION_NONE) {

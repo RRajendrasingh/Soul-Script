@@ -1,0 +1,15 @@
+# Security & Access rules for SoulScript uploads directory
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Cache-Control "max-age=31536000, public"
+</IfModule>
+
+# Disable PHP execution in uploads directory for security
+<FilesMatch "\.(php|php5|php7|php8|phtml|pl|py|jsp|asp|sh|cgi)$">
+    Require all denied
+</FilesMatch>
+
+# Allow public access to image assets
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|ico|svg)$">
+    Require all granted
+</FilesMatch>
