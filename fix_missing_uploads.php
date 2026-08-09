@@ -1,7 +1,7 @@
 <?php
 /**
  * SoulScript - Production Image Auto-Healing & Maintenance Script
- * Scans DB page_media & page_content, normalizes host URLs, and repairs missing disk uploads.
+ * Scans DB page_media & page_content, normalizes host URLs, and repairs missing disk uploads with distinct romantic photos.
  */
 
 require_once __DIR__ . '/config/db.php';
@@ -16,15 +16,21 @@ $baseUrl = rtrim(APP_URL, '/');
 $healedCount = 0;
 $scannedCount = 0;
 
-$sampleFallbacks = [
+$distinctFallbacks = [
     'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80'
+    'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80'
 ];
 
 // 1. Scan page_media
-$stmtMedia = $db->query("SELECT media_id, page_id, file_path, display_order FROM page_media");
+$stmtMedia = $db->query("SELECT media_id, page_id, file_path, display_order FROM page_media ORDER BY display_order ASC");
 $mediaList = $stmtMedia->fetchAll();
 
 echo "Scanning " . count($mediaList) . " records in page_media...\n";
@@ -40,18 +46,23 @@ foreach ($mediaList as $m) {
         continue;
     }
 
-    // Check for uploads/ relative or absolute path
+    // Check for uploads/ relative or absolute path OR generic fallback repeat
     $pos = strpos($rawPath, 'uploads/');
-    if ($pos !== false) {
-        $relPath = substr($rawPath, $pos);
-        $fullDiskPath = __DIR__ . '/' . $relPath;
+    $isGenericFallback = strpos($rawPath, 'photo-1518199266791') !== false;
 
-        if (!file_exists($fullDiskPath) || filesize($fullDiskPath) === 0) {
-            // Missing file on disk -> Heal with high quality Unsplash fallback
-            $fallbackIdx = ($m['display_order'] - 1) % count($sampleFallbacks);
-            $newPath = $sampleFallbacks[$fallbackIdx];
+    if ($pos !== false || $isGenericFallback) {
+        $relPath = ($pos !== false) ? substr($rawPath, $pos) : '';
+        $fullDiskPath = ($pos !== false) ? (__DIR__ . '/' . $relPath) : '';
+
+        $isMissing = empty($fullDiskPath) || !file_exists($fullDiskPath) || filesize($fullDiskPath) === 0;
+
+        if ($isMissing || $isGenericFallback) {
+            // Missing file or repeated fallback -> Assign a DISTINCT high-quality romantic photo by display_order
+            $fallbackIdx = (int)($m['display_order'] - 1) % count($distinctFallbacks);
+            if ($fallbackIdx < 0) $fallbackIdx = 0;
+            $newPath = $distinctFallbacks[$fallbackIdx];
             $needsUpdate = true;
-            echo " [HEALED] page_id: {$m['page_id']}, media_id: {$m['media_id']} (Missing disk file -> Fallback URL)\n";
+            echo " [DISTINCT HEALED] page_id: {$m['page_id']}, order: {$m['display_order']} -> Distinct Photo #{$fallbackIdx}\n";
         } else {
             // Normalizing domain if needed
             $targetUrl = $baseUrl . '/' . $relPath;
@@ -81,19 +92,21 @@ foreach ($contentList as $c) {
     if (strpos($rawPhoto, 'data:image') === 0) continue;
 
     $pos = strpos($rawPhoto, 'uploads/');
-    if ($pos !== false) {
-        $relPath = substr($rawPhoto, $pos);
-        $fullDiskPath = __DIR__ . '/' . $relPath;
+    $isGenericFallback = strpos($rawPhoto, 'photo-1518199266791') !== false;
 
-        if (!file_exists($fullDiskPath) || filesize($fullDiskPath) === 0) {
-            $newPhoto = $sampleFallbacks[0];
+    if ($pos !== false || $isGenericFallback) {
+        $relPath = ($pos !== false) ? substr($rawPhoto, $pos) : '';
+        $fullDiskPath = ($pos !== false) ? (__DIR__ . '/' . $relPath) : '';
+
+        if (empty($fullDiskPath) || !file_exists($fullDiskPath) || filesize($fullDiskPath) === 0 || $isGenericFallback) {
+            $newPhoto = $distinctFallbacks[4]; // Beautiful romantic smile photo for avatar
             $db->prepare("UPDATE page_content SET receiver_photo = ? WHERE page_id = ?")->execute([$newPhoto, $c['page_id']]);
             $healedCount++;
-            echo " [HEALED] page_id: {$c['page_id']} receiver_photo (Missing disk file -> Fallback URL)\n";
+            echo " [DISTINCT HEALED] page_id: {$c['page_id']} receiver_photo -> Avatar Photo\n";
         }
     }
 }
 
 echo "\n=========================================================\n";
-echo " Scan Complete! Total Scanned: {$scannedCount}, Total Healed: {$healedCount}\n";
+echo " Distinct Auto-Healing Complete! Total Scanned: {$scannedCount}, Total Healed: {$healedCount}\n";
 echo "=========================================================\n";
