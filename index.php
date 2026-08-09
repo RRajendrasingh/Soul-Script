@@ -234,7 +234,7 @@ require_once __DIR__ . '/includes/media_helper.php';
     ];
     ?>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <?php foreach ($activeTemplates as $tIdx => $t): 
         $tid = $t['template_id'];
         $tName = htmlspecialchars($t['name']);
@@ -242,7 +242,7 @@ require_once __DIR__ . '/includes/media_helper.php';
         $tDesc = htmlspecialchars($t['description']);
         $tPrice = (float)$t['price_inr'];
         $tBadge = htmlspecialchars($t['badge'] ?? '');
-        $tButtonText = !empty($t['button_text']) ? htmlspecialchars($t['button_text']) : 'Personalize This Gift 🎁';
+        $tButtonText = !empty($t['button_text']) ? htmlspecialchars($t['button_text']) : 'Customize';
         $tCover = resolveMediaUrl($t['preview_image_url']);
         $tCreateUrl = APP_URL . '/create.php?template=' . urlencode($tid);
 
@@ -268,25 +268,53 @@ require_once __DIR__ . '/includes/media_helper.php';
           </div>
 
           <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-1">
-            <h3 class="text-xl font-bold font-serif leading-snug"><?php echo $tName; ?></h3>
+            <h3 class="text-2xl font-bold font-serif leading-snug"><?php echo $tName; ?></h3>
             <p class="text-xs text-[#eac34a] font-medium"><?php echo $tTagline; ?></p>
           </div>
         </div>
 
-        <div class="p-6 flex-1 flex flex-col justify-between space-y-6">
+        <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
           <p class="text-xs text-[#d0c3cb] leading-relaxed font-normal">
             <?php echo $tDesc; ?>
           </p>
 
+          <!-- Inner 2-Column Info Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#151215] p-5 rounded-2xl border border-[#4d444b]">
+            <div>
+              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span>Collected Fields:</span>
+              </h4>
+              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Personalized Names &amp; Motto</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Custom Occasion Details</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Personalized Note / Envelope</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>5-10 Photo Memory Gallery</span></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#e4b9df]"></i>
+                <span>Result Features:</span>
+              </h4>
+              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
+                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Interactive Lock Gate &amp; Confetti</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Customized Countdown Timer</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>3D Gift Envelope / Letter</span></li>
+                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Background Soundtrack &amp; Photos</span></li>
+              </ul>
+            </div>
+          </div>
+
           <div class="space-y-3 pt-2">
-            <div class="flex flex-col sm:flex-row items-center gap-2.5">
-              <a href="<?php echo $tCreateUrl; ?>" class="w-full sm:flex-1 py-3 px-5 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 no-underline text-center">
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <a href="<?php echo $tCreateUrl; ?>" class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 no-underline text-center">
                 <i data-lucide="gift" class="w-4 h-4"></i>
                 <span><?php echo $tButtonText; ?> (₹<?php echo number_format($tPrice, 0); ?>)</span>
               </a>
 
               <?php if (!empty($tDemoUrl)): ?>
-                <a href="<?php echo $tDemoUrl; ?>" target="_blank" class="w-full sm:w-auto px-4 py-3 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#eac34a]/60 transition-all flex items-center justify-center gap-1.5 shrink-0 no-underline">
+                <a href="<?php echo $tDemoUrl; ?>" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#eac34a]/60 transition-all flex items-center justify-center gap-1.5 shrink-0 no-underline">
                   <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
                   <span>Live Sample</span>
                 </a>
