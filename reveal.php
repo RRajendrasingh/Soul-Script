@@ -588,13 +588,14 @@ try {
         ]
       };
 
-      // Resolve Music Track & Titles
-      let finalAudioUrl = content.bg_music_url || 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3';
+      // Resolve Music Track & Titles (check both content and content.template_fields)
+      let rawAudioUrl = content.bg_music_url || tf.bg_music_url || tf.song_url || tf.youtube_url || '';
+      let finalAudioUrl = rawAudioUrl || 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3';
       let finalSongTitle = content.song_title || tf.song_title || '';
-      let finalArtist = content.song_artist || '';
+      let finalArtist = content.song_artist || tf.song_artist || '';
 
-      if (finalAudioUrl === 'random_singer' || !finalAudioUrl) {
-        const singerKey = (content.favorite_singers || 'arijit singh').toLowerCase();
+      if (rawAudioUrl === 'random_singer' || !rawAudioUrl) {
+        const singerKey = (content.favorite_singers || tf.favorite_singers || 'arijit singh').toLowerCase();
         const matchedList = SINGER_PLAYLISTS[singerKey] || SINGER_PLAYLISTS['arijit singh'];
         const randomTrack = matchedList[Math.floor(Math.random() * matchedList.length)];
         finalAudioUrl = randomTrack.url;
@@ -602,15 +603,19 @@ try {
           finalSongTitle = randomTrack.title;
         }
         if (!finalArtist) {
-          finalArtist = content.favorite_singers || 'Arijit Singh';
+          finalArtist = content.favorite_singers || tf.favorite_singers || 'Arijit Singh';
         }
+      }
+
+      // Check if audio URL is a YouTube Video or Shorts URL
+      const ytVideoId = extractYouTubeId(rawAudioUrl || finalAudioUrl);
+      if (ytVideoId && (!finalSongTitle || finalSongTitle === 'Acoustic Sunset Love')) {
+        finalSongTitle = 'YouTube Music Video';
+        finalArtist = 'YouTube Audio';
       }
 
       if (!finalSongTitle) finalSongTitle = 'Acoustic Sunset Love';
       if (!finalArtist) finalArtist = 'Romantic Track';
-
-      // Check if bg_music_url is a YouTube Video or Shorts URL
-      const ytVideoId = extractYouTubeId(content.bg_music_url);
 
       // Preload audio silently — no autoplay (blocked on mobile)
       if (!ytVideoId) {
