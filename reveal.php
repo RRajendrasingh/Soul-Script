@@ -251,16 +251,12 @@ try {
     }
 
     function extractYouTubeId(url) {
-      if (!url) return null;
-      let match = url.match(/\/shorts\/([a-zA-Z0-9_-]+)/);
+      if (!url || typeof url !== 'string') return null;
+      const cleanUrl = url.trim();
+      let match = cleanUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
       if (match && match[1]) return match[1];
-      match = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) return match[1];
-      match = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) return match[1];
-      match = url.match(/\/embed\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) return match[1];
-      return null;
+      const fallbackMatch = cleanUrl.match(/([a-zA-Z0-9_-]{11})/);
+      return (fallbackMatch && cleanUrl.includes('youtu')) ? fallbackMatch[1] : null;
     }
 
     const PLAY_SVG = '<svg class="w-4 h-4 fill-[#241a00] ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
