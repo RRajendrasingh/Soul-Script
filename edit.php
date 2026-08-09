@@ -17,6 +17,7 @@ if (!empty($_GET['token'])) {
   $pageTitle = 'Buyer Management Portal — ' . APP_NAME;
   require_once __DIR__ . '/includes/head.php'; 
   ?>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body class="bg-[#151215] text-[#e8e0e3] font-sans min-h-screen relative overflow-x-hidden">
 
@@ -159,6 +160,27 @@ if (!empty($_GET['token'])) {
 
     <!-- VIEW C: BUYER VISUAL EDITOR DASHBOARD -->
     <div id="dashboardView" class="<?php echo $token ? '' : 'hidden'; ?> space-y-6">
+
+      <!-- Grace Period / Expiration Renewal Banner -->
+      <div id="renewalAlertBanner" class="hidden bg-gradient-to-r from-amber-950/80 via-[#3b1e3b] to-amber-950/80 border-2 border-[#eac34a] p-5 sm:p-6 rounded-3xl shadow-2xl space-y-3">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="flex items-start gap-3 text-left">
+            <div class="w-12 h-12 rounded-2xl bg-[#eac34a] text-[#241a00] flex items-center justify-center text-xl shrink-0 font-bold shadow-md">
+              ⚠️
+            </div>
+            <div class="space-y-1">
+              <span id="renewalAlertBadge" class="text-[10px] font-extrabold uppercase tracking-widest text-[#eac34a] bg-black/40 px-2.5 py-0.5 rounded-md border border-[#eac34a]/30">
+                13th Month Grace Period
+              </span>
+              <h3 id="renewalAlertTitle" class="text-base sm:text-lg font-bold text-white">Your 1-Year Access Has Expired!</h3>
+              <p id="renewalAlertText" class="text-xs text-[#e8e0e3]/90">Your recipient can no longer view this page right now. Renew now for ₹299 to extend access for another full year (+12 Months).</p>
+            </div>
+          </div>
+          <button type="button" onclick="handleInitiateRenewal()" id="renewPlanBtn" class="w-full md:w-auto px-6 py-3.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-xl hover:scale-105 cursor-pointer shrink-0">
+            Renew Access for 1 Year (₹299)
+          </button>
+        </div>
+      </div>
 
       <!-- Active Plan Badge Banner & Share Link -->
       <div class="bg-[#221f21] p-5 sm:p-6 rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -719,6 +741,42 @@ if (!empty($_GET['token'])) {
             dashWaBtn.href = generateWhatsAppShareUrl(p.template_id, p.partner_name, data.share_url);
           }
           document.getElementById('dashPartnerTitle').innerText = (p.partner_name || 'Partner') + "'s Gift Dashboard";
+
+          // Render Lifecycle Expiration & Renewal Banner
+          const lc = data.lifecycle || {};
+          const planBadge = document.getElementById('activePlanBadge');
+          const renewBanner = document.getElementById('renewalAlertBanner');
+
+          if (lc.is_grace_period) {
+            if (renewBanner) renewBanner.classList.remove('hidden');
+            if (planBadge) {
+              planBadge.innerText = '⚠️ 13th Month Grace Period';
+              planBadge.className = 'text-[9px] sm:text-[10px] uppercase font-extrabold tracking-wider text-amber-400 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-500/30 inline-block';
+            }
+          } else if (lc.is_archived) {
+            if (renewBanner) renewBanner.classList.remove('hidden');
+            const bBadge = document.getElementById('renewalAlertBadge');
+            if (bBadge) bBadge.innerText = '📜 Page Archived';
+            const bTitle = document.getElementById('renewalAlertTitle');
+            if (bTitle) bTitle.innerText = 'Page Access Archived (Month 13+)';
+            const bText = document.getElementById('renewalAlertText');
+            if (bText) bText.innerText = 'Your page has been archived. All your text, photos, and memories are safely preserved in our database. Contact support to restore your page.';
+            const rBtn = document.getElementById('renewPlanBtn');
+            if (rBtn) {
+              rBtn.innerText = 'Contact Support to Restore';
+              rBtn.onclick = () => window.open('https://wa.me/919999999999?text=Hi%20SoulScript%20Support,%20please%20reactivate%20my%20archived%20page%20' + encodeURIComponent(p.url_slug), '_blank');
+            }
+            if (planBadge) {
+              planBadge.innerText = '❌ Archived Plan';
+              planBadge.className = 'text-[9px] sm:text-[10px] uppercase font-extrabold tracking-wider text-rose-400 bg-rose-950 px-2.5 py-0.5 rounded-full border border-rose-500/30 inline-block';
+            }
+          } else {
+            if (renewBanner) renewBanner.classList.add('hidden');
+            if (planBadge) {
+              planBadge.innerText = '✨ Active (Valid until ' + (lc.expires_at_formatted || '1 Year') + ')';
+              planBadge.className = 'text-[9px] sm:text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#3b1e3b] px-2.5 py-0.5 rounded-full border border-[#e4b9df]/20 inline-block';
+            }
+          }
 
           // Update Partner Photo Avatar Manager UI
           updatePartnerPhotoAvatar(p.receiver_photo, p.partner_name);
@@ -1770,6 +1828,67 @@ if (!empty($_GET['token'])) {
         input.type = 'password';
         btn.innerHTML = '<i data-lucide="eye" class="w-4 h-4 text-[#d0c3cb]"></i>';
       }
+      if (typeof lucide === 'object') lucide.createIcons();
+    }
+
+    async function handleInitiateRenewal() {
+      const token = activeToken || document.getElementById('activeEditToken')?.value;
+      if (!token) return;
+
+      const btn = document.getElementById('renewPlanBtn');
+      if (btn) { btn.disabled = true; btn.innerText = 'Creating Renewal Order...'; }
+
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/create_renewal_order.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token })
+        });
+        const data = await res.json();
+
+        if (!data.success) {
+          alert('⚠️ Renewal Error: ' + (data.message || 'Could not initiate renewal'));
+          if (btn) { btn.disabled = false; btn.innerText = 'Renew Access for 1 Year (₹299)'; }
+          return;
+        }
+
+        const options = {
+          key: data.razorpay_key,
+          amount: data.amount_inr * 100,
+          currency: "INR",
+          name: "SoulScript",
+          description: "1-Year Access Renewal Fee (+12 Months)",
+          image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=200&q=80",
+          handler: async function (response) {
+            if (btn) btn.innerText = 'Verifying Payment...';
+            const payRes = await fetch('<?php echo APP_URL; ?>/api/webhook_razorpay.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                order_id: data.order_id,
+                razorpay_payment_id: response.razorpay_payment_id || ('pay_renew_' + Date.now()),
+                status: 'paid'
+              })
+            });
+            const payData = await payRes.json();
+            if (payData.success) {
+              alert('🎉 Renewal Successful! Your gift page is live for another 1 full year!');
+              loadDashboardData(token);
+            } else {
+              alert('⚠️ Payment Verification Error: ' + (payData.message || 'Error updating renewal'));
+            }
+            if (btn) { btn.disabled = false; btn.innerText = 'Renew Access for 1 Year (₹299)'; }
+          },
+          theme: { color: "#eac34a" }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (err) {
+        alert('Renewal Error: ' + err.message);
+        if (btn) { btn.disabled = false; btn.innerText = 'Renew Access for 1 Year (₹299)'; }
+      }
+    }
       if (typeof lucide === 'object') lucide.createIcons();
     }
 

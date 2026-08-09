@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/media_helper.php';
+require_once __DIR__ . '/../includes/expiration_helper.php';
 
 $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
 $token = trim($_GET['token'] ?? $input['token'] ?? $_POST['token'] ?? '');
@@ -91,9 +92,12 @@ try {
             ];
         }, $allBuyerPages);
 
+        $lifecycle = getPageLifecycleStatus($page);
+
         echo json_encode([
             'success' => true,
             'page' => $page,
+            'lifecycle' => $lifecycle,
             'milestones' => $milestones,
             'reasons' => $reasons,
             'media' => $media,
