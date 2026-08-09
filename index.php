@@ -201,8 +201,8 @@ require_once __DIR__ . '/includes/media_helper.php';
         </div>
   </section>
 
-  <!-- Templates & Pricing Section (Exact Original Wide Screenshot 1 DOM Layout) -->
-  <section id="gallery" class="py-24 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  <!-- Templates & Pricing Section -->
+  <section id="gallery" class="py-24 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <div class="text-center space-y-4 max-w-3xl mx-auto mb-14">
       <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#e4b9df]/20 text-xs font-semibold uppercase tracking-widest">
         <i data-lucide="gift" class="w-3.5 h-3.5 text-[#eac34a]"></i>
