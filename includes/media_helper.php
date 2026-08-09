@@ -31,24 +31,14 @@ function resolveMediaUrl($url, $fallback = '') {
         return $url;
     }
 
-    // 2. Extract uploads/ relative path from ANY previous URL domain/host
-    $pos = strpos($url, 'uploads/');
-    if ($pos !== false) {
-        $relPath = substr($url, $pos); // e.g. uploads/page_id/file.jpg
-        $fullDiskPath = __DIR__ . '/../' . $relPath;
-
-        // Auto-heal: If physical file is missing or 0 bytes on host disk, fallback to sample image
-        if (!file_exists($fullDiskPath) || filesize($fullDiskPath) === 0) {
-            error_log("SoulScript Media Missing: $fullDiskPath missing on disk. Using fallback.");
-            return $fallbackUrl;
-        }
-
-        return $baseUrl . '/' . $relPath;
-    }
-
-    // 3. Absolute HTTP/HTTPS URLs (external Unsplash, etc.)
+    // 2. Absolute HTTP/HTTPS URLs (e.g. https://digitalyogi24.com/uploads/... or Unsplash) -> ALWAYS Return as-is!
     if (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0) {
         return $url;
+    }
+
+    // 3. Relative uploads path -> Prepend current APP_URL
+    if (strpos($url, 'uploads/') === 0) {
+        return $baseUrl . '/' . $url;
     }
 
     // Default: prepend APP_URL and clean leading slashes

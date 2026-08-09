@@ -38,45 +38,18 @@ echo "Scanning " . count($mediaList) . " records in page_media...\n";
 foreach ($mediaList as $m) {
     $scannedCount++;
     $rawPath = trim($m['file_path']);
-    $needsUpdate = false;
-    $newPath = $rawPath;
 
-    // Check if Base64
-    if (strpos($rawPath, 'data:image') === 0) {
+    // NEVER touch Base64 or existing HTTP/HTTPS upload URLs in DB
+    if (empty($rawPath) || strpos($rawPath, 'data:image') === 0 || strpos($rawPath, 'http://') === 0 || strpos($rawPath, 'https://') === 0) {
         continue;
     }
 
-    // Check for uploads/ relative or absolute path OR generic fallback repeat
-    $pos = strpos($rawPath, 'uploads/');
-    $isGenericFallback = strpos($rawPath, 'photo-1518199266791') !== false;
-
-    if ($pos !== false || $isGenericFallback) {
-        $relPath = ($pos !== false) ? substr($rawPath, $pos) : '';
-        $fullDiskPath = ($pos !== false) ? (__DIR__ . '/' . $relPath) : '';
-
-        $isMissing = empty($fullDiskPath) || !file_exists($fullDiskPath) || filesize($fullDiskPath) === 0;
-
-        if ($isMissing || $isGenericFallback) {
-            // Missing file or repeated fallback -> Assign a DISTINCT high-quality romantic photo by display_order
-            $fallbackIdx = (int)($m['display_order'] - 1) % count($distinctFallbacks);
-            if ($fallbackIdx < 0) $fallbackIdx = 0;
-            $newPath = $distinctFallbacks[$fallbackIdx];
-            $needsUpdate = true;
-            echo " [DISTINCT HEALED] page_id: {$m['page_id']}, order: {$m['display_order']} -> Distinct Photo #{$fallbackIdx}\n";
-        } else {
-            // Normalizing domain if needed
-            $targetUrl = $baseUrl . '/' . $relPath;
-            if ($rawPath !== $targetUrl) {
-                $newPath = $targetUrl;
-                $needsUpdate = true;
-                echo " [NORMALIZED] page_id: {$m['page_id']}, media_id: {$m['media_id']} -> {$newPath}\n";
-            }
-        }
-    }
-
-    if ($needsUpdate) {
+    // Bare relative path -> prepend APP_URL
+    if (strpos($rawPath, 'uploads/') === 0) {
+        $newPath = $baseUrl . '/' . $rawPath;
         $db->prepare("UPDATE page_media SET file_path = ? WHERE media_id = ?")->execute([$newPath, $m['media_id']]);
         $healedCount++;
+        echo " [NORMALIZED] page_id: {$m['page_id']}, media_id: {$m['media_id']} -> {$newPath}\n";
     }
 }
 
@@ -89,21 +62,15 @@ echo "\nScanning " . count($contentList) . " receiver photos in page_content...\
 foreach ($contentList as $c) {
     $scannedCount++;
     $rawPhoto = trim($c['receiver_photo']);
-    if (strpos($rawPhoto, 'data:image') === 0) continue;
+    if (empty($rawPhoto) || strpos($rawPhoto, 'data:image') === 0 || strpos($rawPhoto, 'http://') === 0 || strpos($rawPhoto, 'https://') === 0) {
+        continue;
+    }
 
-    $pos = strpos($rawPhoto, 'uploads/');
-    $isGenericFallback = strpos($rawPhoto, 'photo-1518199266791') !== false;
-
-    if ($pos !== false || $isGenericFallback) {
-        $relPath = ($pos !== false) ? substr($rawPhoto, $pos) : '';
-        $fullDiskPath = ($pos !== false) ? (__DIR__ . '/' . $relPath) : '';
-
-        if (empty($fullDiskPath) || !file_exists($fullDiskPath) || filesize($fullDiskPath) === 0 || $isGenericFallback) {
-            $newPhoto = $distinctFallbacks[4]; // Beautiful romantic smile photo for avatar
-            $db->prepare("UPDATE page_content SET receiver_photo = ? WHERE page_id = ?")->execute([$newPhoto, $c['page_id']]);
-            $healedCount++;
-            echo " [DISTINCT HEALED] page_id: {$c['page_id']} receiver_photo -> Avatar Photo\n";
-        }
+    if (strpos($rawPhoto, 'uploads/') === 0) {
+        $newPhoto = $baseUrl . '/' . $rawPhoto;
+        $db->prepare("UPDATE page_content SET receiver_photo = ? WHERE page_id = ?")->execute([$newPhoto, $c['page_id']]);
+        $healedCount++;
+        echo " [NORMALIZED] page_id: {$c['page_id']} receiver_photo -> {$newPhoto}\n";
     }
 }
 
