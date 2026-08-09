@@ -201,10 +201,8 @@ require_once __DIR__ . '/includes/media_helper.php';
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Templates & Pricing Section (Exact Original Screenshot 1 DOM Layout) -->
-  <section id="gallery" class="py-24 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  </  <!-- Templates & Pricing Section (Exact Original Wide Screenshot 1 DOM Layout) -->
+  <section id="gallery" class="py-24 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <div class="text-center space-y-4 max-w-3xl mx-auto mb-14">
       <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#e4b9df]/20 text-xs font-semibold uppercase tracking-widest">
         <i data-lucide="gift" class="w-3.5 h-3.5 text-[#eac34a]"></i>
@@ -257,7 +255,7 @@ require_once __DIR__ . '/includes/media_helper.php';
     ];
     ?>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
       <?php foreach ($activeTemplates as $tIdx => $t): 
         $tid = $t['template_id'];
         $tName = htmlspecialchars($t['name']);
@@ -271,13 +269,8 @@ require_once __DIR__ . '/includes/media_helper.php';
         $tDemoUrl = !empty($t['demo_url']) ? $t['demo_url'] : ($defaultDemos[$tid]['url'] ?? '');
         $tDemoPass = !empty($t['demo_password']) ? $t['demo_password'] : ($defaultDemos[$tid]['pass'] ?? '');
 
-        // Determine concise single-line button text
-        $rawBtnText = !empty($t['button_text']) ? $t['button_text'] : 'Customize';
-        if (mb_strlen($rawBtnText) > 15 || strpos($rawBtnText, 'Personalize This Gift') !== false) {
-            $tBtnLabel = 'CUSTOMIZE (₹' . number_format($tPrice, 0) . ')';
-        } else {
-            $tBtnLabel = mb_strtoupper($rawBtnText) . ' (₹' . number_format($tPrice, 0) . ')';
-        }
+        // Determine concise single-line button text exactly matching Screenshot 1
+        $tBtnLabel = 'CUSTOMIZE (₹' . number_format($tPrice, 0) . ')';
 
         $spec = $templateSpecs[$tid] ?? [
             'collected' => ['Personalized Names & Motto', 'Custom Occasion Details', 'Personalized Note / Envelope', '5-10 Photo Memory Gallery'],
@@ -325,7 +318,7 @@ require_once __DIR__ . '/includes/media_helper.php';
               </h4>
               <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
                 <?php foreach ($spec['collected'] as $cItem): ?>
-                  <li class="flex items-start gap-1.5"><span class="text-[#eac34a]">•</span><span><?php echo htmlspecialchars($cItem); ?></span></li>
+                  <li class="flex items-start gap-1.5"><span class="text-[#eac34a">•</span><span><?php echo htmlspecialchars($cItem); ?></span></li>
                 <?php endforeach; ?>
               </ul>
             </div>
@@ -345,13 +338,13 @@ require_once __DIR__ . '/includes/media_helper.php';
           <!-- Action Buttons Area -->
           <div class="space-y-3 pt-1">
             <div class="flex flex-col sm:flex-row items-center gap-3">
-              <a href="<?php echo $tCreateUrl; ?>" class="w-full sm:flex-1 py-3 px-5 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 no-underline text-center whitespace-nowrap">
+              <a href="<?php echo $tCreateUrl; ?>" class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 no-underline text-center shrink-0 whitespace-nowrap">
                 <i data-lucide="gift" class="w-4 h-4 shrink-0"></i>
                 <span class="whitespace-nowrap"><?php echo $tBtnLabel; ?></span>
               </a>
 
               <?php if (!empty($tDemoUrl)): ?>
-                <a href="<?php echo $tDemoUrl; ?>" target="_blank" class="w-full sm:w-auto px-5 py-3 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] hover:border-[#eac34a]/60 transition-all flex items-center justify-center gap-1.5 shrink-0 no-underline whitespace-nowrap">
+                <a href="<?php echo $tDemoUrl; ?>" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] hover:border-[#eac34a]/60 transition-all flex items-center justify-center gap-1.5 shrink-0 no-underline whitespace-nowrap">
                   <i data-lucide="eye" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
                   <span class="whitespace-nowrap">Live Sample</span>
                 </a>
