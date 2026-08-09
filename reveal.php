@@ -635,7 +635,12 @@ try {
         }
       }
 
-      // Music box stays hidden until user taps Song badge
+      // Auto-show Floating Music Player Widget on theme unlock!
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) {
+        musicBox.classList.remove('hidden');
+        musicBox.classList.add('flex');
+      }
 
       if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
       if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').innerText = finalArtist;
