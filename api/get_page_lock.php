@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../includes/expiration_helper.php';
+require_once __DIR__ . '/../includes/media_helper.php';
 
 $slug = trim($_GET['slug'] ?? '');
 $userIp = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
@@ -31,18 +31,9 @@ try {
         exit;
     }
 
-    $lifecycle = getPageLifecycleStatus($page);
-
-    if (!$lifecycle['is_live']) {
+    if ($page['status'] === 'expired' || strtotime($page['expires_at']) < time()) {
         http_response_code(410);
-        $expiredMsg = $lifecycle['is_grace_period'] 
-            ? 'This surprise page 1-year memory hosting period has ended. The creator can renew access from their buyer portal.'
-            : 'This surprise page has been archived due to non-renewal. Please contact support to restore memories.';
-        echo json_encode([
-            'success' => false,
-            'message' => $expiredMsg,
-            'lifecycle' => $lifecycle
-        ]);
+        echo json_encode(['success' => false, 'message' => 'This surprise page has expired.']);
         exit;
     }
 

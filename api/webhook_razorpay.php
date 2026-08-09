@@ -51,28 +51,6 @@ try {
         $stmt = $db->prepare("UPDATE orders SET payment_status = 'paid', razorpay_payment_id = ? WHERE order_id = ?");
         $stmt->execute([$payment_id, $order_id]);
 
-        // If this is a 1-year renewal order, extend page access by +1 Year
-        if ($order['template_id'] === 'renewal_1_year') {
-            $stmtPage = $db->prepare("
-                SELECT p.page_id, p.expires_at
-                FROM pages p
-                JOIN orders o ON p.order_id = o.order_id
-                WHERE o.buyer_email = ? OR p.order_id = ?
-                ORDER BY p.created_at DESC LIMIT 1
-            ");
-            $stmtPage->execute([$order['buyer_email'], $order_id]);
-            $targetPage = $stmtPage->fetch();
-
-            if ($targetPage) {
-                $currentExp = $targetPage['expires_at'];
-                $baseTime = max(time(), strtotime($currentExp));
-                $newExpiresAt = date('Y-m-d H:i:s', strtotime('+12 months', $baseTime));
-
-                $db->prepare("UPDATE pages SET expires_at = ?, status = 'live' WHERE page_id = ?")
-                   ->execute([$newExpiresAt, $targetPage['page_id']]);
-            }
-        }
-
         echo json_encode([
             'success' => true,
             'message' => 'Payment status updated to paid via server webhook',

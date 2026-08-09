@@ -136,16 +136,6 @@ try {
         exit;
     }
 
-    $lifecycle = getPageLifecycleStatus($page);
-    if (!$lifecycle['is_live'] && empty($bypass_edit_token)) {
-        http_response_code(410);
-        $expiredMsg = $lifecycle['is_grace_period'] 
-            ? 'This surprise page 1-year memory hosting period has ended. The creator can renew access from their buyer portal.'
-            : 'This surprise page has been archived due to non-renewal. Please contact support to restore memories.';
-        echo json_encode(['success' => false, 'message' => $expiredMsg, 'lifecycle' => $lifecycle]);
-        exit;
-    }
-
     // 2. Check Rate Limiter
     $stmtLock = $db->prepare("SELECT attempts_count, locked_until FROM failed_attempts WHERE slug = ? AND ip_address = ?");
     $stmtLock->execute([$slug, $userIp]);
