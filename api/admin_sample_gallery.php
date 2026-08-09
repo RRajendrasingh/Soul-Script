@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $index = 0;
     foreach ($files as $file) {
         $full = $assetsDir . '/' . $file;
-        if (is_file($full) && (strpos($file, 'sample_') === 0 || preg_match('/\.(webp|jpg|png)$/i', $file))) {
+        if (is_file($full) && preg_match('/\.(webp|jpg|jpeg|png)$/i', $file)) {
             $caption = $captionsMap[$file] ?? $defaultCaptionsPool[$index % count($defaultCaptionsPool)];
             $samples[] = [
                 'filename' => $file,
