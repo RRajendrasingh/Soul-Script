@@ -1543,7 +1543,10 @@ if (!empty($_GET['token'])) {
             canvas.height = h;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(tempImg, 0, 0, w, h);
-            const compressedUrl = canvas.toDataURL('image/jpeg', 0.85);
+            let compressedUrl = canvas.toDataURL('image/webp', 0.82);
+            if (!compressedUrl.startsWith('data:image/webp')) {
+              compressedUrl = canvas.toDataURL('image/jpeg', 0.85);
+            }
 
             const nextCap = DEFAULT_PHOTO_CAPTIONS[dashPhotosList.length % DEFAULT_PHOTO_CAPTIONS.length];
             dashPhotosList.push({ url: compressedUrl, caption: nextCap });

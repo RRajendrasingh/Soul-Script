@@ -3,7 +3,7 @@
  * Target: ~200-400KB per photo to conserve host storage and bandwidth
  */
 
-function compressImage(file, maxWidth = 1600, maxHeight = 1600, quality = 0.82) {
+function compressImage(file, maxWidth = 1200, maxHeight = 1200, quality = 0.82, outputType = 'image/webp') {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -31,7 +31,11 @@ function compressImage(file, maxWidth = 1600, maxHeight = 1600, quality = 0.82) 
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
 
-        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        // Native WebP output format
+        let dataUrl = canvas.toDataURL(outputType, quality);
+        if (!dataUrl.startsWith('data:image/webp')) {
+          dataUrl = canvas.toDataURL('image/jpeg', quality);
+        }
         resolve(dataUrl);
       };
       img.onerror = (err) => reject(err);

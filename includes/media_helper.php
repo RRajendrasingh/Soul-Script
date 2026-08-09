@@ -58,11 +58,11 @@ function saveUploadedBase64Image($photoData, $page_id, $filePrefix = 'photo') {
     // If Base64 string -> Decode and save to /uploads/{page_id}/ disk folder
     if (strpos($photoData, 'data:image') === 0) {
         preg_match('/data:image\/(.*?);base64,(.*)/', $photoData, $matches);
-        $rawExt = strtolower($matches[1] ?? 'jpg');
+        $rawExt = strtolower($matches[1] ?? 'webp');
         if ($rawExt === 'jpeg') $rawExt = 'jpg';
         
-        $allowedExts = ['jpg', 'png', 'webp', 'gif'];
-        $ext = in_array($rawExt, $allowedExts) ? $rawExt : 'jpg';
+        $allowedExts = ['webp', 'jpg', 'png', 'gif'];
+        $ext = in_array($rawExt, $allowedExts) ? $rawExt : 'webp';
 
         $imageData = base64_decode($matches[2] ?? '');
         if (empty($imageData)) return $photoData;
