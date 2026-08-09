@@ -55,6 +55,7 @@ function saveUploadedBase64Image($photoData, $page_id, $filePrefix = 'photo') {
     if (empty($photoData)) return '';
     $photoData = trim($photoData);
 
+    // If Base64 string -> Save to disk as backup AND return Base64 payload for 100% DB permanence
     if (strpos($photoData, 'data:image') === 0) {
         preg_match('/data:image\/(.*?);base64,(.*)/', $photoData, $matches);
         $rawExt = strtolower($matches[1] ?? 'jpg');
@@ -64,31 +65,28 @@ function saveUploadedBase64Image($photoData, $page_id, $filePrefix = 'photo') {
         $ext = in_array($rawExt, $allowedExts) ? $rawExt : 'jpg';
 
         $imageData = base64_decode($matches[2] ?? '');
-        if (empty($imageData)) return $photoData;
+        if (!empty($imageData)) {
+            $baseUploadDir = __DIR__ . '/../uploads';
+            if (!is_dir($baseUploadDir)) {
+                @mkdir($baseUploadDir, 0777, true);
+                @chmod($baseUploadDir, 0777);
+            }
 
-        $baseUploadDir = __DIR__ . '/../uploads';
-        if (!is_dir($baseUploadDir)) {
-            @mkdir($baseUploadDir, 0777, true);
-            @chmod($baseUploadDir, 0777);
-        }
+            $targetDir = $baseUploadDir . '/' . $page_id;
+            if (!is_dir($targetDir)) {
+                @mkdir($targetDir, 0777, true);
+                @chmod($targetDir, 0777);
+            }
 
-        $targetDir = $baseUploadDir . '/' . $page_id;
-        if (!is_dir($targetDir)) {
-            @mkdir($targetDir, 0777, true);
-            @chmod($targetDir, 0777);
-        }
+            $fileName = $filePrefix . '_' . time() . '_' . rand(100, 999) . '.' . $ext;
+            $fullDiskPath = $targetDir . '/' . $fileName;
 
-        $fileName = $filePrefix . '_' . time() . '_' . rand(100, 999) . '.' . $ext;
-        $fullDiskPath = $targetDir . '/' . $fileName;
-
-        $bytesWritten = @file_put_contents($fullDiskPath, $imageData);
-        if ($bytesWritten !== false && $bytesWritten > 0 && file_exists($fullDiskPath)) {
+            @file_put_contents($fullDiskPath, $imageData);
             @chmod($fullDiskPath, 0666);
-            return rtrim(APP_URL, '/') . '/uploads/' . $page_id . '/' . $fileName;
-        } else {
-            error_log("SoulScript Image Disk Error: Failed writing to $fullDiskPath. Preserving Base64 data.");
-            return $photoData; // Fail-safe fallback to Base64 data URL
         }
+
+        // Return full Base64 data URL for 100% guaranteed, indestructible MySQL storage
+        return $photoData;
     }
 
     return resolveMediaUrl($photoData);
