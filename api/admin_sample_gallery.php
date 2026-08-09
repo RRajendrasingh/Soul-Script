@@ -2,6 +2,7 @@
 /**
  * SoulScript - Admin Sample Gallery Manager API
  * Manages self-hosted default sample WebP assets & captions in /assets/default_gallery/
+ * Includes Auto-Healing protection from /uploads_persistent/default_gallery/
  */
 
 session_start();
@@ -16,28 +17,58 @@ if (!is_dir($assetsDir)) {
     @chmod($assetsDir, 0777);
 }
 
+// Persistent Backup Directory (Immune to Hostinger Git Deployment Wipes)
+$persistentDir = getPersistentUploadsDir() . '/default_gallery';
+if (!is_dir($persistentDir)) {
+    @mkdir($persistentDir, 0777, true);
+    @chmod($persistentDir, 0777);
+}
+
+// Auto-Heal: Sync persistent backup files to public assets directory if public files were wiped
+$syncPersistentToPublic = function() use ($assetsDir, $persistentDir) {
+    if (is_dir($persistentDir)) {
+        $pFiles = array_diff(scandir($persistentDir), ['.', '..']);
+        foreach ($pFiles as $pf) {
+            $pPath = $persistentDir . '/' . $pf;
+            $pubPath = $assetsDir . '/' . $pf;
+            if (is_file($pPath) && (!file_exists($pubPath) || filesize($pubPath) === 0)) {
+                @copy($pPath, $pubPath);
+                @chmod($pubPath, 0666);
+            }
+        }
+    }
+};
+
+$syncPersistentToPublic();
+
 $captionsFile = $assetsDir . '/sample_captions.json';
-$loadCaptions = function() use ($captionsFile) {
+$persistentCaptionsFile = $persistentDir . '/sample_captions.json';
+
+$loadCaptions = function() use ($captionsFile, $persistentCaptionsFile) {
+    if (!file_exists($captionsFile) && file_exists($persistentCaptionsFile)) {
+        @copy($persistentCaptionsFile, $captionsFile);
+    }
     if (file_exists($captionsFile)) {
         $json = @file_get_contents($captionsFile);
         $data = @json_decode($json, true);
         if (is_array($data)) return $data;
     }
-    return [
-        'sample_fallback.webp' => 'Our Special Moments 💑',
-        'default' => 'Together Always 💕'
-    ];
+    return [];
 };
 
-$saveCaptions = function($captionsMap) use ($captionsFile) {
-    @file_put_contents($captionsFile, json_encode($captionsMap, JSON_PRETTY_PRINT));
+$saveCaptions = function($captionsMap) use ($captionsFile, $persistentCaptionsFile) {
+    $json = json_encode($captionsMap, JSON_PRETTY_PRINT);
+    @file_put_contents($captionsFile, $json);
     @chmod($captionsFile, 0666);
+    @file_put_contents($persistentCaptionsFile, $json);
+    @chmod($persistentCaptionsFile, 0666);
 };
 
 $baseUrl = rtrim(APP_URL, '/');
 
 // GET: List all sample WebP assets & captions (Publicly accessible for create.php & edit.php sample modal)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $syncPersistentToPublic();
     $files = is_dir($assetsDir) ? array_diff(scandir($assetsDir), ['.', '..']) : [];
     $captionsMap = $loadCaptions();
     $samples = [];
@@ -119,6 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $shortHash = substr(md5(uniqid((string)rand(), true)), 0, 8);
         $fileName = 'sample_' . $shortHash . '.webp';
         $fullPath = $assetsDir . '/' . $fileName;
+        $persistentPath = $persistentDir . '/' . $fileName;
 
         // GD WebP compression & resizing
         $img = @imagecreatefromstring($imageData);
@@ -150,6 +182,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        // Save to persistent backup FIRST
+        @file_put_contents($persistentPath, $imageData);
+        @chmod($persistentPath, 0666);
+
+        // Save to public web directory SECOND
         @file_put_contents($fullPath, $imageData);
         @chmod($fullPath, 0666);
 
@@ -193,8 +230,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $fullPath = $assetsDir . '/' . $filename;
-        if (file_exists($fullPath)) {
+        $persistentPath = $persistentDir . '/' . $filename;
+
+        if (file_exists($fullPath) || file_exists($persistentPath)) {
             @unlink($fullPath);
+            @unlink($persistentPath);
             unset($captionsMap[$filename]);
             $saveCaptions($captionsMap);
             echo json_encode(['status' => 'success', 'message' => 'Sample file deleted successfully.']);
