@@ -27,22 +27,22 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
 </head>
 <body class="min-h-screen pb-16">
 
-  <!-- Header Banner -->
-  <header class="bg-[#1b171b]/90 border-b border-[#3b1e3b] sticky top-0 z-40 backdrop-blur-md">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+  <!-- Header Banner (Mobile Responsive) -->
+  <header class="bg-[#1b171b]/95 border-b border-[#3b1e3b] sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-4 py-3.5 sm:py-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
       <div class="flex items-center gap-3">
-        <a href="index.php" class="p-2 rounded-xl bg-[#241c24] text-[#eac34a] hover:bg-[#3b1e3b] transition-all flex items-center justify-center border border-[#eac34a]/20">
+        <a href="index.php" class="p-2 rounded-xl bg-[#241c24] text-[#eac34a] hover:bg-[#3b1e3b] transition-all flex items-center justify-center border border-[#eac34a]/20 shrink-0">
           <i data-lucide="arrow-left" class="w-5 h-5"></i>
         </a>
-        <div>
-          <h1 class="text-lg sm:text-xl font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
-            <i data-lucide="layout-grid" class="w-5 h-5 text-[#eac34a]"></i>
-            <span>Gift Cards Manager</span>
+        <div class="min-w-0">
+          <h1 class="text-base sm:text-xl font-bold font-serif text-[#e8e0e3] flex items-center gap-2 truncate">
+            <i data-lucide="layout-grid" class="w-4 h-4 sm:w-5 sm:h-5 text-[#eac34a] shrink-0"></i>
+            <span class="truncate">Gift Cards Manager</span>
           </h1>
-          <p class="text-[11px] text-[#b8a7b3]">Manage all gift templates, prices, cover photos, order sequence & live URLs</p>
+          <p class="text-[11px] text-[#b8a7b3] leading-tight truncate sm:whitespace-normal">Manage gift templates, prices, cover photos &amp; live URLs</p>
         </div>
       </div>
-      <button onclick="openTemplateModal()" type="button" class="px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all shadow-lg flex items-center gap-1.5 shrink-0 cursor-pointer">
+      <button onclick="openTemplateModal()" type="button" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
         <i data-lucide="plus-circle" class="w-4 h-4"></i>
         <span>Add New Gift Card</span>
       </button>
