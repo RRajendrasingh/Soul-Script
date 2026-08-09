@@ -226,11 +226,34 @@ require_once __DIR__ . '/includes/media_helper.php';
     } catch (Exception $exT) {}
 
     $defaultDemos = [
-        'anniversary_reveal'    => ['url' => APP_URL . '/gift/ananya-rohan', 'pass' => 'SHIMLA'],
-        'birthday_magic'        => ['url' => APP_URL . '/gift/rohan-birthday', 'pass' => 'MAGIC'],
-        'perfect_proposal'     => ['url' => APP_URL . '/gift/rahul-priya', 'pass' => 'PARIS'],
+        'anniversary_reveal'     => ['url' => APP_URL . '/gift/ananya-rohan', 'pass' => 'SHIMLA'],
+        'birthday_magic'         => ['url' => APP_URL . '/gift/rohan-birthday', 'pass' => 'MAGIC'],
+        'perfect_proposal'      => ['url' => APP_URL . '/gift/rahul-priya', 'pass' => 'PARIS'],
         'long_distance_love'    => ['url' => APP_URL . '/gift/aarav-meera', 'pass' => 'MUMBAI'],
-        'raksha_bandhan_special' => ['url' => APP_URL . '/gift/manvi-testing', 'pass' => '1234']
+        'raksha_bandhan_special'  => ['url' => APP_URL . '/gift/manvi-testing', 'pass' => 'RAKHI']
+    ];
+
+    $templateSpecs = [
+        'raksha_bandhan_special' => [
+            'collected' => ['Brother/Sister Name & Motto', '5 Sibling Promises / Vows', 'Digital Shagun Note / Voucher Code', 'Childhood Photos with Captions'],
+            'features'  => ['Interactive Virtual Rakhi Tying', '5 Sibling Promise 3D Cards', 'Always-Visible Shagun Envelope', 'Sibling Soundtrack & Photo Gallery']
+        ],
+        'anniversary_reveal' => [
+            'collected' => ['Relationship Start Date', '3-6 Timeline Milestones', 'Personalized Love Note', '5-10 Photo Gallery'],
+            'features'  => ['Live Time Counter', 'Vertical Story Timeline', 'Captured Moments Gallery', 'Signed Love Note Card']
+        ],
+        'birthday_magic' => [
+            'collected' => ['Partner Date of Birth', '3-5 Reasons to Celebrate', 'Personalized Note', '5-10 Photo Gallery'],
+            'features'  => ['Next Birthday Countdown', 'Confetti Animations', 'Interactive Reasons List', 'Festive Header Banner']
+        ],
+        'perfect_proposal' => [
+            'collected' => ['Heartfelt Proposal Letter', 'Proposal Location & Date', 'Custom Yes Response Message', '5-10 Photo Gallery'],
+            'features'  => ['Interactive Proposal Buttons', 'Instant Response Email Alert', 'Floating Heart Animations', 'Grand Proposal Card']
+        ],
+        'long_distance_love' => [
+            'collected' => ['Buyer & Partner Cities', 'Next Reunion Date & Time', 'Shared Playlist URL', '5-10 Photo Gallery'],
+            'features'  => ['Dual City Clocks', 'Live Reunion Countdown', 'Music Player Widget', 'Our Journey Gallery']
+        ]
     ];
     ?>
 
@@ -248,6 +271,11 @@ require_once __DIR__ . '/includes/media_helper.php';
 
         $tDemoUrl = !empty($t['demo_url']) ? $t['demo_url'] : ($defaultDemos[$tid]['url'] ?? '');
         $tDemoPass = !empty($t['demo_password']) ? $t['demo_password'] : ($defaultDemos[$tid]['pass'] ?? '');
+
+        $spec = $templateSpecs[$tid] ?? [
+            'collected' => ['Personalized Names & Motto', 'Custom Occasion Details', 'Personalized Note / Envelope', '5-10 Photo Memory Gallery'],
+            'features'  => ['Interactive Lock Gate & Confetti', 'Customized Countdown Timer', '3D Gift Envelope / Letter', 'Background Soundtrack & Photos']
+        ];
 
         $isFeatured = ($tIdx === 0);
       ?>
@@ -286,10 +314,9 @@ require_once __DIR__ . '/includes/media_helper.php';
                 <span>Collected Fields:</span>
               </h4>
               <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Personalized Names &amp; Motto</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Custom Occasion Details</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Personalized Note / Envelope</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>5-10 Photo Memory Gallery</span></li>
+                <?php foreach ($spec['collected'] as $cItem): ?>
+                  <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span><?php echo htmlspecialchars($cItem); ?></span></li>
+                <?php endforeach; ?>
               </ul>
             </div>
             <div>
@@ -298,10 +325,9 @@ require_once __DIR__ . '/includes/media_helper.php';
                 <span>Result Features:</span>
               </h4>
               <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Interactive Lock Gate &amp; Confetti</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Customized Countdown Timer</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>3D Gift Envelope / Letter</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Background Soundtrack &amp; Photos</span></li>
+                <?php foreach ($spec['features'] as $fItem): ?>
+                  <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span><?php echo htmlspecialchars($fItem); ?></span></li>
+                <?php endforeach; ?>
               </ul>
             </div>
           </div>
