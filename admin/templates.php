@@ -140,6 +140,17 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
             Typing a title like <em>"Diwali Surprise"</em> auto-generates slug <code class="text-[#e4b9df] bg-[#221f21] px-1 py-0.5 rounded">diwali_surprise</code> and personalization URL <code class="text-[#eac34a] bg-[#221f21] px-1 py-0.5 rounded">create.php?template=diwali_surprise</code>.
           </p>
         </div>
+
+        <!-- Guide Item 5 -->
+        <div class="bg-[#151215] p-3.5 rounded-xl border border-[#3b1e3b] space-y-1.5 md:col-span-2">
+          <div class="font-bold text-[#eac34a] flex items-center gap-1.5">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            <span>5. Admin Free Demo Creation (0 ₹ Razorpay Bypass)</span>
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            As the logged-in Website Owner, whenever you create a new surprise demo site via <code class="text-[#e4b9df] bg-[#221f21] px-1 py-0.5 rounded">create.php</code>, Razorpay is <strong>100% skipped automatically</strong>! You get instant FREE active orders with 0 ₹ payment.
+          </p>
+        </div>
       </div>
     </div>
 

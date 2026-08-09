@@ -1636,6 +1636,12 @@ Today, I want to ask you the most important question of my life. Will you take m
         });
         const data = await res.json();
         if (data.success) {
+          // ADMIN SUPER BYPASS: Logged in Website Owner skips Razorpay completely & gets FREE 1-click access!
+          if (data.is_admin_order || (data.order && data.order.payment_status === 'paid')) {
+            window.location.href = '<?php echo APP_URL; ?>/create.php?order_id=' + data.order.order_id;
+            return;
+          }
+
           const options = {
             key: data.razorpay_key_id,
             amount: currentPrice * 100,

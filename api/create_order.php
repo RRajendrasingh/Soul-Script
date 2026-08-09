@@ -2,6 +2,9 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
+session_start();
+$isAdmin = !empty($_SESSION['admin_logged_in']);
+
 $input = json_decode(file_get_contents('php://input'), true);
 
 $buyer_name  = trim($input['buyer_name'] ?? '');
@@ -59,9 +62,13 @@ try {
     $order_id = 'ord_' . time() . '_' . rand(1000, 9999);
     $razorpay_order_id = 'order_rzp_' . base_convert(time(), 10, 36);
 
+    // ADMIN SUPER BYPASS: Logged in website owners get 100% FREE instantly active orders!
+    $paymentStatus = $isAdmin ? 'paid' : 'pending';
+    $amountPaid = $isAdmin ? 0 : (float)$template['price_inr'];
+
     $stmt = $db->prepare("
         INSERT INTO orders (order_id, buyer_name, buyer_phone, buyer_email, buyer_password_hash, template_id, amount_paid, payment_status, razorpay_order_id, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, NOW())
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     ");
     $stmt->execute([
         $order_id,
@@ -70,7 +77,8 @@ try {
         $buyer_email,
         $buyer_password_hash,
         $template_id,
-        $template['price_inr'],
+        $amountPaid,
+        $paymentStatus,
         $razorpay_order_id
     ]);
 
@@ -79,11 +87,12 @@ try {
             'order_id' => $order_id,
             'buyer_name' => $buyer_name,
             'buyer_email' => $buyer_email,
-            'amount_paid' => (float)$template['price_inr'],
+            'amount_paid' => $amountPaid,
             'template_id' => $template_id,
-            'payment_status' => 'pending',
+            'payment_status' => $paymentStatus,
             'razorpay_order_id' => $razorpay_order_id,
         ],
+        'is_admin_order' => $isAdmin,
         'razorpay_key_id' => RAZORPAY_KEY_ID
     ]);
 } catch (Exception $e) {
