@@ -1,0 +1,4 @@
+# Protect all user uploaded images & subfolders from Git wipes
+*
+!.gitignore
+!.gitkeep

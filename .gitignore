@@ -35,3 +35,11 @@ Thumbs.db
 # Playwright Test Outputs
 playwright-report/
 test-results/
+
+# User Uploaded Media Protection (NEVER wipe on Git Deployments)
+uploads/*
+!uploads/.gitkeep
+assets/default_gallery/*
+!assets/default_gallery/.gitkeep
+!assets/default_gallery/sample_captions.json
+

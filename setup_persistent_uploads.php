@@ -1,6 +1,6 @@
 <?php
 /**
- * SoulScript - Hostinger Persistent Uploads Directory Setup
+ * SoulScript - Hostinger Persistent Uploads Directory Setup & Restorer
  * Protects user uploads from being wiped during Hostinger Git Auto-Deployments
  */
 
@@ -13,24 +13,43 @@ $publicUploads = $publicHtml . '/uploads';
 
 $log = [];
 
-try {
-    // 1. Create persistent folder outside public_html if missing
-    if (!is_dir($persistentDir)) {
-        if (@mkdir($persistentDir, 0777, true)) {
-            @chmod($persistentDir, 0777);
-            $log[] = "Created persistent uploads directory: $persistentDir";
-        } else {
-            $log[] = "Failed creating $persistentDir";
+function recursiveCopy($src, $dst) {
+    $dir = opendir($src);
+    @mkdir($dst, 0777, true);
+    @chmod($dst, 0777);
+    $copied = 0;
+    while (($file = readdir($dir)) !== false) {
+        if ($file !== '.' && $file !== '..') {
+            if (is_dir($src . '/' . $file)) {
+                $copied += recursiveCopy($src . '/' . $file, $dst . '/' . $file);
+            } else {
+                @copy($src . '/' . $file, $dst . '/' . $file);
+                @chmod($dst . '/' . $file, 0666);
+                $copied++;
+            }
         }
-    } else {
-        $log[] = "Persistent directory already exists: $persistentDir";
+    }
+    closedir($dir);
+    return $copied;
+}
+
+try {
+    if (!is_dir($persistentDir)) {
+        @mkdir($persistentDir, 0777, true);
+        @chmod($persistentDir, 0777);
+        $log[] = "Created persistent uploads directory: $persistentDir";
     }
 
-    // 2. Check if symlink can be created or if uploads folder can be linked
-    $isSymlink = is_link($publicUploads);
-    $log[] = "Is public_html/uploads a symlink? " . ($isSymlink ? 'YES' : 'NO');
+    if (!is_dir($publicUploads)) {
+        @mkdir($publicUploads, 0777, true);
+        @chmod($publicUploads, 0777);
+        $log[] = "Created public_html/uploads directory";
+    }
 
-    // Return detailed environment info
+    // Sync all user files from persistent directory to public uploads
+    $restoredCount = recursiveCopy($persistentDir, $publicUploads);
+    $log[] = "Restored $restoredCount files from persistent backup to public_html/uploads";
+
     echo json_encode([
         'status' => 'success',
         'domain_root' => $domainRoot,
