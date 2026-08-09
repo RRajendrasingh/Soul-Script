@@ -944,11 +944,21 @@ try {
                   </button>
                   <button onclick="submitProposalAnswer('${data.page_id}', 'lets_talk')" class="px-6 py-4 bg-[#151215] text-[#e8e0e3] border border-[#4d444b] font-bold text-xs uppercase tracking-wider rounded-full hover:border-[#eac34a] flex items-center justify-center gap-2 cursor-pointer">
                     <span>Let's Talk &amp; Celebrate</span>
-                  </button>
                 </div>
               `}
             </div>
           </section>
+
+          <!-- Footer Bar -->
+          <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
+            <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
+            <div class="flex items-center justify-center gap-3">
+              <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span>Lock Gift Page 🔒</span>
+              </button>
+            </div>
+          </footer>
         `;
 
         container.innerHTML = html;
