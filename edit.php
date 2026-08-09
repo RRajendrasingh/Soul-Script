@@ -429,14 +429,14 @@ if (!empty($_GET['token'])) {
               <span class="text-[11px] font-semibold text-[#eac34a]" id="dashSelectedPhotoCount">Selected: 0 / 25 Photos</span>
             </div>
             <div class="flex items-center gap-2 w-full sm:w-auto">
-              <button type="button" onclick="openSampleLibraryModal()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#3b1e3b] text-[#e4b9df] font-bold text-xs border border-[#e4b9df]/40 hover:bg-[#4d274d] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0">
+              <a href="javascript:void(0)" onclick="openSampleLibraryModal()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#3b1e3b] text-[#e4b9df] font-bold text-xs border border-[#e4b9df]/40 hover:bg-[#4d274d] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
                 <span>Sample Library</span>
-              </button>
-              <button type="button" onclick="document.getElementById('dashScrapbookFileInput').click()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0">
+              </a>
+              <a href="javascript:void(0)" onclick="document.getElementById('dashScrapbookFileInput').click()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0">
                 <i data-lucide="upload" class="w-3.5 h-3.5"></i>
                 <span>Upload Photos</span>
-              </button>
+              </a>
               <input type="file" id="dashScrapbookFileInput" accept="image/*" multiple class="hidden" onchange="handleDashScrapbookFiles(event)">
             </div>
           </div>
@@ -525,10 +525,13 @@ if (!empty($_GET['token'])) {
       </div>
 
       <!-- Modal Action Buttons -->
-      <div class="flex items-center gap-3 pt-2">
-        <button type="button" onclick="closeCircleCropModal()" class="w-1/2 py-2.5 bg-[#151215] text-[#d0c3cb] border border-[#4d444b] rounded-xl font-bold text-xs">Cancel</button>
-  <!-- Sample Library Picker Modal (Mobile Responsive) -->
-  <div id="sampleLibraryModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 hidden">
+        <button type="button" onclick="applyCircleCrop()" class="w-1/2 py-2.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg hover:bg-[#ffe088] transition-all">Crop &amp; Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sample Library Picker Modal (Top-Level Fail-Safe Modal) -->
+  <div id="sampleLibraryModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4 hidden">
     <div class="bg-[#221f21] border border-[#eac34a]/40 rounded-3xl p-5 sm:p-6 max-w-2xl w-full text-left space-y-4 shadow-2xl relative max-h-[85vh] flex flex-col">
       <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3 shrink-0">
         <div>
@@ -538,7 +541,7 @@ if (!empty($_GET['token'])) {
           </h3>
           <p class="text-[11px] text-[#d0c3cb] mt-0.5">Tap any photo to add it directly to your scrapbook gallery (Up to 25 photos max).</p>
         </div>
-        <button onclick="closeSampleLibraryModal()" type="button" class="text-[#d0c3cb] hover:text-white text-lg font-bold p-1">✕</button>
+        <a href="javascript:void(0)" onclick="closeSampleLibraryModal()" class="text-[#d0c3cb] hover:text-white text-lg font-bold p-1 cursor-pointer">✕</a>
       </div>
 
       <!-- Scrollable Grid of Admin Sample Photos -->
@@ -551,9 +554,9 @@ if (!empty($_GET['token'])) {
 
       <div class="pt-3 border-t border-[#4d444b]/40 flex items-center justify-between shrink-0">
         <span class="text-xs text-[#eac34a] font-semibold" id="sampleModalCountLabel">Selected: 0 / 25</span>
-        <button type="button" onclick="closeSampleLibraryModal()" class="px-5 py-2.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-[#ffe088] transition-all shadow-md">
+        <a href="javascript:void(0)" onclick="closeSampleLibraryModal()" class="px-5 py-2.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-[#ffe088] transition-all shadow-md cursor-pointer">
           Done Selecting
-        </button>
+        </a>
       </div>
     </div>
   </div>
@@ -1501,20 +1504,40 @@ if (!empty($_GET['token'])) {
       }
 
       if (sampleGrid) {
-        sampleGrid.innerHTML = SAMPLE_SCRAPBOOK_PHOTOS.map(photo => {
-          const isSel = dashPhotosList.some(p => p.url === photo.url);
-          return `
-            <div onclick="toggleDashSamplePhoto('${photo.url}')" class="aspect-square rounded-xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/40' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-105 transition-all">
-              <img src="${photo.url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
-              <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] text-center py-0.5 px-1 truncate">${photo.caption}</div>
-              <div class="absolute inset-0 bg-black/40 flex items-center justify-center ${isSel ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity">
-                <span class="px-2 py-1 rounded-md ${isSel ? 'bg-[#eac34a] text-[#241a00]' : 'bg-[#3b1e3b] text-[#eac34a]'} font-bold text-[10px]">
-                  ${isSel ? '✓ Added' : '+ Add'}
-                </span>
-              </div>
-            </div>
-          `;
-        }).join('');
+        fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php')
+          .then(res => res.json())
+          .then(data => {
+            if (data.status === 'success' && data.samples && data.samples.length > 0) {
+              const top5 = data.samples.slice(0, 5);
+              let html = top5.map(photo => {
+                const isSel = dashPhotosList.some(p => p.url === photo.url);
+                return `
+                  <a href="javascript:void(0)" onclick="toggleSampleModalPhoto('${photo.url}', '${(photo.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" class="aspect-square rounded-xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/40' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-105 transition-all block">
+                    <img src="${photo.url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-sm text-white text-[9px] text-center py-0.5 px-1 truncate font-semibold">${photo.caption || 'Romantic Memory'}</div>
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center ${isSel ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity">
+                      <span class="px-2 py-1 rounded-md ${isSel ? 'bg-[#eac34a] text-[#241a00]' : 'bg-[#3b1e3b] text-[#eac34a]'} font-bold text-[10px] shadow-md">
+                        ${isSel ? '✓ Added' : '+ Add'}
+                      </span>
+                    </div>
+                  </a>
+                `;
+              }).join('');
+
+              // 6th Item: View All Anchor Card
+              html += `
+                <a href="javascript:void(0)" onclick="openSampleLibraryModal()" class="aspect-square rounded-xl border border-[#eac34a]/60 bg-gradient-to-br from-[#3b1e3b] to-[#221f21] p-2 flex flex-col items-center justify-center text-center group cursor-pointer hover:scale-105 transition-all shadow-lg hover:border-[#eac34a]">
+                  <i data-lucide="images" class="w-5 h-5 text-[#eac34a] mb-1 group-hover:scale-110 transition-transform"></i>
+                  <span class="text-xs font-bold text-[#e8e0e3] group-hover:text-[#eac34a]">View All ➡️</span>
+                  <span class="text-[9px] text-[#d0c3cb] mt-0.5">More Samples</span>
+                </a>
+              `;
+
+              sampleGrid.innerHTML = html;
+              if (typeof lucide === 'object') lucide.createIcons();
+            }
+          })
+          .catch(() => {});
       }
 
       if (typeof lucide === 'object') lucide.createIcons();
@@ -1541,7 +1564,7 @@ if (!empty($_GET['token'])) {
           modalGrid.innerHTML = data.samples.map(sample => {
             const isSel = dashPhotosList.some(p => p.url === sample.url);
             return `
-              <div onclick="toggleSampleModalPhoto('${sample.url}', '${(sample.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" class="aspect-square rounded-2xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/50' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-[1.02] transition-all flex flex-col justify-between">
+              <a href="javascript:void(0)" onclick="toggleSampleModalPhoto('${sample.url}', '${(sample.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" class="aspect-square rounded-2xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/50' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-[1.02] transition-all flex flex-col justify-between block">
                 <img src="${sample.url}" class="w-full h-full object-cover">
                 <div class="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm text-white text-[10px] text-center py-1 px-1 truncate font-semibold">
                   ${sample.caption || 'Romantic Memory'}
@@ -1551,7 +1574,7 @@ if (!empty($_GET['token'])) {
                     ${isSel ? '✓ Added' : '+ Add Photo'}
                   </span>
                 </div>
-              </div>
+              </a>
             `;
           }).join('');
         } else {
@@ -1567,6 +1590,9 @@ if (!empty($_GET['token'])) {
       const modal = document.getElementById('sampleLibraryModal');
       if (modal) modal.classList.add('hidden');
     }
+
+    window.openSampleLibraryModal = openSampleLibraryModal;
+    window.closeSampleLibraryModal = closeSampleLibraryModal;
 
     function toggleSampleModalPhoto(url, caption) {
       const idx = dashPhotosList.findIndex(p => p.url === url);

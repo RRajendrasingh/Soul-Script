@@ -734,21 +734,22 @@ Today, I want to ask you the most important question of my life. Will you take m
       updatePartnerPhotoAvatar('', partnerName);
     }
 
-    // Sample Photos Registry — each image has its own matching caption
-    const SAMPLE_PHOTOS = [
-      { url: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80', caption: 'Our First Date ☕' },
-      { url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80', caption: 'Sunset Memories 🌅' },
-      { url: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80', caption: 'Together Always 💑' },
-      { url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80', caption: 'Best Friends Forever 👫' },
-      { url: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80', caption: 'Celebration Time 🎉' },
-      { url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80', caption: 'Squad Goals 🌟' }
-    ];
+    let selectedPhotoObjects = [];
 
-    let selectedPhotoObjects = [
-      { url: SAMPLE_PHOTOS[0].url, caption: SAMPLE_PHOTOS[0].caption },
-      { url: SAMPLE_PHOTOS[1].url, caption: SAMPLE_PHOTOS[1].caption },
-      { url: SAMPLE_PHOTOS[2].url, caption: SAMPLE_PHOTOS[2].caption }
-    ];
+    // Fetch dynamic initial samples on create page initialization
+    fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php')
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success' && data.samples && data.samples.length > 0) {
+          const init3 = data.samples.slice(0, 3);
+          selectedPhotoObjects = init3.map(s => ({
+            url: s.url,
+            caption: s.caption || 'Our Special Moment 💕'
+          }));
+          if (typeof renderPhotoPicker === 'function') renderPhotoPicker();
+        }
+      })
+      .catch(() => {});
 
     let createLettersList = [
       { id: "let_1", title: "Open When You Miss Me 💌", category: "Romantic", unlock_condition: "immediate", content: "Remember that no matter the distance, my heart is always right there with you." },
@@ -957,7 +958,7 @@ Today, I want to ask you the most important question of my life. Will you take m
       }
     }
 
-    function toggleSamplePhoto(url) {
+    function toggleSamplePhoto(url, caption) {
       const idx = selectedPhotoObjects.findIndex(p => p.url === url);
       if (idx > -1) {
         if (selectedPhotoObjects.length <= 1) {
@@ -970,12 +971,56 @@ Today, I want to ask you the most important question of my life. Will you take m
           alert('⚠️ Maximum limit of 25 photos reached! Please remove a photo before adding more.');
           return;
         }
-        // Use image-specific caption, not generic one
-        const sampleObj = SAMPLE_PHOTOS.find(p => p.url === url);
-        selectedPhotoObjects.push({ url: url, caption: sampleObj ? sampleObj.caption : 'A Beautiful Memory' });
+        selectedPhotoObjects.push({ url: url, caption: caption || 'A Beautiful Memory' });
       }
       renderPhotoPicker();
     }
+
+    async function openSampleLibraryModal() {
+      const modal = document.getElementById('sampleLibraryModal');
+      const modalGrid = document.getElementById('sampleModalGrid');
+      const countLabel = document.getElementById('sampleModalCountLabel');
+
+      if (modal) modal.classList.remove('hidden');
+      if (countLabel) countLabel.innerText = `Selected: ${selectedPhotoObjects.length} / 25`;
+
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php');
+        const data = await res.json();
+
+        if (data.status === 'success' && data.samples.length > 0) {
+          modalGrid.innerHTML = data.samples.map(sample => {
+            const isSel = selectedPhotoObjects.some(p => p.url === sample.url);
+            return `
+              <a href="javascript:void(0)" onclick="toggleSamplePhoto('${sample.url}', '${(sample.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" class="aspect-square rounded-2xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/50' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-[1.02] transition-all flex flex-col justify-between block">
+                <img src="${sample.url}" class="w-full h-full object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm text-white text-[10px] text-center py-1 px-1 truncate font-semibold">
+                  ${sample.caption || 'Romantic Memory'}
+                </div>
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center ${isSel ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity">
+                  <span class="px-2.5 py-1 rounded-lg ${isSel ? 'bg-[#eac34a] text-[#241a00]' : 'bg-[#3b1e3b] text-[#eac34a]'} font-bold text-[11px] shadow-lg">
+                    ${isSel ? '✓ Added' : '+ Add Photo'}
+                  </span>
+                </div>
+              </a>
+            `;
+          }).join('');
+        } else {
+          modalGrid.innerHTML = `<div class="col-span-full py-10 text-center text-xs text-[#d0c3cb]">No default sample photos found in Admin pool.</div>`;
+        }
+        if (typeof lucide === 'object') lucide.createIcons();
+      } catch (err) {
+        modalGrid.innerHTML = `<div class="col-span-full py-10 text-center text-xs text-red-300">Error loading sample photos.</div>`;
+      }
+    }
+
+    function closeSampleLibraryModal() {
+      const modal = document.getElementById('sampleLibraryModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    window.openSampleLibraryModal = openSampleLibraryModal;
+    window.closeSampleLibraryModal = closeSampleLibraryModal;
 
     let dragSourceIdx = null;
     let touchTimer = null;
@@ -1142,20 +1187,40 @@ Today, I want to ask you the most important question of my life. Will you take m
       // Render Quick Pick Sample Gallery with Golden Checkmark
       const sampleGrid = document.getElementById('samplePhotosGrid');
       if (sampleGrid) {
-        sampleGrid.innerHTML = SAMPLE_PHOTOS.map((photo) => {
-          const isSelected = selectedPhotoObjects.some(p => p.url === photo.url);
-          return `
-            <div onclick="toggleSamplePhoto('${photo.url}')" class="relative aspect-square rounded-2xl overflow-hidden border-2 cursor-pointer transition-all ${isSelected ? 'border-[#eac34a] shadow-[0_0_15px_rgba(234,195,74,0.4)] scale-95' : 'border-[#4d444b] opacity-60 hover:opacity-100'}">
-              <img src="${photo.url}" class="w-full h-full object-cover">
-              <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] text-center py-0.5 px-1 truncate">${photo.caption}</div>
-              ${isSelected ? `
-                <div class="absolute inset-0 bg-[#eac34a]/20 flex items-center justify-center">
-                  <div class="w-6 h-6 rounded-full bg-[#eac34a] text-[#241a00] flex items-center justify-center text-xs font-extrabold shadow-md">✓</div>
-                </div>
-              ` : ''}
-            </div>
-          `;
-        }).join('');
+        fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php')
+          .then(res => res.json())
+          .then(data => {
+            if (data.status === 'success' && data.samples && data.samples.length > 0) {
+              const top5 = data.samples.slice(0, 5);
+              let html = top5.map((photo) => {
+                const isSelected = selectedPhotoObjects.some(p => p.url === photo.url);
+                return `
+                  <a href="javascript:void(0)" onclick="toggleSamplePhoto('${photo.url}', '${(photo.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" class="relative aspect-square rounded-2xl overflow-hidden border-2 cursor-pointer transition-all block ${isSelected ? 'border-[#eac34a] shadow-[0_0_15px_rgba(234,195,74,0.4)] scale-95' : 'border-[#4d444b] opacity-60 hover:opacity-100'}">
+                    <img src="${photo.url}" class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] text-center py-0.5 px-1 truncate font-semibold">${photo.caption || 'Romantic Memory'}</div>
+                    ${isSelected ? `
+                      <div class="absolute inset-0 bg-[#eac34a]/20 flex items-center justify-center">
+                        <div class="w-6 h-6 rounded-full bg-[#eac34a] text-[#241a00] flex items-center justify-center text-xs font-extrabold shadow-md">✓</div>
+                      </div>
+                    ` : ''}
+                  </a>
+                `;
+              }).join('');
+
+              // 6th Item: View All Anchor Card
+              html += `
+                <a href="javascript:void(0)" onclick="openSampleLibraryModal()" class="aspect-square rounded-2xl border border-[#eac34a]/60 bg-gradient-to-br from-[#3b1e3b] to-[#221f21] p-2 flex flex-col items-center justify-center text-center group cursor-pointer hover:scale-105 transition-all shadow-lg hover:border-[#eac34a]">
+                  <i data-lucide="images" class="w-5 h-5 text-[#eac34a] mb-1 group-hover:scale-110 transition-transform"></i>
+                  <span class="text-xs font-bold text-[#e8e0e3] group-hover:text-[#eac34a]">View All ➡️</span>
+                  <span class="text-[9px] text-[#d0c3cb] mt-0.5">More Samples</span>
+                </a>
+              `;
+
+              sampleGrid.innerHTML = html;
+              if (typeof lucide === 'object') lucide.createIcons();
+            }
+          })
+          .catch(() => {});
       }
     }
 
@@ -1613,5 +1678,36 @@ Today, I want to ask you the most important question of my life. Will you take m
     }
     <?php endif; ?>
   </script>
+  <!-- Sample Library Picker Modal (Top-Level Fail-Safe Modal) -->
+  <div id="sampleLibraryModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4 hidden">
+    <div class="bg-[#221f21] border border-[#eac34a]/40 rounded-3xl p-5 sm:p-6 max-w-2xl w-full text-left space-y-4 shadow-2xl relative max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3 shrink-0">
+        <div>
+          <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4 text-[#eac34a]"></i>
+            <span>Sample Romantic Library</span>
+          </h3>
+          <p class="text-[11px] text-[#d0c3cb] mt-0.5">Tap any photo to add it directly to your scrapbook gallery (Up to 25 photos max).</p>
+        </div>
+        <a href="javascript:void(0)" onclick="closeSampleLibraryModal()" class="text-[#d0c3cb] hover:text-white text-lg font-bold p-1 cursor-pointer">✕</a>
+      </div>
+
+      <!-- Scrollable Grid of Admin Sample Photos -->
+      <div id="sampleModalGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 overflow-y-auto pr-1 flex-1 min-h-[220px]">
+        <div class="col-span-full text-center py-10 text-[#d0c3cb] text-xs">
+          <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto text-[#eac34a] mb-2"></i>
+          Loading sample gallery photos...
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-[#4d444b]/40 flex items-center justify-between shrink-0">
+        <span class="text-xs text-[#eac34a] font-semibold" id="sampleModalCountLabel">Selected: 0 / 25</span>
+        <a href="javascript:void(0)" onclick="closeSampleLibraryModal()" class="px-5 py-2.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-[#ffe088] transition-all shadow-md cursor-pointer">
+          Done Selecting
+        </a>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
