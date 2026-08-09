@@ -82,6 +82,67 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       </div>
     </div>
 
+    <!-- Admin Quick Reference & Code Fallbacks Guide -->
+    <div class="bg-[#1b171b] border border-[#eac34a]/30 rounded-2xl p-5 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-[#3b1e3b] pb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="book-open" class="w-5 h-5 text-[#eac34a]"></i>
+          <h3 class="text-sm font-bold font-serif text-[#e8e0e3] uppercase tracking-wider">💡 Admin Quick Reference &amp; Code Fallbacks Guide</h3>
+        </div>
+        <button type="button" onclick="document.getElementById('adminGuideContent').classList.toggle('hidden')" class="text-xs text-[#eac34a] hover:underline font-semibold cursor-pointer">
+          Toggle Guide ↕️
+        </button>
+      </div>
+
+      <div id="adminGuideContent" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-[#d0c3cb]">
+        <!-- Guide Item 1 -->
+        <div class="bg-[#151215] p-3.5 rounded-xl border border-[#3b1e3b] space-y-1.5">
+          <div class="font-bold text-[#eac34a] flex items-center gap-1.5">
+            <i data-lucide="link" class="w-3.5 h-3.5"></i>
+            <span>1. Dynamic Demo URLs &amp; Passwords</span>
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            Changing the <strong>Demo URL</strong> or <strong>Demo Password</strong> in any gift card below instantly updates the live website sample buttons on <code class="text-[#e4b9df] bg-[#221f21] px-1 py-0.5 rounded">index.php</code>!
+          </p>
+        </div>
+
+        <!-- Guide Item 2 -->
+        <div class="bg-[#151215] p-3.5 rounded-xl border border-[#3b1e3b] space-y-1.5">
+          <div class="font-bold text-[#e4b9df] flex items-center gap-1.5">
+            <i data-lucide="file-code" class="w-3.5 h-3.5"></i>
+            <span>2. Hardcoded Code Fallbacks (For VS Code)</span>
+          </div>
+          <ul class="text-[11px] space-y-1 font-mono text-[#b8a7b3]">
+            <li>• <strong class="text-[#e8e0e3]">index.php:L228</strong> &rarr; <code class="text-[#eac34a]">$defaultDemos</code> array</li>
+            <li>• <strong class="text-[#e8e0e3]">index.php:L145</strong> &rarr; Hero Banner Demo buttons</li>
+            <li>• <strong class="text-[#e8e0e3]">includes/header.php:L34</strong> &rarr; Navbar Live Demo link</li>
+          </ul>
+        </div>
+
+        <!-- Guide Item 3 -->
+        <div class="bg-[#151215] p-3.5 rounded-xl border border-[#3b1e3b] space-y-1.5">
+          <div class="font-bold text-[#eac34a] flex items-center gap-1.5">
+            <i data-lucide="image" class="w-3.5 h-3.5"></i>
+            <span>3. Cover Photo Upload Specs</span>
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            Recommended size: <strong>800 x 600 px</strong> or <strong>800 x 800 px</strong>. Max size: 5 MB. Automatically converted to WebP and backed up to outer persistent storage <code class="text-[#eac34a] bg-[#221f21] px-1 py-0.5 rounded">uploads_persistent/default_gallery/</code> (100% safe from Git wipes).
+          </p>
+        </div>
+
+        <!-- Guide Item 4 -->
+        <div class="bg-[#151215] p-3.5 rounded-xl border border-[#3b1e3b] space-y-1.5">
+          <div class="font-bold text-[#e4b9df] flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+            <span>4. Auto-Generated Personalization Links</span>
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            Typing a title like <em>"Diwali Surprise"</em> auto-generates slug <code class="text-[#e4b9df] bg-[#221f21] px-1 py-0.5 rounded">diwali_surprise</code> and personalization URL <code class="text-[#eac34a] bg-[#221f21] px-1 py-0.5 rounded">create.php?template=diwali_surprise</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <!-- Cards Grid -->
     <div id="templatesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       <div class="col-span-full text-center py-16 text-[#b8a7b3] text-sm">
