@@ -37,15 +37,20 @@ try {
         $persistentPath = $persistentDir . '/' . $fileName;
         $publicUrl = $baseUrl . '/assets/default_gallery/' . $fileName;
 
-        if (file_exists($persistentPath) && filesize($persistentPath) > 0) {
-            if (!file_exists($fullPath) || filesize($fullPath) === 0) {
-                @copy($persistentPath, $fullPath);
-                @chmod($fullPath, 0666);
-            }
+        $hasPersistent = file_exists($persistentPath) && filesize($persistentPath) > 500;
+        $hasPublic = file_exists($fullPath) && filesize($fullPath) > 500;
+
+        if ($hasPersistent && $hasPublic) {
             return $publicUrl;
         }
 
-        if (file_exists($fullPath) && filesize($fullPath) > 0) {
+        if ($hasPersistent && !$hasPublic) {
+            @copy($persistentPath, $fullPath);
+            @chmod($fullPath, 0666);
+            return $publicUrl;
+        }
+
+        if ($hasPublic && !$hasPersistent) {
             @copy($fullPath, $persistentPath);
             @chmod($persistentPath, 0666);
             return $publicUrl;
