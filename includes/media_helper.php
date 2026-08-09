@@ -8,7 +8,9 @@ if (!defined('APP_URL')) {
     require_once __DIR__ . '/../config/config.php';
 }
 
-const DEFAULT_MEDIA_FALLBACK = 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80';
+if (!defined('DEFAULT_MEDIA_FALLBACK')) {
+    define('DEFAULT_MEDIA_FALLBACK', rtrim(APP_URL, '/') . '/assets/default_gallery/sample_fallback.webp');
+}
 
 /**
  * Universal Media URL Resolver for PHP
@@ -79,7 +81,13 @@ function saveUploadedBase64Image($photoData, $page_id, $filePrefix = 'photo') {
             @chmod($targetDir, 0777);
         }
 
-        $fileName = $filePrefix . '_' . time() . '_' . rand(100, 999) . '.' . $ext;
+        // Clean Market-Standard Prefix & Hash
+        $cleanPrefix = 'media';
+        if (strpos($filePrefix, 'avatar') !== false || strpos($filePrefix, 'partner') !== false) {
+            $cleanPrefix = 'avatar';
+        }
+        $shortHash = substr(md5(uniqid((string)rand(), true)), 0, 8);
+        $fileName = $cleanPrefix . '_' . $shortHash . '.' . $ext;
         $fullDiskPath = $targetDir . '/' . $fileName;
 
         $bytesWritten = @file_put_contents($fullDiskPath, $imageData);
