@@ -203,8 +203,8 @@ require_once __DIR__ . '/includes/media_helper.php';
     </div>
   </section>
 
-  <!-- Templates & Pricing Section (Exact TemplateGallery.tsx DOM Layout) -->
-  <section id="gallery" class="py-24 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  <!-- Templates & Pricing Section (Exact Original Screenshot 1 DOM Layout) -->
+  <section id="gallery" class="py-24 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <div class="text-center space-y-4 max-w-3xl mx-auto mb-14">
       <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#e4b9df]/20 text-xs font-semibold uppercase tracking-widest">
         <i data-lucide="gift" class="w-3.5 h-3.5 text-[#eac34a]"></i>
@@ -257,7 +257,7 @@ require_once __DIR__ . '/includes/media_helper.php';
     ];
     ?>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
       <?php foreach ($activeTemplates as $tIdx => $t): 
         $tid = $t['template_id'];
         $tName = htmlspecialchars($t['name']);
@@ -265,12 +265,19 @@ require_once __DIR__ . '/includes/media_helper.php';
         $tDesc = htmlspecialchars($t['description']);
         $tPrice = (float)$t['price_inr'];
         $tBadge = htmlspecialchars($t['badge'] ?? '');
-        $tButtonText = !empty($t['button_text']) ? htmlspecialchars($t['button_text']) : 'Customize';
         $tCover = resolveMediaUrl($t['preview_image_url']);
         $tCreateUrl = APP_URL . '/create.php?template=' . urlencode($tid);
 
         $tDemoUrl = !empty($t['demo_url']) ? $t['demo_url'] : ($defaultDemos[$tid]['url'] ?? '');
         $tDemoPass = !empty($t['demo_password']) ? $t['demo_password'] : ($defaultDemos[$tid]['pass'] ?? '');
+
+        // Determine concise single-line button text
+        $rawBtnText = !empty($t['button_text']) ? $t['button_text'] : 'Customize';
+        if (mb_strlen($rawBtnText) > 15 || strpos($rawBtnText, 'Personalize This Gift') !== false) {
+            $tBtnLabel = 'CUSTOMIZE (₹' . number_format($tPrice, 0) . ')';
+        } else {
+            $tBtnLabel = mb_strtoupper($rawBtnText) . ' (₹' . number_format($tPrice, 0) . ')';
+        }
 
         $spec = $templateSpecs[$tid] ?? [
             'collected' => ['Personalized Names & Motto', 'Custom Occasion Details', 'Personalized Note / Envelope', '5-10 Photo Memory Gallery'],
@@ -280,27 +287,30 @@ require_once __DIR__ . '/includes/media_helper.php';
         $isFeatured = ($tIdx === 0);
       ?>
       <div class="bg-[#221f21] rounded-3xl border <?php echo $isFeatured ? 'border-2 border-[#eac34a] shadow-[0_0_35px_rgba(234,195,74,0.3)]' : 'border-[#4d444b]/50 hover:border-[#eac34a]/40 shadow-2xl'; ?> transition-all duration-300 flex flex-col overflow-hidden group">
+        
+        <!-- Header Image Box (h-64 Height with Gradient & Badges) -->
         <div class="relative h-64 bg-[#100d10] overflow-hidden">
           <img src="<?php echo $tCover; ?>" alt="<?php echo $tName; ?>" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-95">
           <div class="absolute inset-0 bg-gradient-to-t from-[#221f21] via-transparent to-transparent"></div>
           
           <?php if (!empty($tBadge)): ?>
-            <div class="absolute top-4 left-4 bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] text-[#241a00] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg flex items-center gap-1.5">
+            <div class="absolute top-4 left-4 bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] text-[#241a00] text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-lg flex items-center gap-1.5">
               <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#241a00]"></i>
               <span><?php echo $tBadge; ?></span>
             </div>
           <?php endif; ?>
 
-          <div class="absolute top-4 right-4 bg-[#eac34a] text-[#241a00] font-extrabold text-base px-4 py-1 rounded-xl shadow-md">
+          <div class="absolute top-4 right-4 bg-[#eac34a] text-[#241a00] font-extrabold text-sm sm:text-base px-3.5 py-1 rounded-xl shadow-md">
             ₹<?php echo number_format($tPrice, 0); ?>
           </div>
 
-          <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-1">
+          <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-0.5">
             <h3 class="text-2xl font-bold font-serif leading-snug"><?php echo $tName; ?></h3>
             <p class="text-xs text-[#eac34a] font-medium"><?php echo $tTagline; ?></p>
           </div>
         </div>
 
+        <!-- Body Area -->
         <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
           <p class="text-xs text-[#d0c3cb] leading-relaxed font-normal">
             <?php echo $tDesc; ?>
@@ -311,45 +321,46 @@ require_once __DIR__ . '/includes/media_helper.php';
             <div>
               <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-                <span>Collected Fields:</span>
+                <span>COLLECTED FIELDS:</span>
               </h4>
               <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
                 <?php foreach ($spec['collected'] as $cItem): ?>
-                  <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span><?php echo htmlspecialchars($cItem); ?></span></li>
+                  <li class="flex items-start gap-1.5"><span class="text-[#eac34a]">•</span><span><?php echo htmlspecialchars($cItem); ?></span></li>
                 <?php endforeach; ?>
               </ul>
             </div>
             <div>
               <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#e4b9df]"></i>
-                <span>Result Features:</span>
+                <span>RESULT FEATURES:</span>
               </h4>
               <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
                 <?php foreach ($spec['features'] as $fItem): ?>
-                  <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span><?php echo htmlspecialchars($fItem); ?></span></li>
+                  <li class="flex items-start gap-1.5"><span class="text-[#e4b9df">•</span><span><?php echo htmlspecialchars($fItem); ?></span></li>
                 <?php endforeach; ?>
               </ul>
             </div>
           </div>
 
-          <div class="space-y-3 pt-2">
+          <!-- Action Buttons Area -->
+          <div class="space-y-3 pt-1">
             <div class="flex flex-col sm:flex-row items-center gap-3">
-              <a href="<?php echo $tCreateUrl; ?>" class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 no-underline text-center">
-                <i data-lucide="gift" class="w-4 h-4"></i>
-                <span><?php echo $tButtonText; ?> (₹<?php echo number_format($tPrice, 0); ?>)</span>
+              <a href="<?php echo $tCreateUrl; ?>" class="w-full sm:flex-1 py-3 px-5 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 no-underline text-center whitespace-nowrap">
+                <i data-lucide="gift" class="w-4 h-4 shrink-0"></i>
+                <span class="whitespace-nowrap"><?php echo $tBtnLabel; ?></span>
               </a>
 
               <?php if (!empty($tDemoUrl)): ?>
-                <a href="<?php echo $tDemoUrl; ?>" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#eac34a]/60 transition-all flex items-center justify-center gap-1.5 shrink-0 no-underline">
-                  <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
-                  <span>Live Sample</span>
+                <a href="<?php echo $tDemoUrl; ?>" target="_blank" class="w-full sm:w-auto px-5 py-3 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] hover:border-[#eac34a]/60 transition-all flex items-center justify-center gap-1.5 shrink-0 no-underline whitespace-nowrap">
+                  <i data-lucide="eye" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
+                  <span class="whitespace-nowrap">Live Sample</span>
                 </a>
               <?php endif; ?>
             </div>
 
             <?php if (!empty($tDemoPass)): ?>
-              <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
-                <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+              <div class="w-full text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-2 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
+                <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a] shrink-0"></i>
                 <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider"><?php echo htmlspecialchars($tDemoPass); ?></strong></span>
               </div>
             <?php endif; ?>
