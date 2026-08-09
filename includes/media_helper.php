@@ -51,10 +51,10 @@ function resolveMediaUrl($url, $fallback = '') {
     }
 
     // 2. Auto-heal missing disk upload files from persistent storage
-    if (strpos($url, '/uploads/') !== false) {
+    if (strpos($url, '/uploads/') !== false || strpos($url, 'uploads/') === 0) {
         $parsed = parse_url($url);
-        $path = $parsed['path'] ?? '';
-        if (preg_match('/uploads\/(page_[^\/]+)\/(.+)$/', $path, $m)) {
+        $path = $parsed['path'] ?? $url;
+        if (preg_match('/uploads\/([^\/]+)\/(.+)$/', $path, $m)) {
             $pageId = $m[1];
             $fileName = $m[2];
 
