@@ -1,7 +1,7 @@
 <?php
 /**
  * SoulScript - Admin Sample Gallery Manager API
- * Manages self-hosted default sample WebP assets stored in /assets/default_gallery/
+ * Manages self-hosted default sample WebP assets & captions in /assets/default_gallery/
  */
 
 session_start();
@@ -10,34 +10,64 @@ require_once __DIR__ . '/../includes/media_helper.php';
 
 header('Content-Type: application/json');
 
-if (empty($_SESSION['admin_logged_in'])) {
-    http_response_code(403);
-    echo json_encode(['status' => 'error', 'message' => 'Unauthorized admin access.']);
-    exit;
-}
-
 $assetsDir = __DIR__ . '/../assets/default_gallery';
 if (!is_dir($assetsDir)) {
     @mkdir($assetsDir, 0777, true);
     @chmod($assetsDir, 0777);
 }
 
+$captionsFile = $assetsDir . '/sample_captions.json';
+$loadCaptions = function() use ($captionsFile) {
+    if (file_exists($captionsFile)) {
+        $json = @file_get_contents($captionsFile);
+        $data = @json_decode($json, true);
+        if (is_array($data)) return $data;
+    }
+    return [
+        'sample_fallback.webp' => 'Our Special Moments 💑',
+        'default' => 'Together Always 💕'
+    ];
+};
+
+$saveCaptions = function($captionsMap) use ($captionsFile) {
+    @file_put_contents($captionsFile, json_encode($captionsMap, JSON_PRETTY_PRINT));
+    @chmod($captionsFile, 0666);
+};
+
 $baseUrl = rtrim(APP_URL, '/');
 
-// GET: List all sample WebP assets
+// GET: List all sample WebP assets & captions (Publicly accessible for create.php & edit.php sample modal)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $files = is_dir($assetsDir) ? array_diff(scandir($assetsDir), ['.', '..']) : [];
+    $captionsMap = $loadCaptions();
     $samples = [];
 
+    $defaultCaptionsPool = [
+        'Our First Coffee Date ☕',
+        'Sunset Memories 🌅',
+        'Together Always 💑',
+        'Moments of Pure Joy 😊',
+        'Forever & Always 💖',
+        'Best Day Ever 🎉',
+        'Unforgettable Smile ✨',
+        'Holding Hands 🤝',
+        'Late Night Talk 🌙',
+        'Sweet Surprise 🎁'
+    ];
+
+    $index = 0;
     foreach ($files as $file) {
         $full = $assetsDir . '/' . $file;
         if (is_file($full) && (strpos($file, 'sample_') === 0 || preg_match('/\.(webp|jpg|png)$/i', $file))) {
+            $caption = $captionsMap[$file] ?? $defaultCaptionsPool[$index % count($defaultCaptionsPool)];
             $samples[] = [
                 'filename' => $file,
+                'caption' => $caption,
                 'url' => $baseUrl . '/assets/default_gallery/' . $file,
                 'size_kb' => round(filesize($full) / 1024, 1),
                 'updated_at' => date('Y-m-d H:i:s', filemtime($full))
             ];
+            $index++;
         }
     }
 
@@ -49,14 +79,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
-// POST: Action dispatch (Upload or Delete)
+// Admin Check for POST operations
+if (empty($_SESSION['admin_logged_in'])) {
+    http_response_code(403);
+    echo json_encode(['status' => 'error', 'message' => 'Unauthorized admin access.']);
+    exit;
+}
+
+// POST Actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
+    $captionsMap = $loadCaptions();
 
     if ($action === 'upload') {
         $photoData = $_POST['photo_data'] ?? '';
-        
-        // Handle direct file upload if present
+        $caption = trim($_POST['caption'] ?? 'Romantic Memory 💕');
+
         if (isset($_FILES['photo_file']) && $_FILES['photo_file']['error'] === UPLOAD_ERR_OK) {
             $tmpPath = $_FILES['photo_file']['tmp_name'];
             $fileData = file_get_contents($tmpPath);
@@ -82,10 +120,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileName = 'sample_' . $shortHash . '.webp';
         $fullPath = $assetsDir . '/' . $fileName;
 
-        // Compress / Convert to WebP using GD if available
+        // GD WebP compression & resizing
         $img = @imagecreatefromstring($imageData);
         if ($img !== false && function_exists('imagewebp')) {
-            // Constrain max dimensions to 1200px
             $w = imagesx($img);
             $h = imagesy($img);
             $maxDim = 1200;
@@ -116,12 +153,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         @file_put_contents($fullPath, $imageData);
         @chmod($fullPath, 0666);
 
+        // Save caption to map
+        $captionsMap[$fileName] = $caption;
+        $saveCaptions($captionsMap);
+
         echo json_encode([
             'status' => 'success',
             'filename' => $fileName,
+            'caption' => $caption,
             'url' => $baseUrl . '/assets/default_gallery/' . $fileName,
             'size_kb' => round(filesize($fullPath) / 1024, 1)
         ]);
+        exit;
+    }
+
+    if ($action === 'update_caption') {
+        $filename = basename($_POST['filename'] ?? '');
+        $caption = trim($_POST['caption'] ?? '');
+
+        if (empty($filename)) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Missing filename parameter.']);
+            exit;
+        }
+
+        $captionsMap[$filename] = $caption;
+        $saveCaptions($captionsMap);
+
+        echo json_encode(['status' => 'success', 'message' => 'Caption updated successfully.']);
         exit;
     }
 
@@ -136,9 +195,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fullPath = $assetsDir . '/' . $filename;
         if (file_exists($fullPath)) {
             @unlink($fullPath);
+            unset($captionsMap[$filename]);
+            $saveCaptions($captionsMap);
             echo json_encode(['status' => 'success', 'message' => 'Sample file deleted successfully.']);
         } else {
-            http_response_code(444);
+            http_response_code(404);
             echo json_encode(['status' => 'error', 'message' => 'File not found on disk.']);
         }
         exit;

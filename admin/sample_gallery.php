@@ -40,7 +40,7 @@ if (empty($_SESSION['admin_logged_in'])) {
           <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel
         </div>
         <h1 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Default Sample Gallery Manager</h1>
-        <p class="text-xs sm:text-sm text-[#d0c3cb] mt-1">Upload and manage self-hosted WebP sample images for demo templates and default user accounts.</p>
+        <p class="text-xs sm:text-sm text-[#d0c3cb] mt-1">Upload and manage self-hosted WebP sample images and captions for template defaults and sample picker.</p>
       </div>
 
       <div class="flex items-center gap-3 w-full sm:w-auto">
@@ -69,11 +69,11 @@ if (empty($_SESSION['admin_logged_in'])) {
 
       <div class="bg-[#221f21] p-5 rounded-2xl border border-[#4d444b] flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-[#3b1e3b] border border-[#e4b9df]/40 flex items-center justify-center text-[#eac34a]">
-          <i data-lucide="file-check" class="w-6 h-6"></i>
+          <i data-lucide="message-square-quote" class="w-6 h-6"></i>
         </div>
         <div>
-          <div class="text-2xl font-bold font-serif text-[#e8e0e3]">WebP 82%</div>
-          <div class="text-xs text-[#d0c3cb]">Optimized Format</div>
+          <div class="text-2xl font-bold font-serif text-[#e8e0e3]">Caption Enabled</div>
+          <div class="text-xs text-[#d0c3cb]">Custom Romantic Captions</div>
         </div>
       </div>
 
@@ -90,7 +90,6 @@ if (empty($_SESSION['admin_logged_in'])) {
 
     <!-- Sample Photos Responsive Grid -->
     <div id="sampleGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Dynamically populated via JS -->
       <div class="col-span-full text-center py-12 text-[#d0c3cb] text-sm">
         <i data-lucide="loader-2" class="w-8 h-8 animate-spin mx-auto text-[#eac34a] mb-2"></i>
         Loading self-hosted sample assets...
@@ -125,26 +124,37 @@ if (empty($_SESSION['admin_logged_in'])) {
 
         grid.innerHTML = data.samples.map(sample => `
           <div class="bg-[#221f21] rounded-2xl border border-[#4d444b] overflow-hidden shadow-xl hover:border-[#eac34a]/60 transition group flex flex-col justify-between">
-            <div class="relative aspect-video sm:aspect-square bg-black/40 overflow-hidden">
-              <img src="${sample.url}" alt="${sample.filename}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+            <div class="relative aspect-square bg-black/40 overflow-hidden">
+              <img src="${sample.url}" alt="${sample.caption || sample.filename}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
               <span class="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-[10px] font-mono px-2 py-0.5 rounded-full text-[#eac34a]">
                 ${sample.size_kb} KB
               </span>
             </div>
 
-            <div class="p-4 space-y-3">
-              <div class="text-[11px] font-mono text-[#d0c3cb] truncate" title="${sample.filename}">
-                ${sample.filename}
+            <div class="p-4 space-y-3 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="text-xs font-semibold text-[#e8e0e3] line-clamp-2" title="${sample.caption || 'No Caption'}">
+                  💬 ${sample.caption || 'No Caption'}
+                </div>
+                <div class="text-[10px] font-mono text-[#d0c3cb]/70 truncate mt-1" title="${sample.filename}">
+                  ${sample.filename}
+                </div>
               </div>
 
-              <div class="flex items-center gap-2 pt-2 border-t border-[#3d363d]">
-                <button onclick="copyToClipboard('${sample.url}')" class="flex-1 bg-[#3b1e3b] text-xs font-semibold py-2 px-3 rounded-xl border border-[#e4b9df]/30 hover:bg-[#4d274d] transition flex items-center justify-center gap-1">
-                  <i data-lucide="copy" class="w-3.5 h-3.5 text-[#eac34a]"></i> Copy URL
+              <div class="space-y-2 pt-2 border-t border-[#3d363d]">
+                <button onclick="editCaption('${sample.filename}', '${(sample.caption || '').replace(/'/g, "\\'")}')" class="w-full bg-[#3b1e3b] text-xs font-semibold py-2 px-3 rounded-xl border border-[#e4b9df]/40 hover:bg-[#4d274d] transition flex items-center justify-center gap-1 text-[#e4b9df]">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Edit Caption
                 </button>
 
-                <button onclick="deleteSample('${sample.filename}')" class="bg-red-950/60 text-red-300 hover:bg-red-900/80 text-xs font-semibold p-2 rounded-xl border border-red-500/40 transition">
-                  <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
+                <div class="flex items-center gap-2">
+                  <button onclick="copyToClipboard('${sample.url}')" class="flex-1 bg-[#151215] text-xs font-semibold py-2 px-3 rounded-xl border border-[#4d444b] hover:border-[#eac34a] transition flex items-center justify-center gap-1 text-[#eac34a]">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy URL
+                  </button>
+
+                  <button onclick="deleteSample('${sample.filename}')" class="bg-red-950/60 text-red-300 hover:bg-red-900/80 text-xs font-semibold p-2 rounded-xl border border-red-500/40 transition">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -159,17 +169,20 @@ if (empty($_SESSION['admin_logged_in'])) {
     async function handleSampleUpload(file) {
       if (!file) return;
 
+      const userCaption = prompt('Enter a romantic caption for this sample photo:', 'Together Always 💑');
+      if (userCaption === null) return; // User cancelled
+
       const grid = document.getElementById('sampleGrid');
       grid.innerHTML = `<div class="col-span-full text-center py-12 text-[#d0c3cb] text-sm"><i data-lucide="loader-2" class="w-8 h-8 animate-spin mx-auto text-[#eac34a] mb-2"></i>Compressing & Uploading WebP Sample...</div>`;
       if (typeof lucide !== 'undefined') lucide.createIcons();
 
       try {
-        // Compress using client-side compressor.js to WebP
         const compressedWebp = await compressImage(file, 1200, 1200, 0.82, 'image/webp');
 
         const formData = new FormData();
         formData.append('action', 'upload');
         formData.append('photo_data', compressedWebp);
+        formData.append('caption', userCaption || 'Our Special Moments 💕');
 
         const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php', {
           method: 'POST',
@@ -178,7 +191,7 @@ if (empty($_SESSION['admin_logged_in'])) {
 
         const data = await res.json();
         if (data.status === 'success') {
-          alert('✅ Sample WebP photo uploaded successfully!');
+          alert('✅ Sample WebP photo and caption uploaded successfully!');
         } else {
           alert('⚠️ Upload error: ' + (data.message || 'Unknown error'));
         }
@@ -186,6 +199,31 @@ if (empty($_SESSION['admin_logged_in'])) {
         alert('⚠️ Upload failed: ' + err.message);
       } finally {
         fetchSamples();
+      }
+    }
+
+    async function editCaption(filename, currentCaption) {
+      const newCaption = prompt(`Edit caption for "${filename}":`, currentCaption);
+      if (newCaption === null) return;
+
+      const formData = new FormData();
+      formData.append('action', 'update_caption');
+      formData.append('filename', filename);
+      formData.append('caption', newCaption);
+
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          fetchSamples();
+        } else {
+          alert('⚠️ Failed updating caption: ' + data.message);
+        }
+      } catch (err) {
+        alert('⚠️ Failed updating caption: ' + err.message);
       }
     }
 

@@ -426,13 +426,19 @@ if (!empty($_GET['token'])) {
                 <i data-lucide="image" class="w-5 h-5 text-[#eac34a]"></i>
                 <span>Photo Gallery Management 🖼️</span>
               </h3>
-              <span class="text-[11px] text-[#d0c3cb]" id="dashSelectedPhotoCount">Selected: 0 photos</span>
+              <span class="text-[11px] font-semibold text-[#eac34a]" id="dashSelectedPhotoCount">Selected: 0 / 25 Photos</span>
             </div>
-            <button type="button" onclick="document.getElementById('dashScrapbookFileInput').click()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0">
-              <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-              <span>Upload Photos</span>
-            </button>
-            <input type="file" id="dashScrapbookFileInput" accept="image/*" multiple class="hidden" onchange="handleDashScrapbookFiles(event)">
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button type="button" onclick="openSampleLibraryModal()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#3b1e3b] text-[#e4b9df] font-bold text-xs border border-[#e4b9df]/40 hover:bg-[#4d274d] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span>Sample Library</span>
+              </button>
+              <button type="button" onclick="document.getElementById('dashScrapbookFileInput').click()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0">
+                <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                <span>Upload Photos</span>
+              </button>
+              <input type="file" id="dashScrapbookFileInput" accept="image/*" multiple class="hidden" onchange="handleDashScrapbookFiles(event)">
+            </div>
           </div>
 
           <!-- Current Selected Uploads Grid -->
@@ -521,7 +527,33 @@ if (!empty($_GET['token'])) {
       <!-- Modal Action Buttons -->
       <div class="flex items-center gap-3 pt-2">
         <button type="button" onclick="closeCircleCropModal()" class="w-1/2 py-2.5 bg-[#151215] text-[#d0c3cb] border border-[#4d444b] rounded-xl font-bold text-xs">Cancel</button>
-        <button type="button" onclick="applyCircleCrop()" class="w-1/2 py-2.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg hover:bg-[#ffe088] transition-all">Crop &amp; Apply</button>
+  <!-- Sample Library Picker Modal (Mobile Responsive) -->
+  <div id="sampleLibraryModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 hidden">
+    <div class="bg-[#221f21] border border-[#eac34a]/40 rounded-3xl p-5 sm:p-6 max-w-2xl w-full text-left space-y-4 shadow-2xl relative max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3 shrink-0">
+        <div>
+          <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4 text-[#eac34a]"></i>
+            <span>Sample Romantic Library</span>
+          </h3>
+          <p class="text-[11px] text-[#d0c3cb] mt-0.5">Tap any photo to add it directly to your scrapbook gallery (Up to 25 photos max).</p>
+        </div>
+        <button onclick="closeSampleLibraryModal()" type="button" class="text-[#d0c3cb] hover:text-white text-lg font-bold p-1">✕</button>
+      </div>
+
+      <!-- Scrollable Grid of Admin Sample Photos -->
+      <div id="sampleModalGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 overflow-y-auto pr-1 flex-1 min-h-[220px]">
+        <div class="col-span-full text-center py-10 text-[#d0c3cb] text-xs">
+          <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto text-[#eac34a] mb-2"></i>
+          Loading sample gallery photos...
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-[#4d444b]/40 flex items-center justify-between shrink-0">
+        <span class="text-xs text-[#eac34a] font-semibold" id="sampleModalCountLabel">Selected: 0 / 25</span>
+        <button type="button" onclick="closeSampleLibraryModal()" class="px-5 py-2.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-[#ffe088] transition-all shadow-md">
+          Done Selecting
+        </button>
       </div>
     </div>
   </div>
@@ -1433,7 +1465,7 @@ if (!empty($_GET['token'])) {
       const sampleGrid = document.getElementById('dashSamplePhotosGrid');
       if (!container) return;
 
-      if (countLabel) countLabel.innerText = `Selected: ${dashPhotosList.length} photos`;
+      if (countLabel) countLabel.innerText = `Selected: ${dashPhotosList.length} / 25 Photos`;
 
       if (dashPhotosList.length === 0) {
         container.innerHTML = `
@@ -1493,20 +1525,62 @@ if (!empty($_GET['token'])) {
       renderDashScrapbookPhotos();
     }
 
-    function toggleDashSamplePhoto(url) {
+    async function openSampleLibraryModal() {
+      const modal = document.getElementById('sampleLibraryModal');
+      const modalGrid = document.getElementById('sampleModalGrid');
+      const countLabel = document.getElementById('sampleModalCountLabel');
+
+      if (modal) modal.classList.remove('hidden');
+      if (countLabel) countLabel.innerText = `Selected: ${dashPhotosList.length} / 25`;
+
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php');
+        const data = await res.json();
+
+        if (data.status === 'success' && data.samples.length > 0) {
+          modalGrid.innerHTML = data.samples.map(sample => {
+            const isSel = dashPhotosList.some(p => p.url === sample.url);
+            return `
+              <div onclick="toggleSampleModalPhoto('${sample.url}', '${(sample.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" class="aspect-square rounded-2xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/50' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-[1.02] transition-all flex flex-col justify-between">
+                <img src="${sample.url}" class="w-full h-full object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm text-white text-[10px] text-center py-1 px-1 truncate font-semibold">
+                  ${sample.caption || 'Romantic Memory'}
+                </div>
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center ${isSel ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity">
+                  <span class="px-2.5 py-1 rounded-lg ${isSel ? 'bg-[#eac34a] text-[#241a00]' : 'bg-[#3b1e3b] text-[#eac34a]'} font-bold text-[11px] shadow-lg">
+                    ${isSel ? '✓ Added' : '+ Add Photo'}
+                  </span>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          modalGrid.innerHTML = `<div class="col-span-full py-10 text-center text-xs text-[#d0c3cb]">No default sample photos found in Admin pool.</div>`;
+        }
+        if (typeof lucide === 'object') lucide.createIcons();
+      } catch (err) {
+        modalGrid.innerHTML = `<div class="col-span-full py-10 text-center text-xs text-red-300">Error loading sample photos.</div>`;
+      }
+    }
+
+    function closeSampleLibraryModal() {
+      const modal = document.getElementById('sampleLibraryModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function toggleSampleModalPhoto(url, caption) {
       const idx = dashPhotosList.findIndex(p => p.url === url);
       if (idx > -1) {
         dashPhotosList.splice(idx, 1);
       } else {
         if (dashPhotosList.length >= 25) {
-          alert('⚠️ Maximum limit of 25 gallery photos reached! Please remove a photo before adding more.');
+          alert('⚠️ Maximum limit of 25 gallery photos reached! Remove a photo to add more.');
           return;
         }
-        // Use image-specific caption
-        const sampleObj = SAMPLE_SCRAPBOOK_PHOTOS.find(p => p.url === url);
-        dashPhotosList.push({ url: url, caption: sampleObj ? sampleObj.caption : 'A Beautiful Memory' });
+        dashPhotosList.push({ url: url, caption: caption || 'A Beautiful Memory' });
       }
       renderDashScrapbookPhotos();
+      openSampleLibraryModal(); // Re-render modal selection state
     }
 
     function handleDashScrapbookFiles(e) {

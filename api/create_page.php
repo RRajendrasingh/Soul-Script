@@ -189,9 +189,44 @@ try {
         $db->prepare("UPDATE page_content SET tokens_json = ? WHERE page_id = ?")->execute([$tokens_json, $page_id]);
     }
 
-    // 7. Handle Photo Uploads & Saving to Disk
+    // 7. Handle Photo Uploads & Saving to Disk (Limit initial default pre-fill to exactly 6 items)
     $savedMedia = [];
     $stmtMedia = $db->prepare("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES (?, ?, ?, ?, ?)");
+
+    // If no user photos provided, fetch top 6 sample items from self-hosted assets/default_gallery/
+    if (empty($photos) || !is_array($photos)) {
+        $assetsDir = __DIR__ . '/../assets/default_gallery';
+        $captionsFile = $assetsDir . '/sample_captions.json';
+        $captionsMap = file_exists($captionsFile) ? (@json_decode(file_get_contents($captionsFile), true) ?: []) : [];
+
+        $sampleFiles = is_dir($assetsDir) ? array_values(array_diff(scandir($assetsDir), ['.', '..'])) : [];
+        $samplePhotos = [];
+
+        $defaultCaptionsPool = [
+            'Our First Coffee Date ☕',
+            'Sunset Memories 🌅',
+            'Together Always 💑',
+            'Moments of Pure Joy 😊',
+            'Forever & Always 💖',
+            'Best Day Ever 🎉'
+        ];
+
+        $idx = 0;
+        foreach ($sampleFiles as $f) {
+            if ($idx >= 6) break; // Smart 6-photo pre-fill limit
+            if (strpos($f, 'sample_') === 0 || preg_match('/\.(webp|jpg|png)$/i', $f)) {
+                $samplePhotos[] = [
+                    'url' => rtrim(APP_URL, '/') . '/assets/default_gallery/' . $f,
+                    'caption' => $captionsMap[$f] ?? $defaultCaptionsPool[$idx % count($defaultCaptionsPool)]
+                ];
+                $idx++;
+            }
+        }
+        $photos = array_slice($samplePhotos, 0, 6);
+    } else {
+        // If user submitted photos, take up to 25 items
+        $photos = array_slice($photos, 0, 25);
+    }
 
     foreach ($photos as $idx => $photoItem) {
         $media_id = 'media_' . $page_id . '_' . ($idx + 1);
@@ -200,7 +235,7 @@ try {
 
         if (!empty($photoData)) {
             $filePath = saveUploadedBase64Image($photoData, $page_id, 'photo_' . ($idx + 1));
-            $finalCaption = !empty($photoCaption) ? $photoCaption : 'Moments of Joy';
+            $finalCaption = !empty($photoCaption) ? $photoCaption : 'Moments of Joy 💕';
             $stmtMedia->execute([$media_id, $page_id, $filePath, $idx + 1, $finalCaption]);
             $savedMedia[] = [
                 'media_id' => $media_id,
