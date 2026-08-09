@@ -7,14 +7,26 @@ $order = null;
 $error = null;
 $show_checkout_form = false;
 
-// Valid templates list
+// Valid templates list dynamically populated from DB
 $valid_templates = [
     'anniversary_reveal'    => ['name' => 'Anniversary Reveal',    'price' => 499],
     'birthday_magic'        => ['name' => 'Birthday Magic',        'price' => 399],
     'perfect_proposal'      => ['name' => 'Perfect Proposal',      'price' => 599],
     'long_distance_love'    => ['name' => 'Long Distance Love',    'price' => 449],
-    'raksha_bandhan_special'=> ['name' => 'Raksha Bandhan Special','price' => 449],
+    'raksha_bandhan_special'=> ['name' => 'Raksha Bandhan Special', 'price' => 449],
 ];
+
+try {
+    $dbTpl = getDB();
+    $stmtTpl = $dbTpl->query("SELECT template_id, name, price_inr FROM templates WHERE active = 1");
+    $dbTemplates = $stmtTpl->fetchAll();
+    foreach ($dbTemplates as $dt) {
+        $valid_templates[$dt['template_id']] = [
+            'name'  => $dt['name'],
+            'price' => (float)$dt['price_inr']
+        ];
+    }
+} catch (Exception $exT) {}
 
 if ($order_id) {
     $db = getDB();

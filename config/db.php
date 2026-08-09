@@ -49,10 +49,23 @@ function getDB() {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
             } catch (Exception $exRl) { /* ignore */ }
 
+            // Auto-migrate templates table extra columns if missing
+            $tplCols = [
+                'button_text'   => "VARCHAR(100) DEFAULT 'Personalize This Gift 🎁'",
+                'demo_url'      => "TEXT DEFAULT NULL",
+                'demo_password' => "VARCHAR(100) DEFAULT NULL",
+                'sort_order'    => "INT DEFAULT 0"
+            ];
+            foreach ($tplCols as $cName => $cDef) {
+                try {
+                    $pdo->exec("ALTER TABLE templates ADD COLUMN {$cName} {$cDef}");
+                } catch (Exception $exTplCol) {}
+            }
+
             // Auto-Seed raksha_bandhan_special template if missing
             try {
-                $pdo->exec("INSERT IGNORE INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, active) VALUES 
-                ('raksha_bandhan_special', 'Raksha Bandhan Special 🪔', 'Celebrate the timeless bond of brother and sister', 'Interactive Rakhi tying ceremony, 5 sibling promise cards, childhood memory scrapbook, and digital Shagun envelope reveal.', 449, 'https://images.unsplash.com/photo-1597157639073-69284dc0fdaf?auto=format&fit=crop&w=800&q=80', 'Festival Special 🪔', 1)");
+                $pdo->exec("INSERT IGNORE INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
+                ('raksha_bandhan_special', 'Raksha Bandhan Special 🪔', 'Celebrate the timeless bond of brother and sister', 'Interactive Rakhi tying ceremony, 5 sibling promise cards, childhood memory scrapbook, and digital Shagun envelope reveal.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Festival Special 🪔', 'Personalize This Gift 🎁', 'https://digitalyogi24.com/gift/manvi-testing', '1234', 1, 5)");
             } catch (Exception $exTpl) { /* ignore */ }
 
             // Auto-Seed Rich Content Demo Pages for all templates
