@@ -215,6 +215,7 @@ require_once __DIR__ . '/includes/media_helper.php';
         Every template is engineered with custom per-occasion logic, interactive countdowns, tailored forms, and responsive visual layouts.
       </p>
       <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-3"></div>
+    </div>
       <?php
     $activeTemplates = [];
     try {
