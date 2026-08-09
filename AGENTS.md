@@ -14,8 +14,9 @@
 3. **Pre-Push Sanity Check**:
    - Verify that all environment-sensitive configuration changes preserve production availability before committing and pushing.
 
-4. **CRITICAL: Absolute Protection of User Uploads & Media Assets from Git Wipes**:
+4. **CRITICAL: Absolute Protection of User Uploads, Partner Avatars & Media Assets from Git Wipes**:
    - `uploads/*` and `assets/default_gallery/*` MUST ALWAYS be ignored in `.gitignore` and `uploads/.gitignore`.
    - NEVER commit overrides that untrack or remove `uploads/*` ignore rules from `.gitignore`.
-   - ALWAYS preserve dual-storage protection: write user files to persistent storage (`/home/u810420317/domains/digitalyogi24.com/uploads_persistent/`) and maintain PHP auto-healing in `includes/media_helper.php`.
+   - ALWAYS preserve dual-storage protection for BOTH user scrapbook photos (`media_{hash}.webp`) and partner profile avatars (`receiver_photo` / `avatar_{hash}.webp`): write files to persistent storage (`/home/u810420317/domains/digitalyogi24.com/uploads_persistent/`) and maintain PHP auto-healing in `includes/media_helper.php`.
+
 
