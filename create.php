@@ -1020,10 +1020,10 @@ Today, I want to ask you the most important question of my life. Will you take m
       modalGrid.innerHTML = filtered.map(sample => {
         const isSel = selectedPhotoObjects.some(p => p.url === sample.url);
         return `
-          <a href="javascript:void(0)" onclick="toggleSamplePhoto('${sample.url}', '${(sample.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" 
-             class="aspect-square rounded-2xl overflow-hidden border-2 ${isSel ? 'border-[#eac34a] ring-4 ring-[#eac34a]/30 shadow-[0_0_15px_rgba(234,195,74,0.4)]' : 'border-[#4d444b] hover:border-[#eac34a]/60'} relative group cursor-pointer bg-[#100d10] hover:scale-[1.03] transition-all duration-300 block">
-            <img src="${sample.url}" class="w-full h-full object-cover" loading="lazy">
-            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent text-white text-[10px] text-center pt-3 pb-1.5 px-1 truncate font-semibold z-10">
+          <div onclick="toggleSamplePhoto('${sample.url}', '${(sample.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" 
+             class="w-full aspect-square rounded-2xl overflow-hidden border-2 ${isSel ? 'border-[#eac34a] ring-4 ring-[#eac34a]/30 shadow-[0_0_15px_rgba(234,195,74,0.4)]' : 'border-[#4d444b] hover:border-[#eac34a]/60'} relative group cursor-pointer bg-[#1a1518] hover:scale-[1.03] transition-all duration-300 flex flex-col justify-end">
+            <img src="${sample.url}" onerror="this.onerror=null; this.src='<?php echo APP_URL; ?>/assets/default_gallery/sample_fa6955df.webp';" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent text-white text-[10px] text-center pt-4 pb-1.5 px-1 truncate font-semibold z-10">
               ${sample.caption || 'Romantic Memory'}
             </div>
             ${isSel ? `
@@ -1035,7 +1035,7 @@ Today, I want to ask you the most important question of my life. Will you take m
                 <span class="px-2.5 py-1 rounded-lg bg-[#3b1e3b] text-[#eac34a] font-bold text-[11px] border border-[#eac34a]/50 shadow-lg">+ Add Photo</span>
               </div>
             `}
-          </a>
+          </div>
         `;
       }).join('');
     }
