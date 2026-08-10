@@ -32,7 +32,7 @@ if (!empty($_GET['token'])) {
   require_once __DIR__ . '/includes/header.php'; 
   ?>
 
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 relative z-10 space-y-8">
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-28 pb-12 relative z-10 space-y-4 sm:space-y-8">
     
     <!-- VIEW A: LOGIN SCREEN (When no token provided) -->
     <div id="loginView" class="<?php echo $token ? 'hidden' : ''; ?> max-w-md mx-auto space-y-6">
@@ -158,37 +158,37 @@ if (!empty($_GET['token'])) {
     </div>
 
     <!-- VIEW C: BUYER VISUAL EDITOR DASHBOARD -->
-    <div id="dashboardView" class="<?php echo $token ? '' : 'hidden'; ?> space-y-6">
+    <div id="dashboardView" class="<?php echo $token ? '' : 'hidden'; ?> space-y-3.5 sm:space-y-6">
 
       <!-- Active Plan Badge Banner & Share Link -->
-      <div class="bg-[#221f21] p-5 sm:p-6 rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div class="flex items-center gap-3 text-left min-w-0 flex-1">
-          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center shrink-0 shadow-md">
-            <i data-lucide="sparkles" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+      <div class="bg-[#221f21] p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
+        <div class="flex items-center gap-2.5 sm:gap-3 text-left min-w-0 flex-1">
+          <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center shrink-0 shadow-md">
+            <i data-lucide="sparkles" class="w-4 h-4 sm:w-6 sm:h-6"></i>
           </div>
           <div class="space-y-0.5 min-w-0 flex-1">
-            <span id="activePlanBadge" class="text-[9px] sm:text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#3b1e3b] px-2.5 py-0.5 rounded-full border border-[#e4b9df]/20 inline-block">
+            <span id="activePlanBadge" class="text-[8px] sm:text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#3b1e3b] px-2 py-0.5 rounded-full border border-[#e4b9df]/20 inline-block">
               Active Plan
             </span>
-            <h2 class="text-lg sm:text-2xl font-bold font-serif text-[#e8e0e3] truncate" id="dashPartnerTitle">Partner Gift Dashboard</h2>
-            <p class="text-[11px] sm:text-xs text-[#d0c3cb]">Update your gift contents in real-time below.</p>
+            <h2 class="text-base sm:text-2xl font-bold font-serif text-[#e8e0e3] truncate" id="dashPartnerTitle">Partner Gift Dashboard</h2>
+            <p class="text-[10px] sm:text-xs text-[#d0c3cb] truncate">Update your gift contents in real-time below.</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-2 w-full md:w-auto justify-start md:justify-end shrink-0">
-          <button type="button" id="backToHubBtn" onclick="showHubView()" class="hidden px-3.5 py-2.5 rounded-xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-md">
-            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <div class="grid grid-cols-3 gap-1.5 w-full md:flex md:w-auto md:items-center md:gap-2 justify-start md:justify-end shrink-0">
+          <button type="button" id="backToHubBtn" onclick="showHubView()" class="hidden col-span-3 sm:col-span-1 px-2.5 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-1 transition-all cursor-pointer shadow-md whitespace-nowrap">
+            <i data-lucide="arrow-left" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
             <span>All Gifts</span>
           </button>
-          <a id="viewLivePageBtn" href="#" target="_blank" class="px-3.5 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#ffe088] transition-all shadow-md">
+          <a id="viewLivePageBtn" href="#" target="_blank" class="px-2 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-extrabold text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-1 hover:bg-[#ffe088] transition-all shadow-md whitespace-nowrap">
             <span>View Live</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <i data-lucide="external-link" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
           </a>
-          <a id="dashWaShareBtn" href="#" target="_blank" class="px-3.5 py-2.5 rounded-xl bg-[#25D366] text-black font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#20bd5a] transition-all shadow-md">
+          <a id="dashWaShareBtn" href="#" target="_blank" class="px-2 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-[#25D366] text-black font-extrabold text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-1 hover:bg-[#20bd5a] transition-all shadow-md whitespace-nowrap">
             <span>💬 Share</span>
           </a>
-          <button type="button" onclick="handleBuyerLogout()" class="px-3.5 py-2.5 rounded-xl bg-[#221f21] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-md">
-            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <button type="button" onclick="handleBuyerLogout()" class="px-2 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-[#221f21] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-1 transition-all cursor-pointer shadow-md whitespace-nowrap">
+            <i data-lucide="log-out" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
             <span>Log Out</span>
           </button>
         </div>
@@ -205,7 +205,7 @@ if (!empty($_GET['token'])) {
       </div>
 
       <!-- Main Edit Form -->
-      <form id="editPageForm" onsubmit="saveDashboardChanges(event)" class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#4d444b]/50 shadow-2xl space-y-6">
+      <form id="editPageForm" onsubmit="saveDashboardChanges(event)" class="bg-[#221f21] p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#4d444b]/50 shadow-2xl space-y-5 sm:space-y-6">
         <input type="hidden" id="activeEditToken" value="<?php echo htmlspecialchars($token); ?>">
         <input type="hidden" id="activeTemplateId" value="">
 
