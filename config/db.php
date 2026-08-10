@@ -268,7 +268,6 @@ function getDB() {
                         $cap = $rakhiCaptionsV2[$idx] ?? ('Sibling Memory #' . ($idx + 1));
                         $pdo->exec("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES ('$mId', 'page_demo_rakhi_v2', '$pUrl', " . ($idx + 1) . ", " . $pdo->quote($cap) . ")");
                     }
-                }
 
                 // Auto-heal double HTML entity encoded hint questions in page_content table
                 $pdo->exec("UPDATE page_content SET hint_question = REPLACE(REPLACE(hint_question, '&amp;#039;', '\''), '&#039;', '\'') WHERE hint_question LIKE '%&#039;%' OR hint_question LIKE '%&amp;%'");
