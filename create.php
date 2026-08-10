@@ -1773,7 +1773,7 @@ Today, I want to ask you the most important question of my life. Will you take m
       </div>
 
       <!-- Scrollable Grid of Admin Sample Photos -->
-      <div id="sampleModalGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 overflow-y-auto pr-1 flex-1 min-h-[300px] max-h-[60vh]">
+      <div id="sampleModalGrid" class="sample-modal-grid pr-1 flex-1 min-h-[300px]">
         <div class="col-span-full text-center py-10 text-[#d0c3cb] text-xs">
           <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto text-[#eac34a] mb-2"></i>
           Loading sample gallery photos...
