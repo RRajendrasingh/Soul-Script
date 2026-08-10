@@ -242,7 +242,7 @@ require_once __DIR__ . '/includes/media_helper.php';
             'preview_image_url' => 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp',
             'badge' => 'Royal Special 👑',
             'button_text' => 'Personalize Royal Gift 🎁',
-            'demo_url' => APP_URL . '/gift/mona-aman?theme=raksha_bandhan_royal',
+            'demo_url' => APP_URL . '/gift/manvi-rakhi-v2',
             'demo_password' => 'rakhi',
             'active' => 1,
             'sort_order' => 2
@@ -260,7 +260,7 @@ require_once __DIR__ . '/includes/media_helper.php';
         'perfect_proposal'      => ['url' => APP_URL . '/gift/rahul-priya', 'pass' => 'PARIS'],
         'long_distance_love'    => ['url' => APP_URL . '/gift/aarav-meera', 'pass' => 'MUMBAI'],
         'raksha_bandhan_special'  => ['url' => APP_URL . '/gift/manvi-testing', 'pass' => 'RAKHI'],
-        'raksha_bandhan_royal'    => ['url' => APP_URL . '/gift/mona-aman?theme=raksha_bandhan_royal', 'pass' => 'RAKHI']
+        'raksha_bandhan_royal'    => ['url' => APP_URL . '/gift/manvi-rakhi-v2', 'pass' => 'RAKHI']
     ];
 
     $templateSpecs = [

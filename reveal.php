@@ -589,8 +589,7 @@ try {
 
     function renderResultPage(data) {
       const container = document.getElementById('resultContentContainer');
-      const urlParams = new URLSearchParams(window.location.search);
-      const templateId = urlParams.get('theme') || data.template_id;
+      const templateId = data.template_id;
 
       const content = data.content;
       const tf = content.template_fields || {};
