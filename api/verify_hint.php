@@ -47,7 +47,7 @@ if ($slug && ($bypass_edit_token || $preview_mode === '1')) {
                 $milestones = $stmtM->fetchAll();
             }
             $reasons = [];
-            if ($page['template_id'] === 'birthday_magic') {
+            if ($page['template_id'] === 'birthday_magic' || $page['template_id'] === 'raksha_bandhan_special' || $page['template_id'] === 'raksha_bandhan_royal') {
                 $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
                 $stmtR->execute([$page['page_id']]);
                 $reasons = $stmtR->fetchAll(PDO::FETCH_COLUMN);
@@ -227,7 +227,7 @@ try {
 
     // 7. Fetch Reasons / Sibling Promises List
     $reasons = [];
-    if ($page['template_id'] === 'birthday_magic' || $page['template_id'] === 'raksha_bandhan_special') {
+    if ($page['template_id'] === 'birthday_magic' || $page['template_id'] === 'raksha_bandhan_special' || $page['template_id'] === 'raksha_bandhan_royal') {
         $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
         $stmtR->execute([$page['page_id']]);
         $reasons = $stmtR->fetchAll(PDO::FETCH_COLUMN);
