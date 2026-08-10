@@ -187,7 +187,7 @@ try {
       </div>
 
       <!-- Hint Form -->
-      <form id="verifyForm" onsubmit="handleVerifySubmit(event)" class="space-y-4 text-xs">
+      <form id="verifyForm" onsubmit="handleVerifySubmit(event); return false;" class="space-y-4 text-xs">
         <div id="lockMessage" class="hidden bg-[#3b1e3b] border border-[#e4b9df]/40 text-[#e4b9df] p-3.5 rounded-xl font-medium text-center text-xs"></div>
 
         <div>
@@ -1642,12 +1642,6 @@ try {
                   <span class="w-2 h-2 rounded-full bg-[#eac34a]"></span>
                   <span class="text-[10px] text-[#eac34a] uppercase tracking-wider font-bold">SACRED VOW TO ${content.partner_name}</span>
                 </div>
-              </div>
-            `).join('')}
-          </div>
-        </section>             "${pText}"
-                </p>
-                <div class="text-[10px] text-[#eac34a] uppercase tracking-wider font-semibold">Promise to ${content.partner_name}</div>
               </div>
             `).join('')}
           </div>
