@@ -74,14 +74,6 @@ function getDB() {
                 }
             } catch (Exception $exTpl) {}
 
-            // Auto-Seed raksha_bandhan_special and raksha_bandhan_royal templates if missing
-            try {
-                $pdo->exec("INSERT INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
-                ('raksha_bandhan_special', 'Raksha Bandhan Special 🪔', 'Celebrate the timeless bond of brother and sister', 'Interactive Rakhi tying ceremony, 5 sibling promise cards, childhood memory scrapbook, and digital Shagun envelope reveal.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Festival Special 🪔', 'Personalize This Gift 🎁', 'https://digitalyogi24.com/gift/manvi-testing', '1234', 1, 5),
-                ('raksha_bandhan_royal', 'Raksha Bandhan Royal 👑', 'Shahi Farman Scroll & 3-Step Rakhi Ritual', 'Interactive 3-Step Tilak & Diya ceremony, Sibling Fight Meter, 3D Glass Vows, Shahi Farman Parchment Photo Scroll, and Wax-Sealed Shagun Envelope.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Royal Special 👑', 'Personalize Royal Gift 🎁', 'https://digitalyogi24.com/gift/mona-aman?theme=raksha_bandhan_royal', 'rakhi', 1, 6)
-                ON DUPLICATE KEY UPDATE name=VALUES(name), tagline=VALUES(tagline), description=VALUES(description), demo_url=VALUES(demo_url), demo_password=VALUES(demo_password), active=1");
-            } catch (Exception $exTpl) { /* ignore */ }
-
             // Auto-Seed Rich Content Demo Pages for all templates
             try {
                 // Shared Sample Photos
