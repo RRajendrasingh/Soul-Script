@@ -315,16 +315,35 @@ body {
   gap: 0.875rem !important;
   max-height: 55vh !important;
   overflow-y: auto !important;
-  padding-right: 0.25rem !important;
+  padding-right: 0.875rem !important;
 }
+
+/* Custom Sleek Dark-Gold Scrollbar for Sample Modal Grid */
+.sample-modal-grid::-webkit-scrollbar {
+  width: 6px !important;
+}
+.sample-modal-grid::-webkit-scrollbar-track {
+  background: #151215 !important;
+  border-radius: 8px !important;
+}
+.sample-modal-grid::-webkit-scrollbar-thumb {
+  background: rgba(234, 195, 74, 0.4) !important;
+  border-radius: 8px !important;
+}
+.sample-modal-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 195, 74, 0.8) !important;
+}
+
 @media (min-width: 640px) {
   .sample-modal-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1rem !important;
   }
 }
 @media (min-width: 768px) {
   .sample-modal-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 1.125rem !important;
   }
 }
 
@@ -332,22 +351,23 @@ body {
   width: 100% !important;
   max-width: 100% !important;
   aspect-ratio: 1 / 1 !important;
+  min-height: 140px !important;
   position: relative !important;
-  border-radius: 1rem !important;
+  border-radius: 1.25rem !important;
   overflow: hidden !important;
   background-color: #1a1518 !important;
   border: 2px solid #4d444b !important;
-  transition: all 0.3s ease !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
   cursor: pointer !important;
   display: block !important;
 }
 .sample-library-card:hover {
-  border-color: rgba(234, 195, 74, 0.7) !important;
-  transform: scale(1.03) !important;
+  border-color: rgba(234, 195, 74, 0.8) !important;
+  box-shadow: 0 0 16px rgba(234, 195, 74, 0.35) !important;
 }
 .sample-library-card.selected {
   border-color: #eac34a !important;
-  box-shadow: 0 0 18px rgba(234, 195, 74, 0.45) !important;
+  box-shadow: 0 0 20px rgba(234, 195, 74, 0.5) !important;
 }
 .sample-library-img {
   position: absolute !important;
@@ -356,4 +376,8 @@ body {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
+  transition: transform 0.5s ease !important;
+}
+.sample-library-card:hover .sample-library-img {
+  transform: scale(1.1) !important;
 }

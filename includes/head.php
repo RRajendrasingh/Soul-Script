@@ -39,7 +39,7 @@ $pageTitle = $pageTitle ?? (defined('APP_NAME') ? APP_NAME . ' — Romantic Surp
 </script>
 
 <!-- Global CSS Design Tokens & Layout Rules (With Cache-Busting) -->
-<link rel="stylesheet" href="<?php echo defined('APP_URL') ? APP_URL : ''; ?>/assets/css/main.css?v=<?php echo defined('APP_VERSION') ? APP_VERSION : '1.0.4'; ?>">
+<link rel="stylesheet" href="<?php echo defined('APP_URL') ? APP_URL : ''; ?>/assets/css/main.css?v=<?php echo defined('APP_VERSION') ? APP_VERSION : '1.0.5'; ?>">
 
 <!-- Client-Side Image Compressor & Lucide Icons -->
 <script src="<?php echo defined('APP_URL') ? APP_URL : ''; ?>/assets/js/compressor.js"></script>
