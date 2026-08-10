@@ -307,3 +307,53 @@ body {
 .photo-card:hover img {
   transform: scale(1.06);
 }
+
+/* Standard Sample Library Modal & Responsive Card Grid */
+.sample-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+@media (min-width: 640px) {
+  .sample-modal-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  .sample-modal-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.sample-library-card {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 130px;
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: #1a1518;
+  border: 2px solid #4d444b;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.sample-library-card:hover {
+  border-color: rgba(234, 195, 74, 0.7);
+  transform: scale(1.03);
+}
+.sample-library-card.selected {
+  border-color: #eac34a;
+  box-shadow: 0 0 18px rgba(234, 195, 74, 0.45);
+}
+.sample-library-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

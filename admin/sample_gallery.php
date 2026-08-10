@@ -98,7 +98,61 @@ if (empty($_SESSION['admin_logged_in'])) {
 
   </main>
 
+  <!-- Admin Sample Upload / Edit Modal -->
+  <div id="sampleEditModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4 hidden">
+    <div class="bg-[#221f21] border border-[#eac34a]/40 rounded-3xl p-6 max-w-md w-full text-left space-y-4 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3">
+        <h3 id="modalTitle" class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
+          <i data-lucide="edit-3" class="w-4 h-4 text-[#eac34a]"></i>
+          <span>Sample Photo Metadata</span>
+        </h3>
+        <button type="button" onclick="closeSampleModal()" class="text-[#d0c3cb] hover:text-white text-lg font-bold p-1 cursor-pointer">✕</button>
+      </div>
+
+      <form id="sampleMetaForm" onsubmit="submitSampleMeta(event)" class="space-y-4">
+        <input type="hidden" id="modalFilename" value="">
+
+        <div id="fileUploadGroup" class="space-y-1">
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#eac34a]">Selected Photo File</label>
+          <div id="previewFileName" class="text-xs text-[#d0c3cb] truncate bg-[#151215] p-2.5 rounded-xl border border-[#4d444b]">No file selected</div>
+        </div>
+
+        <div class="space-y-1">
+          <label for="modalCaption" class="block text-xs font-bold uppercase tracking-wider text-[#eac34a]">Romantic Caption</label>
+          <input type="text" id="modalCaption" required placeholder="e.g. Together Always 💑" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+        </div>
+
+        <div class="space-y-1">
+          <label for="modalCategory" class="block text-xs font-bold uppercase tracking-wider text-[#eac34a]">Occasion Category Tag</label>
+          <select id="modalCategory" required class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none cursor-pointer">
+            <option value="anniversary">Anniversary 🌹</option>
+            <option value="birthday">Birthday 🎂</option>
+            <option value="proposal">Proposal 💍</option>
+            <option value="raksha_bandhan">Raksha Bandhan 🪔</option>
+            <option value="long_distance">Long Distance ✈️</option>
+          </select>
+          <p class="text-[10px] text-[#d0c3cb] mt-1">This category determines which filter tab this photo appears in on create.php & edit.php.</p>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3 border-t border-[#4d444b]/40">
+          <button type="button" onclick="closeSampleModal()" class="px-4 py-2 bg-[#3b1e3b] text-[#e8e0e3] font-bold text-xs rounded-xl hover:bg-[#4d274d] transition cursor-pointer">Cancel</button>
+          <button type="submit" id="modalSubmitBtn" class="px-5 py-2 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-[#ffe088] transition shadow-md cursor-pointer">Save Metadata</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
+    let currentUploadFile = null;
+
+    const catLabels = {
+      'anniversary': 'Anniversary 🌹',
+      'birthday': 'Birthday 🎂',
+      'proposal': 'Proposal 💍',
+      'raksha_bandhan': 'Rakhi 🪔',
+      'long_distance': 'Long Distance ✈️'
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof lucide !== 'undefined') lucide.createIcons();
       fetchSamples();
@@ -122,43 +176,63 @@ if (empty($_SESSION['admin_logged_in'])) {
           return;
         }
 
-        grid.innerHTML = data.samples.map(sample => `
-          <div class="bg-[#221f21] rounded-2xl border border-[#4d444b] overflow-hidden shadow-xl hover:border-[#eac34a]/60 transition group flex flex-col justify-between">
-            <div class="relative aspect-square bg-black/40 overflow-hidden">
-              <img src="${sample.url}" alt="${sample.caption || sample.filename}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
-              <span class="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-[10px] font-mono px-2 py-0.5 rounded-full text-[#eac34a]">
-                ${sample.size_kb} KB
-              </span>
-            </div>
-
-            <div class="p-4 space-y-3 flex-1 flex flex-col justify-between">
-              <div>
-                <div class="text-xs font-semibold text-[#e8e0e3] line-clamp-2" title="${sample.caption || 'No Caption'}">
-                  💬 ${sample.caption || 'No Caption'}
-                </div>
-                <div class="text-[10px] font-mono text-[#d0c3cb]/70 truncate mt-1" title="${sample.filename}">
-                  ${sample.filename}
-                </div>
+        grid.innerHTML = data.samples.map(sample => {
+          const catLabel = catLabels[sample.category] || 'Anniversary 🌹';
+          const isCover = sample.is_template_cover;
+          return `
+            <div class="bg-[#221f21] rounded-2xl border ${isCover ? 'border-amber-500/40' : 'border-[#4d444b]'} overflow-hidden shadow-xl hover:border-[#eac34a]/60 transition group flex flex-col justify-between">
+              <div class="relative aspect-square bg-black/40 overflow-hidden">
+                <img src="${sample.url}" alt="${sample.caption || sample.filename}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+                <span class="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-[10px] font-mono px-2 py-0.5 rounded-full text-[#eac34a]">
+                  ${sample.size_kb} KB
+                </span>
+                ${isCover ? `
+                  <span class="absolute top-2 left-2 bg-amber-950/90 border border-amber-500/50 text-amber-300 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md">
+                    🎴 Template Cover Photo
+                  </span>
+                ` : ''}
               </div>
 
-              <div class="space-y-2 pt-2 border-t border-[#3d363d]">
-                <button onclick="editCaption('${sample.filename}', '${(sample.caption || '').replace(/'/g, "\\'")}')" class="w-full bg-[#3b1e3b] text-xs font-semibold py-2 px-3 rounded-xl border border-[#e4b9df]/40 hover:bg-[#4d274d] transition flex items-center justify-center gap-1 text-[#e4b9df]">
-                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Edit Caption
-                </button>
+              <div class="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-1.5 mb-1.5">
+                    <span class="px-2 py-0.5 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 text-[10px] font-bold">
+                      ${catLabel}
+                    </span>
+                  </div>
+                  <div class="text-xs font-semibold text-[#e8e0e3] line-clamp-2" title="${sample.caption || 'No Caption'}">
+                    💬 ${sample.caption || 'No Caption'}
+                  </div>
+                  <div class="text-[10px] font-mono text-[#d0c3cb]/70 truncate mt-1" title="${sample.filename}">
+                    ${sample.filename}
+                  </div>
+                </div>
 
-                <div class="flex items-center gap-2">
-                  <button onclick="copyToClipboard('${sample.url}')" class="flex-1 bg-[#151215] text-xs font-semibold py-2 px-3 rounded-xl border border-[#4d444b] hover:border-[#eac34a] transition flex items-center justify-center gap-1 text-[#eac34a]">
-                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy URL
+                <div class="space-y-2 pt-2 border-t border-[#3d363d]">
+                  <button onclick="openEditModal('${sample.filename}', '${(sample.caption || '').replace(/'/g, "\\'")}', '${sample.category || 'anniversary'}')" class="w-full bg-[#3b1e3b] text-xs font-semibold py-2 px-3 rounded-xl border border-[#e4b9df]/40 hover:bg-[#4d274d] transition flex items-center justify-center gap-1 text-[#e4b9df]">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Edit Tag & Caption
                   </button>
 
-                  <button onclick="deleteSample('${sample.filename}')" class="bg-red-950/60 text-red-300 hover:bg-red-900/80 text-xs font-semibold p-2 rounded-xl border border-red-500/40 transition">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                  </button>
+                  <div class="flex items-center gap-2">
+                    <button onclick="copyToClipboard('${sample.url}')" class="flex-1 bg-[#151215] text-xs font-semibold py-2 px-3 rounded-xl border border-[#4d444b] hover:border-[#eac34a] transition flex items-center justify-center gap-1 text-[#eac34a]">
+                      <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy URL
+                    </button>
+
+                    ${!isCover ? `
+                      <button onclick="deleteSample('${sample.filename}')" class="bg-red-950/60 text-red-300 hover:bg-red-900/80 text-xs font-semibold p-2 rounded-xl border border-red-500/40 transition">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                      </button>
+                    ` : `
+                      <span title="Template Cover Photos cannot be deleted from sample gallery" class="opacity-40 cursor-not-allowed bg-gray-900 text-gray-500 text-xs font-semibold p-2 rounded-xl border border-gray-700">
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+                      </span>
+                    `}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
       } catch (err) {
@@ -166,64 +240,91 @@ if (empty($_SESSION['admin_logged_in'])) {
       }
     }
 
-    async function handleSampleUpload(file) {
+    function handleSampleUpload(file) {
       if (!file) return;
-
-      const userCaption = prompt('Enter a romantic caption for this sample photo:', 'Together Always 💑');
-      if (userCaption === null) return; // User cancelled
-
-      const grid = document.getElementById('sampleGrid');
-      grid.innerHTML = `<div class="col-span-full text-center py-12 text-[#d0c3cb] text-sm"><i data-lucide="loader-2" class="w-8 h-8 animate-spin mx-auto text-[#eac34a] mb-2"></i>Compressing & Uploading WebP Sample...</div>`;
+      currentUploadFile = file;
+      document.getElementById('modalFilename').value = '';
+      document.getElementById('fileUploadGroup').classList.remove('hidden');
+      document.getElementById('previewFileName').textContent = file.name + ' (' + roundKb(file.size) + ' KB)';
+      document.getElementById('modalTitle').innerHTML = '<i data-lucide="upload-cloud" class="w-4 h-4 text-[#eac34a]"></i> <span>Upload Sample Photo</span>';
+      document.getElementById('modalCaption').value = 'Together Always 💑';
+      document.getElementById('modalCategory').value = 'anniversary';
+      document.getElementById('modalSubmitBtn').textContent = 'Upload & Save Tag';
+      document.getElementById('sampleEditModal').classList.remove('hidden');
       if (typeof lucide !== 'undefined') lucide.createIcons();
-
-      try {
-        const compressedWebp = await compressImage(file, 1200, 1200, 0.82, 'image/webp');
-
-        const formData = new FormData();
-        formData.append('action', 'upload');
-        formData.append('photo_data', compressedWebp);
-        formData.append('caption', userCaption || 'Our Special Moments 💕');
-
-        const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php', {
-          method: 'POST',
-          body: formData
-        });
-
-        const data = await res.json();
-        if (data.status === 'success') {
-          alert('✅ Sample WebP photo and caption uploaded successfully!');
-        } else {
-          alert('⚠️ Upload error: ' + (data.message || 'Unknown error'));
-        }
-      } catch (err) {
-        alert('⚠️ Upload failed: ' + err.message);
-      } finally {
-        fetchSamples();
-      }
     }
 
-    async function editCaption(filename, currentCaption) {
-      const newCaption = prompt(`Edit caption for "${filename}":`, currentCaption);
-      if (newCaption === null) return;
+    function openEditModal(filename, caption, category) {
+      currentUploadFile = null;
+      document.getElementById('modalFilename').value = filename;
+      document.getElementById('fileUploadGroup').classList.add('hidden');
+      document.getElementById('modalTitle').innerHTML = '<i data-lucide="edit-3" class="w-4 h-4 text-[#eac34a]"></i> <span>Edit Photo Tag & Caption</span>';
+      document.getElementById('modalCaption').value = caption || '';
+      document.getElementById('modalCategory').value = category || 'anniversary';
+      document.getElementById('modalSubmitBtn').textContent = 'Save Metadata';
+      document.getElementById('sampleEditModal').classList.remove('hidden');
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
 
-      const formData = new FormData();
-      formData.append('action', 'update_caption');
-      formData.append('filename', filename);
-      formData.append('caption', newCaption);
+    function closeSampleModal() {
+      document.getElementById('sampleEditModal').classList.add('hidden');
+      currentUploadFile = null;
+      document.getElementById('sampleFileInput').value = '';
+    }
+
+    async function submitSampleMeta(e) {
+      e.preventDefault();
+      const filename = document.getElementById('modalFilename').value;
+      const caption = document.getElementById('modalCaption').value;
+      const category = document.getElementById('modalCategory').value;
+      const btn = document.getElementById('modalSubmitBtn');
+
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
 
       try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php', {
-          method: 'POST',
-          body: formData
-        });
-        const data = await res.json();
-        if (data.status === 'success') {
-          fetchSamples();
+        if (currentUploadFile) {
+          // UPLOAD NEW FILE
+          const compressedWebp = await compressImage(currentUploadFile, 1200, 1200, 0.82, 'image/webp');
+          const formData = new FormData();
+          formData.append('action', 'upload');
+          formData.append('photo_data', compressedWebp);
+          formData.append('caption', caption || 'Our Special Moments 💕');
+          formData.append('category', category || 'anniversary');
+
+          const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php', {
+            method: 'POST', body: formData
+          });
+          const data = await res.json();
+          if (data.status === 'success') {
+            closeSampleModal();
+            fetchSamples();
+          } else {
+            alert('⚠️ Upload error: ' + (data.message || 'Unknown error'));
+          }
         } else {
-          alert('⚠️ Failed updating caption: ' + data.message);
+          // UPDATE EXISTING FILE TAG & CAPTION
+          const formData = new FormData();
+          formData.append('action', 'update_caption');
+          formData.append('filename', filename);
+          formData.append('caption', caption);
+          formData.append('category', category);
+
+          const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php', {
+            method: 'POST', body: formData
+          });
+          const data = await res.json();
+          if (data.status === 'success') {
+            closeSampleModal();
+            fetchSamples();
+          } else {
+            alert('⚠️ Update error: ' + data.message);
+          }
         }
       } catch (err) {
-        alert('⚠️ Failed updating caption: ' + err.message);
+        alert('⚠️ Operation failed: ' + err.message);
+      } finally {
+        btn.disabled = false;
       }
     }
 
@@ -236,10 +337,8 @@ if (empty($_SESSION['admin_logged_in'])) {
 
       try {
         const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php', {
-          method: 'POST',
-          body: formData
+          method: 'POST', body: formData
         });
-
         const data = await res.json();
         if (data.status === 'success') {
           fetchSamples();
@@ -255,6 +354,10 @@ if (empty($_SESSION['admin_logged_in'])) {
       navigator.clipboard.writeText(text).then(() => {
         alert('📋 Copied URL to clipboard!');
       });
+    }
+
+    function roundKb(bytes) {
+      return roundKb ? roundKb = (bytes / 1024).toFixed(1) : (bytes / 1024).toFixed(1);
     }
   </script>
 </body>

@@ -87,12 +87,22 @@ $resolveCategory = function($file, $entry, $caption) {
     return 'anniversary';
 };
 
+// Template Cover Detector
+$isTemplateCover = function($file, $caption) {
+    $lStr = strtolower($file . ' ' . $caption);
+    if (strpos($lStr, 'cover') !== false || strpos($lStr, 'sample_fa6955df') !== false || strpos($lStr, 'fallback') !== false || strpos($lStr, 'lambda') !== false || strpos($lStr, 'growth') !== false || strpos($lStr, 'diwali') !== false) {
+        return true;
+    }
+    return false;
+};
+
 // GET: List all sample WebP assets & captions & categories
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $syncPersistentToPublic();
     $files = is_dir($assetsDir) ? array_diff(scandir($assetsDir), ['.', '..']) : [];
     $captionsMap = $loadCaptions();
     $samples = [];
+    $isUserMode = isset($_GET['user_mode']) || !empty($_GET['for_user']);
 
     $defaultCaptionsPool = [
         'Our First Coffee Date ☕',
@@ -121,10 +131,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $category = $resolveCategory($file, $entry, $caption);
             }
 
+            $isCover = $isTemplateCover($file, $caption);
+
+            // USER LIBRARY MODAL: Exclude template cover posters & test banners!
+            if ($isUserMode && $isCover) {
+                continue;
+            }
+
             $samples[] = [
                 'filename' => $file,
                 'caption' => $caption,
                 'category' => $category,
+                'is_template_cover' => $isCover,
                 'url' => $baseUrl . '/assets/default_gallery/' . $file,
                 'size_kb' => round(filesize($full) / 1024, 1),
                 'updated_at' => date('Y-m-d H:i:s', filemtime($full))

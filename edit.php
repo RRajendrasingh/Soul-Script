@@ -1591,8 +1591,8 @@ if (!empty($_GET['token'])) {
         const isSel = dashPhotosList.some(p => p.url === sample.url);
         return `
           <div onclick="toggleSampleModalPhoto('${sample.url}', '${(sample.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" 
-             class="w-full aspect-square rounded-2xl overflow-hidden border-2 ${isSel ? 'border-[#eac34a] ring-4 ring-[#eac34a]/30 shadow-[0_0_15px_rgba(234,195,74,0.4)]' : 'border-[#4d444b] hover:border-[#eac34a]/60'} relative group cursor-pointer bg-[#1a1518] hover:scale-[1.03] transition-all duration-300 flex flex-col justify-end">
-            <img src="${sample.url}" onerror="this.onerror=null; this.src='<?php echo APP_URL; ?>/assets/default_gallery/sample_fa6955df.webp';" class="absolute inset-0 w-full h-full object-cover">
+             class="sample-library-card ${isSel ? 'selected' : ''} group">
+            <img src="${sample.url}" onerror="this.onerror=null; this.src='<?php echo APP_URL; ?>/assets/default_gallery/sample_fa6955df.webp';" class="sample-library-img">
             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent text-white text-[10px] text-center pt-4 pb-1.5 px-1 truncate font-semibold z-10">
               ${sample.caption || 'Romantic Memory'}
             </div>
@@ -1619,7 +1619,7 @@ if (!empty($_GET['token'])) {
 
       try {
         if (cachedSamplePhotos.length === 0) {
-          const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php');
+          const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php?user_mode=1');
           const data = await res.json();
           if (data.status === 'success' && data.samples.length > 0) {
             cachedSamplePhotos = data.samples;
