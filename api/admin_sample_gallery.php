@@ -66,7 +66,28 @@ $saveCaptions = function($captionsMap) use ($captionsFile, $persistentCaptionsFi
 
 $baseUrl = rtrim(APP_URL, '/');
 
-// GET: List all sample WebP assets & captions (Publicly accessible for create.php & edit.php sample modal)
+// Category Auto-Resolver Helper
+$resolveCategory = function($file, $entry, $caption) {
+    if (is_array($entry) && !empty($entry['category'])) {
+        return $entry['category'];
+    }
+    $lStr = strtolower($file . ' ' . $caption);
+    if (strpos($lStr, 'rakhi') !== false || strpos($lStr, 'sister') !== false || strpos($lStr, 'shagun') !== false) {
+        return 'raksha_bandhan';
+    }
+    if (strpos($lStr, 'bday') !== false || strpos($lStr, 'birthday') !== false || strpos($lStr, 'cake') !== false || strpos($lStr, 'confetti') !== false) {
+        return 'birthday';
+    }
+    if (strpos($lStr, 'proposal') !== false || strpos($lStr, 'ring') !== false || strpos($lStr, 'marry') !== false) {
+        return 'proposal';
+    }
+    if (strpos($lStr, 'distance') !== false || strpos($lStr, 'airport') !== false || strpos($lStr, 'city') !== false || strpos($lStr, 'reunion') !== false) {
+        return 'long_distance';
+    }
+    return 'anniversary';
+};
+
+// GET: List all sample WebP assets & captions & categories
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $syncPersistentToPublic();
     $files = is_dir($assetsDir) ? array_diff(scandir($assetsDir), ['.', '..']) : [];
@@ -90,10 +111,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     foreach ($files as $file) {
         $full = $assetsDir . '/' . $file;
         if (is_file($full) && strpos($file, '.json') === false && preg_match('/\.(webp|jpg|jpeg|png)$/i', $file)) {
-            $caption = $captionsMap[$file] ?? $defaultCaptionsPool[$index % count($defaultCaptionsPool)];
+            $entry = $captionsMap[$file] ?? null;
+            $caption = is_array($entry) ? ($entry['caption'] ?? '') : (is_string($entry) ? $entry : '');
+            if (!$caption) {
+                $caption = $defaultCaptionsPool[$index % count($defaultCaptionsPool)];
+            }
+            $category = is_array($entry) ? ($entry['category'] ?? '') : '';
+            if (!$category) {
+                $category = $resolveCategory($file, $entry, $caption);
+            }
+
             $samples[] = [
                 'filename' => $file,
                 'caption' => $caption,
+                'category' => $category,
                 'url' => $baseUrl . '/assets/default_gallery/' . $file,
                 'size_kb' => round(filesize($full) / 1024, 1),
                 'updated_at' => date('Y-m-d H:i:s', filemtime($full))
@@ -190,14 +221,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         @file_put_contents($fullPath, $imageData);
         @chmod($fullPath, 0666);
 
-        // Save caption to map
-        $captionsMap[$fileName] = $caption;
+        // Save caption & category to metadata map
+        $category = trim($_POST['category'] ?? 'anniversary');
+        if (!in_array($category, ['anniversary', 'birthday', 'proposal', 'raksha_bandhan', 'long_distance'])) {
+            $category = 'anniversary';
+        }
+
+        $captionsMap[$fileName] = [
+            'caption' => $caption,
+            'category' => $category
+        ];
         $saveCaptions($captionsMap);
 
         echo json_encode([
             'status' => 'success',
             'filename' => $fileName,
             'caption' => $caption,
+            'category' => $category,
             'url' => $baseUrl . '/assets/default_gallery/' . $fileName,
             'size_kb' => round(filesize($fullPath) / 1024, 1)
         ]);
@@ -207,6 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'update_caption') {
         $filename = basename($_POST['filename'] ?? '');
         $caption = trim($_POST['caption'] ?? '');
+        $category = trim($_POST['category'] ?? '');
 
         if (empty($filename)) {
             http_response_code(400);
@@ -214,10 +255,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        $captionsMap[$filename] = $caption;
+        $existing = $captionsMap[$filename] ?? [];
+        $existingCaption = is_array($existing) ? ($existing['caption'] ?? '') : (is_string($existing) ? $existing : '');
+        $existingCat = is_array($existing) ? ($existing['category'] ?? '') : '';
+
+        $captionsMap[$filename] = [
+            'caption' => $caption ?: $existingCaption,
+            'category' => $category ?: ($existingCat ?: 'anniversary')
+        ];
         $saveCaptions($captionsMap);
 
-        echo json_encode(['status' => 'success', 'message' => 'Caption updated successfully.']);
+        echo json_encode(['status' => 'success', 'message' => 'Caption & Category updated successfully.']);
         exit;
     }
 

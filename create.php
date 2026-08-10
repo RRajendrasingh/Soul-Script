@@ -988,42 +988,94 @@ Today, I want to ask you the most important question of my life. Will you take m
       renderPhotoPicker();
     }
 
+    let cachedSamplePhotos = [];
+    let currentSampleCategory = 'all';
+
+    function filterSampleCategory(cat) {
+      currentSampleCategory = cat;
+      document.querySelectorAll('.sample-cat-pill').forEach(btn => {
+        if (btn.dataset.cat === cat) {
+          btn.className = 'sample-cat-pill px-3 py-1.5 rounded-full font-bold text-[11px] transition-all bg-[#eac34a] text-[#241a00] border border-[#eac34a] shadow-md cursor-pointer shrink-0';
+        } else {
+          btn.className = 'sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0';
+        }
+      });
+      renderSampleGrid();
+    }
+
+    function renderSampleGrid() {
+      const modalGrid = document.getElementById('sampleModalGrid');
+      const countLabel = document.getElementById('sampleModalCountLabel');
+      if (!modalGrid) return;
+
+      if (countLabel) countLabel.innerText = `Selected: ${selectedPhotoObjects.length} / 25`;
+
+      const filtered = cachedSamplePhotos.filter(s => currentSampleCategory === 'all' || s.category === currentSampleCategory);
+
+      if (filtered.length === 0) {
+        modalGrid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-[#d0c3cb]">No photos found in this category.</div>`;
+        return;
+      }
+
+      modalGrid.innerHTML = filtered.map(sample => {
+        const isSel = selectedPhotoObjects.some(p => p.url === sample.url);
+        return `
+          <a href="javascript:void(0)" onclick="toggleSamplePhoto('${sample.url}', '${(sample.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" 
+             class="aspect-square rounded-2xl overflow-hidden border-2 ${isSel ? 'border-[#eac34a] ring-4 ring-[#eac34a]/30 shadow-[0_0_15px_rgba(234,195,74,0.4)]' : 'border-[#4d444b] hover:border-[#eac34a]/60'} relative group cursor-pointer bg-[#100d10] hover:scale-[1.03] transition-all duration-300 block">
+            <img src="${sample.url}" class="w-full h-full object-cover" loading="lazy">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent text-white text-[10px] text-center pt-3 pb-1.5 px-1 truncate font-semibold z-10">
+              ${sample.caption || 'Romantic Memory'}
+            </div>
+            ${isSel ? `
+              <div class="absolute top-2 right-2 bg-[#eac34a] text-[#241a00] text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg flex items-center gap-1 z-20">
+                ✓ Selected
+              </div>
+            ` : `
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
+                <span class="px-2.5 py-1 rounded-lg bg-[#3b1e3b] text-[#eac34a] font-bold text-[11px] border border-[#eac34a]/50 shadow-lg">+ Add Photo</span>
+              </div>
+            `}
+          </a>
+        `;
+      }).join('');
+    }
+
     async function openSampleLibraryModal() {
       const modal = document.getElementById('sampleLibraryModal');
-      const modalGrid = document.getElementById('sampleModalGrid');
       const countLabel = document.getElementById('sampleModalCountLabel');
 
       if (modal) modal.classList.remove('hidden');
       if (countLabel) countLabel.innerText = `Selected: ${selectedPhotoObjects.length} / 25`;
 
       try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php');
-        const data = await res.json();
-
-        if (data.status === 'success' && data.samples.length > 0) {
-          modalGrid.innerHTML = data.samples.map(sample => {
-            const isSel = selectedPhotoObjects.some(p => p.url === sample.url);
-            return `
-              <a href="javascript:void(0)" onclick="toggleSamplePhoto('${sample.url}', '${(sample.caption || 'Romantic Memory').replace(/'/g, "\\'")}')" class="aspect-square rounded-2xl overflow-hidden border ${isSel ? 'border-[#eac34a] ring-2 ring-[#eac34a]/50' : 'border-[#4d444b]'} relative group cursor-pointer bg-[#100d10] hover:scale-[1.02] transition-all flex flex-col justify-between block">
-                <img src="${sample.url}" class="w-full h-full object-cover">
-                <div class="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm text-white text-[10px] text-center py-1 px-1 truncate font-semibold">
-                  ${sample.caption || 'Romantic Memory'}
-                </div>
-                <div class="absolute inset-0 bg-black/40 flex items-center justify-center ${isSel ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity">
-                  <span class="px-2.5 py-1 rounded-lg ${isSel ? 'bg-[#eac34a] text-[#241a00]' : 'bg-[#3b1e3b] text-[#eac34a]'} font-bold text-[11px] shadow-lg">
-                    ${isSel ? '✓ Added' : '+ Add Photo'}
-                  </span>
-                </div>
-              </a>
-            `;
-          }).join('');
-        } else {
-          modalGrid.innerHTML = `<div class="col-span-full py-10 text-center text-xs text-[#d0c3cb]">No default sample photos found in Admin pool.</div>`;
+        if (cachedSamplePhotos.length === 0) {
+          const res = await fetch('<?php echo APP_URL; ?>/api/admin_sample_gallery.php');
+          const data = await res.json();
+          if (data.status === 'success' && data.samples.length > 0) {
+            cachedSamplePhotos = data.samples;
+          }
         }
+        renderSampleGrid();
         if (typeof lucide === 'object') lucide.createIcons();
       } catch (err) {
-        modalGrid.innerHTML = `<div class="col-span-full py-10 text-center text-xs text-red-300">Error loading sample photos.</div>`;
+        const modalGrid = document.getElementById('sampleModalGrid');
+        if (modalGrid) modalGrid.innerHTML = `<div class="col-span-full py-10 text-center text-xs text-red-300">Error loading sample photos.</div>`;
       }
+    }
+
+    function toggleSamplePhoto(url, caption) {
+      const idx = selectedPhotoObjects.findIndex(p => p.url === url);
+      if (idx >= 0) {
+        selectedPhotoObjects.splice(idx, 1);
+      } else {
+        if (selectedPhotoObjects.length >= 25) {
+          alert('⚠️ Maximum limit of 25 photos reached! Please remove a photo before adding more.');
+          return;
+        }
+        selectedPhotoObjects.push({ url: url, caption: caption || 'A Beautiful Memory' });
+      }
+      renderPhotoPicker();
+      renderSampleGrid();
     }
 
     function closeSampleLibraryModal() {
@@ -1710,8 +1762,18 @@ Today, I want to ask you the most important question of my life. Will you take m
         <a href="javascript:void(0)" onclick="closeSampleLibraryModal()" class="text-[#d0c3cb] hover:text-white text-lg font-bold p-1 cursor-pointer">✕</a>
       </div>
 
+      <!-- Category Filter Pills Bar -->
+      <div id="sampleCategoryFilters" class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[#4d444b]/30 shrink-0 text-xs">
+        <button type="button" onclick="filterSampleCategory('all')" class="sample-cat-pill px-3 py-1.5 rounded-full font-bold text-[11px] transition-all bg-[#eac34a] text-[#241a00] border border-[#eac34a] shadow-md cursor-pointer shrink-0" data-cat="all">All Photos ✨</button>
+        <button type="button" onclick="filterSampleCategory('anniversary')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="anniversary">Anniversary 🌹</button>
+        <button type="button" onclick="filterSampleCategory('birthday')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="birthday">Birthday 🎂</button>
+        <button type="button" onclick="filterSampleCategory('proposal')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="proposal">Proposal 💍</button>
+        <button type="button" onclick="filterSampleCategory('raksha_bandhan')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="raksha_bandhan">Rakhi 🪔</button>
+        <button type="button" onclick="filterSampleCategory('long_distance')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="long_distance">Long Distance ✈️</button>
+      </div>
+
       <!-- Scrollable Grid of Admin Sample Photos -->
-      <div id="sampleModalGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 overflow-y-auto pr-1 flex-1 min-h-[220px]">
+      <div id="sampleModalGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 overflow-y-auto pr-1 flex-1 min-h-[260px] max-h-[55vh]">
         <div class="col-span-full text-center py-10 text-[#d0c3cb] text-xs">
           <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto text-[#eac34a] mb-2"></i>
           Loading sample gallery photos...
