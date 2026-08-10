@@ -224,7 +224,7 @@ if ($order_id) {
       $isBirthday = ($tId === 'birthday_magic');
       $isProposal = ($tId === 'perfect_proposal');
       $isLdr = ($tId === 'long_distance_love');
-      $isRakhi = ($tId === 'raksha_bandhan_special' || $tId === 'raksha_bandhan_royal');
+      $isRakhi = (strpos($tId, 'raksha_bandhan') !== false);
 
       $recipientLabel = $isBirthday ? "Birthday Person's First Name (Friend / Loved One) *" : ($isRakhi ? "Brother / Sister's First Name *" : "Partner's First Name *");
       $recipientPlaceholder = $isBirthday ? "e.g. Rohan" : ($isProposal ? "e.g. Priya" : ($isRakhi ? "e.g. Mona" : "e.g. Ananya"));
@@ -426,7 +426,7 @@ Today, I want to ask you the most important question of my life. Will you take m
             <label class="block font-semibold text-[#d0c3cb] mb-1">Shared Song or Spotify Playlist Link (Optional)</label>
             <input type="url" name="playlist_url" value="https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3]" placeholder="https://open.spotify.com/track/...">
           </div>
-      <?php elseif ($order['template_id'] === 'raksha_bandhan_special' || $order['template_id'] === 'raksha_bandhan_royal'): ?>
+      <?php elseif (strpos($order['template_id'] ?? '', 'raksha_bandhan') !== false): ?>
         <div class="space-y-4 text-xs">
           <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">5 Sibling Promises / Vows *</label>
           <div class="space-y-2">

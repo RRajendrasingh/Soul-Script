@@ -1210,7 +1210,7 @@ if (!empty($_GET['token'])) {
           </div>
         `;
 
-      } else if (templateId === 'raksha_bandhan_special' || templateId === 'raksha_bandhan_royal') {
+      } else if (templateId.includes('raksha_bandhan')) {
         badge.innerText = '✨ Managing: Raksha Bandhan Special Plan (Active)';
         tabBtn.innerText = 'Sibling Promises & Vows';
 

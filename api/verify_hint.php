@@ -40,26 +40,22 @@ if ($slug && ($bypass_edit_token || $preview_mode === '1')) {
             $stmtMedia->execute([$page['page_id']]);
             $media = $stmtMedia->fetchAll();
 
-            $milestones = [];
-            if ($page['template_id'] === 'anniversary_reveal') {
-                $stmtM = $db->prepare("SELECT * FROM story_milestones WHERE page_id = ? ORDER BY entry_order ASC");
-                $stmtM->execute([$page['page_id']]);
-                $milestones = $stmtM->fetchAll();
-            }
-            $reasons = [];
-            if ($page['template_id'] === 'birthday_magic' || $page['template_id'] === 'raksha_bandhan_special' || $page['template_id'] === 'raksha_bandhan_royal') {
-                $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
-                $stmtR->execute([$page['page_id']]);
-                $reasons = $stmtR->fetchAll(PDO::FETCH_COLUMN);
-            }
-            $proposalResponse = null;
-            if ($page['template_id'] === 'perfect_proposal') {
-                $stmtP = $db->prepare("SELECT * FROM proposal_responses WHERE page_id = ?");
-                $stmtP->execute([$page['page_id']]);
-                $proposalResponse = $stmtP->fetch() ?: null;
-                if ($proposalResponse) {
-                    $proposalResponse['responded_at_formatted'] = date('j M, h:i a', strtotime($proposalResponse['responded_at']));
-                }
+            // Fetch Milestones dynamically if present for page_id
+            $stmtM = $db->prepare("SELECT * FROM story_milestones WHERE page_id = ? ORDER BY entry_order ASC");
+            $stmtM->execute([$page['page_id']]);
+            $milestones = $stmtM->fetchAll();
+
+            // Fetch Reasons / Promises list dynamically if present for page_id
+            $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
+            $stmtR->execute([$page['page_id']]);
+            $reasons = $stmtR->fetchAll(PDO::FETCH_COLUMN);
+
+            // Fetch Proposal Response dynamically if present for page_id
+            $stmtP = $db->prepare("SELECT * FROM proposal_responses WHERE page_id = ?");
+            $stmtP->execute([$page['page_id']]);
+            $proposalResponse = $stmtP->fetch() ?: null;
+            if ($proposalResponse) {
+                $proposalResponse['responded_at_formatted'] = date('j M, h:i a', strtotime($proposalResponse['responded_at']));
             }
 
             $lettersData = !empty($page['letters_json']) ? json_decode($page['letters_json'], true) : [];
@@ -217,29 +213,20 @@ try {
     $stmtMedia->execute([$page['page_id']]);
     $media = $stmtMedia->fetchAll();
 
-    // 6. Fetch Milestones (if Anniversary)
-    $milestones = [];
-    if ($page['template_id'] === 'anniversary_reveal') {
-        $stmtM = $db->prepare("SELECT * FROM story_milestones WHERE page_id = ? ORDER BY entry_order ASC");
-        $stmtM->execute([$page['page_id']]);
-        $milestones = $stmtM->fetchAll();
-    }
+    // 6. Fetch Milestones dynamically if present for page_id
+    $stmtM = $db->prepare("SELECT * FROM story_milestones WHERE page_id = ? ORDER BY entry_order ASC");
+    $stmtM->execute([$page['page_id']]);
+    $milestones = $stmtM->fetchAll();
 
-    // 7. Fetch Reasons / Sibling Promises List
-    $reasons = [];
-    if ($page['template_id'] === 'birthday_magic' || $page['template_id'] === 'raksha_bandhan_special' || $page['template_id'] === 'raksha_bandhan_royal') {
-        $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
-        $stmtR->execute([$page['page_id']]);
-        $reasons = $stmtR->fetchAll(PDO::FETCH_COLUMN);
-    }
+    // 7. Fetch Reasons / Sibling Promises List dynamically if present for page_id
+    $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
+    $stmtR->execute([$page['page_id']]);
+    $reasons = $stmtR->fetchAll(PDO::FETCH_COLUMN);
 
-    // 8. Fetch Proposal Response (if Perfect Proposal)
-    $proposalResponse = null;
-    if ($page['template_id'] === 'perfect_proposal') {
-        $stmtP = $db->prepare("SELECT * FROM proposal_responses WHERE page_id = ?");
-        $stmtP->execute([$page['page_id']]);
-        $proposalResponse = $stmtP->fetch() ?: null;
-    }
+    // 8. Fetch Proposal Response dynamically if present for page_id
+    $stmtP = $db->prepare("SELECT * FROM proposal_responses WHERE page_id = ?");
+    $stmtP->execute([$page['page_id']]);
+    $proposalResponse = $stmtP->fetch() ?: null;
 
     // Return Full Result Page Payload
     $lettersData = !empty($page['letters_json']) ? json_decode($page['letters_json'], true) : [];
