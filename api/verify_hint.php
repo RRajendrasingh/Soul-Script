@@ -8,19 +8,30 @@ $input = json_decode(file_get_contents('php://input'), true);
 $slug              = trim($input['slug'] ?? '');
 $answer            = trim($input['answer'] ?? '');
 $bypass_edit_token = trim($input['bypass_edit_token'] ?? '');
+$preview_mode      = trim($input['preview_mode'] ?? '');
 $userIp            = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
 
-// BUYER EDIT MODE: bypass hint check using edit_token
-if ($slug && $bypass_edit_token) {
+// BUYER EDIT / PREVIEW MODE: bypass hint check
+if ($slug && ($bypass_edit_token || $preview_mode === '1')) {
     try {
         $db = getDB();
-        $stmtBp = $db->prepare("
-            SELECT p.page_id, p.template_id, p.url_slug, p.status, p.expires_at, c.*
-            FROM pages p
-            JOIN page_content c ON p.page_id = c.page_id
-            WHERE LOWER(p.url_slug) = LOWER(?) AND p.edit_token = ?
-        ");
-        $stmtBp->execute([$slug, $bypass_edit_token]);
+        if ($bypass_edit_token) {
+            $stmtBp = $db->prepare("
+                SELECT p.page_id, p.template_id, p.url_slug, p.status, p.expires_at, c.*
+                FROM pages p
+                JOIN page_content c ON p.page_id = c.page_id
+                WHERE LOWER(p.url_slug) = LOWER(?) AND p.edit_token = ?
+            ");
+            $stmtBp->execute([$slug, $bypass_edit_token]);
+        } else {
+            $stmtBp = $db->prepare("
+                SELECT p.page_id, p.template_id, p.url_slug, p.status, p.expires_at, c.*
+                FROM pages p
+                JOIN page_content c ON p.page_id = c.page_id
+                WHERE LOWER(p.url_slug) = LOWER(?)
+            ");
+            $stmtBp->execute([$slug]);
+        }
         $page = $stmtBp->fetch();
 
         if ($page) {

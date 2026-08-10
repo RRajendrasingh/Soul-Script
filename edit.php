@@ -828,7 +828,8 @@ if (!empty($_GET['token'])) {
         'birthday_magic': { name: 'Birthday Magic', emoji: '🎂', color: 'from-[#1e3b30] to-[#221f21]' },
         'perfect_proposal': { name: 'Perfect Proposal', emoji: '💍', color: 'from-[#3b2d1e] to-[#221f21]' },
         'long_distance_love': { name: 'Long Distance Love', emoji: '🌍', color: 'from-[#1e2a3b] to-[#221f21]' },
-        'raksha_bandhan_special': { name: 'Raksha Bandhan Special', emoji: '🪔', color: 'from-[#3b1e22] to-[#221f21]' }
+        'raksha_bandhan_special': { name: 'Raksha Bandhan Special', emoji: '🪔', color: 'from-[#3b1e22] to-[#221f21]' },
+        'raksha_bandhan_royal': { name: 'Raksha Bandhan Royal', emoji: '👑', color: 'from-[#3b1e22] to-[#221f21]' }
       };
 
       grid.innerHTML = allBuyerPages.map(p => {
@@ -1209,7 +1210,7 @@ if (!empty($_GET['token'])) {
           </div>
         `;
 
-      } else if (templateId === 'raksha_bandhan_special') {
+      } else if (templateId === 'raksha_bandhan_special' || templateId === 'raksha_bandhan_royal') {
         badge.innerText = '✨ Managing: Raksha Bandhan Special Plan (Active)';
         tabBtn.innerText = 'Sibling Promises & Vows';
 
@@ -1809,7 +1810,7 @@ if (!empty($_GET['token'])) {
       const templateId = document.getElementById('activeTemplateId').value;
       const templateFields = {};
 
-      if (templateId === 'birthday_magic' || templateId === 'raksha_bandhan_special') {
+      if (templateId === 'birthday_magic' || templateId === 'raksha_bandhan_special' || templateId === 'raksha_bandhan_royal') {
         const pDob = document.getElementById('partnerDob')?.value;
         const reasons = [];
         document.querySelectorAll('#editReasonsList .edit-reason-item').forEach(inp => {

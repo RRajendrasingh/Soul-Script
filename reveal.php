@@ -426,6 +426,24 @@ try {
     }
 
     async function loadLockMetadata() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('theme') || urlParams.get('preview')) {
+        try {
+          const vRes = await fetch('<?php echo APP_URL; ?>/api/verify_hint.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug: currentSlug, answer: 'preview', preview_mode: '1' })
+          });
+          const vData = await vRes.json();
+          if (vData.success) {
+            document.getElementById('lockScreenView').classList.add('hidden');
+            document.getElementById('resultPageView').classList.remove('hidden');
+            renderResultPage(vData);
+            return;
+          }
+        } catch (vErr) { /* ignore */ }
+      }
+
       try {
         const res = await fetch('<?php echo APP_URL; ?>/api/get_page_lock.php?slug=' + encodeURIComponent(currentSlug));
         const data = await res.json();
@@ -447,6 +465,24 @@ try {
             } else {
               avatarContainer.innerHTML = `<span id="lockReceiverFallback" class="text-2xl font-bold font-serif text-[#eac34a]">${pInitial}</span>`;
             }
+          }
+
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get('theme') || urlParams.get('preview')) {
+            try {
+              const vRes = await fetch('<?php echo APP_URL; ?>/api/verify_hint.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug: currentSlug, answer: 'preview', preview_mode: '1' })
+              });
+              const vData = await vRes.json();
+              if (vData.status === 'success' || vData.success) {
+                document.getElementById('lockScreenView').classList.add('hidden');
+                document.getElementById('resultPageView').classList.remove('hidden');
+                renderResultPage(vData);
+                return;
+              }
+            } catch (vErr) { /* ignore */ }
           }
 
           if (data.is_locked) {
@@ -480,7 +516,6 @@ try {
     document.addEventListener('DOMContentLoaded', () => {
       loadLockMetadata();
     });
-    loadLockMetadata();
 
     function triggerCooldown(seconds) {
       const btn = document.getElementById('unlockBtn');
@@ -514,10 +549,11 @@ try {
       btn.disabled = true;
 
       try {
+        const urlParams = new URLSearchParams(window.location.search);
         const res = await fetch('<?php echo APP_URL; ?>/api/verify_hint.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug: currentSlug, answer: input.value.trim() })
+          body: JSON.stringify({ slug: currentSlug, answer: input.value.trim(), preview_mode: (urlParams.get('theme') ? '1' : '0') })
         });
         const data = await res.json();
 
@@ -553,7 +589,8 @@ try {
 
     function renderResultPage(data) {
       const container = document.getElementById('resultContentContainer');
-      const templateId = data.template_id;
+      const urlParams = new URLSearchParams(window.location.search);
+      const templateId = urlParams.get('theme') || data.template_id;
 
       const content = data.content;
       const tf = content.template_fields || {};
@@ -1474,6 +1511,243 @@ try {
         container.innerHTML = html;
         lucide.createIcons();
 
+      } else if (templateId === 'raksha_bandhan_royal') {
+
+        const promisesList = (reasons && reasons.length > 0) ? reasons : [
+          "Always protect you & stand by your side 🛡️",
+          "Keep all your deepest secrets safe 🤫",
+          "Sponsor your favorite food & treats 🍕",
+          "Never let you feel alone, wherever I am 💖",
+          "Always be your forever crime partner 🕵️‍♂️"
+        ];
+
+        let voucherCode = '';
+        if (tokens && tokens.length > 0) {
+          voucherCode = tokens[0].shagun_voucher_code || tokens[0].code || '';
+        }
+
+        html = `
+        <!-- SECTION 1: HERO BANNER & SISTER AVATAR -->
+        <section class="relative pt-20 pb-8 px-4 text-center z-10">
+          <div class="max-w-4xl mx-auto space-y-6">
+            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[3.5px] mx-auto shadow-[0_0_40px_rgba(234,195,74,0.45)]">
+              <div class="w-full h-full bg-[#151215] rounded-full overflow-hidden flex items-center justify-center relative">
+                ${photoAvatarHtml}
+                <div id="tilakMarkOnAvatar" class="hidden absolute top-7 sm:top-8 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 shadow-[0_0_12px_#ef4444] z-30"></div>
+              </div>
+            </div>
+
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-xs sm:text-sm font-bold shadow-lg">
+              <i data-lucide="crown" class="w-4 h-4 text-[#eac34a]"></i>
+              <span>${content.tagline_quote || "World's Best Sister 👑"}</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-extrabold font-serif text-[#e8e0e3] tracking-tight leading-tight">
+              Happy Raksha Bandhan, <span class="text-[#eac34a]">${content.partner_name}</span>! 🪔
+            </h1>
+            <p class="text-xs sm:text-base text-[#d0c3cb] max-w-xl mx-auto">
+              A digital celebration of our unbreakable bond, childhood memories, and sacred vows.
+            </p>
+          </div>
+        </section>
+
+        <!-- SECTION 2: 3-STEP VIRTUAL RAKHI CEREMONY -->
+        <section class="max-w-3xl mx-auto px-4 py-8 relative z-10">
+          <div class="bg-gradient-to-br from-[#29211f] via-[#1c1618] to-[#120e10] border-2 border-[#eac34a]/50 backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.25em] text-[#eac34a] bg-[#3b1e3b] px-4 py-1 rounded-full border border-[#eac34a]/30">
+                SACRED RITUAL CEREMONY 🪔
+              </span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Tying 🧵</h2>
+
+            <!-- 3 Ritual Step Action Buttons -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto pt-2">
+              <button type="button" onclick="applyRoyalTilak()" id="tilakBtn" class="px-4 py-3 rounded-2xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#e4b9df] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-md">
+                <span class="text-base">🔴</span>
+                <span>Step 1: Tilak</span>
+              </button>
+
+              <button type="button" onclick="lightRoyalDiya()" id="diyaBtn" class="px-4 py-3 rounded-2xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#e4b9df] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-md">
+                <span class="text-base">🪔</span>
+                <span>Step 2: Diya</span>
+              </button>
+
+              <button type="button" onclick="tieRoyalRakhi()" id="rakhiBtn" class="px-4 py-3 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] text-[#241a00] font-extrabold text-xs flex flex-col items-center gap-1 shadow-lg hover:scale-105 transition-all cursor-pointer">
+                <span class="text-base">🧵</span>
+                <span>Step 3: Tie Rakhi</span>
+              </button>
+            </div>
+
+            <div id="rakhiRitualStatus" class="text-xs font-semibold text-[#eac34a] min-h-[20px] pt-1">
+              Tap Step 1 to begin the traditional Rakhi ritual!
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 3: SIBLING FIGHT METER & TV REMOTE RULES -->
+        <section class="max-w-4xl mx-auto px-4 py-8 relative z-10">
+          <div class="bg-[#221f21]/90 border border-[#4d444b] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl relative">
+            <div class="text-center space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-[#eac34a]">SIBLING HUMOR &amp; STATS 📺</span>
+              <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">Fight Meter &amp; Remote Rules 🤫</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] space-y-2">
+                <div class="flex justify-between text-xs font-bold">
+                  <span class="text-[#e8e0e3]">TV Remote Share</span>
+                  <span class="text-[#eac34a]">80% Sister / 20% Brother</span>
+                </div>
+                <div class="w-full h-3 bg-[#221f21] rounded-full overflow-hidden p-0.5 border border-[#4d444b]">
+                  <div class="h-full bg-gradient-to-r from-[#eac34a] to-[#e4b9df] rounded-full w-[80%]"></div>
+                </div>
+              </div>
+
+              <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] space-y-2">
+                <div class="flex justify-between text-xs font-bold">
+                  <span class="text-[#e8e0e3]">Secret Keeper Rating</span>
+                  <span class="text-[#eac34a]">100% Top Secret 🏆</span>
+                </div>
+                <div class="w-full h-3 bg-[#221f21] rounded-full overflow-hidden p-0.5 border border-[#4d444b]">
+                  <div class="h-full bg-gradient-to-r from-emerald-500 to-[#eac34a] rounded-full w-[100%]"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: 3D GLASSMORPHISM SIBLING PROMISE CARDS -->
+        <section class="max-w-5xl mx-auto px-4 py-10 relative z-10 space-y-8">
+          <div class="text-center space-y-2">
+            <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">BROTHER &amp; SISTER VOWS</span>
+            <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">5 Sibling Promises 🛡️</h2>
+            <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-2"></div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${promisesList.map((pText, pIdx) => `
+              <div class="glass-vow-card p-6 space-y-4 shadow-xl relative group">
+                <div class="flex items-center justify-between">
+                  <span class="w-8 h-8 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs flex items-center justify-center border border-[#eac34a]/30">#${pIdx + 1}</span>
+                  <i data-lucide="shield-check" class="w-5 h-5 text-[#eac34a]"></i>
+                </div>
+                <p class="text-sm font-serif text-[#e8e0e3] leading-relaxed">
+                  "${pText}"
+                </p>
+                <div class="text-[10px] text-[#eac34a] uppercase tracking-wider font-semibold">Promise to ${content.partner_name}</div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+
+        <!-- SECTION 5: WAX-SEALED ROYAL SHAGUN LIFAFA -->
+        <section class="max-w-3xl mx-auto px-4 py-10 relative z-10">
+          <div class="text-center space-y-2 mb-8">
+            <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">SPECIAL GIFT &amp; BLESSINGS</span>
+            <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Digital Shagun Envelope 🧧</h2>
+            <p class="text-xs text-[#d0c3cb]">Tap the wax-sealed lifafa to reveal your gift voucher and personal letter!</p>
+          </div>
+
+          <!-- Closed Envelope UI -->
+          <div id="shagunEnvelopeContainer" onclick="toggleShagunLifafa()" class="bg-gradient-to-br from-[#800f1c] via-[#590a13] to-[#2b0509] border-2 border-[#eac34a] rounded-3xl p-8 text-center cursor-pointer shadow-[0_0_40px_rgba(234,195,74,0.3)] hover:scale-[1.02] transition-all relative overflow-hidden group">
+            <div class="wax-seal-badge w-14 h-14 rounded-full text-[#eac34a] flex items-center justify-center mx-auto mb-3 text-xl font-serif font-bold">
+              ॐ
+            </div>
+            <div class="space-y-2">
+              <span class="text-xs font-extrabold uppercase tracking-widest text-[#eac34a] bg-[#151215]/80 px-4 py-1 rounded-full border border-[#eac34a]/40 inline-block">ROYAL SHAGUN LIFAFA</span>
+              <h3 class="text-2xl font-bold font-serif text-white">Tap to Open Envelope 🧧</h3>
+              <p class="text-xs text-[#f5d77f]">Contains personal note &amp; gift voucher code</p>
+            </div>
+          </div>
+
+          <!-- Opened Envelope Content -->
+          <div id="shagunLetterContent" class="hidden bg-[#221f21] border-2 border-[#eac34a] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-[#4d444b]/60 pb-4">
+              <span class="text-xs font-bold text-[#eac34a] uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="heart" class="w-4 h-4 text-[#eac34a]"></i>
+                <span>Shagun Letter from ${content.buyer_name}</span>
+              </span>
+              <button type="button" onclick="toggleShagunLifafa()" class="text-xs text-[#d0c3cb] hover:text-[#eac34a] font-bold">Close ✕</button>
+            </div>
+
+            <div class="space-y-4">
+              <p class="font-serif text-base sm:text-lg text-[#e8e0e3] leading-relaxed italic bg-[#151215] p-5 rounded-2xl border border-[#4d444b]">
+                "${content.love_note_text || "Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)"}"
+              </p>
+
+              ${voucherCode ? `
+                <div class="p-4 bg-gradient-to-r from-[#eac34a]/20 via-[#e4b9df]/20 to-[#eac34a]/20 border-2 border-[#eac34a] rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
+                  <div class="flex items-center gap-3 text-left">
+                    <div class="w-10 h-10 rounded-xl bg-[#eac34a] text-[#241a00] flex items-center justify-center shrink-0 font-bold">🎁</div>
+                    <div>
+                      <span class="block text-[10px] uppercase font-bold text-[#eac34a] tracking-wider">Gift Voucher Code</span>
+                      <strong class="text-base font-mono text-white tracking-widest">${voucherCode}</strong>
+                    </div>
+                  </div>
+                  <button type="button" onclick="navigator.clipboard.writeText('${voucherCode}'); alert('Voucher code copied to clipboard!');" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider transition-colors shadow-md cursor-pointer">
+                    Copy Code
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="text-right pt-2">
+              <span class="text-xs text-[#d0c3cb]">With lots of love,</span>
+              <span class="block text-lg font-bold font-serif text-[#eac34a]">${content.buyer_name}</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 6: SHAHI FARMAN UNROLLING SCROLL GALLERY (ALL PHOTOS) -->
+        <section class="max-w-5xl mx-auto px-4 py-12 relative z-10 space-y-8">
+          <div class="text-center space-y-2 mb-8">
+            <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ROYAL MEMORY SCROLL</span>
+            <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Shahi Farman Scrapbook 📜</h2>
+            <p class="text-xs text-[#d0c3cb]">Every memory photo uploaded by ${content.buyer_name} framed inside the unrolling antique parchment scroll.</p>
+          </div>
+
+          <!-- Antique Parchment Scroll Container -->
+          <div class="shahi-farman-scroll rounded-3xl p-6 sm:p-10 relative">
+            <div class="shahi-farman-handle-left"></div>
+            <div class="shahi-farman-handle-right"></div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+              ${media.map(m => {
+                const imgUrl = normalizeMediaUrlJs(m.file_path);
+                const capText = escapeHtml(m.caption || 'Cherished Memory');
+                return `
+                  <div onclick="openLightbox('${imgUrl}')" class="bg-[#1c1715] p-2 sm:p-3 rounded-2xl border border-[#eac34a]/30 group cursor-pointer hover:border-[#eac34a] transition-all shadow-xl flex flex-col justify-between">
+                    <div class="w-full aspect-square rounded-xl overflow-hidden bg-black/50 relative">
+                      <img src="${imgUrl}" onerror="this.onerror=null; this.src='<?php echo APP_URL; ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="pt-2 text-center">
+                      <span class="text-[10px] sm:text-xs font-serif text-[#eac34a] block truncate font-semibold">${capText}</span>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </section>
+
+        <!-- Footer Bar -->
+        <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
+          <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
+          <div class="flex items-center justify-center gap-3">
+            <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+              <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+              <span>Lock Gift Page 🔒</span>
+            </button>
+          </div>
+        </footer>
+        `;
+
+        container.innerHTML = html;
+        lucide.createIcons();
+
+      }
+
       } else {
         // Fallback layout
         html = `
@@ -1691,6 +1965,58 @@ try {
       if (modal) {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+      }
+    }
+
+    let rakhiRitualProgress = { tilak: false, diya: false, rakhi: false };
+
+    function applyRoyalTilak() {
+      rakhiRitualProgress.tilak = true;
+      const tilakMark = document.getElementById('tilakMarkOnAvatar');
+      if (tilakMark) tilakMark.classList.remove('hidden');
+      
+      const btn = document.getElementById('tilakBtn');
+      if (btn) btn.innerHTML = '<span class="text-base">✓ 🔴</span><span>Step 1: Applied</span>';
+      
+      const status = document.getElementById('rakhiRitualStatus');
+      if (status) status.innerHTML = '✨ Roli-Chawal Tilak applied with love! Now tap Step 2 to light the Diya!';
+      
+      if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 60, origin: { y: 0.4 } });
+    }
+
+    function lightRoyalDiya() {
+      if (!rakhiRitualProgress.tilak) {
+        alert('Please complete Step 1 (Apply Tilak) first!');
+        return;
+      }
+      rakhiRitualProgress.diya = true;
+      
+      const btn = document.getElementById('diyaBtn');
+      if (btn) btn.innerHTML = '<span class="text-base">✓ 🪔</span><span>Step 2: Lit Flame</span>';
+      
+      const status = document.getElementById('rakhiRitualStatus');
+      if (status) status.innerHTML = '🪔 Sacred Diya flame lit! Now tap Step 3 to Tie the Golden Rakhi!';
+      
+      if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 75, origin: { y: 0.5 } });
+    }
+
+    function tieRoyalRakhi() {
+      if (!rakhiRitualProgress.diya) {
+        alert('Please complete Step 1 & Step 2 first!');
+        return;
+      }
+      rakhiRitualProgress.rakhi = true;
+      
+      const btn = document.getElementById('rakhiBtn');
+      if (btn) btn.innerHTML = '<span class="text-base">✓ 🧵</span><span>Rakhi Tied!</span>';
+      
+      const status = document.getElementById('rakhiRitualStatus');
+      if (status) status.innerHTML = '🎉 Sacred Rakhi Tied with Endless Blessings & Love! 💖';
+      
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 220, spread: 100, origin: { y: 0.6 } });
+        setTimeout(() => confetti({ particleCount: 150, angle: 60, spread: 80, origin: { x: 0 } }), 300);
+        setTimeout(() => confetti({ particleCount: 150, angle: 120, spread: 80, origin: { x: 1 } }), 600);
       }
     }
 

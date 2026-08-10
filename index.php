@@ -224,15 +224,50 @@ require_once __DIR__ . '/includes/media_helper.php';
         $activeTemplates = $stmtTpl->fetchAll();
     } catch (Exception $exT) {}
 
+    // Guarantee Raksha Bandhan Royal is present on Homepage Grid
+    $hasRoyal = false;
+    foreach ($activeTemplates as $at) {
+        if (($at['template_id'] ?? '') === 'raksha_bandhan_royal') {
+            $hasRoyal = true;
+            break;
+        }
+    }
+    if (!$hasRoyal) {
+        $royalCard = [
+            'template_id' => 'raksha_bandhan_royal',
+            'name' => 'Raksha Bandhan Royal 👑',
+            'tagline' => 'Shahi Farman Scroll & 3-Step Rakhi Ritual',
+            'description' => 'Interactive 3-Step Tilak & Diya ceremony, Sibling Fight Meter, 3D Glass Vows, Shahi Farman Parchment Photo Scroll, and Wax-Sealed Shagun Envelope.',
+            'price_inr' => 449,
+            'preview_image_url' => 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp',
+            'badge' => 'Royal Special 👑',
+            'button_text' => 'Personalize Royal Gift 🎁',
+            'demo_url' => APP_URL . '/gift/mona-aman?theme=raksha_bandhan_royal',
+            'demo_password' => 'rakhi',
+            'active' => 1,
+            'sort_order' => 2
+        ];
+        if (count($activeTemplates) > 0) {
+            array_splice($activeTemplates, 1, 0, [$royalCard]);
+        } else {
+            $activeTemplates[] = $royalCard;
+        }
+    }
+
     $defaultDemos = [
         'anniversary_reveal'     => ['url' => APP_URL . '/gift/ananya-rohan', 'pass' => 'SHIMLA'],
         'birthday_magic'         => ['url' => APP_URL . '/gift/rohan-birthday', 'pass' => 'MAGIC'],
         'perfect_proposal'      => ['url' => APP_URL . '/gift/rahul-priya', 'pass' => 'PARIS'],
         'long_distance_love'    => ['url' => APP_URL . '/gift/aarav-meera', 'pass' => 'MUMBAI'],
-        'raksha_bandhan_special'  => ['url' => APP_URL . '/gift/manvi-testing', 'pass' => 'RAKHI']
+        'raksha_bandhan_special'  => ['url' => APP_URL . '/gift/manvi-testing', 'pass' => 'RAKHI'],
+        'raksha_bandhan_royal'    => ['url' => APP_URL . '/gift/mona-aman?theme=raksha_bandhan_royal', 'pass' => 'RAKHI']
     ];
 
     $templateSpecs = [
+        'raksha_bandhan_royal' => [
+            'collected' => ['Brother/Sister Name & Motto', '3-Step Ritual (Tilak, Diya, Rakhi)', '5 Sibling Promises / Vows', 'Shahi Farman Photos & Shagun Code'],
+            'features'  => ['3-Step Tilak & Diya Ceremony', 'Sibling Fight Meter & TV Remote Rules', '3D Glassmorphism Vow Cards', 'Shahi Farman Antique Scroll & Shagun Lifafa']
+        ],
         'raksha_bandhan_special' => [
             'collected' => ['Brother/Sister Name & Motto', '5 Sibling Promises / Vows', 'Digital Shagun Note / Voucher Code', 'Childhood Photos with Captions'],
             'features'  => ['Interactive Virtual Rakhi Tying', '5 Sibling Promise 3D Cards', 'Always-Visible Shagun Envelope', 'Sibling Soundtrack & Photo Gallery']

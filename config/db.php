@@ -62,10 +62,20 @@ function getDB() {
                 } catch (Exception $exTplCol) {}
             }
 
-            // Auto-Seed raksha_bandhan_special template if missing
+            // Sync Raksha Bandhan Royal template into DB
             try {
-                $pdo->exec("INSERT IGNORE INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
-                ('raksha_bandhan_special', 'Raksha Bandhan Special 🪔', 'Celebrate the timeless bond of brother and sister', 'Interactive Rakhi tying ceremony, 5 sibling promise cards, childhood memory scrapbook, and digital Shagun envelope reveal.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Festival Special 🪔', 'Personalize This Gift 🎁', 'https://digitalyogi24.com/gift/manvi-testing', '1234', 1, 5)");
+                $pdo->exec("INSERT INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
+                ('raksha_bandhan_royal', 'Raksha Bandhan Royal 👑', 'Shahi Farman Scroll & 3-Step Rakhi Ritual', 'Interactive 3-Step Tilak & Diya ceremony, Sibling Fight Meter, 3D Glass Vows, Shahi Farman Parchment Photo Scroll, and Wax-Sealed Shagun Envelope.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Royal Special 👑', 'Personalize Royal Gift 🎁', 'https://digitalyogi24.com/gift/mona-aman?theme=raksha_bandhan_royal', 'rakhi', 1, 2)
+                ON DUPLICATE KEY UPDATE name=VALUES(name), tagline=VALUES(tagline), description=VALUES(description), demo_url=VALUES(demo_url), demo_password=VALUES(demo_password), active=1, sort_order=2");
+                $pdo->exec("UPDATE templates SET active = 1 WHERE template_id = 'raksha_bandhan_royal'");
+            } catch (Exception $exTpl) {}
+
+            // Auto-Seed raksha_bandhan_special and raksha_bandhan_royal templates if missing
+            try {
+                $pdo->exec("INSERT INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
+                ('raksha_bandhan_special', 'Raksha Bandhan Special 🪔', 'Celebrate the timeless bond of brother and sister', 'Interactive Rakhi tying ceremony, 5 sibling promise cards, childhood memory scrapbook, and digital Shagun envelope reveal.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Festival Special 🪔', 'Personalize This Gift 🎁', 'https://digitalyogi24.com/gift/manvi-testing', '1234', 1, 5),
+                ('raksha_bandhan_royal', 'Raksha Bandhan Royal 👑', 'Shahi Farman Scroll & 3-Step Rakhi Ritual', 'Interactive 3-Step Tilak & Diya ceremony, Sibling Fight Meter, 3D Glass Vows, Shahi Farman Parchment Photo Scroll, and Wax-Sealed Shagun Envelope.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Royal Special 👑', 'Personalize Royal Gift 🎁', 'https://digitalyogi24.com/gift/mona-aman?theme=raksha_bandhan_royal', 'rakhi', 1, 6)
+                ON DUPLICATE KEY UPDATE name=VALUES(name), tagline=VALUES(tagline), description=VALUES(description), demo_url=VALUES(demo_url), demo_password=VALUES(demo_password), active=1");
             } catch (Exception $exTpl) { /* ignore */ }
 
             // Auto-Seed Rich Content Demo Pages for all templates
@@ -218,6 +228,44 @@ function getDB() {
                     }
                 }
 
+                // Demo 6: Raksha Bandhan Royal Standalone Preview (manvi-rakhi-v2)
+                $pdo->exec("INSERT INTO orders (order_id, buyer_name, buyer_phone, buyer_email, template_id, amount_paid, payment_status) VALUES ('ord_demo_rakhi_v2', 'Rajendra', '+91 97777 88888', 'rajendra@example.com', 'raksha_bandhan_royal', 449.00, 'paid') ON DUPLICATE KEY UPDATE payment_status='paid'");
+                $pdo->exec("INSERT INTO pages (page_id, order_id, template_id, url_slug, edit_token, status, expires_at) VALUES ('page_demo_rakhi_v2', 'ord_demo_rakhi_v2', 'raksha_bandhan_royal', 'manvi-rakhi-v2', 'token_demo_edit_rakhi_v2', 'live', DATE_ADD(NOW(), INTERVAL 10 YEAR)) ON DUPLICATE KEY UPDATE status='live', template_id='raksha_bandhan_royal'");
+                $passHashRakhiV2 = hashHintAnswer('rakhi');
+                $shagunTokensJsonV2 = json_encode([['shagun_voucher_code' => 'AMZ-ROYAL-RAKHI-2026']]);
+                $pdo->exec("INSERT INTO page_content (page_id, partner_name, buyer_name, hint_question, hint_answer_hash, tagline_quote, favorite_singers, bg_music_url, song_title, song_artist, love_note_text, tokens_json, receiver_photo) VALUES ('page_demo_rakhi_v2', 'Manvi', 'Rajendra', 'What is our special Rakhi secret word? (Hint: RAKHI)', '$passHashRakhiV2', 'World\'s Best Sister 👑', 'Kishore Kumar', 'https://youtube.com/shorts/C-zaRcKXEP0', 'Phoolon Ka Taron Ka', 'Raksha Bandhan Special', 'Manvi Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)', '$shagunTokensJsonV2', '{$demoPhotos[2]}') ON DUPLICATE KEY UPDATE partner_name=VALUES(partner_name), buyer_name=VALUES(buyer_name), hint_question=VALUES(hint_question), hint_answer_hash=VALUES(hint_answer_hash), tagline_quote=VALUES(tagline_quote), bg_music_url=VALUES(bg_music_url), song_title=VALUES(song_title), song_artist=VALUES(song_artist), love_note_text=VALUES(love_note_text), tokens_json=VALUES(tokens_json), receiver_photo=VALUES(receiver_photo)");
+                $pdo->exec("UPDATE page_content SET bg_music_url = 'https://youtube.com/shorts/C-zaRcKXEP0', song_title = 'Phoolon Ka Taron Ka', song_artist = 'Raksha Bandhan Special' WHERE page_id IN (SELECT page_id FROM pages WHERE url_slug = 'manvi-rakhi-v2')");
+
+                    // Seed 5 Sibling Promises
+                    $pdo->exec("DELETE FROM reasons_list WHERE page_id = 'page_demo_rakhi_v2'");
+                    $rakhiPromisesV2 = [
+                        "Always protect you and stand by your side 🛡️",
+                        "Keep all your deepest secrets safe 🤫",
+                        "Sponsor your favorite food and treat you 🍕",
+                        "Never let you feel alone, no matter where I am 💖",
+                        "Always be your forever crime partner 🕵️‍♂️"
+                    ];
+                    foreach ($rakhiPromisesV2 as $idx => $pText) {
+                        $pdo->exec("INSERT INTO reasons_list (page_id, entry_order, reason_text) VALUES ('page_demo_rakhi_v2', " . ($idx + 1) . ", " . $pdo->quote($pText) . ")");
+                    }
+
+                    // Seed Media Photos for Shahi Farman Scroll
+                    $pdo->exec("DELETE FROM page_media WHERE page_id = 'page_demo_rakhi_v2'");
+                    $rakhiCaptionsV2 = [
+                        'First Childhood Photo ☕',
+                        'Trip to Shimla 🌅',
+                        'TV Remote Fight Day 😄',
+                        'Maggi Night Party 🍜',
+                        'Diwali Sweets Stealing 🪔',
+                        'Best Sibling Hug 🤗'
+                    ];
+                    foreach ($demoPhotos as $idx => $pUrl) {
+                        $mId = 'media_demo_rv2_' . ($idx + 1);
+                        $cap = $rakhiCaptionsV2[$idx] ?? ('Sibling Memory #' . ($idx + 1));
+                        $pdo->exec("INSERT INTO page_media (media_id, page_id, file_path, display_order, caption) VALUES ('$mId', 'page_demo_rakhi_v2', '$pUrl', " . ($idx + 1) . ", " . $pdo->quote($cap) . ")");
+                    }
+                }
+
                 // Auto-heal double HTML entity encoded hint questions in page_content table
                 $pdo->exec("UPDATE page_content SET hint_question = REPLACE(REPLACE(hint_question, '&amp;#039;', '\''), '&#039;', '\'') WHERE hint_question LIKE '%&#039;%' OR hint_question LIKE '%&amp;%'");
             } catch (Exception $exSeed) {
@@ -233,9 +281,11 @@ function getDB() {
                     'message' => 'Database connection failure: ' . $e->getMessage()
                 ]);
                 exit;
-            } else {
-                die('Database Connection Error: ' . $e->getMessage());
             }
+            // Ensure demo seeds are active
+            try {
+                initDatabase($pdo);
+            } catch (Exception $exSeed) { /* ignore */ }
         }
     }
     return $pdo;

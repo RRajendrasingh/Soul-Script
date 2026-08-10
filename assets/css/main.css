@@ -381,3 +381,46 @@ body {
 .sample-library-card:hover .sample-library-img {
   transform: scale(1.1) !important;
 }
+
+/* Raksha Bandhan Royal Theme Styling */
+.shahi-farman-scroll {
+  background: radial-gradient(circle at center, #29211f 0%, #151010 100%);
+  border-top: 12px solid #eac34a;
+  border-bottom: 12px solid #eac34a;
+  box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 30px rgba(234,195,74,0.12);
+  position: relative;
+}
+
+.shahi-farman-handle-left,
+.shahi-farman-handle-right {
+  position: absolute;
+  top: -18px;
+  bottom: -18px;
+  width: 22px;
+  background: linear-gradient(to right, #8a6d29, #eac34a, #8a6d29);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  z-index: 20;
+}
+.shahi-farman-handle-left { left: -11px; }
+.shahi-farman-handle-right { right: -11px; }
+
+.glass-vow-card {
+  background: rgba(34, 31, 33, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(234, 195, 74, 0.35);
+  border-radius: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.glass-vow-card:hover {
+  border-color: rgba(234, 195, 74, 0.8);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(234, 195, 74, 0.25);
+}
+
+.wax-seal-badge {
+  background: radial-gradient(circle, #b91c1c 0%, #7f1d1d 100%);
+  border: 3px solid #eac34a;
+  box-shadow: 0 0 20px rgba(234, 195, 74, 0.5), inset 0 0 10px rgba(0,0,0,0.5);
+}
