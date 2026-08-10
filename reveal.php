@@ -1745,8 +1745,6 @@ try {
         container.innerHTML = html;
         lucide.createIcons();
 
-      }
-
       } else {
         // Fallback layout
         html = `
