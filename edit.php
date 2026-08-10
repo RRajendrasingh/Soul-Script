@@ -531,8 +531,8 @@ if (!empty($_GET['token'])) {
   </div>
 
   <!-- Sample Library Picker Modal (Top-Level Fail-Safe Modal) -->
-  <div id="sampleLibraryModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4 hidden">
-    <div class="bg-[#221f21] border border-[#eac34a]/40 rounded-3xl p-5 sm:p-6 max-w-2xl w-full text-left space-y-4 shadow-2xl relative max-h-[85vh] flex flex-col">
+  <div id="sampleLibraryModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-[#221f21] border border-[#eac34a]/40 rounded-3xl p-4 sm:p-6 max-w-4xl w-full text-left space-y-4 shadow-2xl relative max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3 shrink-0">
         <div>
           <h3 class="text-base font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
@@ -544,18 +544,18 @@ if (!empty($_GET['token'])) {
         <a href="javascript:void(0)" onclick="closeSampleLibraryModal()" class="text-[#d0c3cb] hover:text-white text-lg font-bold p-1 cursor-pointer">✕</a>
       </div>
 
-      <!-- Category Filter Pills Bar -->
-      <div id="sampleCategoryFilters" class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[#4d444b]/30 shrink-0 text-xs">
-        <button type="button" onclick="filterSampleCategory('all')" class="sample-cat-pill px-3 py-1.5 rounded-full font-bold text-[11px] transition-all bg-[#eac34a] text-[#241a00] border border-[#eac34a] shadow-md cursor-pointer shrink-0" data-cat="all">All Photos ✨</button>
-        <button type="button" onclick="filterSampleCategory('anniversary')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="anniversary">Anniversary 🌹</button>
-        <button type="button" onclick="filterSampleCategory('birthday')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="birthday">Birthday 🎂</button>
-        <button type="button" onclick="filterSampleCategory('proposal')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="proposal">Proposal 💍</button>
-        <button type="button" onclick="filterSampleCategory('raksha_bandhan')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="raksha_bandhan">Rakhi 🪔</button>
-        <button type="button" onclick="filterSampleCategory('long_distance')" class="sample-cat-pill px-3 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="long_distance">Long Distance ✈️</button>
+      <!-- Category Filter Pills Bar (Clean scrollbar-none) -->
+      <div id="sampleCategoryFilters" class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[#4d444b]/30 shrink-0 text-xs [scrollbar-width:none] [-ms-overflow-style:none]">
+        <button type="button" onclick="filterSampleCategory('all')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-bold text-[11px] transition-all bg-[#eac34a] text-[#241a00] border border-[#eac34a] shadow-md cursor-pointer shrink-0" data-cat="all">All Photos ✨</button>
+        <button type="button" onclick="filterSampleCategory('anniversary')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="anniversary">Anniversary 🌹</button>
+        <button type="button" onclick="filterSampleCategory('birthday')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="birthday">Birthday 🎂</button>
+        <button type="button" onclick="filterSampleCategory('proposal')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="proposal">Proposal 💍</button>
+        <button type="button" onclick="filterSampleCategory('raksha_bandhan')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="raksha_bandhan">Rakhi 🪔</button>
+        <button type="button" onclick="filterSampleCategory('long_distance')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="long_distance">Long Distance ✈️</button>
       </div>
 
       <!-- Scrollable Grid of Admin Sample Photos -->
-      <div id="sampleModalGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 overflow-y-auto pr-1 flex-1 min-h-[260px] max-h-[55vh]">
+      <div id="sampleModalGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 overflow-y-auto pr-1 flex-1 min-h-[300px] max-h-[60vh]">
         <div class="col-span-full text-center py-10 text-[#d0c3cb] text-xs">
           <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto text-[#eac34a] mb-2"></i>
           Loading sample gallery photos...
