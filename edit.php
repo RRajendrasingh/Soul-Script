@@ -1075,7 +1075,7 @@ if (!empty($_GET['token'])) {
     }
 
     function renderThemeContainer(p, data) {
-      const templateId = p.template_id;
+      const templateId = p.template_id || '';
       const themeContainer = document.getElementById('themeContainer');
       const badge = document.getElementById('activePlanBadge');
       const tabBtn = document.getElementById('tabBtn-theme');
@@ -1210,7 +1210,7 @@ if (!empty($_GET['token'])) {
           </div>
         `;
 
-      } else if (templateId.includes('raksha_bandhan')) {
+      } else if (templateId && templateId.includes('raksha_bandhan')) {
         badge.innerText = '✨ Managing: Raksha Bandhan Special Plan (Active)';
         tabBtn.innerText = 'Sibling Promises & Vows';
 
