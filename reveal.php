@@ -1552,63 +1552,67 @@ try {
 
         <!-- SECTION 2: 3-STEP VIRTUAL RAKHI CEREMONY -->
         <section class="max-w-3xl mx-auto px-4 py-8 relative z-10">
-          <div class="bg-gradient-to-br from-[#29211f] via-[#1c1618] to-[#120e10] border-2 border-[#eac34a]/50 backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden">
+          <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.25)] relative overflow-hidden transition-all duration-500">
             <div class="flex items-center justify-center gap-2">
-              <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.25em] text-[#eac34a] bg-[#3b1e3b] px-4 py-1 rounded-full border border-[#eac34a]/30">
-                SACRED RITUAL CEREMONY 🪔
+              <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.25em] text-[#eac34a] bg-[#3b1e3b] px-4 py-1.5 rounded-full border border-[#eac34a]/40 shadow-inner">
+                🪔 SACRED AARTI THALI &amp; RAKHI RITUAL
               </span>
             </div>
-            <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Tying 🧵</h2>
+
+            <div class="space-y-1">
+              <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Ceremony 🧵</h2>
+              <p class="text-xs text-[#d0c3cb]/80">Perform the 3 sacred steps to tie the royal Rakhi &amp; unlock blessings.</p>
+            </div>
 
             <!-- 3 Ritual Step Action Buttons -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto pt-2">
-              <button type="button" onclick="applyRoyalTilak()" id="tilakBtn" class="px-4 py-3 rounded-2xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#e4b9df] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-md">
-                <span class="text-base">🔴</span>
-                <span>Step 1: Tilak</span>
+              <button type="button" onclick="applyRoyalTilak()" id="tilakBtn" class="px-4 py-3.5 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
+                <span class="text-xl">🔴</span>
+                <span class="font-serif">Step 1: Tilak</span>
               </button>
 
-              <button type="button" onclick="lightRoyalDiya()" id="diyaBtn" class="px-4 py-3 rounded-2xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#e4b9df] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-md">
-                <span class="text-base">🪔</span>
-                <span>Step 2: Diya</span>
+              <button type="button" onclick="lightRoyalDiya()" id="diyaBtn" class="px-4 py-3.5 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
+                <span class="text-xl" id="diyaIconSpan">🪔</span>
+                <span class="font-serif">Step 2: Light Diya</span>
               </button>
 
-              <button type="button" onclick="tieRoyalRakhi()" id="rakhiBtn" class="px-4 py-3 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] text-[#241a00] font-extrabold text-xs flex flex-col items-center gap-1 shadow-lg hover:scale-105 transition-all cursor-pointer">
-                <span class="text-base">🧵</span>
-                <span>Step 3: Tie Rakhi</span>
+              <button type="button" onclick="tieRoyalRakhi()" id="rakhiBtn" class="px-4 py-3.5 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#eac34a] text-[#241a00] font-extrabold text-xs flex flex-col items-center gap-1 shadow-[0_0_25px_rgba(234,195,74,0.4)] hover:scale-105 transition-all cursor-pointer">
+                <span class="text-xl">🧵</span>
+                <span class="font-serif">Step 3: Tie Rakhi</span>
               </button>
             </div>
 
-            <div id="rakhiRitualStatus" class="text-xs font-semibold text-[#eac34a] min-h-[20px] pt-1">
-              Tap Step 1 to begin the traditional Rakhi ritual!
+            <div id="rakhiRitualStatus" class="text-xs font-bold text-[#eac34a] min-h-[24px] pt-1 tracking-wide">
+              Tap Step 1 to apply Kumkum Tilak! 🔴
             </div>
           </div>
         </section>
 
         <!-- SECTION 3: SIBLING FIGHT METER & TV REMOTE RULES -->
         <section class="max-w-4xl mx-auto px-4 py-8 relative z-10">
-          <div class="bg-[#221f21]/90 border border-[#4d444b] rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl relative">
+          <div class="bg-[#2a060b]/90 border-2 border-[#eac34a]/40 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
             <div class="text-center space-y-1">
               <span class="text-[10px] font-bold uppercase tracking-widest text-[#eac34a]">SIBLING HUMOR &amp; STATS 📺</span>
               <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">Fight Meter &amp; Remote Rules 🤫</h3>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] space-y-2">
+              <div class="bg-[#180306] p-4.5 rounded-2xl border border-[#eac34a]/30 space-y-2">
                 <div class="flex justify-between text-xs font-bold">
-                  <span class="text-[#e8e0e3]">TV Remote Share</span>
+                  <span class="text-[#e8e0e3]">TV Remote Sharing Ratio</span>
                   <span class="text-[#eac34a]">80% Sister / 20% Brother</span>
                 </div>
-                <div class="w-full h-3 bg-[#221f21] rounded-full overflow-hidden p-0.5 border border-[#4d444b]">
-                  <div class="h-full bg-gradient-to-r from-[#eac34a] to-[#e4b9df] rounded-full w-[80%]"></div>
+                <div class="w-full h-3 bg-black/60 rounded-full overflow-hidden p-0.5 border border-[#eac34a]/30">
+                  <div class="h-full bg-gradient-to-r from-[#eac34a] to-[#ff4d6d] rounded-full w-[80%]"></div>
                 </div>
               </div>
 
-              <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] space-y-2">
+              <div class="bg-[#180306] p-4.5 rounded-2xl border border-[#eac34a]/30 space-y-2">
                 <div class="flex justify-between text-xs font-bold">
                   <span class="text-[#e8e0e3]">Secret Keeper Rating</span>
                   <span class="text-[#eac34a]">100% Top Secret 🏆</span>
                 </div>
-                <div class="w-full h-3 bg-[#221f21] rounded-full overflow-hidden p-0.5 border border-[#4d444b]">
+                <div class="w-full h-3 bg-black/60 rounded-full overflow-hidden p-0.5 border border-[#eac34a]/30">
                   <div class="h-full bg-gradient-to-r from-emerald-500 to-[#eac34a] rounded-full w-[100%]"></div>
                 </div>
               </div>
@@ -1617,22 +1621,31 @@ try {
         </section>
 
         <!-- SECTION 4: 3D GLASSMORPHISM SIBLING PROMISE CARDS -->
-        <section class="max-w-5xl mx-auto px-4 py-10 relative z-10 space-y-8">
+        <section id="siblingVowsSection" class="max-w-5xl mx-auto px-4 py-10 relative z-10 space-y-8">
           <div class="text-center space-y-2">
             <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">BROTHER &amp; SISTER VOWS</span>
             <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">5 Sibling Promises 🛡️</h2>
-            <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-2"></div>
+            <div class="w-16 h-[2.5px] bg-[#eac34a] mx-auto mt-2 rounded-full shadow-[0_0_10px_#eac34a]"></div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             ${promisesList.map((pText, pIdx) => `
-              <div class="glass-vow-card p-6 space-y-4 shadow-xl relative group">
+              <div class="glass-vow-card p-6 space-y-4 shadow-2xl relative group overflow-hidden border-2 border-[#eac34a]/40 hover:border-[#eac34a] transition-all">
                 <div class="flex items-center justify-between">
-                  <span class="w-8 h-8 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs flex items-center justify-center border border-[#eac34a]/30">#${pIdx + 1}</span>
-                  <i data-lucide="shield-check" class="w-5 h-5 text-[#eac34a]"></i>
+                  <span class="wax-seal-badge w-10 h-10 rounded-full text-[#eac34a] font-bold text-xs flex items-center justify-center font-serif shadow-lg">#${pIdx + 1}</span>
+                  <i data-lucide="shield-check" class="w-6 h-6 text-[#eac34a]"></i>
                 </div>
-                <p class="text-sm font-serif text-[#e8e0e3] leading-relaxed">
+                <p class="text-sm font-serif text-[#e8e0e3] leading-relaxed italic pt-1">
                   "${pText}"
+                </p>
+                <div class="flex items-center gap-1.5 pt-2 border-t border-[#eac34a]/20">
+                  <span class="w-2 h-2 rounded-full bg-[#eac34a]"></span>
+                  <span class="text-[10px] text-[#eac34a] uppercase tracking-wider font-bold">SACRED VOW TO ${content.partner_name}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>             "${pText}"
                 </p>
                 <div class="text-[10px] text-[#eac34a] uppercase tracking-wider font-semibold">Promise to ${content.partner_name}</div>
               </div>
