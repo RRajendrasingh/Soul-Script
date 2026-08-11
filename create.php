@@ -1656,7 +1656,7 @@ Today, I want to ask you the most important question of my life. Will you take m
 
     async function checkActiveBuyerSession() {
       try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/buyer_session.php');
+        const res = await fetch('<?php echo APP_URL; ?>/api/buyer_session.php', { credentials: 'same-origin' });
         const data = await res.json();
         const passGroup = document.getElementById('buyerPasswordGroup');
         const passInput = document.getElementById('buyerPassword');
@@ -1684,7 +1684,12 @@ Today, I want to ask you the most important question of my life. Will you take m
         console.log('Session check error:', err);
       }
     }
-    checkActiveBuyerSession();
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkActiveBuyerSession);
+    } else {
+      checkActiveBuyerSession();
+    }
 
     async function handleCheckoutSubmit(e) {
       e.preventDefault();

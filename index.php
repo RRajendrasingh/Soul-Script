@@ -751,7 +751,7 @@ require_once __DIR__ . '/includes/media_helper.php';
 
     async function checkActiveBuyerSession() {
       try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/buyer_session.php');
+        const res = await fetch('<?php echo APP_URL; ?>/api/buyer_session.php', { credentials: 'same-origin' });
         const data = await res.json();
         const passGroup = document.getElementById('buyerPasswordGroup');
         const passInput = document.getElementById('buyerPassword');
