@@ -36,14 +36,25 @@ try {
     $stmt->execute([$email, $passHash]);
     $pages = $stmt->fetchAll();
 
-    if ($pages && count($pages) > 0) {
+    // 2. Fetch ALL pending paid orders (paid, but page not customized/created yet)
+    $stmtPending = $db->prepare("
+        SELECT o.order_id, o.template_id, o.buyer_name, o.buyer_email, o.created_at, t.name as template_name
+        FROM orders o
+        LEFT JOIN pages p ON o.order_id = p.order_id
+        LEFT JOIN templates t ON o.template_id = t.template_id
+        WHERE LOWER(o.buyer_email) = LOWER(?) AND o.buyer_password_hash = ? AND o.payment_status = 'paid' AND p.page_id IS NULL
+        ORDER BY o.created_at DESC
+    ");
+    $stmtPending->execute([$email, $passHash]);
+    $pendingOrders = $stmtPending->fetchAll();
+
+    if (($pages && count($pages) > 0) || ($pendingOrders && count($pendingOrders) > 0)) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        $firstPage = $pages[0];
-        $_SESSION['edit_token'] = $firstPage['edit_token'];
-        $_SESSION['buyer_email'] = $firstPage['buyer_email'];
+        $_SESSION['buyer_email'] = strtolower($email);
+        $buyerName = $pages[0]['buyer_name'] ?? $pendingOrders[0]['buyer_name'] ?? 'Buyer';
 
         $pagesList = array_map(function($p) {
             return [
@@ -56,37 +67,42 @@ try {
             ];
         }, $pages);
 
-        echo json_encode([
-            'success' => true,
-            'message' => 'Login successful!',
-            'edit_token' => $firstPage['edit_token'],
-            'page_id' => $firstPage['page_id'],
-            'url_slug' => $firstPage['url_slug'],
-            'buyer_name' => $firstPage['buyer_name'],
-            'pages' => $pagesList
-        ]);
-        exit;
-    }
+        $pendingList = array_map(function($po) {
+            return [
+                'order_id' => $po['order_id'],
+                'template_id' => $po['template_id'],
+                'template_name' => $po['template_name'] ?? 'Surprise Card',
+                'created_at' => $po['created_at'],
+                'redirect_url' => APP_URL . '/create.php?order_id=' . $po['order_id']
+            ];
+        }, $pendingOrders);
 
-    // 2. Check if valid order exists without a page created yet
-    $stmtOrder = $db->prepare("
-        SELECT o.order_id, o.buyer_name, o.buyer_email
-        FROM orders o
-        WHERE LOWER(o.buyer_email) = LOWER(?) AND o.buyer_password_hash = ?
-        ORDER BY o.created_at DESC
-        LIMIT 1
-    ");
-    $stmtOrder->execute([$email, $passHash]);
-    $orderResult = $stmtOrder->fetch();
-
-    if ($orderResult) {
-        echo json_encode([
-            'success' => true,
-            'message' => 'Order verified! Please complete your gift creation.',
-            'redirect_url' => APP_URL . '/create.php?order_id=' . $orderResult['order_id'],
-            'buyer_name' => $orderResult['buyer_name']
-        ]);
-        exit;
+        if (count($pages) > 0) {
+            $firstPage = $pages[0];
+            $_SESSION['edit_token'] = $firstPage['edit_token'];
+            echo json_encode([
+                'success' => true,
+                'message' => 'Login successful!',
+                'edit_token' => $firstPage['edit_token'],
+                'page_id' => $firstPage['page_id'],
+                'url_slug' => $firstPage['url_slug'],
+                'buyer_name' => $buyerName,
+                'pages' => $pagesList,
+                'pending_orders' => $pendingList
+            ]);
+            exit;
+        } else {
+            // Only pending orders exist
+            $firstPending = $pendingOrders[0];
+            echo json_encode([
+                'success' => true,
+                'message' => 'Order verified! Please complete your gift creation.',
+                'redirect_url' => APP_URL . '/create.php?order_id=' . $firstPending['order_id'],
+                'buyer_name' => $buyerName,
+                'pending_orders' => $pendingList
+            ]);
+            exit;
+        }
     }
 
     http_response_code(401);

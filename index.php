@@ -645,10 +645,11 @@ require_once __DIR__ . '/includes/media_helper.php';
       <h2 class="font-serif text-2xl text-[#e8e0e3] font-bold mb-0.5 pr-6" id="modalTemplateTitle">Checkout</h2>
       <p class="text-xs text-[#d0c3cb] mb-6">Enter your details to unlock your partner personalization form.</p>
       
-      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
+      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event); return false;">
         <input type="hidden" id="selectedTemplateId" value="">
         
         <div id="checkoutErrorMsg" class="hidden mb-4 p-3 bg-[#3b1e3b] border border-[#e4b9df]/40 text-[#e4b9df] rounded-xl text-xs font-semibold text-center"></div>
+        <div id="loggedInNotice" class="hidden mb-4 p-3 bg-[#1e3b20] border border-[#a4e4b9]/40 text-[#a4e4b9] rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-2"></div>
 
         <!-- 2-Column Responsive Grid on Desktop -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -678,7 +679,7 @@ require_once __DIR__ . '/includes/media_helper.php';
           </div>
 
           <!-- Column 2: Secret Edit Password -->
-          <div class="form-group">
+          <div class="form-group" id="buyerPasswordGroup">
             <div class="flex items-center justify-between mb-1">
               <label class="form-label text-xs font-semibold text-[#d0c3cb]">Secret Edit Password *</label>
               <span class="text-[10px] text-[#eac34a] font-bold" id="passStrengthBadge">Min 6 chars</span>
@@ -746,6 +747,40 @@ require_once __DIR__ . '/includes/media_helper.php';
       lucide.createIcons();
     }
 
+    let isLoggedInBuyerSession = false;
+
+    async function checkActiveBuyerSession() {
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/check_buyer_session.php');
+        const data = await res.json();
+        const passGroup = document.getElementById('buyerPasswordGroup');
+        const passInput = document.getElementById('buyerPassword');
+        const noticeBox = document.getElementById('loggedInNotice');
+
+        if (data.logged_in && data.buyer_email) {
+          isLoggedInBuyerSession = true;
+          if (data.buyer_name) document.getElementById('buyerName').value = data.buyer_name;
+          if (data.buyer_phone) document.getElementById('buyerPhone').value = data.buyer_phone;
+          if (data.buyer_email) document.getElementById('buyerEmail').value = data.buyer_email;
+
+          passGroup.classList.add('hidden');
+          passInput.removeAttribute('required');
+          passInput.value = 'LOGGED_IN_SESSION';
+
+          noticeBox.innerHTML = `<i data-lucide="user-check" class="w-4 h-4"></i> <span>Logged in as <strong>${escapeHtml(data.buyer_email)}</strong> (Buying 2nd Gift)</span>`;
+          noticeBox.classList.remove('hidden');
+          if (typeof lucide === 'object') lucide.createIcons();
+        } else {
+          isLoggedInBuyerSession = false;
+          passGroup.classList.remove('hidden');
+          passInput.setAttribute('required', 'true');
+          noticeBox.classList.add('hidden');
+        }
+      } catch (err) {
+        console.log('Session check error:', err);
+      }
+    }
+
     function openCheckout(templateId, name, price) {
       currentTemplateId = templateId;
       currentPrice = price;
@@ -755,6 +790,7 @@ require_once __DIR__ . '/includes/media_helper.php';
       const modal = document.getElementById('checkoutModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+      checkActiveBuyerSession();
     }
 
     function selectTemplate(templateId, name, price) {
@@ -782,7 +818,7 @@ require_once __DIR__ . '/includes/media_helper.php';
       }
 
       const buyerPassword = document.getElementById('buyerPassword').value;
-      if (buyerPassword.length < 6) {
+      if (!isLoggedInBuyerSession && buyerPassword.length < 6) {
         errBox.innerText = 'Please create a Secret Edit Password with at least 6 characters.';
         errBox.classList.remove('hidden');
         return;

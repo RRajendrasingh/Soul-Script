@@ -46,7 +46,7 @@ if (!empty($_GET['token'])) {
           <p class="text-xs text-[#d0c3cb] mt-1">Log in using your Email &amp; Secret Edit Password to update your gift website.</p>
         </div>
 
-        <form id="buyerLoginForm" onsubmit="event.preventDefault(); handleBuyerLogin(event);" class="space-y-4 text-left">
+        <form id="buyerLoginForm" onsubmit="event.preventDefault(); handleBuyerLogin(event); return false;" class="space-y-4 text-left">
           <div>
             <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Your Email Address</label>
             <input type="email" id="loginEmail" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. rohan@example.com" required>
@@ -62,7 +62,7 @@ if (!empty($_GET['token'])) {
 
           <div id="loginMsg" class="hidden text-xs text-rose-400 font-semibold text-center"></div>
 
-          <button type="button" onclick="handleBuyerLogin(event)" id="loginBtn" class="w-full py-3.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all cursor-pointer">
+          <button type="submit" id="loginBtn" class="w-full py-3.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all cursor-pointer">
             Log In To Live Visual Editor
           </button>
         </form>
@@ -81,7 +81,7 @@ if (!empty($_GET['token'])) {
           <p class="text-xs text-[#d0c3cb]">Enter your registered email to reset your account password in 10 seconds.</p>
         </div>
 
-        <form id="forgotPassForm" onsubmit="handleRequestPasswordReset(event)" class="space-y-4">
+        <form id="forgotPassForm" onsubmit="handleRequestPasswordReset(event); return false;" class="space-y-4">
           <div>
             <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Registered Email Address</label>
             <input type="email" id="forgotPassEmail" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. rohan@example.com" required>
@@ -108,7 +108,7 @@ if (!empty($_GET['token'])) {
           <p class="text-xs text-[#d0c3cb]">Type your new secret edit password below to update your account access.</p>
         </div>
 
-        <form id="setNewPassForm" onsubmit="handlePerformPasswordReset(event)" class="space-y-4">
+        <form id="setNewPassForm" onsubmit="handlePerformPasswordReset(event); return false;" class="space-y-4">
           <input type="hidden" id="newPassTokenInput" value="">
           
           <div>
@@ -205,7 +205,7 @@ if (!empty($_GET['token'])) {
       </div>
 
       <!-- Main Edit Form -->
-      <form id="editPageForm" onsubmit="saveDashboardChanges(event)" class="bg-[#221f21] p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#4d444b]/50 shadow-2xl space-y-5 sm:space-y-6">
+      <form id="editPageForm" onsubmit="saveDashboardChanges(event); return false;" class="bg-[#221f21] p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#4d444b]/50 shadow-2xl space-y-5 sm:space-y-6">
         <input type="hidden" id="activeEditToken" value="<?php echo htmlspecialchars($token); ?>">
         <input type="hidden" id="activeTemplateId" value="">
 
@@ -594,12 +594,15 @@ if (!empty($_GET['token'])) {
         const data = await res.json();
 
         if (data.success) {
-          if (data.redirect_url) {
+          const totalItems = (data.pages ? data.pages.length : 0) + (data.pending_orders ? data.pending_orders.length : 0);
+          if (data.pending_orders && data.pending_orders.length > 0 && (!data.pages || data.pages.length === 0)) {
+            window.location.href = data.pending_orders[0].redirect_url;
+          } else if (data.redirect_url) {
             window.location.href = data.redirect_url;
-          } else if (data.pages && data.pages.length > 1) {
+          } else if (totalItems > 1) {
             document.getElementById('loginView').classList.add('hidden');
             document.getElementById('dashboardView').classList.add('hidden');
-            renderPurchasedGiftsHub(data.pages);
+            renderPurchasedGiftsHub(data.pages, data.pending_orders);
             document.getElementById('hubView').classList.remove('hidden');
           } else {
             window.location.href = '<?php echo APP_URL; ?>/edit.php';
@@ -809,13 +812,17 @@ if (!empty($_GET['token'])) {
     }
 
     let allBuyerPages = [];
+    let allPendingOrders = [];
 
-    function renderPurchasedGiftsHub(pages) {
-      allBuyerPages = pages || [];
+    function renderPurchasedGiftsHub(pages, pendingOrders) {
+      allBuyerPages = pages || allBuyerPages || [];
+      allPendingOrders = pendingOrders || allPendingOrders || [];
       const grid = document.getElementById('hubGiftsGrid');
       const backBtn = document.getElementById('backToHubBtn');
 
-      if (allBuyerPages.length > 1 && backBtn) {
+      const totalItems = allBuyerPages.length + allPendingOrders.length;
+
+      if (totalItems > 1 && backBtn) {
         backBtn.classList.remove('hidden');
       } else if (backBtn) {
         backBtn.classList.add('hidden');
@@ -832,7 +839,29 @@ if (!empty($_GET['token'])) {
         'raksha_bandhan_royal': { name: 'Raksha Bandhan Royal', emoji: '👑', color: 'from-[#3b1e22] to-[#221f21]' }
       };
 
-      grid.innerHTML = allBuyerPages.map(p => {
+      let pendingHtml = allPendingOrders.map(po => `
+        <div class="bg-gradient-to-b from-[#3b2d1e] to-[#221f21] p-5 rounded-2xl border-2 border-amber-500/60 shadow-xl flex flex-col justify-between gap-4 group hover:border-amber-400 transition-all">
+          <div class="space-y-2.5">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5">
+              <span class="text-[10px] uppercase font-extrabold tracking-wider text-amber-400 bg-[#100d10] px-2.5 py-1 rounded-full border border-amber-500/40 flex items-center gap-1 shrink-0">
+                <span>⚠️</span>
+                <span>Paid Order (Pending Customization)</span>
+              </span>
+              <span class="text-[10px] text-amber-300/80 font-mono">Order ID: ${po.order_id}</span>
+            </div>
+            <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">${escapeHtml(po.template_name || 'Surprise Gift Card')}</h3>
+            <p class="text-xs text-[#d0c3cb]/90">Payment received successfully! Tap below to fill in photos and names to launch your page.</p>
+          </div>
+
+          <div class="pt-2 border-t border-amber-500/30">
+            <a href="${po.redirect_url}" class="w-full py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+              <span>➡️ Finish Customizing Gift Now</span>
+            </a>
+          </div>
+        </div>
+      `).join('');
+
+      let pagesHtml = allBuyerPages.map(p => {
         const meta = tplMeta[p.template_id] || { name: 'Gift Website', emoji: '🎁', color: 'from-[#221f21] to-[#151215]' };
         const partner = p.partner_name || 'Partner';
         const shareUrl = '<?php echo APP_URL; ?>/gift/' + p.url_slug;
@@ -864,6 +893,8 @@ if (!empty($_GET['token'])) {
           </div>
         `;
       }).join('');
+
+      grid.innerHTML = pendingHtml + pagesHtml;
 
       if (typeof lucide === 'object') lucide.createIcons();
     }

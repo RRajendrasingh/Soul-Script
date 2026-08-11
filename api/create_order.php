@@ -37,17 +37,26 @@ $buyer_password_hash = $buyer_password ? hashHintAnswer($buyer_password) : null;
 try {
     $db = getDB();
 
-    // Strict Account Security Check: If email already exists, verify existing account password
+    // Check if user is currently logged in via session
+    $sessionEmail = trim($_SESSION['buyer_email'] ?? '');
+    $isLoggedInBuyer = (!empty($sessionEmail) && strtolower($sessionEmail) === strtolower($buyer_email));
+
+    // Account Security Check: If email already exists, verify existing account password unless buyer is logged in via session
     $stmtCheck = $db->prepare("SELECT buyer_password_hash FROM orders WHERE LOWER(buyer_email) = LOWER(?) AND buyer_password_hash IS NOT NULL LIMIT 1");
     $stmtCheck->execute([$buyer_email]);
     $existingAccount = $stmtCheck->fetch();
 
     if ($existingAccount && !empty($existingAccount['buyer_password_hash'])) {
-        // Account exists! Verify that provided password matches existing account password
-        if (empty($buyer_password) || hashHintAnswer($buyer_password) !== $existingAccount['buyer_password_hash']) {
-            sendJsonError('An account already exists with this email address! Please enter your correct existing account password, or log in at digitalyogi24.com/edit.php', 400);
+        if ($isLoggedInBuyer) {
+            // Automatically attach to logged in buyer's existing account password hash
+            $buyer_password_hash = $existingAccount['buyer_password_hash'];
+        } else {
+            // Unauthenticated guest: Verify that provided password matches existing account password
+            if (empty($buyer_password) || hashHintAnswer($buyer_password) !== $existingAccount['buyer_password_hash']) {
+                sendJsonError('An account already exists with this email address! Please enter your correct existing account password, or log in at digitalyogi24.com/edit.php', 400);
+            }
+            $buyer_password_hash = $existingAccount['buyer_password_hash'];
         }
-        $buyer_password_hash = $existingAccount['buyer_password_hash'];
     }
 
     // Fetch template price
