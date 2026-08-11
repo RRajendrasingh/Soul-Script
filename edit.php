@@ -869,61 +869,81 @@ $showLogin = !$showDashboard && !$showHub;
       if (!grid) return;
 
       const tplMeta = {
-        'anniversary_reveal': { name: 'Anniversary Reveal', emoji: '🌹', color: 'from-[#3b1e3b] to-[#221f21]' },
-        'birthday_magic': { name: 'Birthday Magic', emoji: '🎂', color: 'from-[#1e3b30] to-[#221f21]' },
-        'perfect_proposal': { name: 'Perfect Proposal', emoji: '💍', color: 'from-[#3b2d1e] to-[#221f21]' },
-        'long_distance_love': { name: 'Long Distance Love', emoji: '🌍', color: 'from-[#1e2a3b] to-[#221f21]' },
-        'raksha_bandhan_special': { name: 'Raksha Bandhan Special', emoji: '🪔', color: 'from-[#3b1e22] to-[#221f21]' },
-        'raksha_bandhan_royal': { name: 'Raksha Bandhan Royal', emoji: '👑', color: 'from-[#3b1e22] to-[#221f21]' }
+        'anniversary_reveal': { name: 'Anniversary Reveal', icon: 'heart', color: 'from-[#3b1e3b] via-[#261626] to-[#181118]' },
+        'birthday_magic': { name: 'Birthday Magic', icon: 'sparkles', color: 'from-[#1e3b30] via-[#152821] to-[#101b17]' },
+        'perfect_proposal': { name: 'Perfect Proposal', icon: 'heart-handshake', color: 'from-[#3b2d1e] via-[#271d14] to-[#17130e]' },
+        'long_distance_love': { name: 'Long Distance Love', icon: 'globe', color: 'from-[#1e2a3b] via-[#141b27] to-[#0e121b]' },
+        'raksha_bandhan_special': { name: 'Raksha Bandhan Special', icon: 'shield-check', color: 'from-[#3b1e22] via-[#271417] to-[#180e10]' },
+        'raksha_bandhan_royal': { name: 'Raksha Bandhan Royal', icon: 'crown', color: 'from-[#3b2a1a] via-[#281c12] to-[#18110b]' }
       };
 
       let pendingHtml = allPendingOrders.map(po => `
-        <div class="bg-gradient-to-b from-[#3b2d1e] to-[#221f21] p-5 rounded-2xl border-2 border-amber-500/60 shadow-xl flex flex-col justify-between gap-4 group hover:border-amber-400 transition-all">
-          <div class="space-y-2.5">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5">
-              <span class="text-[10px] uppercase font-extrabold tracking-wider text-amber-400 bg-[#100d10] px-2.5 py-1 rounded-full border border-amber-500/40 flex items-center gap-1 shrink-0">
-                <span>⚠️</span>
-                <span>Paid Order (Pending Customization)</span>
+        <div class="bg-gradient-to-br from-[#3b2a1a] via-[#281d12] to-[#1a140d] p-5 sm:p-6 rounded-3xl border-2 border-[#eac34a]/70 shadow-[0_0_30px_rgba(234,195,74,0.18)] flex flex-col justify-between gap-5 transition-all hover:border-[#eac34a] hover:shadow-[0_0_35px_rgba(234,195,74,0.25)] relative overflow-hidden group">
+          <div class="space-y-3.5">
+            <div class="flex items-center justify-between gap-2 border-b border-[#eac34a]/20 pb-3">
+              <span class="text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#100d10] px-3 py-1 rounded-full border border-[#eac34a]/40 flex items-center gap-1.5 shrink-0 shadow-sm">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-[#eac34a] animate-pulse"></i>
+                <span>Action Required: Customization Pending</span>
               </span>
-              <span class="text-[10px] text-amber-300/80 font-mono">Order ID: ${po.order_id}</span>
+              <span class="text-[10px] text-[#eac34a]/80 font-mono bg-[#151215] px-2 py-0.5 rounded-md border border-[#eac34a]/20 truncate">
+                ${po.order_id}
+              </span>
             </div>
-            <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">${escapeHtml(po.template_name || 'Surprise Gift Card')}</h3>
-            <p class="text-xs text-[#d0c3cb]/90">Payment received successfully! Tap below to fill in photos and names to launch your page.</p>
+
+            <div class="space-y-1">
+              <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3] group-hover:text-[#eac34a] transition-colors">
+                ${escapeHtml(po.template_name || 'Surprise Gift Card')}
+              </h3>
+              <p class="text-xs text-[#d0c3cb]/90 leading-relaxed">
+                ✨ Payment verified! Tap below to add partner's name, photos, and secret hint password to launch page.
+              </p>
+            </div>
           </div>
 
-          <div class="pt-2 border-t border-amber-500/30">
-            <a href="${po.redirect_url}" class="w-full py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
-              <span>➡️ Finish Customizing Gift Now</span>
+          <div class="pt-3 border-t border-[#eac34a]/20">
+            <a href="${po.redirect_url}" class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#f7d774] to-[#cca830] hover:brightness-110 text-[#241a00] font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl">
+              <span>Finish Customizing Gift Now</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </a>
           </div>
         </div>
       `).join('');
 
       let pagesHtml = allBuyerPages.map(p => {
-        const meta = tplMeta[p.template_id] || { name: 'Gift Website', emoji: '🎁', color: 'from-[#221f21] to-[#151215]' };
+        const meta = tplMeta[p.template_id] || { name: 'Gift Website', icon: 'gift', color: 'from-[#221f21] to-[#151215]' };
         const partner = p.partner_name || 'Partner';
         const shareUrl = '<?php echo APP_URL; ?>/gift/' + p.url_slug;
 
         return `
-          <div class="bg-gradient-to-b ${meta.color} p-5 rounded-2xl border border-[#eac34a]/30 shadow-xl flex flex-col justify-between gap-4 group hover:border-[#eac34a] transition-all">
-            <div class="space-y-2.5">
-              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5">
-                <span class="text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#100d10] px-2.5 py-1 rounded-full border border-[#eac34a]/30 flex items-center gap-1 shrink-0">
-                  <span>${meta.emoji}</span>
+          <div class="bg-gradient-to-b ${meta.color} p-5 sm:p-6 rounded-3xl border border-[#4d444b]/60 hover:border-[#eac34a]/60 shadow-xl flex flex-col justify-between gap-5 transition-all hover:shadow-2xl hover:scale-[1.005] group">
+            <div class="space-y-3.5">
+              <div class="flex items-center justify-between gap-2 border-b border-[#4d444b]/30 pb-3">
+                <span class="text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#100d10] px-3 py-1 rounded-full border border-[#eac34a]/30 flex items-center gap-1.5 shrink-0">
+                  <i data-lucide="${meta.icon}" class="w-3.5 h-3.5 text-[#eac34a]"></i>
                   <span>${meta.name}</span>
                 </span>
-                <span class="text-[10px] text-[#d0c3cb]/70 font-mono truncate max-w-full">/gift/${p.url_slug}</span>
+                <span class="text-[10px] text-[#d0c3cb]/70 font-mono bg-[#100d10] px-2 py-0.5 rounded-md border border-[#4d444b]/40 truncate max-w-[140px]">
+                  /gift/${p.url_slug}
+                </span>
               </div>
-              <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">Surprise Page for <span class="text-[#eac34a]">${escapeHtml(partner)}</span></h3>
-              <p class="text-xs text-[#d0c3cb]/80 truncate">Private Link: <a href="${shareUrl}" target="_blank" class="underline hover:text-[#eac34a]">${shareUrl}</a></p>
+
+              <div class="space-y-1">
+                <span class="text-[10px] uppercase tracking-widest font-extrabold text-[#d0c3cb]/60 block">Live Gift Website</span>
+                <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">
+                  Surprise Page for <span class="text-[#eac34a] font-serif">${escapeHtml(partner)}</span>
+                </h3>
+                <p class="text-xs text-[#d0c3cb]/80 truncate">
+                  Link: <a href="${shareUrl}" target="_blank" class="underline hover:text-[#eac34a] font-mono">${shareUrl}</a>
+                </p>
+              </div>
             </div>
 
-            <div class="flex items-center gap-2 pt-2 border-t border-[#4d444b]/30">
-              <button type="button" onclick="openSelectedGiftEditor('${p.edit_token}')" class="flex-1 py-2.5 px-3 rounded-xl bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+            <div class="flex items-center gap-2.5 pt-3 border-t border-[#4d444b]/30">
+              <button type="button" onclick="openSelectedGiftEditor('${p.edit_token}')" class="flex-1 py-3 px-4 rounded-2xl bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md">
                 <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                 <span>Edit &amp; Manage</span>
               </button>
-              <a href="${shareUrl}" target="_blank" class="py-2.5 px-3 rounded-xl bg-[#100d10] hover:bg-[#3b1e3b] text-[#e8e0e3] border border-[#4d444b] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1 shrink-0">
+              <a href="${shareUrl}" target="_blank" class="py-3 px-4 rounded-2xl bg-[#100d10] hover:bg-[#3b1e3b] text-[#e8e0e3] border border-[#4d444b] hover:border-[#eac34a]/60 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shrink-0">
                 <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#eac34a]"></i>
                 <span>View</span>
               </a>
