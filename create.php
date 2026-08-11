@@ -82,8 +82,9 @@ if ($order_id) {
       </div>
 
       <div id="checkoutErrorMsg" class="hidden p-3 bg-[#3b1e3b] border border-[#e4b9df]/40 text-[#e4b9df] rounded-xl text-xs font-semibold text-center"></div>
+      <div id="loggedInNotice" class="hidden p-3 bg-[#1e3b20] border border-[#a4e4b9]/40 text-[#a4e4b9] rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-2"></div>
 
-      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
+      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event); return false;" class="space-y-4">
         <input type="hidden" id="selectedTemplateId" value="<?php echo htmlspecialchars($preselected_template); ?>">
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -105,7 +106,7 @@ if ($order_id) {
               🔑 <strong>Account Found:</strong> An account already exists for this email. Please enter your existing account password below, or <a href="<?php echo APP_URL; ?>/edit.php" class="underline font-bold text-[#eac34a]">Log In at Portal</a>.
             </div>
           </div>
-          <div>
+          <div id="buyerPasswordGroup">
             <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Secret Edit Password * <span class="text-[10px] text-[#eac34a]">(min 6 chars)</span></label>
             <input type="password" id="buyerPassword" minlength="6" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="••••••••" required>
           </div>
@@ -215,7 +216,7 @@ if ($order_id) {
     </div>
 
     <!-- Main Creation Form -->
-    <form id="createPageForm" class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#4d444b]/50 shadow-2xl space-y-6" onsubmit="handleFormSubmit(event)">
+    <form id="createPageForm" class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#4d444b]/50 shadow-2xl space-y-6" onsubmit="handleFormSubmit(event); return false;">
       <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order['order_id']); ?>">
       <input type="hidden" name="template_id" value="<?php echo htmlspecialchars($order['template_id']); ?>">
 
@@ -1651,6 +1652,39 @@ Today, I want to ask you the most important question of my life. Will you take m
     // Inline checkout form JS (for create.php?template= flow)
     let currentTemplateId = document.getElementById('selectedTemplateId')?.value || '';
     let currentPrice = <?php echo $show_checkout_form ? $tpl['price'] : 0; ?>;
+    let isLoggedInBuyerSession = false;
+
+    async function checkActiveBuyerSession() {
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/buyer_session.php');
+        const data = await res.json();
+        const passGroup = document.getElementById('buyerPasswordGroup');
+        const passInput = document.getElementById('buyerPassword');
+        const noticeBox = document.getElementById('loggedInNotice');
+
+        if (data.logged_in && data.buyer_email) {
+          isLoggedInBuyerSession = true;
+          if (data.buyer_name && document.getElementById('buyerName')) document.getElementById('buyerName').value = data.buyer_name;
+          if (data.buyer_phone && document.getElementById('buyerPhone')) document.getElementById('buyerPhone').value = data.buyer_phone;
+          if (data.buyer_email && document.getElementById('buyerEmail')) document.getElementById('buyerEmail').value = data.buyer_email;
+
+          if (passGroup) passGroup.classList.add('hidden');
+          if (passInput) {
+            passInput.removeAttribute('required');
+            passInput.value = 'LOGGED_IN_SESSION';
+          }
+
+          if (noticeBox) {
+            noticeBox.innerHTML = `<i data-lucide="user-check" class="w-4 h-4 text-[#a4e4b9]"></i> <span>Logged in as <strong>${escapeHtml(data.buyer_email)}</strong> (Buying 2nd Gift)</span>`;
+            noticeBox.classList.remove('hidden');
+            if (typeof lucide === 'object') lucide.createIcons();
+          }
+        }
+      } catch (err) {
+        console.log('Session check error:', err);
+      }
+    }
+    checkActiveBuyerSession();
 
     async function handleCheckoutSubmit(e) {
       e.preventDefault();
@@ -1664,7 +1698,7 @@ Today, I want to ask you the most important question of my life. Will you take m
         return;
       }
       const buyerPassword = document.getElementById('buyerPassword')?.value || '';
-      if (buyerPassword.length < 6) {
+      if (!isLoggedInBuyerSession && buyerPassword.length < 6) {
         if (errBox) { errBox.innerText = 'Secret Edit Password must be at least 6 characters.'; errBox.classList.remove('hidden'); }
         return;
       }
