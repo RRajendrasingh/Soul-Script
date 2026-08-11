@@ -40,7 +40,11 @@ if (!empty($buyerEmail)) {
             ORDER BY o.created_at DESC
         ");
         $stmtPending->execute([$buyerEmail]);
-        $serverPendingOrders = $stmtPending->fetchAll() ?: [];
+        $rawPending = $stmtPending->fetchAll() ?: [];
+        $serverPendingOrders = array_map(function($po) {
+            $po['redirect_url'] = APP_URL . '/create.php?order_id=' . urlencode($po['order_id']);
+            return $po;
+        }, $rawPending);
     } catch (Exception $eS) {}
 }
 
@@ -877,37 +881,39 @@ $showLogin = !$showDashboard && !$showHub;
         'raksha_bandhan_royal': { name: 'Raksha Bandhan Royal', icon: 'crown', color: 'from-[#3b2a1a] via-[#281c12] to-[#18110b]' }
       };
 
-      let pendingHtml = allPendingOrders.map(po => `
-        <div class="bg-gradient-to-br from-[#3b2a1a] via-[#281d12] to-[#1a140d] p-5 sm:p-6 rounded-3xl border-2 border-[#eac34a]/70 shadow-[0_0_30px_rgba(234,195,74,0.18)] flex flex-col justify-between gap-5 transition-all hover:border-[#eac34a] hover:shadow-[0_0_35px_rgba(234,195,74,0.25)] relative overflow-hidden group">
-          <div class="space-y-3.5">
-            <div class="flex items-center justify-between gap-2 border-b border-[#eac34a]/20 pb-3">
-              <span class="text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#100d10] px-3 py-1 rounded-full border border-[#eac34a]/40 flex items-center gap-1.5 shrink-0 shadow-sm">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-[#eac34a] animate-pulse"></i>
-                <span>Action Required: Customization Pending</span>
-              </span>
-              <span class="text-[10px] text-[#eac34a]/80 font-mono bg-[#151215] px-2 py-0.5 rounded-md border border-[#eac34a]/20 truncate">
-                ${po.order_id}
-              </span>
+      let pendingHtml = allPendingOrders.map(po => {
+        const targetUrl = po.redirect_url || ('<?php echo APP_URL; ?>/create.php?order_id=' + encodeURIComponent(po.order_id));
+        return `
+          <div class="relative bg-gradient-to-br from-[#3b2a1a] via-[#281d12] to-[#1a140d] p-5 sm:p-6 rounded-3xl border-2 border-[#eac34a] shadow-[0_0_30px_rgba(234,195,74,0.22)] flex flex-col justify-between gap-5 transition-all hover:shadow-[0_0_35px_rgba(234,195,74,0.3)] overflow-hidden group">
+            <!-- Glowing Floating Ribbon Badge -->
+            <div class="absolute top-0 right-0 bg-gradient-to-l from-[#eac34a] via-[#f7d774] to-[#eac34a] text-[#241a00] font-extrabold text-[10px] uppercase tracking-wider px-3.5 py-1.5 rounded-bl-2xl shadow-lg flex items-center gap-1.5 z-10 border-b border-l border-[#241a00]/20">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-[#241a00] shrink-0"></i>
+              <span>Unfinished Gift • Action Required</span>
             </div>
 
-            <div class="space-y-1">
-              <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3] group-hover:text-[#eac34a] transition-colors">
-                ${escapeHtml(po.template_name || 'Surprise Gift Card')}
-              </h3>
-              <p class="text-xs text-[#d0c3cb]/90 leading-relaxed">
-                ✨ Payment verified! Tap below to add partner's name, photos, and secret hint password to launch page.
-              </p>
+            <div class="space-y-3.5 pt-4">
+              <div class="space-y-1">
+                <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3] group-hover:text-[#eac34a] transition-colors pr-2">
+                  ${escapeHtml(po.template_name || 'Surprise Gift Card')}
+                </h3>
+                <p class="text-xs text-[#d0c3cb]/90 leading-relaxed">
+                  ✨ Payment verified! Tap below to add partner's name, photos, and secret hint password to launch page.
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-[#eac34a]/20 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <a href="${targetUrl}" class="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#f7d774] to-[#cca830] hover:brightness-110 text-[#241a00] font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl">
+                <span>Finish Customizing Gift Now</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+              <span class="text-[10px] text-[#eac34a]/80 font-mono bg-[#151215] px-2.5 py-2 rounded-xl border border-[#eac34a]/30 shrink-0 text-center">
+                Order #${po.order_id}
+              </span>
             </div>
           </div>
-
-          <div class="pt-3 border-t border-[#eac34a]/20">
-            <a href="${po.redirect_url}" class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#f7d774] to-[#cca830] hover:brightness-110 text-[#241a00] font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl">
-              <span>Finish Customizing Gift Now</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
 
       let pagesHtml = allBuyerPages.map(p => {
         const meta = tplMeta[p.template_id] || { name: 'Gift Website', icon: 'gift', color: 'from-[#221f21] to-[#151215]' };
