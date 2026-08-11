@@ -104,7 +104,7 @@ if ($order_id) {
       <?php if (!empty($loggedInBuyer)): ?>
         <div id="loggedInNotice" class="p-3 bg-[#1e3b20] border border-[#a4e4b9]/40 text-[#a4e4b9] rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-2">
           <i data-lucide="user-check" class="w-4 h-4 text-[#a4e4b9]"></i> 
-          <span>Logged in as <strong><?php echo htmlspecialchars($loggedInBuyer['buyer_email']); ?></strong> (Buying 2nd Gift)</span>
+          <span>Logged in as <strong><?php echo htmlspecialchars($loggedInBuyer['buyer_email']); ?></strong> (Buying a New Gift)</span>
         </div>
       <?php else: ?>
         <div id="loggedInNotice" class="hidden p-3 bg-[#1e3b20] border border-[#a4e4b9]/40 text-[#a4e4b9] rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-2"></div>
@@ -1701,7 +1701,7 @@ Today, I want to ask you the most important question of my life. Will you take m
           }
 
           if (noticeBox) {
-            noticeBox.innerHTML = `<i data-lucide="user-check" class="w-4 h-4 text-[#a4e4b9]"></i> <span>Logged in as <strong>${escapeHtml(data.buyer_email)}</strong> (Buying 2nd Gift)</span>`;
+            noticeBox.innerHTML = `<i data-lucide="user-check" class="w-4 h-4 text-[#a4e4b9]"></i> <span>Logged in as <strong>${escapeHtml(data.buyer_email)}</strong> (Buying a New Gift)</span>`;
             noticeBox.classList.remove('hidden');
             if (typeof lucide === 'object') lucide.createIcons();
           }

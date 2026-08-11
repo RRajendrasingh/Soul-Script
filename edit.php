@@ -4,11 +4,49 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once __DIR__ . '/config/db.php';
 
-// Option 2: Password-Gated Session Login (Clean URL, token stored in session)
-$token = trim($_SESSION['edit_token'] ?? $_GET['token'] ?? '');
-if (!empty($_GET['token'])) {
-    $_SESSION['edit_token'] = $_GET['token'];
+$urlToken = trim($_GET['token'] ?? '');
+if (!empty($urlToken)) {
+    $_SESSION['edit_token'] = $urlToken;
 }
+
+$token = !empty($urlToken) ? $urlToken : '';
+$buyerEmail = trim($_SESSION['buyer_email'] ?? '');
+
+$serverBuyerPages = [];
+$serverPendingOrders = [];
+
+if (!empty($buyerEmail)) {
+    try {
+        $db = getDB();
+        // 1. Fetch ALL created pages for this buyer
+        $stmtP = $db->prepare("
+            SELECT p.edit_token, p.page_id, p.template_id, p.url_slug, c.partner_name, p.created_at, o.buyer_name, o.buyer_email, o.order_id
+            FROM orders o
+            JOIN pages p ON o.order_id = p.order_id
+            LEFT JOIN page_content c ON p.page_id = c.page_id
+            WHERE LOWER(o.buyer_email) = LOWER(?)
+            ORDER BY p.created_at DESC
+        ");
+        $stmtP->execute([$buyerEmail]);
+        $serverBuyerPages = $stmtP->fetchAll() ?: [];
+
+        // 2. Fetch ALL pending paid orders (paid, but page not customized yet)
+        $stmtPending = $db->prepare("
+            SELECT o.order_id, o.template_id, o.buyer_name, o.buyer_email, o.created_at, t.name as template_name
+            FROM orders o
+            LEFT JOIN pages p ON o.order_id = p.order_id
+            LEFT JOIN templates t ON o.template_id = t.template_id
+            WHERE LOWER(o.buyer_email) = LOWER(?) AND o.payment_status = 'paid' AND p.page_id IS NULL
+            ORDER BY o.created_at DESC
+        ");
+        $stmtPending->execute([$buyerEmail]);
+        $serverPendingOrders = $stmtPending->fetchAll() ?: [];
+    } catch (Exception $eS) {}
+}
+
+$showDashboard = !empty($urlToken);
+$showHub = !$showDashboard && !empty($buyerEmail);
+$showLogin = !$showDashboard && !$showHub;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +73,7 @@ if (!empty($_GET['token'])) {
   <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-28 pb-12 relative z-10 space-y-4 sm:space-y-8">
     
     <!-- VIEW A: LOGIN SCREEN (When no token provided) -->
-    <div id="loginView" class="<?php echo $token ? 'hidden' : ''; ?> max-w-md mx-auto space-y-6">
+    <div id="loginView" class="<?php echo $showLogin ? '' : 'hidden'; ?> max-w-md mx-auto space-y-6">
       <div class="bg-[#221f21] p-8 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-6 text-center">
         <div class="w-14 h-14 rounded-full bg-[#3b1e3b] text-[#eac34a] flex items-center justify-center mx-auto border border-[#eac34a]/30">
           <i data-lucide="lock" class="w-7 h-7"></i>
@@ -131,7 +169,7 @@ if (!empty($_GET['token'])) {
     </div>
 
     <!-- VIEW B: PURCHASED GIFTS HUB (When logged in / managing multiple gifts) -->
-    <div id="hubView" class="hidden space-y-6">
+    <div id="hubView" class="<?php echo $showHub ? '' : 'hidden'; ?> space-y-6">
       <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-4">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#4d444b]/40 pb-5">
           <div class="flex items-center gap-3">
@@ -158,7 +196,7 @@ if (!empty($_GET['token'])) {
     </div>
 
     <!-- VIEW C: BUYER VISUAL EDITOR DASHBOARD -->
-    <div id="dashboardView" class="<?php echo $token ? '' : 'hidden'; ?> space-y-3.5 sm:space-y-6">
+    <div id="dashboardView" class="<?php echo $showDashboard ? '' : 'hidden'; ?> space-y-3.5 sm:space-y-6">
 
       <!-- Active Plan Badge Banner & Share Link -->
       <div class="bg-[#221f21] p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-[#eac34a]/30 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
@@ -1978,7 +2016,16 @@ if (!empty($_GET['token'])) {
       if (typeof lucide === 'object') lucide.createIcons();
     }
 
-    if (activeToken) {
+    let serverPages = <?php echo json_encode($serverBuyerPages); ?>;
+    let serverPendingOrders = <?php echo json_encode($serverPendingOrders); ?>;
+
+    if (serverPages.length > 0 || serverPendingOrders.length > 0) {
+      allBuyerPages = serverPages;
+      allPendingOrders = serverPendingOrders;
+      renderPurchasedGiftsHub(serverPages, serverPendingOrders);
+    }
+
+    if (activeToken && <?php echo $showDashboard ? 'true' : 'false'; ?>) {
       loadDashboardData(activeToken);
     }
 

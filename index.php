@@ -767,7 +767,7 @@ require_once __DIR__ . '/includes/media_helper.php';
           passInput.removeAttribute('required');
           passInput.value = 'LOGGED_IN_SESSION';
 
-          noticeBox.innerHTML = `<i data-lucide="user-check" class="w-4 h-4"></i> <span>Logged in as <strong>${escapeHtml(data.buyer_email)}</strong> (Buying 2nd Gift)</span>`;
+          noticeBox.innerHTML = `<i data-lucide="user-check" class="w-4 h-4"></i> <span>Logged in as <strong>${escapeHtml(data.buyer_email)}</strong> (Buying a New Gift)</span>`;
           noticeBox.classList.remove('hidden');
           if (typeof lucide === 'object') lucide.createIcons();
         } else {
