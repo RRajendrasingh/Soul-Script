@@ -902,14 +902,16 @@ $showLogin = !$showDashboard && !$showHub;
               </div>
             </div>
 
-            <div class="pt-3 border-t border-[#eac34a]/20 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-              <a href="${targetUrl}" class="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#f7d774] to-[#cca830] hover:brightness-110 text-[#241a00] font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl">
+            <div class="pt-3 border-t border-[#eac34a]/20 space-y-2.5">
+              <a href="${targetUrl}" class="w-full py-3.5 sm:py-4 px-5 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#f7d774] to-[#cca830] hover:brightness-110 text-[#241a00] font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl">
                 <span>Finish Customizing Gift Now</span>
                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
               </a>
-              <span class="text-[10px] text-[#eac34a]/80 font-mono bg-[#151215] px-2.5 py-2 rounded-xl border border-[#eac34a]/30 shrink-0 text-center">
-                Order #${po.order_id}
-              </span>
+              <div class="text-center">
+                <span class="text-[10px] text-[#eac34a]/80 font-mono bg-[#151215] px-3 py-1 rounded-xl border border-[#eac34a]/20 inline-block">
+                  Order #${po.order_id}
+                </span>
+              </div>
             </div>
           </div>
         `;
@@ -923,34 +925,34 @@ $showLogin = !$showDashboard && !$showHub;
         return `
           <div class="bg-gradient-to-b ${meta.color} p-5 sm:p-6 rounded-3xl border border-[#4d444b]/60 hover:border-[#eac34a]/60 shadow-xl flex flex-col justify-between gap-5 transition-all hover:shadow-2xl hover:scale-[1.005] group">
             <div class="space-y-3.5">
-              <div class="flex items-center justify-between gap-2 border-b border-[#4d444b]/30 pb-3">
+              <div class="flex items-center justify-between border-b border-[#4d444b]/30 pb-3">
                 <span class="text-[10px] uppercase font-extrabold tracking-wider text-[#eac34a] bg-[#100d10] px-3 py-1 rounded-full border border-[#eac34a]/30 flex items-center gap-1.5 shrink-0">
                   <i data-lucide="${meta.icon}" class="w-3.5 h-3.5 text-[#eac34a]"></i>
                   <span>${meta.name}</span>
                 </span>
-                <span class="text-[10px] text-[#d0c3cb]/70 font-mono bg-[#100d10] px-2 py-0.5 rounded-md border border-[#4d444b]/40 truncate max-w-[140px]">
-                  /gift/${p.url_slug}
+                <span class="text-[10px] uppercase font-extrabold tracking-widest text-[#a4e4b9] bg-[#1e3b20] px-2.5 py-0.5 rounded-full border border-[#a4e4b9]/30 flex items-center gap-1">
+                  <i data-lucide="check-circle-2" class="w-3 h-3 text-[#a4e4b9]"></i> Live Page
                 </span>
               </div>
 
-              <div class="space-y-1">
-                <span class="text-[10px] uppercase tracking-widest font-extrabold text-[#d0c3cb]/60 block">Live Gift Website</span>
+              <div class="space-y-1.5">
                 <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">
                   Surprise Page for <span class="text-[#eac34a] font-serif">${escapeHtml(partner)}</span>
                 </h3>
-                <p class="text-xs text-[#d0c3cb]/80 truncate">
-                  Link: <a href="${shareUrl}" target="_blank" class="underline hover:text-[#eac34a] font-mono">${shareUrl}</a>
+                <p class="text-xs text-[#d0c3cb]/80 flex items-center gap-1.5 pt-0.5">
+                  <span class="text-[#d0c3cb]/60 font-semibold">Page Link:</span>
+                  <a href="${shareUrl}" target="_blank" class="font-mono text-[#eac34a] bg-[#100d10] px-2.5 py-1 rounded-lg border border-[#eac34a]/20 hover:border-[#eac34a] hover:underline transition-all">/gift/${p.url_slug}</a>
                 </p>
               </div>
             </div>
 
             <div class="flex items-center gap-2.5 pt-3 border-t border-[#4d444b]/30">
-              <button type="button" onclick="openSelectedGiftEditor('${p.edit_token}')" class="flex-1 py-3 px-4 rounded-2xl bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md">
-                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+              <button type="button" onclick="openSelectedGiftEditor('${p.edit_token}')" class="flex-1 py-3.5 sm:py-4 px-5 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#f7d774] to-[#cca830] hover:brightness-110 text-[#241a00] font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl">
+                <i data-lucide="edit-3" class="w-4 h-4"></i>
                 <span>Edit &amp; Manage</span>
               </button>
-              <a href="${shareUrl}" target="_blank" class="py-3 px-4 rounded-2xl bg-[#100d10] hover:bg-[#3b1e3b] text-[#e8e0e3] border border-[#4d444b] hover:border-[#eac34a]/60 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shrink-0">
-                <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+              <a href="${shareUrl}" target="_blank" class="py-3.5 sm:py-4 px-5 rounded-2xl bg-[#100d10] hover:bg-[#3b1e3b] text-[#e8e0e3] border border-[#4d444b] hover:border-[#eac34a]/60 font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 shrink-0 shadow-md">
+                <i data-lucide="external-link" class="w-4 h-4 text-[#eac34a]"></i>
                 <span>View</span>
               </a>
             </div>
