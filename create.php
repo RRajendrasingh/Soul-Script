@@ -42,6 +42,21 @@ if ($order_id) {
 } elseif ($preselected_template && isset($valid_templates[$preselected_template])) {
     // User came from homepage Customize link — show checkout form
     $show_checkout_form = true;
+    $loggedInBuyer = null;
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!empty($_SESSION['buyer_email'])) {
+        try {
+            $dbB = getDB();
+            $stmtB = $dbB->prepare("SELECT buyer_name, buyer_phone, buyer_email FROM orders WHERE LOWER(buyer_email) = LOWER(?) ORDER BY created_at DESC LIMIT 1");
+            $stmtB->execute([$_SESSION['buyer_email']]);
+            $loggedInBuyer = $stmtB->fetch();
+            if (!$loggedInBuyer) {
+                $loggedInBuyer = ['buyer_email' => $_SESSION['buyer_email'], 'buyer_name' => '', 'buyer_phone' => ''];
+            }
+        } catch (Exception $eB) {}
+    }
 } else {
     $error = "Missing order ID. Please select a template and complete checkout first.";
 }
@@ -82,7 +97,15 @@ if ($order_id) {
       </div>
 
       <div id="checkoutErrorMsg" class="hidden p-3 bg-[#3b1e3b] border border-[#e4b9df]/40 text-[#e4b9df] rounded-xl text-xs font-semibold text-center"></div>
-      <div id="loggedInNotice" class="hidden p-3 bg-[#1e3b20] border border-[#a4e4b9]/40 text-[#a4e4b9] rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-2"></div>
+      
+      <?php if (!empty($loggedInBuyer)): ?>
+        <div id="loggedInNotice" class="p-3 bg-[#1e3b20] border border-[#a4e4b9]/40 text-[#a4e4b9] rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-2">
+          <i data-lucide="user-check" class="w-4 h-4 text-[#a4e4b9]"></i> 
+          <span>Logged in as <strong><?php echo htmlspecialchars($loggedInBuyer['buyer_email']); ?></strong> (Buying 2nd Gift)</span>
+        </div>
+      <?php else: ?>
+        <div id="loggedInNotice" class="hidden p-3 bg-[#1e3b20] border border-[#a4e4b9]/40 text-[#a4e4b9] rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-2"></div>
+      <?php endif; ?>
 
       <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event); return false;" class="space-y-4">
         <input type="hidden" id="selectedTemplateId" value="<?php echo htmlspecialchars($preselected_template); ?>">
@@ -90,25 +113,25 @@ if ($order_id) {
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Your Full Name *</label>
-            <input type="text" id="buyerName" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Rohan Sharma" required>
+            <input type="text" id="buyerName" value="<?php echo htmlspecialchars($loggedInBuyer['buyer_name'] ?? ''); ?>" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Rohan Sharma" required>
           </div>
           <div>
             <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">WhatsApp Number *</label>
             <div class="flex rounded-xl overflow-hidden border border-[#4d444b] focus-within:border-[#eac34a] bg-[#100d10]">
               <div class="bg-[#221f21] text-[#eac34a] font-mono text-xs font-bold px-3 flex items-center border-r border-[#4d444b] shrink-0">IN +91</div>
-              <input type="tel" id="buyerPhone" class="w-full bg-transparent px-3 py-2.5 text-sm text-[#e8e0e3] focus:outline-none font-mono" placeholder="9876543210" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')" required>
+              <input type="tel" id="buyerPhone" value="<?php echo htmlspecialchars(preg_replace('/^\+91/', '', $loggedInBuyer['buyer_phone'] ?? '')); ?>" class="w-full bg-transparent px-3 py-2.5 text-sm text-[#e8e0e3] focus:outline-none font-mono" placeholder="9876543210" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')" required>
             </div>
           </div>
           <div>
             <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Email Address *</label>
-            <input type="email" id="buyerEmail" onchange="checkExistingBuyerEmail(this.value)" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="you@example.com" required>
+            <input type="email" id="buyerEmail" value="<?php echo htmlspecialchars($loggedInBuyer['buyer_email'] ?? ''); ?>" onchange="checkExistingBuyerEmail(this.value)" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="you@example.com" required>
             <div id="existingEmailNotice" class="hidden mt-2 p-3 bg-amber-950/80 border border-amber-500/40 rounded-xl text-amber-300 text-xs leading-relaxed">
               🔑 <strong>Account Found:</strong> An account already exists for this email. Please enter your existing account password below, or <a href="<?php echo APP_URL; ?>/edit.php" class="underline font-bold text-[#eac34a]">Log In at Portal</a>.
             </div>
           </div>
-          <div id="buyerPasswordGroup">
+          <div id="buyerPasswordGroup" class="<?php echo !empty($loggedInBuyer) ? 'hidden' : ''; ?>">
             <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Secret Edit Password * <span class="text-[10px] text-[#eac34a]">(min 6 chars)</span></label>
-            <input type="password" id="buyerPassword" minlength="6" class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="••••••••" required>
+            <input type="password" id="buyerPassword" value="<?php echo !empty($loggedInBuyer) ? 'LOGGED_IN_SESSION' : ''; ?>" <?php echo empty($loggedInBuyer) ? 'minlength="6" required' : ''; ?> class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="••••••••">
           </div>
         </div>
 
