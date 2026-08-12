@@ -243,6 +243,10 @@ try {
     }
     unset($m);
 
+    require_once __DIR__ . '/../includes/voucher_helper.php';
+    $voucherStatus = getRakhiVoucherUnlockStatus($page['order_id'] ?? null, $page['page_id']);
+    $affiliateProducts = getAffiliateProducts();
+
     echo json_encode([
         'success' => true,
         'message' => 'Hint verified successfully!',
@@ -250,6 +254,8 @@ try {
         'template_id' => $page['template_id'],
         'url_slug' => $page['url_slug'],
         'expires_at' => $page['expires_at'],
+        'voucher_status' => $voucherStatus,
+        'affiliate_products' => $affiliateProducts,
         'content' => [
             'partner_name' => $page['partner_name'],
             'buyer_name' => $page['buyer_name'],
