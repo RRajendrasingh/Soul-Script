@@ -2087,6 +2087,21 @@ if (!empty($initialLockData['page_id'])) {
       }
     }
 
+    function toggleShagunLifafa() {
+      const container = document.getElementById('shagunEnvelopeContainer');
+      const letter = document.getElementById('shagunLetterContent');
+      if (container && letter) {
+        if (letter.classList.contains('hidden')) {
+          container.classList.add('hidden');
+          letter.classList.remove('hidden');
+          if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+        } else {
+          letter.classList.add('hidden');
+          container.classList.remove('hidden');
+        }
+      }
+    }
+
     loadLockMetadata();
 
     function escapeHtml(str) {
