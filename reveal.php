@@ -1381,18 +1381,55 @@ if (!empty($initialLockData['page_id'])) {
           </div>
         </section>
 
-        <!-- SECTION 2: 3-STEP VIRTUAL RAKHI CEREMONY -->
+        <!-- SECTION 2: ROYAL PHOTOREALISTIC AARTI THALI & 3-STEP VIRTUAL RAKHI CEREMONY -->
         <section class="max-w-3xl mx-auto px-4 py-8 relative z-10">
-          <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.25)] relative overflow-hidden transition-all duration-500">
+          <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.3)] relative overflow-hidden transition-all duration-500 animate-thali-glow">
+            
             <div class="flex items-center justify-center gap-2">
-              <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.25em] text-[#eac34a] bg-[#3b1e3b] px-4 py-1.5 rounded-full border border-[#eac34a]/40 shadow-inner">
-                🪔 SACRED AARTI THALI &amp; RAKHI RITUAL
+              <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.25em] text-[#eac34a] bg-[#3b1e3b] px-4 py-1.5 rounded-full border border-[#eac34a]/40 shadow-inner flex items-center gap-1.5">
+                <span>✨</span> <span>SACRED AARTI THALI &amp; RAKHI RITUAL</span> <span>✨</span>
               </span>
             </div>
 
             <div class="space-y-1">
               <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Ceremony 🧵</h2>
-              <p class="text-xs text-[#d0c3cb]/80">Perform the 3 sacred steps to tie the royal Rakhi &amp; unlock blessings.</p>
+              <p class="text-xs text-[#d0c3cb]/90 max-w-md mx-auto">Perform the 3 traditional steps: Apply Kumkum Tilak, Light Aarti Diya, and Tie Royal Rakhi!</p>
+            </div>
+
+            <!-- Centerpiece Royal Aarti Thali Graphic Ring -->
+            <div class="relative w-48 h-48 sm:w-56 sm:h-56 mx-auto my-4 flex items-center justify-center">
+              <!-- Outer Golden Carved Thali Plate -->
+              <div id="thaliOuterRing" class="absolute inset-0 rounded-full bg-gradient-to-tr from-[#cca830] via-[#ffd700] to-[#b8860b] p-[6px] shadow-[0_0_45px_rgba(234,195,74,0.45)] transition-transform duration-1000">
+                <div class="w-full h-full bg-gradient-to-br from-[#2a060b] via-[#3b0811] to-[#180306] rounded-full border-4 border-[#eac34a]/60 flex items-center justify-center relative shadow-inner overflow-hidden">
+                  
+                  <!-- Decorative Marigold Flower Petals Accents -->
+                  <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#eac34a_1px,transparent_1px)] [background-size:12px_12px]"></div>
+
+                  <!-- Roli Bowl (Kumkum) Left -->
+                  <div onclick="applyRoyalTilak()" title="Roli-Chawal Bowl (Step 1)" class="absolute top-4 left-6 sm:left-8 w-10 h-10 rounded-full bg-gradient-to-tr from-red-700 via-red-600 to-amber-500 border-2 border-[#eac34a] p-1 shadow-lg cursor-pointer hover:scale-110 transition-all flex items-center justify-center group z-20">
+                    <span class="text-xs font-bold text-white shadow-sm">🔴</span>
+                    <span class="absolute -bottom-4 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Roli-Chawal</span>
+                  </div>
+
+                  <!-- Brass Aarti Diya Flame Top/Center -->
+                  <div id="diyaFlameContainer" onclick="lightRoyalDiya()" title="Aarti Diya (Step 2)" class="absolute top-3 right-6 sm:right-8 w-11 h-11 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 border-2 border-[#eac34a] p-1 shadow-xl cursor-pointer hover:scale-110 transition-all flex items-center justify-center group z-20">
+                    <span id="diyaFlameIcon" class="text-lg">🪔</span>
+                    <span class="absolute -bottom-4 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Light Diya</span>
+                  </div>
+
+                  <!-- Royal Silk Rakhi Thread Bottom -->
+                  <div onclick="tieRoyalRakhi()" title="Sacred Rakhi (Step 3)" class="absolute bottom-3 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#b8860b] border-2 border-white p-1 shadow-2xl cursor-pointer hover:scale-110 transition-all flex items-center justify-center group z-20">
+                    <span class="text-xl">🧵</span>
+                    <span class="absolute -bottom-4 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Tie Rakhi</span>
+                  </div>
+
+                  <!-- Center Flower Emblem -->
+                  <div class="w-16 h-16 rounded-full bg-[#1e0407] border-2 border-[#eac34a]/40 flex flex-col items-center justify-center text-center p-1 shadow-inner">
+                    <span class="text-xl animate-pulse">🌸</span>
+                    <span class="text-[8px] font-extrabold text-[#eac34a] uppercase tracking-wider">Aarti Thali</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- 3 Ritual Step Action Buttons -->
@@ -1414,7 +1451,7 @@ if (!empty($initialLockData['page_id'])) {
             </div>
 
             <div id="rakhiRitualStatus" class="text-xs font-bold text-[#eac34a] min-h-[24px] pt-1 tracking-wide">
-              Tap Step 1 to apply Kumkum Tilak! 🔴
+              Tap Step 1 or Roli Bowl to apply Kumkum Tilak! 🔴
             </div>
           </div>
         </section>
@@ -2144,16 +2181,26 @@ if (!empty($initialLockData['page_id'])) {
       const btn = document.getElementById('diyaBtn');
       if (btn) btn.innerHTML = '<span class="text-base">✓ 🪔</span><span class="font-serif">Step 2: Lit Diya</span>';
 
+      const thaliRing = document.getElementById('thaliOuterRing');
+      if (thaliRing) {
+        thaliRing.classList.add('animate-aarti');
+      }
+
+      const diyaIcon = document.getElementById('diyaFlameIcon');
+      if (diyaIcon) {
+        diyaIcon.classList.add('animate-flame');
+      }
+
       const thaliContainer = document.getElementById('royalThaliContainer');
       if (thaliContainer) {
-        thaliContainer.classList.add('shadow-[0_0_80px_rgba(234,195,74,0.4)]');
+        thaliContainer.classList.add('shadow-[0_0_90px_rgba(234,195,74,0.5)]');
       }
       
       const status = document.getElementById('rakhiRitualStatus');
-      if (status) status.innerHTML = '🪔 Sacred Aarti Diya flame lit! Now tap Step 3 to Select & Tie Royal Rakhi! 🧵';
+      if (status) status.innerHTML = '🪔 Sacred Aarti Diya flame lit & Thali rotating! Now tap Step 3 to Select & Tie Royal Rakhi! 🧵';
       
       if (typeof confetti === 'function') {
-        confetti({ particleCount: 80, spread: 85, origin: { y: 0.5 }, colors: ['#f59e0b', '#eab308', '#ffffff'] });
+        confetti({ particleCount: 90, spread: 90, origin: { y: 0.5 }, colors: ['#f59e0b', '#eab308', '#ffffff'] });
       }
     }
 

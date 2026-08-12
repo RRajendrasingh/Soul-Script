@@ -54,30 +54,38 @@ $pageTitle = $pageTitle ?? (defined('APP_NAME') ? APP_NAME . ' — Romantic Surp
 
   @keyframes aartiRotate {
     0% { transform: rotate(0deg) scale(1); }
-    25% { transform: rotate(90deg) scale(1.03); }
+    25% { transform: rotate(90deg) scale(1.02); }
     50% { transform: rotate(180deg) scale(1); }
-    75% { transform: rotate(270deg) scale(1.03); }
+    75% { transform: rotate(270deg) scale(1.02); }
     100% { transform: rotate(360deg) scale(1); }
   }
   .animate-aarti {
-    animation: aartiRotate 6s linear infinite;
+    animation: aartiRotate 8s linear infinite;
   }
 
   @keyframes flameFlicker {
-    0%, 100% { transform: scale(1) translateY(0); opacity: 1; filter: drop-shadow(0 0 10px #f59e0b); }
-    25% { transform: scale(1.15) translateY(-2px); opacity: 0.9; filter: drop-shadow(0 0 18px #ef4444); }
-    50% { transform: scale(0.95) translateY(1px); opacity: 1; filter: drop-shadow(0 0 12px #f59e0b); }
-    75% { transform: scale(1.2) translateY(-1px); opacity: 0.95; filter: drop-shadow(0 0 20px #eab308); }
+    0%, 100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 12px #f59e0b) drop-shadow(0 0 25px #ef4444); }
+    25% { transform: scale(1.2) translateY(-3px) rotate(-2deg); filter: drop-shadow(0 0 20px #ef4444) drop-shadow(0 0 35px #f59e0b); }
+    50% { transform: scale(0.9) translateY(1px) rotate(2deg); filter: drop-shadow(0 0 15px #f59e0b); }
+    75% { transform: scale(1.25) translateY(-2px); filter: drop-shadow(0 0 25px #eab308) drop-shadow(0 0 40px #f97316); }
   }
   .animate-flame {
-    animation: flameFlicker 1.2s ease-in-out infinite;
+    animation: flameFlicker 1.1s ease-in-out infinite;
   }
 
   @keyframes tilakGlow {
-    0%, 100% { transform: translate(-50%, 0) scale(1); box-shadow: 0 0 12px #ef4444; }
-    50% { transform: translate(-50%, 0) scale(1.3); box-shadow: 0 0 22px #eab308; }
+    0%, 100% { transform: translate(-50%, 0) scale(1); box-shadow: 0 0 15px #ef4444, 0 0 30px #f59e0b; }
+    50% { transform: translate(-50%, 0) scale(1.35); box-shadow: 0 0 25px #eab308, 0 0 45px #ef4444; }
   }
   .animate-tilak {
-    animation: tilakGlow 2s ease-in-out infinite;
+    animation: tilakGlow 1.8s ease-in-out infinite;
+  }
+
+  @keyframes thaliGlowPulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(234, 195, 74, 0.35), inset 0 0 30px rgba(234, 195, 74, 0.15); }
+    50% { box-shadow: 0 0 80px rgba(234, 195, 74, 0.65), inset 0 0 50px rgba(234, 195, 74, 0.3); }
+  }
+  .animate-thali-glow {
+    animation: thaliGlowPulse 3s ease-in-out infinite;
   }
 </style>
