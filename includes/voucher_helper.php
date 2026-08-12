@@ -94,6 +94,7 @@ function allocateRakhiVoucher($orderId, $pageId = null) {
  */
 function getEffectiveUnlockTimestamp() {
     $overrideFile = __DIR__ . '/../config/rakhi_unlock_override.json';
+    @clearstatcache(true, $overrideFile);
     if (file_exists($overrideFile)) {
         $data = json_decode(file_get_contents($overrideFile), true);
         $mode = $data['test_mode'] ?? 'production';
