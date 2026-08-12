@@ -1702,17 +1702,17 @@ if (!empty($initialLockData['page_id'])) {
                       </span>
                       <h4 class="text-lg font-bold font-serif text-white">Your Secret Rakhi Cash Voucher Unlocks Soon! ⏳</h4>
                       <p class="text-xs text-[#d0c3cb] leading-relaxed">
-                        Your Brother/Sister has hidden a surprise Amazon Gift Voucher inside this card! It unlocks automatically on <strong>28 August 2026 at 12:00 PM IST</strong>.
+                        Your Brother/Sister has hidden a surprise Amazon Gift Voucher inside this card! It unlocks automatically on <strong>${rakhiVoucherStatus.unlock_date_formatted || '28 August 2026, 12:00 PM IST'}</strong>.
                       </p>
                       <div class="inline-flex items-center gap-2 text-xs font-mono text-[#eac34a] bg-[#100d10] py-2 px-4 rounded-xl border border-[#eac34a]/30 font-extrabold shadow-inner">
                         <i data-lucide="clock" class="w-4 h-4 text-[#eac34a] animate-pulse"></i>
-                        <span>Unlocks on 28 Aug 2026, 12:00 PM IST</span>
+                        <span>Unlocks on ${rakhiVoucherStatus.unlock_date_formatted || '28 Aug 2026, 12:00 PM IST'}</span>
                       </div>
                     </div>
                   `;
                 } else {
                   const vAmt = rakhiVoucherStatus.allocated_amount || 100;
-                  const vCode = rakhiVoucherStatus.voucher_code || voucherCode || 'AMZ-RAKHI-2026-CLAIM';
+                  const vCode = rakhiVoucherStatus.voucher_code || (voucherCode && voucherCode !== 'AMZ-RAKHI-9876' ? voucherCode : 'AMZ-RAKHI-2026-CLAIM');
                   return `
                     <div class="p-5 bg-gradient-to-br from-[#1e3b20] via-[#152821] to-[#101b17] border-2 border-[#a4e4b9] rounded-2xl text-center space-y-3.5 shadow-2xl relative overflow-hidden">
                       <span class="text-[10px] uppercase font-extrabold tracking-widest text-[#a4e4b9] bg-[#100d10] px-3 py-1 rounded-full border border-[#a4e4b9]/30 inline-block">
