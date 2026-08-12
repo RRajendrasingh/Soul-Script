@@ -606,6 +606,8 @@ if (!empty($initialLockData['page_id'])) {
       const letters = content.letters || [];
       const tokens = content.tokens || [];
       const reasons = tf.reasons || [];
+      const rakhiVoucherStatus = data.voucher_status || null;
+      const rakhiAffiliateProducts = data.affiliate_products || [];
 
       // SINGER HIT PLAYLIST REGISTRY
       const SINGER_PLAYLISTS = {
