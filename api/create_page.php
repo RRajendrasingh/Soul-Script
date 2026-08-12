@@ -184,8 +184,22 @@ try {
         }
     }
 
-    if (!empty($template_fields['shagun_voucher_code'])) {
-        $tokens_json = json_encode([['shagun_voucher_code' => trim($template_fields['shagun_voucher_code'])]]);
+    $shagun_voucher_code = trim($template_fields['shagun_voucher_code'] ?? $input['shagun_voucher_code'] ?? '');
+    $selected_rakhi_design = trim($template_fields['selected_rakhi_design'] ?? $input['selected_rakhi_design'] ?? 'gold_zardosi');
+
+    $tokens = [];
+    if (!empty($shagun_voucher_code)) {
+        $tokens[] = [
+            'shagun_voucher_code' => $shagun_voucher_code,
+            'selected_rakhi_design' => $selected_rakhi_design
+        ];
+    } else {
+        $tokens[] = [
+            'selected_rakhi_design' => $selected_rakhi_design
+        ];
+    }
+    $tokens_json = json_encode($tokens);
+    if (!empty($tokens)) {
         $db->prepare("UPDATE page_content SET tokens_json = ? WHERE page_id = ?")->execute([$tokens_json, $page_id]);
     }
 

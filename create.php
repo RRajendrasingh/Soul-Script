@@ -472,6 +472,16 @@ Today, I want to ask you the most important question of my life. Will you take m
           </div>
 
           <div class="pt-2">
+            <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider mb-1">Pre-select Preferred Rakhi Style 🧵 (Optional)</label>
+            <select name="selected_rakhi_design" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+              <option value="gold_zardosi">👑 Gold Zardosi (Royal Golden Thread &amp; Beads)</option>
+              <option value="ruby_silk">💎 Ruby Royal Silk (Crimson Gemstone &amp; Silk)</option>
+              <option value="peacock">🦚 Peacock Feather (Vibrant Mayur Pankh Design)</option>
+              <option value="sacred_om">🕉️ Sacred Om Thread (Pure Auspicious Mauli Thread)</option>
+            </select>
+          </div>
+
+          <div class="pt-2">
             <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider mb-1">Amazon / Gift Voucher Code 🎁 (Optional)</label>
             <input type="text" name="shagun_voucher_code" id="shagunVoucherCodeInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. AMZ-RAKHI-9876 (Leave blank if no voucher code)">
             <p class="text-[10px] text-[#d0c3cb] mt-1">If entered, a golden "Claim Gift Voucher" badge with 1-click copy will appear inside the Shagun Envelope!</p>

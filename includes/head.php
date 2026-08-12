@@ -51,4 +51,33 @@ $pageTitle = $pageTitle ?? (defined('APP_NAME') ? APP_NAME . ' — Romantic Surp
     max-width: 100vw !important;
     position: relative;
   }
+
+  @keyframes aartiRotate {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(1.03); }
+    50% { transform: rotate(180deg) scale(1); }
+    75% { transform: rotate(270deg) scale(1.03); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+  .animate-aarti {
+    animation: aartiRotate 6s linear infinite;
+  }
+
+  @keyframes flameFlicker {
+    0%, 100% { transform: scale(1) translateY(0); opacity: 1; filter: drop-shadow(0 0 10px #f59e0b); }
+    25% { transform: scale(1.15) translateY(-2px); opacity: 0.9; filter: drop-shadow(0 0 18px #ef4444); }
+    50% { transform: scale(0.95) translateY(1px); opacity: 1; filter: drop-shadow(0 0 12px #f59e0b); }
+    75% { transform: scale(1.2) translateY(-1px); opacity: 0.95; filter: drop-shadow(0 0 20px #eab308); }
+  }
+  .animate-flame {
+    animation: flameFlicker 1.2s ease-in-out infinite;
+  }
+
+  @keyframes tilakGlow {
+    0%, 100% { transform: translate(-50%, 0) scale(1); box-shadow: 0 0 12px #ef4444; }
+    50% { transform: translate(-50%, 0) scale(1.3); box-shadow: 0 0 22px #eab308; }
+  }
+  .animate-tilak {
+    animation: tilakGlow 2s ease-in-out infinite;
+  }
 </style>

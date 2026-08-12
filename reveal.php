@@ -2093,56 +2093,120 @@ if (!empty($initialLockData['page_id'])) {
       }
     }
 
-    let rakhiRitualProgress = { tilak: false, diya: false, rakhi: false };
+    let rakhiRitualProgress = { tilak: false, diya: false, rakhi: false, selectedDesign: 'gold_zardosi' };
 
     function applyRoyalTilak() {
       rakhiRitualProgress.tilak = true;
       const tilakMark = document.getElementById('tilakMarkOnAvatar');
-      if (tilakMark) tilakMark.classList.remove('hidden');
+      if (tilakMark) {
+        tilakMark.classList.remove('hidden');
+        tilakMark.classList.add('animate-tilak');
+      }
       
       const btn = document.getElementById('tilakBtn');
-      if (btn) btn.innerHTML = '<span class="text-base">✓ 🔴</span><span>Step 1: Applied</span>';
+      if (btn) btn.innerHTML = '<span class="text-base">✓ 🔴</span><span class="font-serif">Step 1: Applied</span>';
       
       const status = document.getElementById('rakhiRitualStatus');
-      if (status) status.innerHTML = '✨ Roli-Chawal Tilak applied with love! Now tap Step 2 to light the Diya!';
+      if (status) status.innerHTML = '✨ Roli-Chawal Tilak applied with love! Now tap Step 2 to light the Aarti Diya! 🪔';
       
-      if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 60, origin: { y: 0.4 } });
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 60, spread: 70, origin: { y: 0.4 }, colors: ['#ef4444', '#f59e0b', '#ffd700'] });
+      }
     }
 
     function lightRoyalDiya() {
       if (!rakhiRitualProgress.tilak) {
-        alert('Please complete Step 1 (Apply Tilak) first!');
+        alert('Please complete Step 1 (Apply Kumkum Tilak) first!');
         return;
       }
       rakhiRitualProgress.diya = true;
       
       const btn = document.getElementById('diyaBtn');
-      if (btn) btn.innerHTML = '<span class="text-base">✓ 🪔</span><span>Step 2: Lit Flame</span>';
+      if (btn) btn.innerHTML = '<span class="text-base">✓ 🪔</span><span class="font-serif">Step 2: Lit Diya</span>';
+
+      const thaliContainer = document.getElementById('royalThaliContainer');
+      if (thaliContainer) {
+        thaliContainer.classList.add('shadow-[0_0_80px_rgba(234,195,74,0.4)]');
+      }
       
       const status = document.getElementById('rakhiRitualStatus');
-      if (status) status.innerHTML = '🪔 Sacred Diya flame lit! Now tap Step 3 to Tie the Golden Rakhi!';
+      if (status) status.innerHTML = '🪔 Sacred Aarti Diya flame lit! Now tap Step 3 to Select & Tie Royal Rakhi! 🧵';
       
-      if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 75, origin: { y: 0.5 } });
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 80, spread: 85, origin: { y: 0.5 }, colors: ['#f59e0b', '#eab308', '#ffffff'] });
+      }
     }
 
     function tieRoyalRakhi() {
       if (!rakhiRitualProgress.diya) {
-        alert('Please complete Step 1 & Step 2 first!');
+        alert('Please complete Step 1 (Tilak) & Step 2 (Diya) first!');
         return;
       }
+      openRakhiSelectorModal();
+    }
+
+    function openRakhiSelectorModal() {
+      const modal = document.getElementById('rakhiSelectorModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeRakhiSelectorModal() {
+      const modal = document.getElementById('rakhiSelectorModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function selectRakhiDesign(designKey) {
+      rakhiRitualProgress.selectedDesign = designKey;
+      const options = ['gold_zardosi', 'ruby_silk', 'peacock', 'sacred_om'];
+      options.forEach(opt => {
+        const card = document.getElementById('rakhiOpt-' + opt);
+        if (card) {
+          if (opt === designKey) {
+            card.className = 'rakhi-option-card bg-[#2a060b] p-3.5 rounded-2xl border-2 border-[#eac34a] cursor-pointer scale-105 transition-all shadow-xl text-center space-y-2';
+          } else {
+            card.className = 'rakhi-option-card bg-[#150305] p-3.5 rounded-2xl border border-[#4d444b] cursor-pointer hover:scale-105 transition-all shadow-lg text-center space-y-2';
+          }
+        }
+      });
+    }
+
+    function confirmTieRakhi() {
+      closeRakhiSelectorModal();
       rakhiRitualProgress.rakhi = true;
+
+      const rakhiIcons = {
+        'gold_zardosi': '👑 Gold Zardosi',
+        'ruby_silk': '💎 Ruby Silk',
+        'peacock': '🦚 Peacock Feather',
+        'sacred_om': '🕉️ Sacred Om'
+      };
+
+      const designTitle = rakhiIcons[rakhiRitualProgress.selectedDesign] || '👑 Gold Zardosi';
       
       const btn = document.getElementById('rakhiBtn');
-      if (btn) btn.innerHTML = '<span class="text-base">✓ 🧵</span><span>Rakhi Tied!</span>';
+      if (btn) btn.innerHTML = `<span class="text-base">✓ 🧵</span><span class="font-serif">${designTitle} Tied!</span>`;
       
       const status = document.getElementById('rakhiRitualStatus');
-      if (status) status.innerHTML = '🎉 Sacred Rakhi Tied with Endless Blessings & Love! 💖';
+      if (status) status.innerHTML = `🎉 ${designTitle} Rakhi Tied with Endless Blessings & Love! 💖`;
       
       if (typeof confetti === 'function') {
         confetti({ particleCount: 220, spread: 100, origin: { y: 0.6 } });
         setTimeout(() => confetti({ particleCount: 150, angle: 60, spread: 80, origin: { x: 0 } }), 300);
         setTimeout(() => confetti({ particleCount: 150, angle: 120, spread: 80, origin: { x: 1 } }), 600);
       }
+
+      // Automatically open Shagun Lifafa
+      setTimeout(() => {
+        toggleShagunLifafa();
+        const envelope = document.getElementById('shagunLetterContent') || document.getElementById('shagunEnvelopeContainer');
+        if (envelope) envelope.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 1200);
     }
 
     function toggleShagunLifafa() {
@@ -2177,6 +2241,50 @@ if (!empty($initialLockData['page_id'])) {
       return String(str).replace(/'/g, "\\'").replace(/"/g, '\\"');
     }
   </script>
+
+  <!-- Interactive Rakhi Design Selection Modal -->
+  <div id="rakhiSelectorModal" class="fixed inset-0 z-50 bg-[#100d10]/95 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto" onclick="closeRakhiSelectorModal()">
+    <div class="relative max-w-lg w-full bg-gradient-to-br from-[#2a060b] via-[#1a0407] to-[#100204] p-6 sm:p-8 rounded-3xl border-2 border-[#eac34a] shadow-2xl space-y-6 text-center my-auto max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      <div class="space-y-1">
+        <span class="text-[10px] uppercase font-extrabold tracking-widest text-[#eac34a] bg-[#3b1e3b] px-3 py-1 rounded-full border border-[#eac34a]/30 inline-block">
+          👑 SACRED RAKHI SELECTION
+        </span>
+        <h3 class="text-2xl font-bold font-serif text-white">Choose Rakhi Style 🧵</h3>
+        <p class="text-xs text-[#d0c3cb]">Select your favorite Rakhi design to tie onto your sibling's photo avatar!</p>
+      </div>
+
+      <!-- 4 Royal Rakhi Options Grid -->
+      <div class="grid grid-cols-2 gap-3 text-left">
+        <div onclick="selectRakhiDesign('gold_zardosi')" id="rakhiOpt-gold_zardosi" class="rakhi-option-card bg-[#2a060b] p-3.5 rounded-2xl border-2 border-[#eac34a] cursor-pointer hover:scale-105 transition-all shadow-lg text-center space-y-2">
+          <span class="text-3xl block">👑</span>
+          <strong class="text-xs font-serif text-[#eac34a] block">Gold Zardosi</strong>
+          <span class="text-[10px] text-[#d0c3cb] block">Royal Golden Thread &amp; Beads</span>
+        </div>
+
+        <div onclick="selectRakhiDesign('ruby_silk')" id="rakhiOpt-ruby_silk" class="rakhi-option-card bg-[#150305] p-3.5 rounded-2xl border border-[#4d444b] cursor-pointer hover:scale-105 transition-all shadow-lg text-center space-y-2">
+          <span class="text-3xl block">💎</span>
+          <strong class="text-xs font-serif text-[#e8e0e3] block">Ruby Royal Silk</strong>
+          <span class="text-[10px] text-[#d0c3cb] block">Crimson Gemstone &amp; Silk</span>
+        </div>
+
+        <div onclick="selectRakhiDesign('peacock')" id="rakhiOpt-peacock" class="rakhi-option-card bg-[#150305] p-3.5 rounded-2xl border border-[#4d444b] cursor-pointer hover:scale-105 transition-all shadow-lg text-center space-y-2">
+          <span class="text-3xl block">🦚</span>
+          <strong class="text-xs font-serif text-[#e8e0e3] block">Peacock Feather</strong>
+          <span class="text-[10px] text-[#d0c3cb] block">Vibrant Mayur Pankh Design</span>
+        </div>
+
+        <div onclick="selectRakhiDesign('sacred_om')" id="rakhiOpt-sacred_om" class="rakhi-option-card bg-[#150305] p-3.5 rounded-2xl border border-[#4d444b] cursor-pointer hover:scale-105 transition-all shadow-lg text-center space-y-2">
+          <span class="text-3xl block">🕉️</span>
+          <strong class="text-xs font-serif text-[#e8e0e3] block">Sacred Om Thread</strong>
+          <span class="text-[10px] text-[#d0c3cb] block">Pure Auspicious Mauli Thread</span>
+        </div>
+      </div>
+
+      <button type="button" onclick="confirmTieRakhi()" class="w-full py-3.5 bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#eac34a] text-[#241a00] font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow-[0_0_25px_rgba(234,195,74,0.4)] hover:brightness-110 transition-all cursor-pointer">
+        Tie Selected Rakhi 🧵✨
+      </button>
+    </div>
+  </div>
 
   <!-- Letter Reading Modal -->
   <div id="letterModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6 flex items-start sm:items-center justify-center py-8 sm:py-12" onclick="closeLetterModal()">
