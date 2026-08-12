@@ -87,6 +87,16 @@ function getDB() {
                     sort_order INT DEFAULT 0,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+                // Seed initial 4 sample affiliate products if table is empty
+                $chkAff = $pdo->query("SELECT COUNT(*) FROM affiliate_products")->fetchColumn();
+                if ($chkAff == 0) {
+                    $pdo->exec("INSERT INTO affiliate_products (id, title, category, price_text, image_url, affiliate_url, is_active, sort_order) VALUES
+                    (1, 'Cadbury Celebrations Premium Rakhi Chocolate Gift Box', 'Chocolates 🍫', '₹349', 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=400&q=80', 'https://www.amazon.in/dp/B0757FG9X6?tag=soulscript-21', 1, 1),
+                    (2, 'Titan Karishma Analog Dial Women\'s Luxury Watch', 'Watches ⌚', '₹1,495', 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80', 'https://www.amazon.in/dp/B00FLL4K90?tag=soulscript-21', 1, 2),
+                    (3, 'The Body Shop British Rose Deluxe Beauty Gift Set', 'Skincare 💄', '₹1,895', 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=400&q=80', 'https://www.amazon.in/dp/B01HME57CS?tag=soulscript-21', 1, 3),
+                    (4, 'Personalized Wooden Photo Frame Keepsake Desk Gift', 'Photo Keepsake 🖼️', '₹499', 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=400&q=80', 'https://www.amazon.in/dp/B08F7K9L2P?tag=soulscript-21', 1, 4)");
+                }
             } catch (Exception $exRakhiV) { /* ignore */ }
 
             // Auto-migrate templates table extra columns if missing

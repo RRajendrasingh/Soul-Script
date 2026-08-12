@@ -90,21 +90,30 @@ function allocateRakhiVoucher($orderId, $pageId = null) {
 }
 
 /**
- * Get Effective Unlock Timestamp (Supports Admin Test Mode Override)
+ * Get Effective Unlock Timestamp (Supports Admin Test Mode Override & Custom Date)
  */
 function getEffectiveUnlockTimestamp() {
     $overrideFile = __DIR__ . '/../config/rakhi_unlock_override.json';
     if (file_exists($overrideFile)) {
         $data = json_decode(file_get_contents($overrideFile), true);
-        if (!empty($data['test_mode']) && $data['test_mode'] === 'unlocked_now') {
+        $mode = $data['test_mode'] ?? 'production';
+        if ($mode === 'unlocked_now') {
             return time() - 100; // Always unlocked for immediate testing!
         }
-        if (!empty($data['override_date'])) {
+        if ($mode === 'custom_date' && !empty($data['override_date'])) {
             $ts = strtotime($data['override_date']);
             if ($ts !== false) return $ts;
         }
     }
     return strtotime('2026-08-28 12:00:00');
+}
+
+/**
+ * Get Formatted Unlock Date String
+ */
+function getFormattedUnlockDate() {
+    $ts = getEffectiveUnlockTimestamp();
+    return date('d F Y, h:i A', $ts) . ' IST';
 }
 
 /**
@@ -115,6 +124,7 @@ function getRakhiVoucherUnlockStatus($orderId, $pageId = null) {
     $targetTimestamp = getEffectiveUnlockTimestamp();
     $isUnlocked = ($now >= $targetTimestamp);
     $secondsRemaining = max(0, $targetTimestamp - $now);
+    $unlockDateFormatted = getFormattedUnlockDate();
 
     try {
         $db = getDB();
@@ -140,18 +150,18 @@ function getRakhiVoucherUnlockStatus($orderId, $pageId = null) {
             return [
                 'unlocked' => false,
                 'seconds_remaining' => $secondsRemaining,
-                'unlock_date_formatted' => '28 August 2026, 12:00 PM IST',
+                'unlock_date_formatted' => $unlockDateFormatted,
                 'allocated_amount' => null,
                 'voucher_code' => null,
                 'is_claimed' => 0
             ];
         }
 
-        // UNLOCKED RESPONSE (28 Aug 12:00 PM onwards)
+        // UNLOCKED RESPONSE (When Target Timestamp is Reached)
         return [
             'unlocked' => true,
             'seconds_remaining' => 0,
-            'unlock_date_formatted' => '28 August 2026, 12:00 PM IST',
+            'unlock_date_formatted' => $unlockDateFormatted,
             'allocated_amount' => $allocation ? intval($allocation['allocated_amount']) : 100,
             'voucher_code' => $allocation ? $allocation['voucher_code'] : null,
             'is_claimed' => $allocation ? intval($allocation['is_claimed']) : 0
