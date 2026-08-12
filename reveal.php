@@ -1357,17 +1357,18 @@ if (!empty($initialLockData['page_id'])) {
         }
 
         html = `
-        <!-- SECTION 1: HERO HEADER & TAGLINE BANNER -->
+        <!-- SECTION 1: HERO HEADER & SISTER AVATAR WITH TILAK MARK -->
         <section class="relative pt-20 pb-8 px-4 text-center z-10">
           <div class="max-w-4xl mx-auto space-y-6">
-            <div class="w-28 h-28 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[3px] mx-auto shadow-[0_0_35px_rgba(234,195,74,0.4)]">
-              <div class="w-full h-full bg-[#151215] rounded-full overflow-hidden flex items-center justify-center">
+            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[3.5px] mx-auto shadow-[0_0_40px_rgba(234,195,74,0.45)]">
+              <div class="w-full h-full bg-[#151215] rounded-full overflow-hidden flex items-center justify-center relative">
                 ${photoAvatarHtml}
+                <div id="tilakMarkOnAvatar" class="hidden absolute top-7 sm:top-8 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 shadow-[0_0_12px_#ef4444] z-30"></div>
               </div>
             </div>
 
             <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-xs sm:text-sm font-bold shadow-lg">
-              <i data-lucide="flame" class="w-4 h-4 text-[#eac34a]"></i>
+              <i data-lucide="crown" class="w-4 h-4 text-[#eac34a]"></i>
               <span>${content.tagline_quote || "World's Best Sister 👑"}</span>
             </div>
 
@@ -1380,21 +1381,40 @@ if (!empty($initialLockData['page_id'])) {
           </div>
         </section>
 
-        <!-- SECTION 2: VIRTUAL RAKHI TYING CEREMONY -->
+        <!-- SECTION 2: 3-STEP VIRTUAL RAKHI CEREMONY -->
         <section class="max-w-3xl mx-auto px-4 py-8 relative z-10">
-          <div class="bg-[#221f21]/90 border border-[#eac34a]/40 backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
-            <div class="w-16 h-16 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 flex items-center justify-center mx-auto shadow-lg">
-              <i data-lucide="sparkles" class="w-8 h-8 text-[#eac34a]"></i>
+          <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.25)] relative overflow-hidden transition-all duration-500">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.25em] text-[#eac34a] bg-[#3b1e3b] px-4 py-1.5 rounded-full border border-[#eac34a]/40 shadow-inner">
+                🪔 SACRED AARTI THALI &amp; RAKHI RITUAL
+              </span>
             </div>
-            <div>
-              <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block mb-1">SACRED THREAD OF LOVE</span>
+
+            <div class="space-y-1">
               <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Ceremony 🧵</h2>
-              <p class="text-xs text-[#d0c3cb] max-w-md mx-auto mt-2">Tap the golden thread below to complete the virtual Rakhi ritual with confetti and blessings!</p>
+              <p class="text-xs text-[#d0c3cb]/80">Perform the 3 sacred steps to tie the royal Rakhi &amp; unlock blessings.</p>
             </div>
-            <div>
-              <button onclick="tieVirtualRakhi()" id="tieRakhiBtn" type="button" class="px-8 py-4 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] text-[#241a00] font-extrabold text-xs sm:text-sm uppercase tracking-widest shadow-[0_0_30px_rgba(234,195,74,0.4)] hover:scale-105 transition-all cursor-pointer">
-                Tie Virtual Rakhi 🧵
+
+            <!-- 3 Ritual Step Action Buttons -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto pt-2">
+              <button type="button" onclick="applyRoyalTilak()" id="tilakBtn" class="px-4 py-3.5 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
+                <span class="text-xl">🔴</span>
+                <span class="font-serif">Step 1: Tilak</span>
               </button>
+
+              <button type="button" onclick="lightRoyalDiya()" id="diyaBtn" class="px-4 py-3.5 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
+                <span class="text-xl" id="diyaIconSpan">🪔</span>
+                <span class="font-serif">Step 2: Light Diya</span>
+              </button>
+
+              <button type="button" onclick="tieRoyalRakhi()" id="rakhiBtn" class="px-4 py-3.5 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#eac34a] text-[#241a00] font-extrabold text-xs flex flex-col items-center gap-1 shadow-[0_0_25px_rgba(234,195,74,0.4)] hover:scale-105 transition-all cursor-pointer">
+                <span class="text-xl">🧵</span>
+                <span class="font-serif">Step 3: Tie Rakhi</span>
+              </button>
+            </div>
+
+            <div id="rakhiRitualStatus" class="text-xs font-bold text-[#eac34a] min-h-[24px] pt-1 tracking-wide">
+              Tap Step 1 to apply Kumkum Tilak! 🔴
             </div>
           </div>
         </section>
