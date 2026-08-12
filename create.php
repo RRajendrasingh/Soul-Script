@@ -99,6 +99,13 @@ if ($order_id) {
         <p class="text-xs text-[#d0c3cb]">Enter your details below to unlock your personalization form after payment.</p>
       </div>
 
+      <?php if (strpos($preselected_template, 'raksha_bandhan') !== false): ?>
+        <div class="p-3.5 bg-gradient-to-r from-[#3b2a1a] via-[#281d12] to-[#3b2a1a] border border-[#eac34a]/60 text-[#eac34a] rounded-2xl text-xs font-bold text-center flex items-center justify-center gap-2 shadow-md">
+          <i data-lucide="gift" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
+          <span>🎁 Raksha Bandhan Special: Guaranteed Amazon Cash Voucher (₹100 to ₹2,000) Unlocks on 28 Aug 12:00 PM!</span>
+        </div>
+      <?php endif; ?>
+
       <div id="checkoutErrorMsg" class="hidden p-3 bg-[#3b1e3b] border border-[#e4b9df]/40 text-[#e4b9df] rounded-xl text-xs font-semibold text-center"></div>
       
       <?php if (!empty($loggedInBuyer)): ?>

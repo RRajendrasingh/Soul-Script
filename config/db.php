@@ -47,7 +47,45 @@ function getDB() {
                     reason_text TEXT NOT NULL,
                     INDEX idx_reasons_page_id (page_id)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
-            } catch (Exception $exRl) { /* ignore */ }
+            // Auto-migrate Raksha Bandhan Vouchers & Affiliate Store Tables if missing
+            try {
+                $pdo->exec("CREATE TABLE IF NOT EXISTS rakhi_voucher_allocations (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    order_id VARCHAR(100) NOT NULL,
+                    page_id VARCHAR(100) DEFAULT NULL,
+                    allocated_amount INT NOT NULL DEFAULT 100,
+                    voucher_code VARCHAR(100) DEFAULT NULL,
+                    is_claimed TINYINT(1) DEFAULT 0,
+                    claimed_at DATETIME DEFAULT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE KEY idx_rv_order_id (order_id),
+                    INDEX idx_rv_page_id (page_id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS rakhi_vouchers_vault (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    voucher_code VARCHAR(100) NOT NULL,
+                    amount INT NOT NULL DEFAULT 100,
+                    status VARCHAR(20) DEFAULT 'available',
+                    assigned_order_id VARCHAR(100) DEFAULT NULL,
+                    assigned_at DATETIME DEFAULT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE KEY idx_rvv_code (voucher_code),
+                    INDEX idx_rvv_status_amt (status, amount)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS affiliate_products (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    title VARCHAR(255) NOT NULL,
+                    category VARCHAR(100) DEFAULT 'Rakhi Gift',
+                    price_text VARCHAR(50) DEFAULT '₹499',
+                    image_url TEXT,
+                    affiliate_url TEXT NOT NULL,
+                    is_active TINYINT(1) DEFAULT 1,
+                    sort_order INT DEFAULT 0,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+            } catch (Exception $exRakhiV) { /* ignore */ }
 
             // Auto-migrate templates table extra columns if missing
             $tplCols = [

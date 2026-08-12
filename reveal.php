@@ -58,6 +58,15 @@ try {
 } catch (Exception $e) {
     $initialLockData = null;
 }
+
+require_once __DIR__ . '/includes/voucher_helper.php';
+
+$rakhiVoucherStatus = null;
+$rakhiAffiliateProducts = getAffiliateProducts();
+
+if (!empty($initialLockData['page_id'])) {
+    $rakhiVoucherStatus = getRakhiVoucherUnlockStatus(null, $initialLockData['page_id']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1682,20 +1691,74 @@ try {
                 "${content.love_note_text || "Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)"}"
               </p>
 
-              ${voucherCode ? `
-                <div class="p-4 bg-gradient-to-r from-[#eac34a]/20 via-[#e4b9df]/20 to-[#eac34a]/20 border-2 border-[#eac34a] rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
-                  <div class="flex items-center gap-3 text-left">
-                    <div class="w-10 h-10 rounded-xl bg-[#eac34a] text-[#241a00] flex items-center justify-center shrink-0 font-bold">🎁</div>
-                    <div>
-                      <span class="block text-[10px] uppercase font-bold text-[#eac34a] tracking-wider">Gift Voucher Code</span>
-                      <strong class="text-base font-mono text-white tracking-widest">${voucherCode}</strong>
+              <!-- Dynamic Rakhi Voucher Unlock Box -->
+              ${(function() {
+                if (!rakhiVoucherStatus) return '';
+                if (!rakhiVoucherStatus.unlocked) {
+                  return `
+                    <div class="p-5 bg-gradient-to-br from-[#3b2a1a] via-[#281d12] to-[#1a140d] border-2 border-[#eac34a] rounded-2xl text-center space-y-3 shadow-xl relative overflow-hidden">
+                      <span class="text-[10px] uppercase font-extrabold tracking-widest text-[#eac34a] bg-[#100d10] px-3 py-1 rounded-full border border-[#eac34a]/30 inline-block">
+                        🎁 Surprise Amazon Cash Voucher
+                      </span>
+                      <h4 class="text-lg font-bold font-serif text-white">Your Secret Rakhi Cash Voucher Unlocks Soon! ⏳</h4>
+                      <p class="text-xs text-[#d0c3cb] leading-relaxed">
+                        Your Brother/Sister has hidden a surprise Amazon Gift Voucher inside this card! It unlocks automatically on <strong>28 August 2026 at 12:00 PM IST</strong>.
+                      </p>
+                      <div class="inline-flex items-center gap-2 text-xs font-mono text-[#eac34a] bg-[#100d10] py-2 px-4 rounded-xl border border-[#eac34a]/30 font-extrabold shadow-inner">
+                        <i data-lucide="clock" class="w-4 h-4 text-[#eac34a] animate-pulse"></i>
+                        <span>Unlocks on 28 Aug 2026, 12:00 PM IST</span>
+                      </div>
+                    </div>
+                  `;
+                } else {
+                  const vAmt = rakhiVoucherStatus.allocated_amount || 100;
+                  const vCode = rakhiVoucherStatus.voucher_code || voucherCode || 'AMZ-RAKHI-2026-CLAIM';
+                  return `
+                    <div class="p-5 bg-gradient-to-br from-[#1e3b20] via-[#152821] to-[#101b17] border-2 border-[#a4e4b9] rounded-2xl text-center space-y-3.5 shadow-2xl relative overflow-hidden">
+                      <span class="text-[10px] uppercase font-extrabold tracking-widest text-[#a4e4b9] bg-[#100d10] px-3 py-1 rounded-full border border-[#a4e4b9]/30 inline-block">
+                        🎉 Amazon Cash Voucher Unlocked!
+                      </span>
+                      <h4 class="text-2xl font-black font-serif text-[#a4e4b9]">₹${vAmt} Amazon Gift Voucher</h4>
+                      <p class="text-xs text-[#d0c3cb]">Copy your gift code below and redeem directly on Amazon India!</p>
+                      <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-1">
+                        <strong class="text-base font-mono text-white bg-[#100d10] px-5 py-2.5 rounded-xl border border-[#a4e4b9]/40 tracking-widest shadow-inner">${vCode}</strong>
+                        <button type="button" onclick="navigator.clipboard.writeText('${vCode}'); alert('Voucher code copied to clipboard!'); confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-[#a4e4b9] to-[#6ee7b7] text-[#100d10] font-extrabold text-xs uppercase tracking-wider rounded-xl hover:brightness-110 transition-all cursor-pointer shadow-lg">
+                          Copy Code &amp; Redeem 📋
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                }
+              })()}
+
+              <!-- Amazon Affiliate Store Recommendations -->
+              ${(function() {
+                if (!rakhiAffiliateProducts || rakhiAffiliateProducts.length === 0) return '';
+                return `
+                  <div class="pt-6 border-t border-[#4d444b]/40 space-y-3">
+                    <span class="text-[10px] uppercase font-extrabold tracking-widest text-[#eac34a] block text-center">
+                      🛍️ Recommended Rakhi Gifts on Amazon (Redeem Voucher Directly Below)
+                    </span>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      ${rakhiAffiliateProducts.map(prod => `
+                        <a href="${prod.affiliate_url}" target="_blank" class="bg-[#100d10] p-3 rounded-2xl border border-[#4d444b]/40 hover:border-[#eac34a] transition-all group flex flex-col justify-between space-y-2 text-left">
+                          <div class="w-full aspect-square rounded-xl overflow-hidden bg-black/40">
+                            <img src="${prod.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                          </div>
+                          <div class="space-y-1">
+                            <span class="text-[9px] font-bold text-[#eac34a] block truncate">${escapeHtml(prod.category || 'Amazon Gift')}</span>
+                            <h5 class="text-xs font-bold text-[#e8e0e3] line-clamp-2 leading-snug">${escapeHtml(prod.title)}</h5>
+                            <span class="text-xs font-extrabold text-[#a4e4b9] block">${escapeHtml(prod.price_text)}</span>
+                          </div>
+                          <div class="w-full py-1.5 bg-[#eac34a] text-[#241a00] font-extrabold text-[10px] uppercase tracking-wider rounded-lg text-center group-hover:bg-[#ffe088] transition-colors">
+                            Buy on Amazon ↗
+                          </div>
+                        </a>
+                      `).join('')}
                     </div>
                   </div>
-                  <button type="button" onclick="navigator.clipboard.writeText('${voucherCode}'); alert('Voucher code copied to clipboard!');" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider transition-colors shadow-md cursor-pointer">
-                    Copy Code
-                  </button>
-                </div>
-              ` : ''}
+                `;
+              })()}
             </div>
 
             <div class="text-right pt-2">
