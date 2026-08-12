@@ -2152,8 +2152,50 @@ if (!empty($initialLockData['page_id'])) {
 
     let rakhiRitualProgress = { tilak: false, diya: false, rakhi: false, selectedDesign: 'gold_zardosi' };
 
+    function playTempleBellSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 1.2);
+        gain.gain.setValueAtTime(0.5, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 1.2);
+      } catch(e) {}
+    }
+
+    function playVedicChantSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        [220, 330, 440].forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime);
+          gain.gain.setValueAtTime(0.15, ctx.currentTime + idx * 0.1);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.0);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.1);
+          osc.stop(ctx.currentTime + 2.0);
+        });
+      } catch(e) {}
+    }
+
     function applyRoyalTilak() {
       rakhiRitualProgress.tilak = true;
+      if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+      playTempleBellSound();
+
       const tilakMark = document.getElementById('tilakMarkOnAvatar');
       if (tilakMark) {
         tilakMark.classList.remove('hidden');
@@ -2164,10 +2206,10 @@ if (!empty($initialLockData['page_id'])) {
       if (btn) btn.innerHTML = '<span class="text-base">✓ 🔴</span><span class="font-serif">Step 1: Applied</span>';
       
       const status = document.getElementById('rakhiRitualStatus');
-      if (status) status.innerHTML = '✨ Roli-Chawal Tilak applied with love! Now tap Step 2 to light the Aarti Diya! 🪔';
+      if (status) status.innerHTML = '✨ <strong>Roli-Chawal Kumkum Tilak</strong> applied with love &amp; Vedic blessings! Tap Step 2 to light Aarti Diya! 🪔';
       
       if (typeof confetti === 'function') {
-        confetti({ particleCount: 60, spread: 70, origin: { y: 0.4 }, colors: ['#ef4444', '#f59e0b', '#ffd700'] });
+        confetti({ particleCount: 80, spread: 75, origin: { y: 0.4 }, colors: ['#ef4444', '#f59e0b', '#ffd700'] });
       }
     }
 
@@ -2177,6 +2219,9 @@ if (!empty($initialLockData['page_id'])) {
         return;
       }
       rakhiRitualProgress.diya = true;
+      if (navigator.vibrate) navigator.vibrate([50, 40, 50]);
+      playTempleBellSound();
+      playVedicChantSound();
       
       const btn = document.getElementById('diyaBtn');
       if (btn) btn.innerHTML = '<span class="text-base">✓ 🪔</span><span class="font-serif">Step 2: Lit Diya</span>';
@@ -2197,10 +2242,10 @@ if (!empty($initialLockData['page_id'])) {
       }
       
       const status = document.getElementById('rakhiRitualStatus');
-      if (status) status.innerHTML = '🪔 Sacred Aarti Diya flame lit & Thali rotating! Now tap Step 3 to Select & Tie Royal Rakhi! 🧵';
+      if (status) status.innerHTML = '🪔 <strong>Sacred Aarti Diya flame lit!</strong> Thali rotating with temple bells. Tap Step 3 to Select &amp; Tie Royal Rakhi! 🧵';
       
       if (typeof confetti === 'function') {
-        confetti({ particleCount: 90, spread: 90, origin: { y: 0.5 }, colors: ['#f59e0b', '#eab308', '#ffffff'] });
+        confetti({ particleCount: 100, spread: 95, origin: { y: 0.5 }, colors: ['#f59e0b', '#eab308', '#ffffff'] });
       }
     }
 
