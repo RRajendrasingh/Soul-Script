@@ -1391,13 +1391,28 @@ if (!empty($initialLockData['page_id'])) {
               </span>
             </div>
 
-            <div class="space-y-1">
-              <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Ceremony 🧵</h2>
-              <p class="text-xs text-[#d0c3cb]/90 max-w-md mx-auto">Perform the 3 traditional steps: Apply Kumkum Tilak, Light Aarti Diya, and Tie Royal Rakhi!</p>
+            <!-- Vedic Raksha Sutra Mantra Audio Banner -->
+            <div class="bg-[#1a0307] p-3.5 rounded-2xl border border-[#eac34a]/40 max-w-lg mx-auto shadow-inner space-y-1.5">
+              <div class="flex items-center justify-between text-left">
+                <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#eac34a] flex items-center gap-1">
+                  <span>🕉️</span> <span>SACRED RAKSHA SUTRA MANTRA</span>
+                </span>
+                <button type="button" onclick="playVedicChantSound(); playTempleBellSound();" class="text-[10px] font-bold text-[#eac34a] bg-[#3b1e3b] px-3 py-1 rounded-full border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all cursor-pointer flex items-center gap-1">
+                  <span>▶️</span> <span>Play Chants &amp; Bells</span>
+                </button>
+              </div>
+              <p class="font-serif text-xs text-[#f7d070] italic tracking-wide">
+                "ॐ येन बद्धो बली राजा दानवेन्द्रो महाबलः। तेन त्वामभि बध्नामि रक्षे मा चल मा चल॥"
+              </p>
             </div>
 
-            <!-- Centerpiece Royal Aarti Thali Graphic Ring -->
-            <div class="relative w-48 h-48 sm:w-56 sm:h-56 mx-auto my-4 flex items-center justify-center">
+            <div class="space-y-1">
+              <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Ceremony 🧵</h2>
+              <p class="text-xs text-[#d0c3cb]/90 max-w-md mx-auto">Tap or <strong>Drag items from the Thali</strong> onto your sibling's photo: Apply Tilak, Light Diya, and Tie Rakhi!</p>
+            </div>
+
+            <!-- Centerpiece Royal Aarti Thali Graphic Ring with Drag Handles -->
+            <div class="relative w-52 h-52 sm:w-64 sm:h-64 mx-auto my-4 flex items-center justify-center">
               <!-- Outer Golden Carved Thali Plate -->
               <div id="thaliOuterRing" class="absolute inset-0 rounded-full bg-gradient-to-tr from-[#cca830] via-[#ffd700] to-[#b8860b] p-[6px] shadow-[0_0_45px_rgba(234,195,74,0.45)] transition-transform duration-1000">
                 <div class="w-full h-full bg-gradient-to-br from-[#2a060b] via-[#3b0811] to-[#180306] rounded-full border-4 border-[#eac34a]/60 flex items-center justify-center relative shadow-inner overflow-hidden">
@@ -1406,21 +1421,21 @@ if (!empty($initialLockData['page_id'])) {
                   <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#eac34a_1px,transparent_1px)] [background-size:12px_12px]"></div>
 
                   <!-- Roli Bowl (Kumkum) Left -->
-                  <div onclick="applyRoyalTilak()" title="Roli-Chawal Bowl (Step 1)" class="absolute top-4 left-6 sm:left-8 w-10 h-10 rounded-full bg-gradient-to-tr from-red-700 via-red-600 to-amber-500 border-2 border-[#eac34a] p-1 shadow-lg cursor-pointer hover:scale-110 transition-all flex items-center justify-center group z-20">
-                    <span class="text-xs font-bold text-white shadow-sm">🔴</span>
-                    <span class="absolute -bottom-4 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Roli-Chawal</span>
+                  <div id="dragRoliItem" draggable="true" onclick="applyRoyalTilak()" title="Drag Roli Finger onto photo (Step 1)" class="absolute top-4 left-6 sm:left-8 w-11 h-11 rounded-full bg-gradient-to-tr from-red-700 via-red-600 to-amber-500 border-2 border-[#eac34a] p-1 shadow-2xl cursor-grab active:cursor-grabbing hover:scale-115 transition-all flex items-center justify-center group z-20">
+                    <span class="text-sm font-bold text-white shadow-sm">🔴</span>
+                    <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">Step 1: Roli</span>
                   </div>
 
                   <!-- Brass Aarti Diya Flame Top/Center -->
-                  <div id="diyaFlameContainer" onclick="lightRoyalDiya()" title="Aarti Diya (Step 2)" class="absolute top-3 right-6 sm:right-8 w-11 h-11 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 border-2 border-[#eac34a] p-1 shadow-xl cursor-pointer hover:scale-110 transition-all flex items-center justify-center group z-20">
-                    <span id="diyaFlameIcon" class="text-lg">🪔</span>
-                    <span class="absolute -bottom-4 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Light Diya</span>
+                  <div id="diyaFlameContainer" draggable="true" onclick="lightRoyalDiya()" title="Drag Diya in circle (Step 2)" class="absolute top-3 right-6 sm:right-8 w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 border-2 border-[#eac34a] p-1 shadow-2xl cursor-grab active:cursor-grabbing hover:scale-115 transition-all flex items-center justify-center group z-20">
+                    <span id="diyaFlameIcon" class="text-xl">🪔</span>
+                    <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">Step 2: Diya</span>
                   </div>
 
                   <!-- Royal Silk Rakhi Thread Bottom -->
-                  <div onclick="tieRoyalRakhi()" title="Sacred Rakhi (Step 3)" class="absolute bottom-3 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#b8860b] border-2 border-white p-1 shadow-2xl cursor-pointer hover:scale-110 transition-all flex items-center justify-center group z-20">
-                    <span class="text-xl">🧵</span>
-                    <span class="absolute -bottom-4 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Tie Rakhi</span>
+                  <div id="dragRakhiItem" draggable="true" onclick="tieRoyalRakhi()" title="Drag Rakhi onto photo (Step 3)" class="absolute bottom-3 left-1/2 -translate-x-1/2 w-13 h-13 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#b8860b] border-2 border-white p-1 shadow-2xl cursor-grab active:cursor-grabbing hover:scale-115 transition-all flex items-center justify-center group z-20">
+                    <span class="text-2xl">🧵</span>
+                    <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">Step 3: Rakhi</span>
                   </div>
 
                   <!-- Center Flower Emblem -->
@@ -1451,7 +1466,7 @@ if (!empty($initialLockData['page_id'])) {
             </div>
 
             <div id="rakhiRitualStatus" class="text-xs font-bold text-[#eac34a] min-h-[24px] pt-1 tracking-wide">
-              Tap Step 1 or Roli Bowl to apply Kumkum Tilak! 🔴
+              Tap or Drag Step 1 Roli Bowl to apply Kumkum Tilak! 🔴
             </div>
           </div>
         </section>
@@ -2292,6 +2307,10 @@ if (!empty($initialLockData['page_id'])) {
       closeRakhiSelectorModal();
       rakhiRitualProgress.rakhi = true;
 
+      if (navigator.vibrate) navigator.vibrate([60, 40, 60, 40, 100]);
+      playTempleBellSound();
+      playVedicChantSound();
+
       const rakhiIcons = {
         'gold_zardosi': '👑 Gold Zardosi',
         'ruby_silk': '💎 Ruby Silk',
@@ -2305,12 +2324,13 @@ if (!empty($initialLockData['page_id'])) {
       if (btn) btn.innerHTML = `<span class="text-base">✓ 🧵</span><span class="font-serif">${designTitle} Tied!</span>`;
       
       const status = document.getElementById('rakhiRitualStatus');
-      if (status) status.innerHTML = `🎉 ${designTitle} Rakhi Tied with Endless Blessings & Love! 💖`;
+      if (status) status.innerHTML = `🎉 <strong>${designTitle} Rakhi Tied!</strong> Sacred blessings, Rose Petals &amp; Shagun Envelope Unlocked! 💖`;
       
       if (typeof confetti === 'function') {
-        confetti({ particleCount: 220, spread: 100, origin: { y: 0.6 } });
-        setTimeout(() => confetti({ particleCount: 150, angle: 60, spread: 80, origin: { x: 0 } }), 300);
-        setTimeout(() => confetti({ particleCount: 150, angle: 120, spread: 80, origin: { x: 1 } }), 600);
+        // Wave 1: Golden Confetti & Rose Petals
+        confetti({ particleCount: 220, spread: 100, origin: { y: 0.5 }, colors: ['#ef4444', '#f59e0b', '#ffd700', '#ffffff'] });
+        setTimeout(() => confetti({ particleCount: 160, angle: 60, spread: 80, origin: { x: 0 }, colors: ['#ef4444', '#ffd700'] }), 300);
+        setTimeout(() => confetti({ particleCount: 160, angle: 120, spread: 80, origin: { x: 1 }, colors: ['#f59e0b', '#ffffff'] }), 600);
       }
 
       // Automatically open Shagun Lifafa
