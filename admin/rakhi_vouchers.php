@@ -27,6 +27,29 @@ $msgType = 'success';
 if ($isLoggedIn) {
     $db = getDB();
 
+    // Handle Test Unlock Mode Switch Action
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_test_mode') {
+        $mode = trim($_POST['test_mode'] ?? 'production');
+        $customDate = trim($_POST['override_date'] ?? '');
+        $overrideFile = __DIR__ . '/../config/rakhi_unlock_override.json';
+        file_put_contents($overrideFile, json_encode([
+            'test_mode' => $mode,
+            'override_date' => $customDate,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]));
+        $msg = "⚡ Unlock Mode Settings Saved Successfully! Mode: " . strtoupper($mode);
+        $msgType = 'success';
+    }
+
+    // Read current mode state
+    $overrideData = [];
+    $overrideFile = __DIR__ . '/../config/rakhi_unlock_override.json';
+    if (file_exists($overrideFile)) {
+        $overrideData = json_decode(file_get_contents($overrideFile), true) ?: [];
+    }
+    $currentMode = $overrideData['test_mode'] ?? 'production';
+    $currentOverrideDate = $overrideData['override_date'] ?? '';
+
     // Handle Bulk CSV / Text Import
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'import_vouchers') {
         $amount = intval($_POST['voucher_amount'] ?? 100);
@@ -209,16 +232,56 @@ if ($isLoggedIn) {
         </div>
       </div>
 
+      <!-- TEST MODE & DATE OVERRIDE CARD -->
+      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#4d444b]/40 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 flex items-center justify-center font-bold">
+              <i data-lucide="sliders" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">🛠️ Test Unlock &amp; Testing Mode Settings</h3>
+              <p class="text-xs text-[#d0c3cb]">Test scratch card reveal today or set custom test date before 28 August.</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-bold font-mono <?php echo $currentMode === 'unlocked_now' ? 'bg-[#1e3b20] text-[#a4e4b9] border border-[#a4e4b9]/40' : 'bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40'; ?>">
+            Status: <?php echo $currentMode === 'unlocked_now' ? '⚡ TEST UNLOCKED NOW' : '🟢 PRODUCTION (28 AUG 12:00 PM)'; ?>
+          </span>
+        </div>
+
+        <form method="POST" class="flex flex-col sm:flex-row items-end gap-4">
+          <input type="hidden" name="action" value="save_test_mode">
+          
+          <div class="flex-1 space-y-1 w-full">
+            <label class="block text-xs font-bold text-[#d0c3cb]">Unlock Mode</label>
+            <select name="test_mode" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+              <option value="production" <?php echo $currentMode === 'production' ? 'selected' : ''; ?>>🟢 Production Mode (Locked until 28 Aug 12:00 PM IST)</option>
+              <option value="unlocked_now" <?php echo $currentMode === 'unlocked_now' ? 'selected' : ''; ?>>⚡ Instant Test Unlock Mode (Unlocked Right Now for Testing!)</option>
+            </select>
+          </div>
+
+          <button type="submit" class="px-6 py-2.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all cursor-pointer whitespace-nowrap">
+            Save Mode Settings
+          </button>
+        </form>
+      </div>
+
       <!-- BULK CSV & TEXT IMPORT FORM -->
       <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-5">
-        <div class="flex items-center gap-3 border-b border-[#4d444b]/40 pb-4">
-          <div class="w-10 h-10 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 flex items-center justify-center font-bold">
-            <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#4d444b]/40 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 flex items-center justify-center font-bold">
+              <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">1-Click Bulk Amazon Voucher Import</h3>
+              <p class="text-xs text-[#d0c3cb]">Upload CSV Excel file or paste gift codes to stock your vault instantly.</p>
+            </div>
           </div>
-          <div>
-            <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">1-Click Bulk Amazon Voucher Import</h3>
-            <p class="text-xs text-[#d0c3cb]">Upload CSV Excel file or paste gift codes to stock your vault instantly.</p>
-          </div>
+          <a href="<?php echo APP_URL; ?>/assets/sample_amazon_vouchers.csv" download class="px-4 py-2 bg-[#151215] hover:bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 rounded-xl text-xs font-bold flex items-center gap-2 shadow-md transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Download Sample CSV Template</span>
+          </a>
         </div>
 
         <form method="POST" enctype="multipart/form-data" class="space-y-4">

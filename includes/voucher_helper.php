@@ -90,12 +90,31 @@ function allocateRakhiVoucher($orderId, $pageId = null) {
 }
 
 /**
+ * Get Effective Unlock Timestamp (Supports Admin Test Mode Override)
+ */
+function getEffectiveUnlockTimestamp() {
+    $overrideFile = __DIR__ . '/../config/rakhi_unlock_override.json';
+    if (file_exists($overrideFile)) {
+        $data = json_decode(file_get_contents($overrideFile), true);
+        if (!empty($data['test_mode']) && $data['test_mode'] === 'unlocked_now') {
+            return time() - 100; // Always unlocked for immediate testing!
+        }
+        if (!empty($data['override_date'])) {
+            $ts = strtotime($data['override_date']);
+            if ($ts !== false) return $ts;
+        }
+    }
+    return strtotime('2026-08-28 12:00:00');
+}
+
+/**
  * Get Secure Unlock State for Recipient Page (Server-Gated Verification)
  */
 function getRakhiVoucherUnlockStatus($orderId, $pageId = null) {
     $now = time();
-    $isUnlocked = ($now >= RAKHI_UNLOCK_TIMESTAMP);
-    $secondsRemaining = max(0, RAKHI_UNLOCK_TIMESTAMP - $now);
+    $targetTimestamp = getEffectiveUnlockTimestamp();
+    $isUnlocked = ($now >= $targetTimestamp);
+    $secondsRemaining = max(0, $targetTimestamp - $now);
 
     try {
         $db = getDB();
