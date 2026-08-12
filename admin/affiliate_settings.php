@@ -100,6 +100,7 @@ if ($isLoggedIn) {
       </div>
 
     <?php else: ?>
+      <?php require_once __DIR__ . '/nav_header.php'; ?>
 
       <!-- HEADER -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#4d444b]/40 pb-6">
@@ -107,14 +108,6 @@ if ($isLoggedIn) {
           <span class="text-[10px] uppercase font-extrabold tracking-[0.2em] text-[#eac34a] block">Double Earnings Engine</span>
           <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]">🛒 Amazon Affiliate Store Products</h1>
           <p class="text-xs text-[#d0c3cb] mt-1">Add curated Amazon gifts shown under recipient Amazon Vouchers to earn extra 6-10% commissions.</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <a href="rakhi_vouchers.php" class="px-4 py-2.5 rounded-xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs uppercase tracking-wider transition-all shadow-md">
-            🎁 Voucher Vault
-          </a>
-          <a href="?logout=1" class="px-4 py-2.5 rounded-xl bg-[#151215] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs uppercase tracking-wider transition-all shadow-md">
-            Log Out
-          </a>
         </div>
       </div>
 

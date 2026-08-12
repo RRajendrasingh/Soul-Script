@@ -76,6 +76,8 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
         </form>
       </div>
     <?php else: ?>
+      <?php require_once __DIR__ . '/nav_header.php'; ?>
+
       <!-- Header Title -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>

@@ -192,6 +192,7 @@ if ($isLoggedIn) {
       </div>
 
     <?php else: ?>
+      <?php require_once __DIR__ . '/nav_header.php'; ?>
 
       <!-- DASHBOARD HEADER -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#4d444b]/40 pb-6">
@@ -200,10 +201,6 @@ if ($isLoggedIn) {
           <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]">🎁 Rakhi Amazon Voucher Vault</h1>
           <p class="text-xs text-[#d0c3cb] mt-1">Manage bulk Amazon voucher codes, view probability allocations, and upload CSV batches.</p>
         </div>
-        <a href="?logout=1" class="px-4 py-2.5 rounded-xl bg-[#151215] hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md">
-          <i data-lucide="log-out" class="w-4 h-4"></i>
-          <span>Log Out</span>
-        </a>
       </div>
 
       <?php if ($msg): ?>
