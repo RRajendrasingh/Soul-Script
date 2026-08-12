@@ -110,23 +110,55 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
     </div>
 
     <!-- Filter & Search Controls -->
-    <div class="bg-[#221f21] p-6 rounded-3xl border border-[#4d444b] flex flex-col sm:flex-row gap-4 justify-between items-center">
-      <div class="flex gap-4 w-full sm:w-auto flex-1 max-w-xl">
-        <input type="text" id="searchInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3] placeholder-[#d0c3cb]/50 focus:border-[#eac34a] focus:outline-none" placeholder="Search by buyer name, email, or slug..." onkeyup="fetchOrders()">
-        
-        <select id="statusFilter" class="bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" onchange="fetchOrders()">
+    <div class="bg-[#221f21] p-6 rounded-3xl border border-[#4d444b] flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center shadow-xl">
+      <div class="flex flex-wrap gap-3 items-center flex-1">
+        <!-- Search Input -->
+        <div class="flex-1 min-w-[220px]">
+          <input type="text" id="searchInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3] placeholder-[#d0c3cb]/50 focus:border-[#eac34a] focus:outline-none" placeholder="Search by name, email, phone, order ID, slug..." onkeyup="handleSearchKeyup(event)">
+        </div>
+
+        <!-- Payment & Page Status Filter -->
+        <select id="statusFilter" class="bg-[#151215] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" onchange="currentPage=1; fetchOrders()">
           <option value="">All Statuses</option>
-          <option value="paid">Paid Orders</option>
-          <option value="pending">Pending Orders</option>
-          <option value="live">Live Pages</option>
-          <option value="expired">Expired Pages</option>
+          <option value="paid">🟢 Paid Orders</option>
+          <option value="pending">⏳ Pending Orders</option>
+          <option value="live">✨ Live Pages</option>
+          <option value="expired">🔒 Expired Pages</option>
         </select>
+
+        <!-- Date Range Filter -->
+        <select id="dateRangeFilter" class="bg-[#151215] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" onchange="currentPage=1; fetchOrders()">
+          <option value="all">🗓️ All Time</option>
+          <option value="today">📅 Today Only</option>
+          <option value="7days">📊 Last 7 Days</option>
+          <option value="30days">📈 Last 30 Days</option>
+        </select>
+
+        <!-- Per Page Limit Selector -->
+        <div class="flex items-center gap-1.5 bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#d0c3cb]">
+          <span class="text-[11px] font-semibold text-[#b8a7b3]">Show:</span>
+          <select id="limitSelect" class="bg-transparent text-[#eac34a] font-bold focus:outline-none cursor-pointer" onchange="currentPage=1; fetchOrders()">
+            <option value="25" class="bg-[#151215]">25</option>
+            <option value="50" class="bg-[#151215]" selected>50</option>
+            <option value="100" class="bg-[#151215]">100</option>
+            <option value="500" class="bg-[#151215]">500</option>
+            <option value="all" class="bg-[#151215]">All</option>
+          </select>
+        </div>
       </div>
 
-      <button onclick="fetchOrders()" class="px-4 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b] text-xs font-semibold text-[#eac34a] hover:border-[#eac34a] flex items-center gap-1.5">
-        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-        <span>Refresh</span>
-      </button>
+      <div class="flex items-center gap-2 shrink-0">
+        <!-- Export CSV Button -->
+        <button onclick="exportOrdersCsv()" type="button" class="px-4 py-2.5 rounded-xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Export CSV (.csv)</span>
+        </button>
+
+        <button onclick="fetchOrders()" type="button" class="px-3.5 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b] text-xs font-semibold text-[#eac34a] hover:border-[#eac34a] flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>Refresh</span>
+        </button>
+      </div>
     </div>
 
     <!-- Orders Table -->
@@ -148,19 +180,66 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
         </tbody>
       </table>
     </div>
+
+    <!-- Server-Side Pagination Bar -->
+    <div class="bg-[#221f21] p-4 rounded-2xl border border-[#4d444b] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg text-xs">
+      <div class="text-[#d0c3cb]" id="paginationInfo">
+        Showing 0 to 0 of 0 orders
+      </div>
+      <div class="flex items-center gap-2" id="paginationControls">
+        <button id="prevPageBtn" onclick="changePage(-1)" class="px-3.5 py-2 rounded-xl bg-[#151215] border border-[#4d444b] text-[#e8e0e3] hover:border-[#eac34a] disabled:opacity-40 disabled:pointer-events-none font-semibold flex items-center gap-1">
+          <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous
+        </button>
+        <span class="px-4 py-2 font-mono font-bold text-[#eac34a] bg-[#151215] rounded-xl border border-[#4d444b]" id="currentPageDisplay">Page 1 of 1</span>
+        <button id="nextPageBtn" onclick="changePage(1)" class="px-3.5 py-2 rounded-xl bg-[#151215] border border-[#4d444b] text-[#e8e0e3] hover:border-[#eac34a] disabled:opacity-40 disabled:pointer-events-none font-semibold flex items-center gap-1">
+          Next <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
     <?php endif; ?>
   </main>
 
   <script>
     lucide.createIcons();
 
+    let currentPage = 1;
+    let totalPages = 1;
+    let searchDebounceTimer = null;
+
+    function handleSearchKeyup(e) {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        currentPage = 1;
+        fetchOrders();
+      }, 300);
+    }
+
+    function changePage(delta) {
+      const newPage = currentPage + delta;
+      if (newPage >= 1 && newPage <= totalPages) {
+        currentPage = newPage;
+        fetchOrders();
+      }
+    }
+
+    function exportOrdersCsv() {
+      const search = document.getElementById('searchInput').value;
+      const status = document.getElementById('statusFilter').value;
+      const dateRange = document.getElementById('dateRangeFilter').value;
+      
+      const exportUrl = `<?php echo APP_URL; ?>/api/admin.php?action=export_csv&search=${encodeURIComponent(search)}&status=${encodeURIComponent(status)}&date_range=${encodeURIComponent(dateRange)}`;
+      window.location.href = exportUrl;
+    }
+
     async function fetchOrders() {
       const search = document.getElementById('searchInput').value;
       const status = document.getElementById('statusFilter').value;
+      const dateRange = document.getElementById('dateRangeFilter').value;
+      const limit = document.getElementById('limitSelect').value;
       const tbody = document.getElementById('ordersTableBody');
 
       try {
-        const res = await fetch(`<?php echo APP_URL; ?>/api/admin.php?action=list&search=${encodeURIComponent(search)}&status=${encodeURIComponent(status)}`);
+        const res = await fetch(`<?php echo APP_URL; ?>/api/admin.php?action=list&search=${encodeURIComponent(search)}&status=${encodeURIComponent(status)}&date_range=${encodeURIComponent(dateRange)}&limit=${encodeURIComponent(limit)}&page=${currentPage}`);
         const data = await res.json();
 
         if (data.success) {
@@ -168,6 +247,23 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
           document.getElementById('statOrders').innerText = data.stats.total_orders || 0;
           document.getElementById('statPaid').innerText = data.stats.paid_orders || 0;
           document.getElementById('statLive').innerText = data.stats.live_pages || 0;
+
+          // Pagination UI update
+          if (data.pagination) {
+            currentPage = data.pagination.page;
+            totalPages = data.pagination.total_pages;
+            const totalRecords = data.pagination.total_records;
+            const limitVal = data.pagination.limit;
+            
+            let startRec = totalRecords > 0 ? (limitVal > 0 ? (currentPage - 1) * limitVal + 1 : 1) : 0;
+            let endRec = limitVal > 0 ? Math.min(currentPage * limitVal, totalRecords) : totalRecords;
+
+            document.getElementById('paginationInfo').innerText = `Showing ${startRec}–${endRec} of ${totalRecords} orders`;
+            document.getElementById('currentPageDisplay').innerText = `Page ${currentPage} of ${totalPages || 1}`;
+
+            document.getElementById('prevPageBtn').disabled = (currentPage <= 1);
+            document.getElementById('nextPageBtn').disabled = (currentPage >= totalPages);
+          }
 
           const orders = data.orders || [];
           if (orders.length === 0) {

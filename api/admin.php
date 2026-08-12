@@ -21,9 +21,14 @@ $action = $_GET['action'] ?? $input['action'] ?? $_POST['action'] ?? 'list';
 try {
     $db = getDB();
 
-    if ($action === 'list') {
+    if ($action === 'list' || $action === 'export_csv') {
         $search = trim($_GET['search'] ?? '');
         $status = trim($_GET['status'] ?? '');
+        $dateRange = trim($_GET['date_range'] ?? 'all');
+        $page = max(1, (int)($_GET['page'] ?? 1));
+        $limitRaw = trim($_GET['limit'] ?? '50');
+        
+        $limit = ($limitRaw === 'all' || $limitRaw === '0') ? 0 : max(1, (int)$limitRaw);
 
         $sql = "
             SELECT o.*, t.name as template_name, p.page_id, p.url_slug, p.edit_token, p.status as page_status, p.expires_at,
@@ -37,8 +42,10 @@ try {
         $params = [];
 
         if ($search !== '') {
-            $sql .= " AND (o.buyer_name LIKE ? OR o.buyer_email LIKE ? OR p.url_slug LIKE ?)";
+            $sql .= " AND (o.order_id LIKE ? OR o.buyer_name LIKE ? OR o.buyer_email LIKE ? OR o.buyer_phone LIKE ? OR p.url_slug LIKE ?)";
             $searchTerm = '%' . $search . '%';
+            $params[] = $searchTerm;
+            $params[] = $searchTerm;
             $params[] = $searchTerm;
             $params[] = $searchTerm;
             $params[] = $searchTerm;
@@ -54,13 +61,67 @@ try {
             }
         }
 
+        if ($dateRange === 'today') {
+            $sql .= " AND DATE(o.created_at) = CURDATE()";
+        } elseif ($dateRange === '7days') {
+            $sql .= " AND o.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
+        } elseif ($dateRange === '30days') {
+            $sql .= " AND o.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
+        }
+
+        // Count Total Matching Records for Pagination
+        $countSql = "SELECT COUNT(*) FROM (" . $sql . ") as filtered_count";
+        $countStmt = $db->prepare($countSql);
+        $countStmt->execute($params);
+        $totalRecords = (int)$countStmt->fetchColumn();
+
         $sql .= " ORDER BY o.created_at DESC";
+
+        // If Exporting CSV
+        if ($action === 'export_csv') {
+            $stmt = $db->prepare($sql);
+            $stmt->execute($params);
+            $allMatchingOrders = $stmt->fetchAll();
+
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="soulscript_orders_' . date('Y-m-d') . '.csv"');
+
+            $output = fopen('php://output', 'w');
+            fputcsv($output, ['Order ID', 'Date & Time', 'Buyer Name', 'Email', 'Phone', 'Template', 'Amount Paid', 'Payment Status', 'Secret URL', 'Proposal Response', 'Partner Note']);
+
+            foreach ($allMatchingOrders as $ord) {
+                $secretUrl = !empty($ord['url_slug']) ? APP_URL . '/gift/' . $ord['url_slug'] : 'Not generated';
+                fputcsv($output, [
+                    $ord['order_id'],
+                    $ord['created_at'],
+                    $ord['buyer_name'],
+                    $ord['buyer_email'],
+                    $ord['buyer_phone'],
+                    $ord['template_name'] ?: $ord['template_id'],
+                    $ord['amount_paid'],
+                    strtoupper($ord['payment_status']),
+                    $secretUrl,
+                    $ord['proposal_response'] ?: 'No response yet',
+                    $ord['proposal_note'] ?: ''
+                ]);
+            }
+            fclose($output);
+            exit;
+        }
+
+        // Apply Pagination SQL Limit
+        if ($limit > 0) {
+            $offset = ($page - 1) * $limit;
+            $sql .= " LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
+        }
 
         $stmt = $db->prepare($sql);
         $stmt->execute($params);
         $orders = $stmt->fetchAll();
 
-        // Calculate Stats
+        $totalPages = $limit > 0 ? (int)ceil($totalRecords / $limit) : 1;
+
+        // Calculate Global Stats
         $statsStmt = $db->query("
             SELECT 
                 COUNT(*) as total_orders,
@@ -77,6 +138,12 @@ try {
             'success' => true,
             'orders' => $orders,
             'stats' => $stats,
+            'pagination' => [
+                'total_records' => $totalRecords,
+                'page' => $page,
+                'limit' => $limit,
+                'total_pages' => $totalPages
+            ],
             'app_url' => APP_URL
         ]);
         exit;
