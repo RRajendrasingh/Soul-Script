@@ -50,6 +50,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
   </header>
 
   <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
+    <?php require_once __DIR__ . '/nav_header.php'; ?>
 
     <!-- Stats & Guidelines Alert -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -179,7 +180,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       </div>
 
       <!-- Modal Body (Scrollable) -->
-      <form id="templateForm" onsubmit="handleSaveTemplate(event)" class="space-y-4 overflow-y-auto pr-1 flex-1">
+      <form id="templateForm" onsubmit="handleSaveTemplate(event); return false;" class="space-y-4 overflow-y-auto pr-1 flex-1">
         <input type="hidden" id="formTemplateId" value="">
         <input type="hidden" id="formExistingImageUrl" value="">
 

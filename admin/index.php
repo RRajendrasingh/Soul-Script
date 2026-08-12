@@ -84,14 +84,6 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
           <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]">Orders &amp; Page Management</h1>
           <p class="text-xs text-[#d0c3cb] mt-1">Real-time overview of all customer orders, generated surprise reveal links, and proposal responses.</p>
         </div>
-        <div class="flex items-center gap-2">
-          <a href="<?php echo APP_URL; ?>/admin/templates.php" class="bg-[#eac34a] text-[#241a00] font-bold text-xs px-4 py-3 rounded-2xl hover:bg-[#ffe088] transition flex items-center gap-2 shadow-lg">
-            <i data-lucide="layout-grid" class="w-4 h-4"></i> Gift Cards Manager
-          </a>
-          <a href="<?php echo APP_URL; ?>/admin/sample_gallery.php" class="bg-[#3b1e3b] text-[#e8e0e3] border border-[#e4b9df]/40 font-semibold text-xs px-4 py-3 rounded-2xl hover:bg-[#4d274d] transition flex items-center gap-2 shadow-lg">
-            <i data-lucide="image" class="w-4 h-4 text-[#eac34a]"></i> Sample Gallery
-          </a>
-        </div>
       </div>
 
     <!-- Stats Row -->

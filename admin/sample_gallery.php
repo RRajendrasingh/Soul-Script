@@ -32,6 +32,7 @@ if (empty($_SESSION['admin_logged_in'])) {
   ?>
 
   <main class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-16 relative z-10 space-y-8">
+    <?php require_once __DIR__ . '/nav_header.php'; ?>
     
     <!-- Top Action Bar -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#221f21]/80 backdrop-blur-md p-6 rounded-3xl border border-[#4d444b] shadow-2xl">
@@ -109,7 +110,7 @@ if (empty($_SESSION['admin_logged_in'])) {
         <button type="button" onclick="closeSampleModal()" class="text-[#d0c3cb] hover:text-white text-lg font-bold p-1 cursor-pointer">✕</button>
       </div>
 
-      <form id="sampleMetaForm" onsubmit="submitSampleMeta(event)" class="space-y-4">
+      <form id="sampleMetaForm" onsubmit="submitSampleMeta(event); return false;" class="space-y-4">
         <input type="hidden" id="modalFilename" value="">
 
         <div id="fileUploadGroup" class="space-y-1">

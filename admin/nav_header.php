@@ -8,6 +8,14 @@ $currentAdminScript = basename($_SERVER['PHP_SELF']);
       <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
       <span>Orders &amp; Sales</span>
     </a>
+    <a href="templates.php" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 <?php echo $currentAdminScript === 'templates.php' ? 'bg-[#eac34a] text-[#241a00] shadow-md' : 'bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:bg-[#3b1e3b] hover:text-[#eac34a]'; ?>">
+      <i data-lucide="layout-grid" class="w-4 h-4"></i>
+      <span>Gift Cards Manager</span>
+    </a>
+    <a href="sample_gallery.php" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 <?php echo $currentAdminScript === 'sample_gallery.php' ? 'bg-[#eac34a] text-[#241a00] shadow-md' : 'bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:bg-[#3b1e3b] hover:text-[#eac34a]'; ?>">
+      <i data-lucide="image" class="w-4 h-4"></i>
+      <span>Sample Gallery</span>
+    </a>
     <a href="rakhi_vouchers.php" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 <?php echo $currentAdminScript === 'rakhi_vouchers.php' ? 'bg-[#eac34a] text-[#241a00] shadow-md' : 'bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:bg-[#3b1e3b] hover:text-[#eac34a]'; ?>">
       <i data-lucide="gift" class="w-4 h-4"></i>
       <span>Rakhi Amazon Vouchers 🎁</span>
