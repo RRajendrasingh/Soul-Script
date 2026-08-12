@@ -46,7 +46,8 @@ function getDB() {
                     entry_order INT DEFAULT 0,
                     reason_text TEXT NOT NULL,
                     INDEX idx_reasons_page_id (page_id)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+            } catch (Exception $exRl) { /* ignore */ }
+
             // Auto-migrate Raksha Bandhan Vouchers & Affiliate Store Tables if missing
             try {
                 $pdo->exec("CREATE TABLE IF NOT EXISTS rakhi_voucher_allocations (
