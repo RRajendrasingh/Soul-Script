@@ -318,10 +318,19 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       }
 
       container.innerHTML = globalTemplatesList.map((item, idx) => `
-        <div class="bg-[#1b171b] border ${item.active ? 'border-[#3b1e3b] hover:border-[#eac34a]' : 'border-rose-900/40 opacity-70'} rounded-3xl p-4 shadow-xl flex flex-col justify-between transition-all relative group">
+        <div draggable="true" ondragstart="handleTemplateDragStart(event, ${idx})" ondragover="handleTemplateDragOver(event)" ondragenter="handleTemplateDragEnter(event)" ondragleave="handleTemplateDragLeave(event)" ondrop="handleTemplateDrop(event, ${idx})" ondragend="handleTemplateDragEnd(event)" class="bg-[#1b171b] border ${item.active ? 'border-[#3b1e3b] hover:border-[#eac34a]' : 'border-rose-900/40 opacity-70'} rounded-3xl p-4 shadow-xl flex flex-col justify-between transition-all relative group cursor-grab active:cursor-grabbing">
           
+          <!-- Drag Handle Header Bar -->
+          <div class="bg-[#241c24] hover:bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 rounded-xl py-1.5 px-3 mb-3 flex items-center justify-between text-xs font-bold select-none transition-all shadow-inner">
+            <span class="flex items-center gap-1.5">
+              <span class="text-base leading-none">⠿</span>
+              <span>Drag to Reorder</span>
+            </span>
+            <span class="text-[10px] text-[#eac34a] font-mono bg-[#100d10] px-2 py-0.5 rounded-md border border-[#eac34a]/30">Pos: #${idx + 1}</span>
+          </div>
+
           <!-- Top Cover Image with Badges -->
-          <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#100d10] mb-3">
+          <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#100d10] mb-3 pointer-events-none">
             <img src="${item.preview_image_url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
             
             <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
@@ -394,6 +403,70 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       `).join('');
 
       if (typeof lucide === 'object') lucide.createIcons();
+    }
+
+    let draggedTemplateIndex = null;
+
+    function handleTemplateDragStart(e, idx) {
+      draggedTemplateIndex = idx;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', idx);
+      e.currentTarget.classList.add('opacity-40', 'scale-95', 'border-[#eac34a]');
+    }
+
+    function handleTemplateDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    }
+
+    function handleTemplateDragEnter(e) {
+      e.preventDefault();
+      const card = e.currentTarget;
+      card.classList.add('border-[#eac34a]', 'ring-2', 'ring-[#eac34a]/60', 'scale-[1.02]');
+    }
+
+    function handleTemplateDragLeave(e) {
+      const card = e.currentTarget;
+      card.classList.remove('ring-2', 'ring-[#eac34a]/60', 'scale-[1.02]');
+    }
+
+    async function handleTemplateDrop(e, targetIdx) {
+      e.preventDefault();
+      const card = e.currentTarget;
+      card.classList.remove('ring-2', 'ring-[#eac34a]/60', 'scale-[1.02]');
+
+      if (draggedTemplateIndex === null || draggedTemplateIndex === targetIdx) return;
+
+      // Reorder array in local memory
+      const draggedItem = globalTemplatesList.splice(draggedTemplateIndex, 1)[0];
+      globalTemplatesList.splice(targetIdx, 0, draggedItem);
+
+      // Re-render UI grid instantly
+      renderTemplatesGrid();
+
+      // Persist sequence to MySQL database
+      const sequence = globalTemplatesList.map(t => t.template_id);
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/admin_templates.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'reorder', sequence: sequence })
+        });
+        const data = await res.json();
+        if (data.status !== 'success') {
+          loadAdminTemplates();
+        }
+      } catch (err) {
+        loadAdminTemplates();
+      }
+    }
+
+    function handleTemplateDragEnd(e) {
+      draggedTemplateIndex = null;
+      const cards = document.querySelectorAll('#templatesContainer > div');
+      cards.forEach(c => {
+        c.classList.remove('opacity-40', 'scale-95', 'ring-2', 'ring-[#eac34a]/60', 'scale-[1.02]');
+      });
     }
 
     function updateAutoSlugPreview(val) {
