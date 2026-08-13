@@ -93,6 +93,18 @@ try {
                     $newPos = (int)($orderIdx + 1);
                     $stmtReorder->execute([':sort_order' => $newPos, ':template_id' => $tid]);
                 }
+
+                // Auto-update any remaining templates in DB not present in the sequence array
+                $inClause = implode(',', array_fill(0, count($sequence), '?'));
+                $stmtRest = $db->prepare("SELECT template_id FROM templates WHERE template_id NOT IN ($inClause) ORDER BY sort_order ASC, template_id ASC");
+                $stmtRest->execute($sequence);
+                $restTpls = $stmtRest->fetchAll();
+
+                $nextPos = count($sequence) + 1;
+                foreach ($restTpls as $rTpl) {
+                    $stmtReorder->execute([':sort_order' => $nextPos++, ':template_id' => $rTpl['template_id']]);
+                }
+
                 $db->commit();
                 echo json_encode(['status' => 'success', 'message' => 'Card sequence order updated successfully!']);
             } catch (Exception $exReorder) {
