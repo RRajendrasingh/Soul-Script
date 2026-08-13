@@ -74,35 +74,12 @@ try {
                 echo json_encode(['status' => 'error', 'message' => 'Invalid sequence array']);
                 exit;
             }
-            try {
-                $db->beginTransaction();
-                $stmtReorder = $db->prepare("UPDATE templates SET sort_order = :sort_order WHERE template_id = :template_id");
-                foreach ($sequence as $orderIdx => $tid) {
-                    $newPos = (int)($orderIdx + 1);
-                    $stmtReorder->execute([':sort_order' => $newPos, ':template_id' => $tid]);
-                }
-
-                if (!empty($sequence)) {
-                    $inClause = implode(',', array_fill(0, count($sequence), '?'));
-                    $stmtRest = $db->prepare("SELECT template_id FROM templates WHERE template_id NOT IN ($inClause) ORDER BY sort_order ASC, template_id ASC");
-                    $stmtRest->execute(array_values($sequence));
-                    $restTpls = $stmtRest->fetchAll();
-
-                    $nextPos = count($sequence) + 1;
-                    foreach ($restTpls as $rTpl) {
-                        $stmtReorder->execute([':sort_order' => $nextPos++, ':template_id' => $rTpl['template_id']]);
-                    }
-                }
-
-                $db->commit();
-                echo json_encode(['status' => 'success', 'message' => 'Card sequence order updated successfully!']);
-            } catch (Exception $exReorder) {
-                if ($db->inTransaction()) {
-                    $db->rollBack();
-                }
-                http_response_code(500);
-                echo json_encode(['status' => 'error', 'message' => $exReorder->getMessage()]);
+            $stmtUpdate = $db->prepare("UPDATE templates SET sort_order = ? WHERE template_id = ?");
+            foreach ($sequence as $orderIdx => $tid) {
+                $pos = (int)($orderIdx + 1);
+                $stmtUpdate->execute([$pos, $tid]);
             }
+            echo json_encode(['status' => 'success', 'message' => 'Card sequence order updated successfully!']);
             exit;
         }
 
