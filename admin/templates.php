@@ -318,19 +318,10 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       }
 
       container.innerHTML = globalTemplatesList.map((item, idx) => `
-        <div draggable="true" ondragstart="handleTemplateDragStart(event, ${idx})" ondragover="handleTemplateDragOver(event)" ondragenter="handleTemplateDragEnter(event)" ondragleave="handleTemplateDragLeave(event)" ondrop="handleTemplateDrop(event, ${idx})" ondragend="handleTemplateDragEnd(event)" class="bg-[#1b171b] border ${item.active ? 'border-[#3b1e3b] hover:border-[#eac34a]' : 'border-rose-900/40 opacity-70'} rounded-3xl p-4 shadow-xl flex flex-col justify-between transition-all relative group cursor-grab active:cursor-grabbing">
+        <div class="bg-[#1b171b] border ${item.active ? 'border-[#3b1e3b] hover:border-[#eac34a]' : 'border-rose-900/40 opacity-70'} rounded-3xl p-4 shadow-xl flex flex-col justify-between transition-all relative group">
           
-          <!-- Drag Handle Header Bar -->
-          <div class="bg-[#241c24] hover:bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 rounded-xl py-1.5 px-3 mb-3 flex items-center justify-between text-xs font-bold select-none transition-all shadow-inner">
-            <span class="flex items-center gap-1.5">
-              <span class="text-base leading-none">⠿</span>
-              <span>Drag to Reorder</span>
-            </span>
-            <span class="text-[10px] text-[#eac34a] font-mono bg-[#100d10] px-2 py-0.5 rounded-md border border-[#eac34a]/30">Pos: #${idx + 1}</span>
-          </div>
-
-          <!-- Top Cover Image with Badges -->
-          <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#100d10] mb-3 pointer-events-none">
+          <!-- Top Cover Image with Badges & Position Indicator -->
+          <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#100d10] mb-3">
             <img src="${item.preview_image_url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover">
             
             <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
@@ -346,7 +337,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
 
             <div class="absolute bottom-2 left-2 right-2 bg-black/80 backdrop-blur-md p-2 rounded-xl border border-white/10 flex items-center justify-between">
               <span class="text-xs font-bold text-[#eac34a]">₹${item.price_inr}</span>
-              <span class="text-[10px] text-[#b8a7b3] font-mono">Pos: #${idx + 1}</span>
+              <span class="text-[10px] text-[#eac34a] font-mono font-bold bg-[#100d10] px-2 py-0.5 rounded-md border border-[#eac34a]/30">Pos: #${idx + 1}</span>
             </div>
           </div>
 
@@ -372,15 +363,15 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
 
           <!-- Card Action Buttons Grid -->
           <div class="pt-3 border-t border-[#3b1e3b] flex flex-col gap-2">
-            <!-- Sequence Controls -->
-            <div class="flex items-center justify-between gap-1 bg-[#171317] p-1.5 rounded-xl border border-[#4d444b]">
-              <span class="text-[10px] text-[#b8a7b3] font-bold px-1">Order Sequence:</span>
-              <div class="flex items-center gap-1">
-                <button type="button" onclick="moveTemplateSequence('${item.template_id}', -1)" ${idx === 0 ? 'disabled class="opacity-30 cursor-not-allowed px-2 py-1 bg-[#241c24] text-white text-[10px] font-bold rounded-lg"' : 'class="px-2.5 py-1 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#4d274d] text-[10px] font-bold rounded-lg cursor-pointer"'}>
-                  ⬆️ Up
+            <!-- Order Sequence Controls -->
+            <div class="flex items-center justify-between gap-1 bg-[#171317] p-2 rounded-xl border border-[#4d444b]">
+              <span class="text-[10px] text-[#eac34a] font-bold px-1 uppercase tracking-wider">Position #${idx + 1}</span>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="moveTemplateSequence('${item.template_id}', -1)" ${idx === 0 ? 'disabled class="opacity-30 cursor-not-allowed px-3 py-1.5 bg-[#241c24] text-white text-xs font-bold rounded-lg"' : 'class="px-3 py-1.5 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#4d274d] text-xs font-bold rounded-lg cursor-pointer transition-all shadow-md"'}>
+                  ⬆️ Move Up
                 </button>
-                <button type="button" onclick="moveTemplateSequence('${item.template_id}', 1)" ${idx === globalTemplatesList.length - 1 ? 'disabled class="opacity-30 cursor-not-allowed px-2 py-1 bg-[#241c24] text-white text-[10px] font-bold rounded-lg"' : 'class="px-2.5 py-1 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#4d274d] text-[10px] font-bold rounded-lg cursor-pointer"'}>
-                  ⬇️ Down
+                <button type="button" onclick="moveTemplateSequence('${item.template_id}', 1)" ${idx === globalTemplatesList.length - 1 ? 'disabled class="opacity-30 cursor-not-allowed px-3 py-1.5 bg-[#241c24] text-white text-xs font-bold rounded-lg"' : 'class="px-3 py-1.5 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#4d274d] text-xs font-bold rounded-lg cursor-pointer transition-all shadow-md"'}>
+                  ⬇️ Move Down
                 </button>
               </div>
             </div>

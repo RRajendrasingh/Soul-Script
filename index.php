@@ -220,39 +220,9 @@ require_once __DIR__ . '/includes/media_helper.php';
     $activeTemplates = [];
     try {
         $dbTpl = getDB();
-        $stmtTpl = $dbTpl->query("SELECT * FROM templates WHERE active = 1 ORDER BY sort_order ASC, template_id ASC");
+        $stmtTpl = $dbTpl->query("SELECT * FROM templates WHERE active = 1 ORDER BY sort_order ASC");
         $activeTemplates = $stmtTpl->fetchAll();
     } catch (Exception $exT) {}
-
-    // Guarantee Raksha Bandhan Royal is present on Homepage Grid
-    $hasRoyal = false;
-    foreach ($activeTemplates as $at) {
-        if (($at['template_id'] ?? '') === 'raksha_bandhan_royal') {
-            $hasRoyal = true;
-            break;
-        }
-    }
-    if (!$hasRoyal) {
-        $royalCard = [
-            'template_id' => 'raksha_bandhan_royal',
-            'name' => 'Raksha Bandhan Royal 👑',
-            'tagline' => 'Shahi Farman Scroll & 3-Step Rakhi Ritual',
-            'description' => 'Interactive 3-Step Tilak & Diya ceremony, Sibling Fight Meter, 3D Glass Vows, Shahi Farman Parchment Photo Scroll, and Wax-Sealed Shagun Envelope.',
-            'price_inr' => 449,
-            'preview_image_url' => 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp',
-            'badge' => 'Royal Special 👑',
-            'button_text' => 'Personalize Royal Gift 🎁',
-            'demo_url' => APP_URL . '/gift/manvi-rakhi-v2',
-            'demo_password' => 'rakhi',
-            'active' => 1,
-            'sort_order' => 2
-        ];
-        if (count($activeTemplates) > 0) {
-            array_splice($activeTemplates, 1, 0, [$royalCard]);
-        } else {
-            $activeTemplates[] = $royalCard;
-        }
-    }
 
     $defaultDemos = [
         'anniversary_reveal'     => ['url' => APP_URL . '/gift/ananya-rohan', 'pass' => 'SHIMLA'],
