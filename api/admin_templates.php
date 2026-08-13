@@ -25,7 +25,7 @@ try {
     }
 
     if ($method === 'GET') {
-        $stmt = $db->query("SELECT * FROM templates ORDER BY sort_order ASC");
+        $stmt = $db->query("SELECT * FROM templates ORDER BY sort_order ASC, template_id ASC");
         $templates = $stmt->fetchAll();
 
         $baseUrl = rtrim(APP_URL, '/');
