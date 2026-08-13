@@ -1357,16 +1357,51 @@ if (!empty($initialLockData['page_id'])) {
         }
 
         html = `
-        <!-- SECTION 1: HERO HEADER & SISTER AVATAR WITH TILAK MARK & BROTHER WRIST -->
+        <!-- TOP-LEFT GOLDEN MANDALA CORNER ART -->
+        <div class="absolute top-0 left-0 w-36 sm:w-56 opacity-35 pointer-events-none z-0">
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-[#eac34a]">
+            <path d="M0 0 C60 0 100 40 100 100 C40 100 0 60 0 0 Z" fill="url(#mandalaGradSp)" opacity="0.15"/>
+            <circle cx="0" cy="0" r="180" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <circle cx="0" cy="0" r="140" stroke="currentColor" stroke-width="1"/>
+            <circle cx="0" cy="0" r="100" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M0 80 Q 40 40 80 0 M0 120 Q 60 60 120 0 M0 160 Q 80 80 160 0" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+            <defs>
+              <linearGradient id="mandalaGradSp" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#eac34a"/>
+                <stop offset="1" stop-color="#b8860b" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- TOP-RIGHT HANGING BRASS & TERRACOTTA DIYAS ON CHAINS -->
+        <div class="absolute top-0 right-4 sm:right-12 z-20 pointer-events-none flex gap-4 sm:gap-6">
+          <div class="flex flex-col items-center animate-bell-swing">
+            <div class="w-0.5 h-16 sm:h-24 bg-gradient-to-b from-[#eac34a] to-[#cca830]"></div>
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-500 border-2 border-[#eac34a] p-1 shadow-[0_0_20px_#f59e0b] flex items-center justify-center -mt-1">
+              <span class="text-base sm:text-lg animate-flame">🪔</span>
+            </div>
+          </div>
+          <div class="flex flex-col items-center animate-bell-swing" style="animation-delay: 0.5s;">
+            <div class="w-0.5 h-24 sm:h-36 bg-gradient-to-b from-[#eac34a] to-[#cca830]"></div>
+            <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-gradient-to-tr from-rose-600 via-pink-400 to-amber-400 border-2 border-[#eac34a] p-1 shadow-[0_0_15px_#ec4899] flex items-center justify-center -mt-1">
+              <span class="text-sm sm:text-base animate-flame">🪔</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 1: HERO HEADER & DOUBLE GOLDEN RING AVATAR -->
         <section class="relative pt-20 pb-8 px-4 text-center z-10">
           <div class="max-w-4xl mx-auto space-y-6">
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <!-- Sibling Avatar Photo Portrait -->
-              <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[3.5px] shadow-[0_0_40px_rgba(234,195,74,0.45)] relative">
-                <div class="w-full h-full bg-[#151215] rounded-full overflow-hidden flex items-center justify-center relative">
-                  ${photoAvatarHtml}
-                  <div id="tilakMarkOnAvatar" class="hidden absolute top-7 sm:top-8 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-tr from-red-600 via-red-500 to-amber-400 shadow-[0_0_15px_#ef4444] z-30 flex items-center justify-center">
-                    <span class="w-1.5 h-1.5 rounded-full bg-white/90"></span>
+              <!-- Double Golden Ring Photo Avatar Frame -->
+              <div id="doubleGoldenRingAvatar" class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-tr from-[#cca830] via-[#ffd700] to-[#b8860b] p-1.5 shadow-[0_0_50px_rgba(234,195,74,0.55)]">
+                <div class="w-full h-full rounded-full border-2 border-[#100d10] p-1 bg-gradient-to-br from-[#2a060b] to-[#140205]">
+                  <div class="w-full h-full bg-[#151215] rounded-full overflow-hidden flex items-center justify-center relative shadow-inner">
+                    ${photoAvatarHtml}
+                    <div id="tilakMarkOnAvatar" class="hidden absolute top-8 sm:top-10 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-tr from-red-600 via-red-500 to-amber-400 shadow-[0_0_15px_#ef4444] z-30 flex items-center justify-center">
+                      <span class="w-1.5 h-1.5 rounded-full bg-white/90"></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1399,11 +1434,41 @@ if (!empty($initialLockData['page_id'])) {
             </div>
 
             <h1 class="text-4xl sm:text-6xl font-extrabold font-serif text-[#e8e0e3] tracking-tight leading-tight">
-              Happy Raksha Bandhan, <span class="text-[#eac34a]">${content.partner_name}</span>! 🪔
+              Happy Raksha Bandhan, <span class="text-[#eac34a]">${content.partner_name || "Di"}</span>! 🪔
             </h1>
             <p class="text-xs sm:text-base text-[#d0c3cb] max-w-xl mx-auto">
               A digital celebration of our unbreakable bond, childhood memories, and sacred vows.
             </p>
+
+            <!-- PHOTOREALISTIC WRIST RAKHI HERO BANNER WITH ACTION BUTTON -->
+            <div id="heroWristBannerContainer" class="max-w-2xl mx-auto bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] rounded-3xl p-5 sm:p-7 shadow-[0_0_50px_rgba(234,195,74,0.35)] relative overflow-hidden text-center space-y-4">
+              <!-- Lit Brass Diyas Banner Floor Accents -->
+              <div class="flex items-center justify-between px-2">
+                <span class="text-2xl animate-flame">🪔</span>
+                <span class="text-xs font-extrabold uppercase tracking-widest text-[#eac34a] bg-[#1a0307] px-4 py-1.5 rounded-full border border-[#eac34a]/40 shadow-inner">
+                  ✨ VIRTUAL RAKHI CEREMONY
+                </span>
+                <span class="text-2xl animate-flame">🪔</span>
+              </div>
+
+              <!-- Banner Graphics Content -->
+              <div class="py-2 space-y-2">
+                <h3 class="text-2xl sm:text-3xl font-extrabold font-serif text-[#e8e0e3] tracking-tight">
+                  Virtual Rakhi Ceremony 🧵
+                </h3>
+                <p class="text-xs text-[#d0c3cb]/90 max-w-md mx-auto">
+                  Interactive golden Rakhi tying ceremony with temple bells, Kumkum Tilak, Diya Aarti &amp; Shagun blessings.
+                </p>
+              </div>
+
+              <!-- Action Button: Tap to Tie Rakhi -->
+              <div class="pt-2">
+                <button type="button" onclick="document.getElementById('royalThaliContainer').scrollIntoView({behavior:'smooth'}); setTimeout(openRakhiSelectorModal, 800);" class="px-8 py-3.5 bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-black text-sm uppercase tracking-wider rounded-2xl shadow-[0_0_30px_rgba(234,195,74,0.6)] hover:scale-108 active:scale-95 transition-all cursor-pointer inline-flex items-center gap-2.5">
+                  <span class="text-lg">🧵</span>
+                  <span>Tap to Tie Rakhi ✨</span>
+                </button>
+              </div>
+            </div>
           </div>
         </section>
 
