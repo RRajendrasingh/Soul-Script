@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/db.php';
 
 try {
     $db = getDB();
-    $stmt = $db->query("SELECT * FROM templates WHERE active = 1 ORDER BY price_inr ASC");
+    $stmt = $db->query("SELECT * FROM templates WHERE active = 1 ORDER BY sort_order ASC, template_id ASC");
     $templates = $stmt->fetchAll();
 
     echo json_encode([

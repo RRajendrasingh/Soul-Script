@@ -521,20 +521,29 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       const targetIdx = idx + direction;
       if (targetIdx < 0 || targetIdx >= globalTemplatesList.length) return;
 
+      // Swap in memory instantly
       const temp = globalTemplatesList[idx];
       globalTemplatesList[idx] = globalTemplatesList[targetIdx];
       globalTemplatesList[targetIdx] = temp;
 
+      // Re-render UI grid immediately so button clicks feel instantaneous
+      renderTemplatesGrid();
+
       const sequence = globalTemplatesList.map(t => t.template_id);
 
       try {
-        await fetch('<?php echo APP_URL; ?>/api/admin_templates.php', {
+        const res = await fetch('<?php echo APP_URL; ?>/api/admin_templates.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'reorder', sequence: sequence })
         });
+        const data = await res.json();
+        if (data.status !== 'success') {
+          loadAdminTemplates();
+        }
+      } catch (err) {
         loadAdminTemplates();
-      } catch (err) {}
+      }
     }
 
     async function toggleTemplateStatus(templateId) {
