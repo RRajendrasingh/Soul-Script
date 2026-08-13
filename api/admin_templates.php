@@ -24,18 +24,6 @@ try {
         try { $db->exec("ALTER TABLE templates ADD COLUMN {$cName} {$cDef}"); } catch (Exception $ex) {}
     }
 
-    // Ensure all sort_order values are distinct positive integers without duplicate ties
-    try {
-        $chkDup = $db->query("SELECT sort_order, COUNT(*) as cnt FROM templates GROUP BY sort_order HAVING cnt > 1 OR sort_order = 0");
-        if ($chkDup && $chkDup->rowCount() > 0) {
-            $allTpls = $db->query("SELECT template_id FROM templates ORDER BY sort_order ASC")->fetchAll();
-            $stU = $db->prepare("UPDATE templates SET sort_order = ? WHERE template_id = ?");
-            foreach ($allTpls as $i => $tp) {
-                $stU->execute([$i + 1, $tp['template_id']]);
-            }
-        }
-    } catch (Exception $exSort) {}
-
     if ($method === 'GET') {
         $stmt = $db->query("SELECT * FROM templates ORDER BY sort_order ASC");
         $templates = $stmt->fetchAll();
