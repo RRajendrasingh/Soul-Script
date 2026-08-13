@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <linearGradient id="goldSideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe680"/>
+      <stop offset="40%" stop-color="#eac34a"/>
+      <stop offset="80%" stop-color="#b8860b"/>
+      <stop offset="100%" stop-color="#5e4300"/>
+    </linearGradient>
+    <radialGradient id="haloGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#eac34a" stop-opacity="0.35"/>
+      <stop offset="70%" stop-color="#eac34a" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#eac34a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <circle cx="300" cy="300" r="280" fill="url(#haloGlow)" />
+
+  <g stroke="url(#goldSideGrad)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="300" cy="300" r="270" stroke-width="1" opacity="0.3"/>
+    <circle cx="300" cy="300" r="255" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.5"/>
+    <circle cx="300" cy="300" r="240" stroke-width="2" opacity="0.8"/>
+    <circle cx="300" cy="300" r="220" stroke-width="1" opacity="0.5"/>
+    <circle cx="300" cy="300" r="200" stroke-width="1.5" opacity="0.7"/>
+
+    <!-- 24 Outer Ray Petals -->
+    <g opacity="0.8">
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(15 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(30 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(45 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(60 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(75 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(90 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(105 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(120 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(135 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(150 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(165 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(180 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(195 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(210 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(225 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(240 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(255 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(270 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(285 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(300 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(315 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(330 300 300)" />
+      <path d="M300 60 L310 100 L300 120 L290 100 Z" transform="rotate(345 300 300)" />
+    </g>
+
+    <!-- Inner Geometry Rings -->
+    <circle cx="300" cy="300" r="160" stroke-width="2" />
+    <circle cx="300" cy="300" r="140" stroke-width="1" stroke-dasharray="3 3" />
+    <circle cx="300" cy="300" r="120" stroke-width="1.5" />
+    <circle cx="300" cy="300" r="80" stroke-width="2" />
+    <circle cx="300" cy="300" r="40" stroke-width="1.5" />
+    <circle cx="300" cy="300" r="15" fill="url(#goldSideGrad)" stroke="none" />
+  </g>
+</svg>
