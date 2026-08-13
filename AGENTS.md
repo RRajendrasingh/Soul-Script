@@ -19,4 +19,7 @@
    - NEVER commit overrides that untrack or remove `uploads/*` ignore rules from `.gitignore`.
    - ALWAYS preserve dual-storage protection for BOTH user scrapbook photos (`media_{hash}.webp`) and partner profile avatars (`receiver_photo` / `avatar_{hash}.webp`): write files to persistent storage (`/home/u810420317/domains/digitalyogi24.com/uploads_persistent/`) and maintain PHP auto-healing in `includes/media_helper.php`.
 
-
+5. **CRITICAL: The 3 Golden Architectural & Testing Rules**:
+   - **Rule 1: Market Standard Benchmark First**: Always research and analyze top-tier market standards (Shopify, WordPress CMS, enterprise patterns) before building or altering any feature.
+   - **Rule 2: Mandatory Chrome Browser Verification**: Never declare a task completed or ask the user to check live until I have run Chrome browser automated/manual testing myself, verified 100% of scenarios (Insert, Update, Delete, Toggle, Refresh), and ensured zero regression.
+   - **Rule 3: Mandatory 360° View Impact Analysis**: Always evaluate the complete 360° lifecycle of a feature before coding — asking: *"If we Add, Update, Delete, or Toggle X, how does it affect existing features? Will anything break or regress?"* Anticipate all CRUD edge cases proactively.
