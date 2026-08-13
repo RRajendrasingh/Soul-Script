@@ -88,4 +88,40 @@ $pageTitle = $pageTitle ?? (defined('APP_NAME') ? APP_NAME . ' — Romantic Surp
   .animate-thali-glow {
     animation: thaliGlowPulse 3s ease-in-out infinite;
   }
+
+  @keyframes bellSwing {
+    0%, 100% { transform: rotate(0deg); }
+    20% { transform: rotate(18deg); }
+    40% { transform: rotate(-15deg); }
+    60% { transform: rotate(10deg); }
+    80% { transform: rotate(-6deg); }
+  }
+  .animate-bell-swing {
+    animation: bellSwing 1.2s ease-in-out;
+  }
+
+  @keyframes incenseSmoke {
+    0% { opacity: 0.2; transform: translateY(0) scaleX(1); }
+    50% { opacity: 0.7; transform: translateY(-15px) scaleX(1.4); }
+    100% { opacity: 0; transform: translateY(-30px) scaleX(1.8); }
+  }
+  .animate-incense {
+    animation: incenseSmoke 2.5s ease-out infinite;
+  }
+
+  @keyframes petalFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(220px) rotate(360deg); opacity: 0; }
+  }
+  .animate-petal-fall {
+    animation: petalFall 2.8s linear forwards;
+  }
+
+  @keyframes wristGlow {
+    0%, 100% { filter: drop-shadow(0 0 8px #ffd700); }
+    50% { filter: drop-shadow(0 0 20px #ef4444) drop-shadow(0 0 25px #ffd700); }
+  }
+  .animate-wrist-glow {
+    animation: wristGlow 2s ease-in-out infinite;
+  }
 </style>
