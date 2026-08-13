@@ -76,7 +76,8 @@ try {
             }
             $stmtReorder = $db->prepare("UPDATE templates SET sort_order = :sort_order WHERE template_id = :template_id");
             foreach ($sequence as $orderIdx => $tid) {
-                $stmtReorder->execute([':sort_order' => $orderIdx, ':template_id' => $tid]);
+                $newPos = (int)($orderIdx + 1);
+                $stmtReorder->execute([':sort_order' => $newPos, ':template_id' => $tid]);
             }
             echo json_encode(['status' => 'success', 'message' => 'Card sequence order updated successfully!']);
             exit;
