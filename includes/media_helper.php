@@ -50,10 +50,12 @@ function resolveMediaUrl($url, $fallback = '') {
         return $url;
     }
 
-    // 2. Auto-heal missing disk upload files from persistent storage
-    if (strpos($url, '/uploads/') !== false || strpos($url, 'uploads/') === 0) {
+    // 2. Auto-heal missing disk upload & template cover files from persistent storage
+    if (strpos($url, '/uploads/') !== false || strpos($url, 'uploads/') === 0 || strpos($url, 'assets/default_gallery/') !== false) {
         $parsed = parse_url($url);
         $path = $parsed['path'] ?? $url;
+
+        // Healing for user uploads (/uploads/page_id/file.webp)
         if (preg_match('/uploads\/([^\/]+)\/(.+)$/', $path, $m)) {
             $pageId = $m[1];
             $fileName = $m[2];
@@ -70,6 +72,24 @@ function resolveMediaUrl($url, $fallback = '') {
                 }
                 @copy($persistentFile, $publicFile);
                 @chmod($publicFile, 0666);
+            }
+        }
+
+        // Healing for admin template cover photos (/assets/default_gallery/template_hash.webp)
+        if (preg_match('/assets\/default_gallery\/(.+)$/', $path, $mDef)) {
+            $fileNameDef = $mDef[1];
+            $publicDefFile = __DIR__ . '/../assets/default_gallery/' . $fileNameDef;
+            $persistentDefFile = getPersistentUploadsDir() . '/default_gallery/' . $fileNameDef;
+
+            // Auto-Restore if public template cover was cleared by Git deployment
+            if (!file_exists($publicDefFile) && file_exists($persistentDefFile)) {
+                $publicDefFolder = dirname($publicDefFile);
+                if (!is_dir($publicDefFolder)) {
+                    @mkdir($publicDefFolder, 0777, true);
+                    @chmod($publicDefFolder, 0777);
+                }
+                @copy($persistentDefFile, $publicDefFile);
+                @chmod($publicDefFile, 0666);
             }
         }
 
