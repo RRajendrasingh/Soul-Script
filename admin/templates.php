@@ -649,15 +649,32 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
         const data = await res.json();
         if (data.status === 'success') {
           markSequenceSaved();
-          alert('✓ Live card sequence saved successfully to database!');
+          showAdminToast('✓ Live card sequence saved successfully to database!');
+          await loadAdminTemplates();
         } else {
-          alert('Error saving sequence: ' + data.message);
-          loadAdminTemplates();
+          showAdminToast('❌ Error saving sequence: ' + data.message, true);
+          await loadAdminTemplates();
         }
       } catch (err) {
-        alert('Server Error: ' + err.message);
-        loadAdminTemplates();
+        showAdminToast('❌ Server Error: ' + err.message, true);
+        await loadAdminTemplates();
       }
+    }
+
+    function showAdminToast(msg, isError = false) {
+      let toast = document.getElementById('adminToastNotice');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'adminToastNotice';
+        toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-2xl shadow-2xl font-bold text-xs transition-all border flex items-center gap-2';
+        document.body.appendChild(toast);
+      }
+      toast.className = isError 
+        ? 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-2xl shadow-2xl font-bold text-xs transition-all border bg-rose-950 text-rose-200 border-rose-600/50'
+        : 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-2xl shadow-2xl font-bold text-xs transition-all border bg-emerald-950 text-emerald-200 border-emerald-500/50';
+      toast.innerText = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 3500);
     }
 
     async function toggleTemplateStatus(templateId) {

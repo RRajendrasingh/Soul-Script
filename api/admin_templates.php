@@ -81,17 +81,27 @@ try {
         // --- ACTION 1: REORDER SEQUENCE ---
         if ($action === 'reorder') {
             $sequence = $input['sequence'] ?? [];
-            if (!is_array($sequence)) {
+            if (!is_array($sequence) || empty($sequence)) {
                 http_response_code(400);
                 echo json_encode(['status' => 'error', 'message' => 'Invalid sequence array']);
                 exit;
             }
-            $stmtReorder = $db->prepare("UPDATE templates SET sort_order = :sort_order WHERE template_id = :template_id");
-            foreach ($sequence as $orderIdx => $tid) {
-                $newPos = (int)($orderIdx + 1);
-                $stmtReorder->execute([':sort_order' => $newPos, ':template_id' => $tid]);
+            try {
+                $db->beginTransaction();
+                $stmtReorder = $db->prepare("UPDATE templates SET sort_order = :sort_order WHERE template_id = :template_id");
+                foreach ($sequence as $orderIdx => $tid) {
+                    $newPos = (int)($orderIdx + 1);
+                    $stmtReorder->execute([':sort_order' => $newPos, ':template_id' => $tid]);
+                }
+                $db->commit();
+                echo json_encode(['status' => 'success', 'message' => 'Card sequence order updated successfully!']);
+            } catch (Exception $exReorder) {
+                if ($db->inTransaction()) {
+                    $db->rollBack();
+                }
+                http_response_code(500);
+                echo json_encode(['status' => 'error', 'message' => $exReorder->getMessage()]);
             }
-            echo json_encode(['status' => 'success', 'message' => 'Card sequence order updated successfully!']);
             exit;
         }
 
