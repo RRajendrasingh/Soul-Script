@@ -42,10 +42,17 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
           <p class="text-[11px] text-[#b8a7b3] leading-tight truncate sm:whitespace-normal">Manage gift templates, prices, cover photos &amp; live URLs</p>
         </div>
       </div>
-      <button onclick="openTemplateModal()" type="button" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
-        <i data-lucide="plus-circle" class="w-4 h-4"></i>
-        <span>Add New Gift Card</span>
-      </button>
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <button id="saveSequenceBtn" onclick="saveCardSequenceOrder()" type="button" disabled class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#241c24] text-gray-500 font-bold text-xs border border-gray-700 transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-not-allowed opacity-50">
+          <i data-lucide="save" class="w-4 h-4"></i>
+          <span id="saveSeqBtnText">Save Card Sequence</span>
+        </button>
+
+        <button onclick="openTemplateModal()" type="button" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Add New Gift Card</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -578,7 +585,35 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       }
     }
 
-    async function moveTemplateSequence(templateId, direction) {
+    let hasUnsavedSequenceChanges = false;
+
+    function markSequenceUnsaved() {
+      hasUnsavedSequenceChanges = true;
+      const btn = document.getElementById('saveSequenceBtn');
+      const btnText = document.getElementById('saveSeqBtnText');
+      if (btn) {
+        btn.disabled = false;
+        btn.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-pointer animate-pulse ring-2 ring-emerald-400/50';
+      }
+      if (btnText) {
+        btnText.innerText = '💾 Save Card Sequence (Unsaved)';
+      }
+    }
+
+    function markSequenceSaved() {
+      hasUnsavedSequenceChanges = false;
+      const btn = document.getElementById('saveSequenceBtn');
+      const btnText = document.getElementById('saveSeqBtnText');
+      if (btn) {
+        btn.disabled = true;
+        btn.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#241c24] text-gray-500 font-bold text-xs border border-gray-700 transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-not-allowed opacity-50';
+      }
+      if (btnText) {
+        btnText.innerText = 'Save Card Sequence';
+      }
+    }
+
+    function moveTemplateSequence(templateId, direction) {
       const idx = globalTemplatesList.findIndex(t => t.template_id === templateId);
       if (idx === -1) return;
 
@@ -593,6 +628,16 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       // Re-render UI grid immediately so button clicks feel instantaneous
       renderTemplatesGrid();
 
+      // Mark sequence as unsaved until explicit submit button click
+      markSequenceUnsaved();
+    }
+
+    async function saveCardSequenceOrder() {
+      if (!hasUnsavedSequenceChanges) return;
+
+      const btnText = document.getElementById('saveSeqBtnText');
+      if (btnText) btnText.innerText = 'Saving to Database...';
+
       const sequence = globalTemplatesList.map(t => t.template_id);
 
       try {
@@ -602,10 +647,15 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
           body: JSON.stringify({ action: 'reorder', sequence: sequence })
         });
         const data = await res.json();
-        if (data.status !== 'success') {
+        if (data.status === 'success') {
+          markSequenceSaved();
+          alert('✓ Live card sequence saved successfully to database!');
+        } else {
+          alert('Error saving sequence: ' + data.message);
           loadAdminTemplates();
         }
       } catch (err) {
+        alert('Server Error: ' + err.message);
         loadAdminTemplates();
       }
     }

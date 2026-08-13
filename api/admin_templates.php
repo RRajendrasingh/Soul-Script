@@ -119,7 +119,17 @@ try {
             }
             $stmtDel = $db->prepare("DELETE FROM templates WHERE template_id = ?");
             $stmtDel->execute([$template_id]);
-            echo json_encode(['status' => 'success', 'message' => 'Template deleted successfully!']);
+
+            // Auto-compact remaining sort_order sequence to eliminate all gaps
+            try {
+                $allRemaining = $db->query("SELECT template_id FROM templates ORDER BY sort_order ASC")->fetchAll();
+                $stCompact = $db->prepare("UPDATE templates SET sort_order = ? WHERE template_id = ?");
+                foreach ($allRemaining as $cIdx => $rRow) {
+                    $stCompact->execute([$cIdx + 1, $rRow['template_id']]);
+                }
+            } catch (Exception $exCompact) {}
+
+            echo json_encode(['status' => 'success', 'message' => 'Template deleted successfully & sequence auto-compacted!']);
             exit;
         }
 
