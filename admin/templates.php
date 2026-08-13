@@ -296,7 +296,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
     async function loadAdminTemplates() {
       const container = document.getElementById('templatesContainer');
       try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/admin_templates.php');
+        const res = await fetch('<?php echo APP_URL; ?>/api/admin_templates.php?t=' + Date.now());
         const data = await res.json();
 
         if (data.status === 'success' && data.templates) {
