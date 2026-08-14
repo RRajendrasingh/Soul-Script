@@ -50,13 +50,13 @@ if ($cleanReceiverPhoto) {
   </div>
 
   <!-- Middle-Left Side Mandala -->
-  <div class="absolute top-1/3 -left-20 sm:-left-36 w-64 sm:w-[500px] opacity-[0.05] sm:opacity-15 mix-blend-screen">
-    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_side.svg" class="w-full h-full">
+  <div class="absolute top-1/3 -left-20 sm:-left-36 w-64 sm:w-[500px] opacity-[0.08] sm:opacity-[0.25] mix-blend-screen animate-pulse-slow">
+    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/custom_mandala.svg" class="w-full h-full animate-spin-slow">
   </div>
 
   <!-- Middle-Right Side Mandala -->
-  <div class="absolute top-2/3 -right-20 sm:-right-36 w-64 sm:w-[500px] opacity-[0.05] sm:opacity-15 mix-blend-screen">
-    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_side.svg" class="w-full h-full">
+  <div class="absolute top-2/3 -right-20 sm:-right-36 w-64 sm:w-[500px] opacity-[0.08] sm:opacity-[0.25] mix-blend-screen animate-pulse-slow">
+    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/custom_mandala.svg" class="w-full h-full animate-spin-slow">
   </div>
 
   <!-- Bottom-Left Mandala -->

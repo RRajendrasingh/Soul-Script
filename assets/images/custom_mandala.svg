@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" fill="none">
+  <defs>
+    <linearGradient id="goldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFDF73" />
+      <stop offset="50%" stop-color="#EAC34A" />
+      <stop offset="100%" stop-color="#9C7714" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g transform="translate(400, 400)" stroke="url(#goldGlow)" fill="none" filter="url(#glow)">
+    <!-- Outer ornate rings -->
+    <circle cx="0" cy="0" r="380" stroke-width="2" stroke-dasharray="10 15" opacity="0.6"/>
+    <circle cx="0" cy="0" r="360" stroke-width="1" opacity="0.4"/>
+    <circle cx="0" cy="0" r="340" stroke-width="4" stroke-dasharray="4 12" opacity="0.8"/>
+    
+    <!-- Intricate Petals Layer 1 (Outer) -->
+    <path d="M 0 -300 Q 80 -200 0 -100 Q -80 -200 0 -300" stroke-width="2" />
+    <path d="M 0 300 Q 80 200 0 100 Q -80 200 0 300" stroke-width="2" />
+    <path d="M 300 0 Q 200 80 100 0 Q 200 -80 300 0" stroke-width="2" />
+    <path d="M -300 0 Q -200 80 -100 0 Q -200 -80 -300 0" stroke-width="2" />
+
+    <path d="M 212 -212 Q 150 -50 70 -70 Q 50 -150 212 -212" stroke-width="2" />
+    <path d="M -212 212 Q -150 50 -70 70 Q -50 150 -212 212" stroke-width="2" />
+    <path d="M 212 212 Q 150 50 70 70 Q 50 150 212 212" stroke-width="2" />
+    <path d="M -212 -212 Q -150 -50 -70 -70 Q -50 -150 -212 -212" stroke-width="2" />
+
+    <!-- Geometry Lines -->
+    <line x1="-280" y1="-280" x2="280" y2="280" stroke-width="1" opacity="0.3"/>
+    <line x1="-280" y1="280" x2="280" y2="-280" stroke-width="1" opacity="0.3"/>
+    <line x1="0" y1="-380" x2="0" y2="380" stroke-width="1" opacity="0.3"/>
+    <line x1="-380" y1="0" x2="380" y2="0" stroke-width="1" opacity="0.3"/>
+
+    <!-- Concentric Inner Mandalas -->
+    <circle cx="0" cy="0" r="180" stroke-width="2" opacity="0.7"/>
+    <circle cx="0" cy="0" r="160" stroke-width="1" stroke-dasharray="8 8"/>
+    <circle cx="0" cy="0" r="140" stroke-width="2" opacity="0.5"/>
+    <circle cx="0" cy="0" r="80" stroke-width="3" stroke-dasharray="2 6"/>
+    <circle cx="0" cy="0" r="40" stroke-width="2"/>
+
+    <!-- Inner 8-point Star -->
+    <path d="M 0 -120 L 30 -40 L 110 -30 L 50 20 L 70 100 L 0 60 L -70 100 L -50 20 L -110 -30 L -30 -40 Z" stroke-width="2"/>
+    
+    <!-- Micro Dots -->
+    <circle cx="0" cy="-240" r="6" fill="url(#goldGlow)"/>
+    <circle cx="0" cy="240" r="6" fill="url(#goldGlow)"/>
+    <circle cx="-240" cy="0" r="6" fill="url(#goldGlow)"/>
+    <circle cx="240" cy="0" r="6" fill="url(#goldGlow)"/>
+    <circle cx="170" cy="170" r="4" fill="url(#goldGlow)"/>
+    <circle cx="-170" cy="-170" r="4" fill="url(#goldGlow)"/>
+    <circle cx="170" cy="-170" r="4" fill="url(#goldGlow)"/>
+    <circle cx="-170" cy="170" r="4" fill="url(#goldGlow)"/>
+  </g>
+</svg>
