@@ -117,15 +117,17 @@ if ($cleanReceiverPhoto) {
 
       <!-- Right: Greetings & Titles -->
       <div class="space-y-4 w-full md:max-w-3xl text-center md:text-left">
-        <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-xs sm:text-sm font-bold shadow-lg">
+        <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-[10px] md:text-[16px] font-bold shadow-lg">
           <i data-lucide="crown" class="w-4 h-4 text-[#eac34a]"></i>
           <span><?= $taglineQuote ?></span>
         </div>
 
-        <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold font-handwriting text-[#e8e0e3] tracking-wide leading-normal drop-shadow-md py-2">
-          Happy Raksha Bandhan, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830] px-2 -ml-2 -mr-2"><?= $partnerName ?></span>! <span class="text-2xl md:text-4xl inline-block -translate-y-1 animate-flame">🪔</span>
+        <!-- 42px (Mobile) and 68px (Desktop) are exact Golden Ratio steps from 16px -->
+        <h1 class="text-[42px] md:text-[68px] font-bold font-handwriting text-[#e8e0e3] tracking-wide leading-[1.2] drop-shadow-md py-2">
+          Happy Raksha Bandhan, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830] px-2 -ml-2 -mr-2"><?= $partnerName ?></span>! <span class="text-[26px] md:text-[42px] inline-block -translate-y-1 animate-flame">🪔</span>
         </h1>
-        <p class="text-sm md:text-base text-[#d0c3cb] max-w-lg mx-auto md:mx-0 leading-relaxed">
+        <!-- 16px is the base size, 1.618 is the golden line-height -->
+        <p class="text-[14px] md:text-[16px] text-[#d0c3cb] max-w-lg mx-auto md:mx-0 leading-[1.618]">
           A digital celebration of our unbreakable bond, childhood memories, and sacred vows.
         </p>
       </div>
@@ -150,10 +152,11 @@ if ($cleanReceiverPhoto) {
         <span class="absolute top-4 right-10 text-[#eac34a] animate-ping opacity-60">✨</span>
         <span class="absolute bottom-6 right-16 text-[#ffd700] animate-pulse opacity-70">✦</span>
 
-        <h3 class="text-3xl md:text-3xl font-extrabold font-serif text-[#eac34a] tracking-tight drop-shadow-sm">
+        <!-- 26px (Mobile) and 42px (Desktop) -->
+        <h3 class="text-[26px] md:text-[42px] font-extrabold font-serif text-[#eac34a] tracking-tight drop-shadow-sm leading-[1.2]">
           Virtual Rakhi Ceremony
         </h3>
-        <p class="text-xs md:text-sm text-[#d0c3cb]/90 max-w-sm leading-relaxed">
+        <p class="text-[14px] md:text-[16px] text-[#d0c3cb]/90 max-w-sm leading-[1.618]">
           Animated golden Rakhi tying ceremony. Complete the sacred rituals of Tilak, Aarti, and Shagun.
         </p>
         
