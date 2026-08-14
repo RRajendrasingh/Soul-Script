@@ -124,7 +124,7 @@ if ($cleanReceiverPhoto) {
 
         <!-- 42px (Mobile) and 68px (Desktop) are exact Golden Ratio steps from 16px -->
         <h1 class="text-[42px] md:text-[68px] font-bold font-handwriting text-[#e8e0e3] tracking-wide leading-[1.2] drop-shadow-md py-2">
-          Happy Raksha Bandhan, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830] px-2 -ml-2 -mr-2"><?= $partnerName ?></span>! <span class="text-[26px] md:text-[42px] inline-block -translate-y-1 animate-flame">🪔</span>
+          Happy Raksha Bandhan, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830] pl-1 pr-3"><?= $partnerName ?>!</span> <span class="text-[26px] md:text-[42px] inline-block -translate-y-1 animate-flame">🪔</span>
         </h1>
         <!-- 16px is the base size, 1.618 is the golden line-height -->
         <p class="text-[14px] md:text-[16px] text-[#d0c3cb] max-w-lg mx-auto md:mx-0 leading-[1.618]">
