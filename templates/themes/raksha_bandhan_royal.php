@@ -333,23 +333,33 @@ if ($cleanReceiverPhoto) {
 <section id="siblingVowsSection" class="max-w-5xl mx-auto px-4 py-10 relative z-10 space-y-8">
   <div class="text-center space-y-2">
     <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">BROTHER &amp; SISTER VOWS</span>
-    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">5 Sibling Promises 🛡️</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]"><?= count($promisesList) ?> Sacred Sibling Vows 🛡️</h2>
     <div class="w-16 h-[2.5px] bg-[#eac34a] mx-auto mt-2 rounded-full shadow-[0_0_10px_#eac34a]"></div>
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <?php foreach ($promisesList as $pIdx => $pText): ?>
-      <div class="glass-vow-card p-6 space-y-4 shadow-2xl relative group overflow-hidden border-2 border-[#eac34a]/40 hover:border-[#eac34a] transition-all">
-        <div class="flex items-center justify-between">
-          <span class="wax-seal-badge w-10 h-10 rounded-full text-[#eac34a] font-bold text-xs flex items-center justify-center font-serif shadow-lg">#<?= $pIdx + 1 ?></span>
-          <i data-lucide="shield-check" class="w-6 h-6 text-[#eac34a]"></i>
+      <!-- Premium Glassmorphism Promise Card -->
+      <div class="p-6 space-y-5 shadow-2xl relative group overflow-hidden border border-[#eac34a]/30 hover:border-[#eac34a]/80 rounded-2xl transition-all duration-500 bg-gradient-to-br from-[#2a060b]/90 via-[#151215]/95 to-[#3b1e3b]/90 backdrop-blur-xl hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(234,195,74,0.15)]">
+        
+        <!-- Subtle Glow Overlay on Hover -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#eac34a]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"></div>
+        
+        <!-- Subtle Mandala/Floral Watermark -->
+        <div class="absolute -bottom-6 -right-6 text-[#eac34a]/5 text-9xl pointer-events-none z-0 rotate-12 group-hover:rotate-45 transition-transform duration-1000">
+          ❁
         </div>
-        <p class="text-sm font-serif text-[#e8e0e3] leading-relaxed italic pt-1">
+
+        <div class="relative z-10 flex items-center justify-between">
+          <span class="w-10 h-10 rounded-full bg-[#100d10] border border-[#eac34a]/50 text-[#eac34a] font-bold text-xs flex items-center justify-center font-serif shadow-lg group-hover:bg-[#eac34a] group-hover:text-[#100d10] transition-colors duration-300">#<?= $pIdx + 1 ?></span>
+          <i data-lucide="shield-check" class="w-6 h-6 text-[#eac34a]/60 group-hover:text-[#eac34a] transition-colors"></i>
+        </div>
+        <p class="relative z-10 text-base font-serif text-[#e8e0e3] leading-relaxed italic pt-2">
           "<?= htmlspecialchars($pText) ?>"
         </p>
-        <div class="flex items-center gap-1.5 pt-2 border-t border-[#eac34a]/20">
-          <span class="w-2 h-2 rounded-full bg-[#eac34a]"></span>
-          <span class="text-[10px] text-[#eac34a] uppercase tracking-wider font-bold">SACRED VOW TO <?= $partnerName ?></span>
+        <div class="relative z-10 flex items-center gap-2 pt-4 border-t border-[#eac34a]/10 mt-auto">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#eac34a] animate-pulse"></span>
+          <span class="text-[10px] text-[#eac34a] uppercase tracking-widest font-extrabold opacity-80">SACRED VOW TO <?= $partnerName ?></span>
         </div>
       </div>
     <?php endforeach; ?>
@@ -474,14 +484,14 @@ if ($cleanReceiverPhoto) {
     <div class="shahi-farman-handle-left"></div>
     <div class="shahi-farman-handle-right"></div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+    <div class="columns-2 sm:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
       <?php foreach ($media as $m): 
         $imgUrl = htmlspecialchars(resolveMediaUrl($m['file_path'] ?? ''));
         $capText = htmlspecialchars($m['caption'] ?? 'Cherished Memory');
       ?>
-        <div onclick="openLightbox('<?= $imgUrl ?>')" class="bg-[#1c1715] p-2 sm:p-3 rounded-2xl border border-[#eac34a]/30 group cursor-pointer hover:border-[#eac34a] transition-all shadow-xl flex flex-col justify-between">
-          <div class="w-full aspect-square rounded-xl overflow-hidden bg-black/50 relative">
-            <img src="<?= $imgUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        <div onclick="openLightbox('<?= $imgUrl ?>')" class="break-inside-avoid bg-[#1c1715] p-2 sm:p-3 rounded-2xl border border-[#eac34a]/30 group cursor-pointer hover:border-[#eac34a] transition-all shadow-xl flex flex-col">
+          <div class="w-full rounded-xl overflow-hidden bg-black/50 relative">
+            <img loading="lazy" src="<?= $imgUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500">
           </div>
           <div class="pt-2 text-center">
             <span class="text-[10px] sm:text-xs font-serif text-[#eac34a] block truncate font-semibold"><?= $capText ?></span>
