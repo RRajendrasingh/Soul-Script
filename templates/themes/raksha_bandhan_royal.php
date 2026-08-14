@@ -472,29 +472,146 @@ if ($cleanReceiverPhoto) {
 </section>
 
 <!-- SECTION 6: SHAHI FARMAN UNROLLING SCROLL GALLERY (ALL PHOTOS) -->
-<section class="max-w-5xl mx-auto px-4 py-12 relative z-10 space-y-8">
+<!-- SCOPED CSS FOR RAKHI PARCHMENT SCROLL GALLERY (100% Isolated - Zero Global CSS Leak) -->
+<style>
+  .rb-farman-section {
+    position: relative;
+    z-index: 10;
+  }
+  .rb-farman-parchment {
+    background: linear-gradient(to right, #cfb580 0%, #ebd7b3 2.5%, #fdfbf5 8%, #fffdf8 50%, #fdfbf5 92%, #ebd7b3 97.5%, #cfb580 100%);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), inset 0 0 35px rgba(160, 120, 50, 0.2);
+    border-top: 4px solid #c9a658;
+    border-bottom: 4px solid #c9a658;
+    position: relative;
+    border-radius: 1.5rem;
+  }
+  /* Golden Roller Rods Left & Right */
+  .rb-farman-rod-left, .rb-farman-rod-right {
+    position: absolute;
+    top: -24px;
+    bottom: -24px;
+    width: 22px;
+    background: linear-gradient(to right, #523b13 0%, #b89343 35%, #f7e6a6 50%, #b89343 75%, #3d2b0c 100%);
+    border-radius: 11px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.5);
+    z-index: 25;
+  }
+  .rb-farman-rod-left { left: -12px; }
+  .rb-farman-rod-right { right: -12px; }
+  .rb-farman-rod-left::before, .rb-farman-rod-left::after,
+  .rb-farman-rod-right::before, .rb-farman-rod-right::after {
+    content: "";
+    position: absolute;
+    width: 32px;
+    height: 18px;
+    left: -5px;
+    background: radial-gradient(ellipse at center, #fff2c4 0%, #d4af37 50%, #523b13 100%);
+    border-radius: 9px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .rb-farman-rod-left::before, .rb-farman-rod-right::before { top: -12px; }
+  .rb-farman-rod-left::after, .rb-farman-rod-right::after { bottom: -12px; }
+
+  /* Photo Cards Matching User Mockup Colors */
+  .rb-farman-card {
+    background: #fcfbfa;
+    border: 2px solid #dfc690;
+    box-shadow: 0 4px 18px rgba(110, 85, 45, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+    border-radius: 1.25rem;
+    padding: 0.65rem;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .rb-farman-card:hover {
+    transform: translateY(-5px);
+    border-color: #b89343;
+    box-shadow: 0 12px 28px rgba(110, 85, 45, 0.25);
+  }
+  .rb-farman-img-box {
+    border-radius: 0.85rem;
+    overflow: hidden;
+    border: 1px solid #ebd9b5;
+    background-color: #f7f3eb;
+    position: relative;
+    aspect-ratio: 4 / 3;
+  }
+  .rb-farman-caption {
+    color: #3b2b1b;
+    font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 0.55rem;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+  }
+</style>
+
+<section class="rb-farman-section max-w-5xl mx-auto px-4 py-12 space-y-8">
+  <!-- Section Title -->
   <div class="text-center space-y-2 mb-8">
     <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ROYAL MEMORY SCROLL</span>
-    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Shahi Farman Scrapbook 📜</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#fceabb] drop-shadow-md">Our Cherished Moments ✨</h2>
     <p class="text-xs text-[#d0c3cb]">Every memory photo uploaded by <?= $buyerName ?> framed inside the unrolling antique parchment scroll.</p>
   </div>
 
   <!-- Antique Parchment Scroll Container -->
-  <div class="shahi-farman-scroll rounded-3xl p-6 sm:p-10 relative">
-    <div class="shahi-farman-handle-left"></div>
-    <div class="shahi-farman-handle-right"></div>
+  <div class="rb-farman-parchment p-5 sm:p-10 relative">
+    <!-- Decorative Wooden Scroll Handles -->
+    <div class="rb-farman-rod-left"></div>
+    <div class="rb-farman-rod-right"></div>
 
-    <div class="columns-2 sm:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
+    <!-- Corner Watercolor Floral Ornaments -->
+    <!-- Top-Left Floral -->
+    <div class="absolute top-2 left-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
+        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
+        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
+        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
+      </svg>
+    </div>
+    <!-- Top-Right Floral -->
+    <div class="absolute top-2 right-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10 scale-x-[-1]">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
+        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
+        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
+        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
+      </svg>
+    </div>
+    <!-- Bottom-Left Floral -->
+    <div class="absolute bottom-2 left-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10 scale-y-[-1]">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
+        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
+        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
+        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
+      </svg>
+    </div>
+    <!-- Bottom-Right Floral -->
+    <div class="absolute bottom-2 right-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10 scale-[-1]">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
+        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
+        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
+        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
+      </svg>
+    </div>
+
+    <!-- Photo Cards Grid (Matching User Mockup Layout) -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 relative z-20">
       <?php foreach ($media as $m): 
         $imgUrl = htmlspecialchars(resolveMediaUrl($m['file_path'] ?? ''));
         $capText = htmlspecialchars($m['caption'] ?? 'Cherished Memory');
       ?>
-        <div onclick="openLightbox('<?= $imgUrl ?>')" class="break-inside-avoid bg-[#1c1715] p-2 sm:p-3 rounded-2xl border border-[#eac34a]/30 group cursor-pointer hover:border-[#eac34a] transition-all shadow-xl flex flex-col">
-          <div class="w-full rounded-xl overflow-hidden bg-black/50 relative">
-            <img loading="lazy" src="<?= $imgUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500">
+        <div onclick="openLightbox('<?= $imgUrl ?>')" class="rb-farman-card group cursor-pointer flex flex-col">
+          <div class="rb-farman-img-box">
+            <img loading="lazy" src="<?= $imgUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500">
           </div>
-          <div class="pt-2 text-center">
-            <span class="text-[10px] sm:text-xs font-serif text-[#eac34a] block truncate font-semibold"><?= $capText ?></span>
+          <div class="px-1">
+            <p class="rb-farman-caption truncate" title="<?= $capText ?>"><?= $capText ?></p>
           </div>
         </div>
       <?php endforeach; ?>
