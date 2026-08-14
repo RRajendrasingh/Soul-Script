@@ -40,32 +40,32 @@ if ($cleanReceiverPhoto) {
 <!-- RICH MANDALA BACKGROUND ARTWORK LAYER (TOP, MIDDLE & BOTTOM) -->
 <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
   <!-- Top-Left Mandala -->
-  <div class="absolute -top-20 -left-20 w-72 sm:w-96 h-72 sm:h-96 opacity-30 mix-blend-screen">
+  <div class="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-48 h-48 sm:w-80 sm:h-80 opacity-[0.08] sm:opacity-20 mix-blend-screen">
     <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full animate-spin-slow">
   </div>
 
   <!-- Top-Right Mandala -->
-  <div class="absolute -top-20 -right-20 w-72 sm:w-96 h-72 sm:h-96 opacity-30 mix-blend-screen">
+  <div class="absolute -top-16 -right-16 sm:-top-24 sm:-right-24 w-48 h-48 sm:w-80 sm:h-80 opacity-[0.08] sm:opacity-20 mix-blend-screen">
     <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full rotate-90 animate-spin-slow">
   </div>
 
   <!-- Middle-Left Side Mandala -->
-  <div class="absolute top-1/3 -left-36 w-[450px] sm:w-[550px] opacity-15 mix-blend-screen">
+  <div class="absolute top-1/3 -left-20 sm:-left-36 w-64 sm:w-[500px] opacity-[0.05] sm:opacity-15 mix-blend-screen">
     <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_side.svg" class="w-full h-full">
   </div>
 
   <!-- Middle-Right Side Mandala -->
-  <div class="absolute top-2/3 -right-36 w-[450px] sm:w-[550px] opacity-15 mix-blend-screen">
+  <div class="absolute top-2/3 -right-20 sm:-right-36 w-64 sm:w-[500px] opacity-[0.05] sm:opacity-15 mix-blend-screen">
     <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_side.svg" class="w-full h-full">
   </div>
 
   <!-- Bottom-Left Mandala -->
-  <div class="absolute -bottom-24 -left-24 w-80 sm:w-96 h-80 sm:h-96 opacity-25 mix-blend-screen">
+  <div class="absolute -bottom-16 -left-16 sm:-bottom-24 sm:-left-24 w-56 h-56 sm:w-96 sm:h-96 opacity-[0.08] sm:opacity-20 mix-blend-screen">
     <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full rotate-270">
   </div>
 
   <!-- Bottom-Right Mandala -->
-  <div class="absolute -bottom-24 -right-24 w-80 sm:w-96 h-80 sm:h-96 opacity-25 mix-blend-screen">
+  <div class="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-56 h-56 sm:w-96 sm:h-96 opacity-[0.08] sm:opacity-20 mix-blend-screen">
     <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full rotate-180">
   </div>
 
