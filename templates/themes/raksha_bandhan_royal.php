@@ -95,90 +95,91 @@ if ($cleanReceiverPhoto) {
 </div>
 
 <!-- SECTION 1: HERO HEADER & DOUBLE GOLDEN RING AVATAR -->
-<section class="relative pt-20 pb-8 px-4 text-center z-10">
-  <div class="max-w-4xl mx-auto space-y-6">
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-      <!-- Double Golden Ring Photo Avatar Frame -->
-      <div id="doubleGoldenRingAvatar" class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-tr from-[#cca830] via-[#ffd700] to-[#b8860b] p-1.5 shadow-[0_0_50px_rgba(234,195,74,0.55)]">
-        <div class="w-full h-full rounded-full border-2 border-[#100d10] p-1 bg-gradient-to-br from-[#2a060b] to-[#140205]">
+<section class="relative pt-24 pb-12 px-4 text-center sm:text-left z-10 w-full">
+  <div class="max-w-5xl mx-auto space-y-12">
+    
+    <!-- Top Row: Profile & Titles -->
+    <div class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-8 md:gap-16">
+      
+      <!-- Left: Double Golden Ring Photo Avatar Frame -->
+      <div id="doubleGoldenRingAvatar" class="relative w-48 h-48 md:w-56 md:h-56 rounded-full bg-gradient-to-tr from-[#cca830] via-[#ffd700] to-[#b8860b] p-1.5 shadow-[0_0_60px_rgba(234,195,74,0.45)] shrink-0 group hover:scale-105 transition-transform duration-500">
+        <div class="w-full h-full rounded-full border-[3px] border-[#100d10] p-1 bg-gradient-to-br from-[#2a060b] to-[#140205]">
           <div class="w-full h-full bg-[#151215] rounded-full overflow-hidden flex items-center justify-center relative shadow-inner">
             <?= $photoAvatarHtml ?>
-            <div id="tilakMarkOnAvatar" class="hidden absolute top-8 sm:top-10 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-tr from-red-600 via-red-500 to-amber-400 shadow-[0_0_15px_#ef4444] z-30 flex items-center justify-center">
-              <span class="w-1.5 h-1.5 rounded-full bg-white/90"></span>
+            <div id="tilakMarkOnAvatar" class="hidden absolute top-10 md:top-12 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-gradient-to-tr from-red-600 via-red-500 to-amber-400 shadow-[0_0_20px_#ef4444] z-30 flex items-center justify-center">
+              <span class="w-2 h-2 rounded-full bg-white/90"></span>
             </div>
           </div>
         </div>
+        <!-- Decorative Glow Base -->
+        <div class="absolute -inset-4 bg-[#eac34a]/10 blur-xl rounded-full z-[-1] animate-pulse-slow"></div>
       </div>
 
-      <!-- Brother's Hand/Wrist Rakhi Binding Container -->
-      <div id="brotherWristContainer" class="bg-gradient-to-br from-[#2a060b] via-[#3b0811] to-[#1a0306] border-2 border-[#eac34a]/60 rounded-3xl p-4 w-64 shadow-[0_0_30px_rgba(234,195,74,0.3)] space-y-2 text-center relative overflow-hidden">
-        <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#eac34a] bg-[#1a0307] px-3 py-1 rounded-full border border-[#eac34a]/30">
-          🖐️ BROTHER'S WRIST (कलाई)
-        </span>
-        
-        <!-- Wrist & Tied Rakhi Visual Slot -->
-        <div class="relative w-full h-16 bg-[#180306] rounded-2xl border border-[#eac34a]/30 flex items-center justify-center overflow-hidden">
-          <!-- Wrist Graphic Background -->
-          <div class="w-full h-7 bg-gradient-to-r from-[#d9a066] via-[#f5c697] to-[#d9a066] rounded-full shadow-inner relative flex items-center justify-center">
-            <!-- Tied Rakhi Overlay (Shown after tying Rakhi) -->
-            <div id="tiedRakhiOnWrist" class="hidden absolute inset-0 flex items-center justify-center gap-1 animate-wrist-glow z-20">
-              <span class="h-1 w-full bg-gradient-to-r from-red-600 via-yellow-400 to-red-600"></span>
-              <span id="tiedRakhiIcon" class="text-2xl z-30 bg-[#2a060b] p-1 rounded-full border border-[#eac34a] shadow-lg">🧵</span>
-              <span class="h-1 w-full bg-gradient-to-r from-red-600 via-yellow-400 to-red-600"></span>
-            </div>
-            <span id="wristEmptyNotice" class="text-[10px] font-bold text-[#3b1e3b] uppercase tracking-wider">Awaiting Rakhi... 🧵</span>
-          </div>
+      <!-- Right: Greetings & Titles -->
+      <div class="space-y-5 max-w-xl text-center md:text-left">
+        <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-xs sm:text-sm font-bold shadow-lg">
+          <i data-lucide="crown" class="w-4 h-4 text-[#eac34a]"></i>
+          <span><?= $taglineQuote ?></span>
         </div>
-      </div>
-    </div>
 
-    <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-xs sm:text-sm font-bold shadow-lg">
-      <i data-lucide="crown" class="w-4 h-4 text-[#eac34a]"></i>
-      <span><?= $taglineQuote ?></span>
-    </div>
-
-    <h1 class="text-4xl sm:text-6xl font-extrabold font-serif text-[#e8e0e3] tracking-tight leading-tight">
-      Happy Raksha Bandhan, <span class="text-[#eac34a]"><?= $partnerName ?></span>! 🪔
-    </h1>
-    <p class="text-xs sm:text-base text-[#d0c3cb] max-w-xl mx-auto">
-      A digital celebration of our unbreakable bond, childhood memories, and sacred vows.
-    </p>
-
-    <!-- PHOTOREALISTIC WRIST RAKHI HERO BANNER WITH ACTION BUTTON -->
-    <div id="heroWristBannerContainer" class="max-w-2xl mx-auto bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] rounded-3xl p-5 sm:p-7 shadow-[0_0_50px_rgba(234,195,74,0.35)] relative overflow-hidden text-center space-y-4">
-      <!-- Lit Brass Diyas Banner Floor Accents -->
-      <div class="flex items-center justify-between px-2">
-        <span class="text-2xl animate-flame">🪔</span>
-        <span class="text-xs font-extrabold uppercase tracking-widest text-[#eac34a] bg-[#1a0307] px-4 py-1.5 rounded-full border border-[#eac34a]/40 shadow-inner">
-          ✨ VIRTUAL RAKHI CEREMONY
-        </span>
-        <span class="text-2xl animate-flame">🪔</span>
-      </div>
-
-      <!-- Banner Graphics Content -->
-      <div class="py-2 space-y-2">
-        <h3 class="text-2xl sm:text-3xl font-extrabold font-serif text-[#e8e0e3] tracking-tight">
-          Virtual Rakhi Ceremony 🧵
-        </h3>
-        <p class="text-xs text-[#d0c3cb]/90 max-w-md mx-auto">
-          Interactive golden Rakhi tying ceremony with temple bells, Kumkum Tilak, Diya Aarti &amp; Shagun blessings.
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold font-serif text-[#e8e0e3] tracking-tight leading-[1.1] drop-shadow-md">
+          Happy <br class="hidden md:block">Raksha Bandhan, <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830]"><?= $partnerName ?></span>! <span class="text-3xl md:text-5xl inline-block -translate-y-1 animate-flame">🪔</span>
+        </h1>
+        <p class="text-sm md:text-base text-[#d0c3cb] max-w-md mx-auto md:mx-0 leading-relaxed">
+          A digital celebration of our unbreakable bond, childhood memories, and sacred vows.
         </p>
       </div>
 
-      <!-- Action Button: Tap to Tie Rakhi -->
-      <div class="pt-2">
-        <button type="button" onclick="document.getElementById('royalThaliContainer').scrollIntoView({behavior:'smooth'}); setTimeout(openRakhiSelectorModal, 800);" class="px-8 py-3.5 bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-black text-sm uppercase tracking-wider rounded-2xl shadow-[0_0_30px_rgba(234,195,74,0.6)] hover:scale-108 active:scale-95 transition-all cursor-pointer inline-flex items-center gap-2.5">
-          <span class="text-lg">🧵</span>
-          <span>Tap to Tie Rakhi ✨</span>
+    </div>
+
+    <!-- Bottom Row: PHOTOREALISTIC WRIST RAKHI HERO BANNER -->
+    <div id="heroWristBannerContainer" class="w-full bg-[#151215] border border-[#eac34a]/30 rounded-[2.5rem] shadow-[0_0_50px_rgba(234,195,74,0.15)] relative overflow-hidden flex flex-col md:flex-row group transition-all duration-500 hover:shadow-[0_0_60px_rgba(234,195,74,0.3)] hover:border-[#eac34a]/60">
+      
+      <!-- Left side: Photorealistic Image (Brother's Wrist with Rakhi) -->
+      <div class="w-full md:w-5/12 h-48 md:h-auto relative overflow-hidden bg-gradient-to-br from-[#2a060b] to-[#140205]">
+        <!-- Fallback/User Image - Set to absolute cover -->
+        <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/hand_rakhi_banner.png" alt="Rakhi on Wrist" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700">
+        
+        <!-- Gradient Overlay to blend with right side -->
+        <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-transparent via-[#151215]/50 to-[#151215]"></div>
+      </div>
+
+      <!-- Right side: Content & Action Button -->
+      <div class="w-full md:w-7/12 p-6 md:p-10 flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-5 relative">
+        <!-- Floating Sparkles -->
+        <span class="absolute top-6 right-10 text-[#eac34a] animate-ping opacity-60">✨</span>
+        <span class="absolute bottom-8 right-20 text-[#ffd700] animate-pulse opacity-70">✦</span>
+
+        <h3 class="text-3xl md:text-4xl font-extrabold font-serif text-[#eac34a] tracking-tight drop-shadow-sm">
+          Virtual Rakhi Ceremony
+        </h3>
+        <p class="text-xs md:text-sm text-[#d0c3cb]/90 max-w-sm leading-relaxed">
+          Animated golden Rakhi tying ceremony. Complete the sacred rituals of Tilak, Aarti, and Shagun.
+        </p>
+        
+        <!-- Action Button: Opens the Modal -->
+        <button type="button" onclick="openCeremonyModal()" class="mt-2 px-8 py-3.5 md:py-4 bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-bold text-sm md:text-base uppercase tracking-widest rounded-full shadow-[0_10px_30px_rgba(234,195,74,0.4)] hover:shadow-[0_15px_40px_rgba(234,195,74,0.6)] hover:-translate-y-1 active:scale-95 transition-all cursor-pointer inline-flex items-center gap-2.5">
+          <span>Tap to Tie Rakhi</span>
+          <i data-lucide="arrow-right" class="w-5 h-5"></i>
         </button>
       </div>
+
     </div>
+
   </div>
 </section>
 
-<!-- SECTION 2: ROYAL VIRTUAL RAKHI SHRINE & 5-STEP SACRED RITUAL CEREMONY -->
-<section class="max-w-3xl mx-auto px-4 py-8 relative z-10">
-  <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.3)] relative overflow-hidden transition-all duration-500 animate-thali-glow">
+<!-- RAKHI CEREMONY POPUP MODAL -->
+<div id="rakhiCeremonyModal" class="hidden fixed inset-0 z-[100] bg-[#000000e6] backdrop-blur-md overflow-y-auto flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-500">
+  
+  <!-- Close Button -->
+  <button type="button" onclick="closeCeremonyModal()" class="absolute top-6 right-6 sm:top-8 sm:right-8 w-12 h-12 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 text-[#eac34a] flex items-center justify-center hover:bg-[#eac34a] hover:text-black transition-all shadow-[0_0_20px_rgba(234,195,74,0.3)] z-[110]">
+    <i data-lucide="x" class="w-6 h-6"></i>
+  </button>
+
+  <div class="relative w-full max-w-3xl mx-auto my-12">
+    <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.4)] relative overflow-hidden transition-all duration-500 animate-thali-glow">
     
     <!-- Hanging Brass Temple Bell -->
     <div class="flex flex-col items-center justify-center -mt-2">
@@ -322,7 +323,9 @@ if ($cleanReceiverPhoto) {
       </div>
     </div>
   </div>
-</section>
+    </div>
+  </div>
+</div>
 
 <!-- SECTION 4: 3D GLASSMORPHISM SIBLING PROMISE CARDS -->
 <section id="siblingVowsSection" class="max-w-5xl mx-auto px-4 py-10 relative z-10 space-y-8">

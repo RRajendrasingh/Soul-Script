@@ -976,6 +976,30 @@ if (!empty($initialLockData['page_id'])) {
       } catch(e) {}
     }
 
+    function openCeremonyModal() {
+      const modal = document.getElementById('rakhiCeremonyModal');
+      if(modal) {
+        modal.classList.remove('hidden');
+        // trigger reflow
+        void modal.offsetWidth;
+        modal.classList.remove('opacity-0');
+        modal.classList.add('opacity-100');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeCeremonyModal() {
+      const modal = document.getElementById('rakhiCeremonyModal');
+      if(modal) {
+        modal.classList.remove('opacity-100');
+        modal.classList.add('opacity-0');
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          document.body.style.overflow = '';
+        }, 500);
+      }
+    }
+
     function applyRoyalTilak() {
       rakhiRitualProgress.tilak = true;
       if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
