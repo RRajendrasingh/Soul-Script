@@ -122,8 +122,8 @@ if ($cleanReceiverPhoto) {
           <span><?= $taglineQuote ?></span>
         </div>
 
-        <h1 class="text-3xl sm:text-4xl md:text-6xl font-normal font-handwriting text-[#e8e0e3] tracking-wide leading-normal drop-shadow-md">
-          Happy Raksha Bandhan, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830] font-bold"><?= $partnerName ?></span>! <span class="text-2xl md:text-4xl inline-block -translate-y-1 animate-flame">🪔</span>
+        <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold font-handwriting text-[#e8e0e3] tracking-wide leading-normal drop-shadow-md py-2">
+          Happy Raksha Bandhan, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830] px-2 -ml-2 -mr-2"><?= $partnerName ?></span>! <span class="text-2xl md:text-4xl inline-block -translate-y-1 animate-flame">🪔</span>
         </h1>
         <p class="text-sm md:text-base text-[#d0c3cb] max-w-lg mx-auto md:mx-0 leading-relaxed">
           A digital celebration of our unbreakable bond, childhood memories, and sacred vows.
