@@ -347,6 +347,7 @@ body {
 
 .sample-library-card {
   width: 100%;
+  aspect-ratio: 1 / 1;
   position: relative;
   border-radius: 1rem;
   overflow: hidden;
@@ -365,10 +366,12 @@ body {
   box-shadow: 0 0 18px rgba(234, 195, 74, 0.45);
 }
 .sample-library-img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 /* Raksha Bandhan Royal Theme Styling & 3D Ritual Animations */
