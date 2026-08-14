@@ -72,6 +72,50 @@ if ($slug && ($bypass_edit_token || $preview_mode === '1')) {
             }
             unset($m);
 
+            $data = [
+                'page_id' => $page['page_id'],
+                'proposal_response' => $proposalResponse,
+                'tokens' => $tokensData
+            ];
+            $contentData = [
+                'partner_name'     => $page['partner_name'],
+                'buyer_name'       => $page['buyer_name'],
+                'hint_question'    => $page['hint_question'],
+                'love_note_text'   => $page['love_note_text'],
+                'tagline_quote'    => $page['tagline_quote'] ?? 'Safar Khubsurat h manjil se bhi 🌹',
+                'favorite_singers' => $page['favorite_singers'] ?? 'Arijit Singh & KK',
+                'bg_music_url'     => $page['bg_music_url'] ?? '',
+                'receiver_photo'   => $page['receiver_photo'] ?? '',
+                'letters' => $lettersData,
+                'tokens'  => $tokensData,
+                'template_fields' => [
+                    'relationship_start_date' => $page['relationship_start_date'],
+                    'partner_dob'             => $page['partner_dob'],
+                    'love_letter_text'        => $page['love_letter_text'],
+                    'buyer_city'              => $page['buyer_city'],
+                    'buyer_timezone'          => $page['buyer_timezone'],
+                    'partner_city'            => $page['partner_city'],
+                    'partner_timezone'        => $page['partner_timezone'],
+                    'reunion_date'            => $page['reunion_date'],
+                    'playlist_url'            => $page['playlist_url'],
+                    'song_title'              => $page['song_title'],
+                    'song_artist'             => $page['song_artist'],
+                    'milestones'              => $milestones,
+                    'reasons'                 => $reasons
+                ],
+                'media' => $media
+            ];
+
+            $html_content = '';
+            $theme_file = __DIR__ . '/../templates/themes/' . $page['template_id'] . '.php';
+            if (file_exists($theme_file)) {
+                $content = $contentData;
+                $isEditMode = true;
+                ob_start();
+                require $theme_file;
+                $html_content = ob_get_clean();
+            }
+
             echo json_encode([
                 'success' => true,
                 'message' => 'Buyer edit mode — page loaded.',
@@ -79,34 +123,8 @@ if ($slug && ($bypass_edit_token || $preview_mode === '1')) {
                 'template_id' => $page['template_id'],
                 'url_slug' => $page['url_slug'],
                 'expires_at' => $page['expires_at'],
-                'content' => [
-                    'partner_name'     => $page['partner_name'],
-                    'buyer_name'       => $page['buyer_name'],
-                    'hint_question'    => $page['hint_question'],
-                    'love_note_text'   => $page['love_note_text'],
-                    'tagline_quote'    => $page['tagline_quote'] ?? 'Safar Khubsurat h manjil se bhi 🌹',
-                    'favorite_singers' => $page['favorite_singers'] ?? 'Arijit Singh & KK',
-                    'bg_music_url'     => $page['bg_music_url'] ?? '',
-                    'receiver_photo'   => $page['receiver_photo'] ?? '',
-                    'letters' => $lettersData,
-                    'tokens'  => $tokensData,
-                    'template_fields' => [
-                        'relationship_start_date' => $page['relationship_start_date'],
-                        'partner_dob'             => $page['partner_dob'],
-                        'love_letter_text'        => $page['love_letter_text'],
-                        'buyer_city'              => $page['buyer_city'],
-                        'buyer_timezone'          => $page['buyer_timezone'],
-                        'partner_city'            => $page['partner_city'],
-                        'partner_timezone'        => $page['partner_timezone'],
-                        'reunion_date'            => $page['reunion_date'],
-                        'playlist_url'            => $page['playlist_url'],
-                        'song_title'              => $page['song_title'],
-                        'song_artist'             => $page['song_artist'],
-                        'milestones'              => $milestones,
-                        'reasons'                 => $reasons
-                    ],
-                    'media' => $media
-                ],
+                'html_content' => $html_content,
+                'content' => $contentData,
                 'proposal_response' => $proposalResponse
             ]);
             exit;
@@ -247,6 +265,52 @@ try {
     $voucherStatus = getRakhiVoucherUnlockStatus($page['order_id'] ?? null, $page['page_id']);
     $affiliateProducts = getAffiliateProducts();
 
+    $data = [
+        'page_id' => $page['page_id'],
+        'proposal_response' => $proposalResponse,
+        'tokens' => $tokensData,
+        'rakhi_voucher_status' => $voucherStatus,
+        'rakhi_affiliate_products' => $affiliateProducts
+    ];
+    $contentData = [
+        'partner_name' => $page['partner_name'],
+        'buyer_name' => $page['buyer_name'],
+        'hint_question' => $page['hint_question'],
+        'love_note_text' => $page['love_note_text'],
+        'tagline_quote' => $page['tagline_quote'] ?? 'Safar Khubsurat h manjil se bhi 🌹',
+        'favorite_singers' => $page['favorite_singers'] ?? 'Arijit Singh & KK',
+        'bg_music_url' => $page['bg_music_url'] ?? 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3',
+        'receiver_photo' => $page['receiver_photo'] ?? '',
+        'letters' => $lettersData,
+        'tokens' => $tokensData,
+        'template_fields' => [
+            'relationship_start_date' => $page['relationship_start_date'],
+            'partner_dob'             => $page['partner_dob'],
+            'love_letter_text'        => $page['love_letter_text'],
+            'buyer_city'              => $page['buyer_city'],
+            'buyer_timezone'          => $page['buyer_timezone'],
+            'partner_city'            => $page['partner_city'],
+            'partner_timezone'        => $page['partner_timezone'],
+            'reunion_date'            => $page['reunion_date'],
+            'playlist_url'            => $page['playlist_url'],
+            'song_title'              => $page['song_title'],
+            'song_artist'             => $page['song_artist'],
+            'milestones'              => $milestones,
+            'reasons'                 => $reasons
+        ],
+        'media' => $media
+    ];
+
+    $html_content = '';
+    $theme_file = __DIR__ . '/../templates/themes/' . $page['template_id'] . '.php';
+    if (file_exists($theme_file)) {
+        $content = $contentData;
+        $isEditMode = false;
+        ob_start();
+        require $theme_file;
+        $html_content = ob_get_clean();
+    }
+
     echo json_encode([
         'success' => true,
         'message' => 'Hint verified successfully!',
@@ -256,34 +320,8 @@ try {
         'expires_at' => $page['expires_at'],
         'voucher_status' => $voucherStatus,
         'affiliate_products' => $affiliateProducts,
-        'content' => [
-            'partner_name' => $page['partner_name'],
-            'buyer_name' => $page['buyer_name'],
-            'hint_question' => $page['hint_question'],
-            'love_note_text' => $page['love_note_text'],
-            'tagline_quote' => $page['tagline_quote'] ?? 'Safar Khubsurat h manjil se bhi 🌹',
-            'favorite_singers' => $page['favorite_singers'] ?? 'Arijit Singh & KK',
-            'bg_music_url' => $page['bg_music_url'] ?? 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3',
-            'receiver_photo' => $page['receiver_photo'] ?? '',
-            'letters' => $lettersData,
-            'tokens' => $tokensData,
-            'template_fields' => [
-                'relationship_start_date' => $page['relationship_start_date'],
-                'partner_dob'             => $page['partner_dob'],
-                'love_letter_text'        => $page['love_letter_text'],
-                'buyer_city'              => $page['buyer_city'],
-                'buyer_timezone'          => $page['buyer_timezone'],
-                'partner_city'            => $page['partner_city'],
-                'partner_timezone'        => $page['partner_timezone'],
-                'reunion_date'            => $page['reunion_date'],
-                'playlist_url'            => $page['playlist_url'],
-                'song_title'              => $page['song_title'],
-                'song_artist'             => $page['song_artist'],
-                'milestones'              => $milestones,
-                'reasons'                 => $reasons
-            ],
-            'media' => $media
-        ],
+        'html_content' => $html_content,
+        'content' => $contentData,
         'proposal_response' => $proposalResponse
     ]);
 
