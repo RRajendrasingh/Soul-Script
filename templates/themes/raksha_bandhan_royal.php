@@ -600,15 +600,15 @@ if ($cleanReceiverPhoto) {
       </svg>
     </div>
 
-    <!-- Photo Cards Grid (Matching User Mockup Layout) -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 relative z-20">
+    <!-- Photo Cards Masonry Grid (Pinterest Style with Mockup Colors) -->
+    <div class="columns-2 sm:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6 relative z-20">
       <?php foreach ($media as $m): 
         $imgUrl = htmlspecialchars(resolveMediaUrl($m['file_path'] ?? ''));
         $capText = htmlspecialchars($m['caption'] ?? 'Cherished Memory');
       ?>
-        <div onclick="openLightbox('<?= $imgUrl ?>')" class="rb-farman-card group cursor-pointer flex flex-col">
-          <div class="rb-farman-img-box">
-            <img loading="lazy" src="<?= $imgUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500">
+        <div onclick="openLightbox('<?= $imgUrl ?>')" class="break-inside-avoid rb-farman-card group cursor-pointer flex flex-col">
+          <div class="w-full rounded-xl overflow-hidden bg-[#f7f3eb] border border-[#ebd9b5] relative">
+            <img loading="lazy" src="<?= $imgUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-auto object-cover group-hover:scale-[1.04] transition-transform duration-500">
           </div>
           <div class="px-1">
             <p class="rb-farman-caption truncate" title="<?= $capText ?>"><?= $capText ?></p>
