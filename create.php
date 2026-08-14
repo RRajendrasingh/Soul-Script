@@ -255,22 +255,127 @@ if ($order_id) {
 
       <?php
       $tId = $order['template_id'] ?? 'anniversary_reveal';
+      
+      // Master Template UI Configuration Registry
+      $templateSchemas = [
+          'anniversary_reveal' => [
+              'recipientLabel' => "Partner's First Name *",
+              'recipientPlaceholder' => "e.g. Ananya",
+              'recipientDefaultVal' => "Ananya",
+              'taglineLabel' => "Custom Romantic Quote / Tagline Banner *",
+              'taglineDefault' => "Safar Khubsurat h manjil se bhi 🌹",
+              'messageLabel' => "Short Love Note / Signature Message *",
+              'messagePlaceholder' => "e.g. Ananya, happy anniversary!",
+              'messageDefaultVal' => "Every single day spent with you has been a beautiful gift. Happy Anniversary my love!",
+              'photoLabel' => "Gift Receiver / Partner Profile Photo 🖼️ (Optional)",
+              'hints' => [
+                  ['label' => '"First Trip Location?"', 'q' => 'Where did we take our very first trip together in 2022?', 'a' => 'Shimla'],
+                  ['label' => '"My Secret Nickname?"', 'q' => 'What is the nickname I call you when we are alone?', 'a' => 'Piku'],
+                  ['label' => '"First Date Cafe?"', 'q' => 'Where was our first date cafe?', 'a' => 'Starbucks']
+              ]
+          ],
+          'birthday_magic' => [
+              'recipientLabel' => "Birthday Person's First Name (Friend / Loved One) *",
+              'recipientPlaceholder' => "e.g. Rohan",
+              'recipientDefaultVal' => "Rohan",
+              'taglineLabel' => "Custom Birthday Tagline / Motto *",
+              'taglineDefault' => "Cheers to another year of awesome memories! 🥂",
+              'messageLabel' => "Birthday Wish / Personal Message *",
+              'messagePlaceholder' => "e.g. Happy Birthday Rohan! 🎂",
+              'messageDefaultVal' => "Wishing you the happiest of birthdays filled with joy!",
+              'photoLabel' => "Birthday Person Profile Photo 🖼️ (Optional)",
+              'hints' => [
+                  ['label' => '"Childhood Nickname?"', 'q' => 'What was your funny childhood nickname?', 'a' => 'Chintu'],
+                  ['label' => '"Favorite Movie?"', 'q' => 'What is your all-time favorite movie?', 'a' => 'Inception'],
+                  ['label' => '"Dream Vacation?"', 'q' => 'Which country is your dream vacation destination?', 'a' => 'Japan']
+              ]
+          ],
+          'perfect_proposal' => [
+              'recipientLabel' => "Partner's First Name *",
+              'recipientPlaceholder' => "e.g. Priya",
+              'recipientDefaultVal' => "Priya",
+              'taglineLabel' => "Custom Romantic Quote / Tagline Banner *",
+              'taglineDefault' => "Safar Khubsurat h manjil se bhi 🌹",
+              'messageLabel' => "Short Love Note / Signature Message *",
+              'messagePlaceholder' => "e.g. Priya, my love...",
+              'messageDefaultVal' => "Every single day spent with you has been a beautiful gift. Happy Anniversary my love!",
+              'photoLabel' => "Partner's Profile Photo 🖼️ (Optional)",
+              'hints' => [
+                  ['label' => '"First Trip Location?"', 'q' => 'Where did we take our very first trip together in 2022?', 'a' => 'Shimla'],
+                  ['label' => '"My Secret Nickname?"', 'q' => 'What is the nickname I call you when we are alone?', 'a' => 'Piku'],
+                  ['label' => '"First Date Cafe?"', 'q' => 'Where was our first date cafe?', 'a' => 'Starbucks']
+              ]
+          ],
+          'long_distance_love' => [
+              'recipientLabel' => "Partner's First Name *",
+              'recipientPlaceholder' => "e.g. Ananya",
+              'recipientDefaultVal' => "Ananya",
+              'taglineLabel' => "Custom Quote / Tagline Banner *",
+              'taglineDefault' => "Miles apart but connected by heart ✈️",
+              'messageLabel' => "Short Love Note / Signature Message *",
+              'messagePlaceholder' => "e.g. Ananya, I miss you...",
+              'messageDefaultVal' => "Every single day spent with you has been a beautiful gift. Happy Anniversary my love!",
+              'photoLabel' => "Partner's Profile Photo 🖼️ (Optional)",
+              'hints' => [
+                  ['label' => '"First Trip Location?"', 'q' => 'Where did we take our very first trip together in 2022?', 'a' => 'Shimla'],
+                  ['label' => '"My Secret Nickname?"', 'q' => 'What is the nickname I call you when we are alone?', 'a' => 'Piku'],
+                  ['label' => '"First Date Cafe?"', 'q' => 'Where was our first date cafe?', 'a' => 'Starbucks']
+              ]
+          ],
+          'raksha_bandhan_special' => [
+              'recipientLabel' => "Brother / Sister's First Name *",
+              'recipientPlaceholder' => "e.g. Mona",
+              'recipientDefaultVal' => "Mona",
+              'taglineLabel' => "Custom Sibling Motto / Tagline Banner *",
+              'taglineDefault' => "World's Best Sister 👑",
+              'messageLabel' => "Shagun Envelope Message / Slogan *",
+              'messagePlaceholder' => "e.g. Happy Raksha Bandhan Mona Di! 🪔",
+              'messageDefaultVal' => "Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)",
+              'photoLabel' => "Brother / Sister's Profile Photo 🖼️ (Optional)",
+              'hints' => [
+                  ['label' => '"Favorite Cartoon?"', 'q' => 'What was our favorite cartoon show in childhood?', 'a' => 'Tom and Jerry'],
+                  ['label' => '"Childhood Nickname?"', 'q' => 'What funny nickname did I call you in childhood?', 'a' => 'Chutki'],
+                  ['label' => '"Biggest Fight?"', 'q' => 'What did we have our biggest childhood fight over?', 'a' => 'TV Remote']
+              ]
+          ],
+          'raksha_bandhan_royal' => [
+              'recipientLabel' => "Brother / Sister's First Name *",
+              'recipientPlaceholder' => "e.g. Mona",
+              'recipientDefaultVal' => "Mona",
+              'taglineLabel' => "Custom Sibling Motto / Tagline Banner *",
+              'taglineDefault' => "World's Best Sister 👑",
+              'messageLabel' => "Shagun Envelope Message / Slogan *",
+              'messagePlaceholder' => "e.g. Happy Raksha Bandhan Mona Di! 🪔",
+              'messageDefaultVal' => "Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)",
+              'photoLabel' => "Brother / Sister's Profile Photo 🖼️ (Optional)",
+              'hints' => [
+                  ['label' => '"Favorite Cartoon?"', 'q' => 'What was our favorite cartoon show in childhood?', 'a' => 'Tom and Jerry'],
+                  ['label' => '"Childhood Nickname?"', 'q' => 'What funny nickname did I call you in childhood?', 'a' => 'Chutki'],
+                  ['label' => '"Biggest Fight?"', 'q' => 'What did we have our biggest childhood fight over?', 'a' => 'TV Remote']
+              ]
+          ]
+      ];
+
+      // Fallback to anniversary if not found
+      $schema = $templateSchemas[$tId] ?? $templateSchemas['anniversary_reveal'];
+      
+      $recipientLabel = $schema['recipientLabel'];
+      $recipientPlaceholder = $schema['recipientPlaceholder'];
+      $recipientDefaultVal = $schema['recipientDefaultVal'];
+      $taglineLabel = $schema['taglineLabel'];
+      $taglineDefault = $schema['taglineDefault'];
+      $taglinePresetText = $schema['taglineDefault'];
+      $messageLabel = $schema['messageLabel'];
+      $messagePlaceholder = $schema['messagePlaceholder'];
+      $messageDefaultVal = $schema['messageDefaultVal'];
+      $photoLabel = $schema['photoLabel'];
+      $hintsList = $schema['hints'];
+      
+      // Keep old vars for legacy checks
       $isBirthday = ($tId === 'birthday_magic');
       $isProposal = ($tId === 'perfect_proposal');
       $isLdr = ($tId === 'long_distance_love');
       $isRakhi = (strpos($tId, 'raksha_bandhan') !== false);
-
-      $recipientLabel = $isBirthday ? "Birthday Person's First Name (Friend / Loved One) *" : ($isRakhi ? "Brother / Sister's First Name *" : "Partner's First Name *");
-      $recipientPlaceholder = $isBirthday ? "e.g. Rohan" : ($isProposal ? "e.g. Priya" : ($isRakhi ? "e.g. Mona" : "e.g. Ananya"));
-      $recipientDefaultVal = $isBirthday ? "Rohan" : ($isProposal ? "Priya" : ($isRakhi ? "Mona" : "Ananya"));
-      
-      $taglineLabel = $isBirthday ? "Custom Birthday Tagline / Motto *" : ($isRakhi ? "Custom Sibling Motto / Tagline Banner *" : "Custom Romantic Quote / Tagline Banner *");
-      $taglineDefault = $isBirthday ? "Cheers to another year of awesome memories! 🥂" : ($isRakhi ? "World's Best Sister 👑" : "Safar Khubsurat h manjil se bhi 🌹");
-      $taglinePresetText = $isBirthday ? "Cheers to another year of awesome memories! 🥂" : ($isRakhi ? "World's Best Sister 👑" : "Safar Khubsurat h manjil se bhi 🌹");
-
-      $messageLabel = $isBirthday ? "Birthday Wish / Personal Message *" : ($isRakhi ? "Shagun Envelope Message / Slogan *" : "Short Love Note / Signature Message *");
-      $messagePlaceholder = $isBirthday ? "e.g. Happy Birthday Rohan! 🎂" : ($isRakhi ? "e.g. Happy Raksha Bandhan Mona Di! 🪔" : "e.g. Ananya, happy anniversary!");
-      $messageDefaultVal = $isBirthday ? "Wishing you the happiest of birthdays filled with joy!" : ($isRakhi ? "Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)" : "Every single day spent with you has been a beautiful gift. Happy Anniversary my love!");
       ?>
 
       <div class="border-b border-[#4d444b]/40 pb-4">
@@ -285,7 +390,7 @@ if ($order_id) {
 
         <!-- Gift Receiver Avatar Profile Photo Upload -->
         <div>
-          <label class="block font-semibold text-[#d0c3cb] mb-1.5"><?php echo $isBirthday ? 'Birthday Person Profile Photo 🖼️ (Optional)' : 'Gift Receiver / Partner Profile Photo 🖼️ (Optional)'; ?></label>
+          <label class="block font-semibold text-[#d0c3cb] mb-1.5"><?php echo $photoLabel; ?></label>
           <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] flex flex-col sm:flex-row items-center gap-4">
             <div id="partnerAvatarContainer" class="w-16 h-16 rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#eac34a] flex items-center justify-center font-bold text-2xl shadow-[0_0_20px_rgba(234,195,74,0.3)] shrink-0 overflow-hidden">
               <span id="partnerAvatarFallback"><?php echo strtoupper(substr($recipientDefaultVal, 0, 1)); ?></span>
@@ -571,19 +676,19 @@ Today, I want to ask you the most important question of my life. Will you take m
       <div class="space-y-4 text-xs">
         <div>
           <label class="block font-semibold text-[#d0c3cb] mb-1">Secret Hint Question * (Asked to recipient on unlock screen)</label>
-          <input type="text" id="hintQuestionInput" name="hint_question" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Where did we take our very first trip together in 2022?" value="Where did we take our very first trip together in 2022?" required>
+          <input type="text" id="hintQuestionInput" name="hint_question" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. <?php echo htmlspecialchars($hintsList[0]['q']); ?>" value="<?php echo htmlspecialchars($hintsList[0]['q']); ?>" required>
           
           <div class="flex flex-wrap gap-2 mt-2">
             <span class="text-[10px] text-[#eac34a] font-bold self-center">✨ Preset Hints:</span>
-            <button type="button" onclick="setHintPreset('Where did we take our very first trip together in 2022?', 'Shimla')" class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] px-2.5 py-1 rounded-full border border-[#e4b9df]/20 hover:bg-[#eac34a] hover:text-[#241a00] transition-colors">"First Trip Location?"</button>
-            <button type="button" onclick="setHintPreset('What is the nickname I call you when we are alone?', 'Piku')" class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] px-2.5 py-1 rounded-full border border-[#e4b9df]/20 hover:bg-[#eac34a] hover:text-[#241a00] transition-colors">"My Secret Nickname?"</button>
-            <button type="button" onclick="setHintPreset('Where was our first date cafe?', 'Starbucks')" class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] px-2.5 py-1 rounded-full border border-[#e4b9df]/20 hover:bg-[#eac34a] hover:text-[#241a00] transition-colors">"First Date Cafe?"</button>
+            <?php foreach($hintsList as $hint): ?>
+            <button type="button" onclick="setHintPreset('<?php echo htmlspecialchars(addslashes($hint['q'])); ?>', '<?php echo htmlspecialchars(addslashes($hint['a'])); ?>')" class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] px-2.5 py-1 rounded-full border border-[#e4b9df]/20 hover:bg-[#eac34a] hover:text-[#241a00] transition-colors"><?php echo htmlspecialchars($hint['label']); ?></button>
+            <?php endforeach; ?>
           </div>
         </div>
 
         <div>
           <label class="block font-semibold text-[#d0c3cb] mb-1">Secret Hint Answer * (Case-insensitive unlock key)</label>
-          <input type="text" id="hintAnswerInput" name="hint_answer" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. Shimla" value="Shimla" required>
+          <input type="text" id="hintAnswerInput" name="hint_answer" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="e.g. <?php echo htmlspecialchars($hintsList[0]['a']); ?>" value="<?php echo htmlspecialchars($hintsList[0]['a']); ?>" required>
         </div>
 
         <div>

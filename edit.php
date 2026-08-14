@@ -269,7 +269,7 @@ $showLogin = !$showDashboard && !$showHub;
 
           <!-- Visual Gift Receiver Avatar Photo Manager -->
           <div>
-            <label class="block font-semibold text-[#d0c3cb] mb-1.5">Gift Receiver / Partner Profile Photo 🖼️</label>
+            <label id="partnerPhotoLabel" class="block font-semibold text-[#d0c3cb] mb-1.5">Gift Receiver / Partner Profile Photo 🖼️</label>
             <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b] flex flex-col sm:flex-row items-center gap-4">
               <div id="partnerAvatarContainer" class="w-16 h-16 rounded-full bg-[#3b1e3b] text-[#eac34a] border-2 border-[#eac34a] flex items-center justify-center font-bold text-2xl shadow-[0_0_20px_rgba(234,195,74,0.3)] shrink-0 overflow-hidden">
                 <span class="w-full h-full flex items-center justify-center font-bold text-2xl text-[#eac34a] bg-[#3b1e3b] rounded-full">P</span>
@@ -614,6 +614,88 @@ $showLogin = !$showDashboard && !$showHub;
   </div>
 
   <script>
+    const THEME_FEATURES = {
+      'anniversary_reveal': {
+        hasLetters: true, hasTokens: true,
+        dashTitleSuffix: "'s Gift Dashboard",
+        labels: {
+          name: "Partner's First Name *",
+          tagline: "Custom Romantic Quote / Tagline Banner *",
+          note: "Short Love Note / Signature Message *",
+          photo: "Gift Receiver / Partner Profile Photo 🖼️"
+        }
+      },
+      'birthday_magic': {
+        hasLetters: true, hasTokens: false,
+        dashTitleSuffix: "'s Birthday Dashboard",
+        labels: {
+          name: "Birthday Person's Name *",
+          tagline: "Custom Birthday Tagline / Motto *",
+          note: "Birthday Wish / Personal Message *",
+          photo: "Birthday Person Profile Photo 🖼️"
+        }
+      },
+      'perfect_proposal': {
+        hasLetters: true, hasTokens: false,
+        dashTitleSuffix: "'s Gift Dashboard",
+        labels: {
+          name: "Partner's First Name *",
+          tagline: "Custom Romantic Quote / Tagline Banner *",
+          note: "Short Love Note / Signature Message *",
+          photo: "Partner's Profile Photo 🖼️"
+        }
+      },
+      'long_distance_love': {
+        hasLetters: true, hasTokens: true,
+        dashTitleSuffix: "'s Gift Dashboard",
+        labels: {
+          name: "Partner's First Name *",
+          tagline: "Custom Quote / Tagline Banner *",
+          note: "Short Love Note / Signature Message *",
+          photo: "Partner's Profile Photo 🖼️"
+        }
+      },
+      'raksha_bandhan_special': {
+        hasLetters: false, hasTokens: false,
+        dashTitleSuffix: "'s Rakhi Dashboard 🪔",
+        labels: {
+          name: "Brother / Sister's First Name *",
+          tagline: "Sibling Motto / Tagline Banner *",
+          note: "Shagun Envelope Message / Slogan *",
+          photo: "Brother / Sister's Profile Photo 🖼️"
+        }
+      },
+      'raksha_bandhan_royal': {
+        hasLetters: false, hasTokens: false,
+        dashTitleSuffix: "'s Rakhi Dashboard 🪔",
+        labels: {
+          name: "Brother / Sister's First Name *",
+          tagline: "Sibling Motto / Tagline Banner *",
+          note: "Shagun Envelope Message / Slogan *",
+          photo: "Brother / Sister's Profile Photo 🖼️"
+        }
+      }
+    };
+
+    function applyThemeVisibility(templateId) {
+      const config = THEME_FEATURES[templateId] || THEME_FEATURES['anniversary_reveal'];
+      
+      const tabLetters = document.getElementById('tabBtn-letters');
+      const tabTokens = document.getElementById('tabBtn-tokens');
+      
+      if (tabLetters) tabLetters.style.display = config.hasLetters ? 'inline-block' : 'none';
+      if (tabTokens) tabTokens.style.display = config.hasTokens ? 'inline-block' : 'none';
+      
+      const contentLetters = document.getElementById('tabContent-letters');
+      const contentTokens = document.getElementById('tabContent-tokens');
+      if (!config.hasLetters && contentLetters && !contentLetters.classList.contains('hidden')) {
+          switchTab('general');
+      }
+      if (!config.hasTokens && contentTokens && !contentTokens.classList.contains('hidden')) {
+          switchTab('general');
+      }
+    }
+
     let activeToken = "<?php echo htmlspecialchars($token); ?>";
 
     async function handleBuyerLogin(e) {
@@ -809,7 +891,9 @@ $showLogin = !$showDashboard && !$showHub;
           if (dashWaBtn) {
             dashWaBtn.href = generateWhatsAppShareUrl(p.template_id, p.partner_name, data.share_url);
           }
-          document.getElementById('dashPartnerTitle').innerText = (p.partner_name || 'Partner') + "'s Gift Dashboard";
+          const schema = THEME_FEATURES[p.template_id] || THEME_FEATURES['anniversary_reveal'];
+          const defaultName = p.template_id.includes('raksha_bandhan') ? 'Sibling' : 'Partner';
+          document.getElementById('dashPartnerTitle').innerText = (p.partner_name || defaultName) + schema.dashTitleSuffix;
 
           // Update Partner Photo Avatar Manager UI
           updatePartnerPhotoAvatar(p.receiver_photo, p.partner_name);
@@ -1185,31 +1269,14 @@ $showLogin = !$showDashboard && !$showHub;
       const noteLabel = document.getElementById('loveNoteLabel');
       const taglineInput = document.getElementById('taglineQuote');
 
-      if (templateId === 'birthday_magic') {
-        if (nameLabel) nameLabel.innerText = "Birthday Person's Name *";
-        if (taglineLabel) taglineLabel.innerText = "Custom Birthday Tagline / Motto *";
-        if (taglineInput) taglineInput.placeholder = "e.g. Cheers to another year of awesome memories! 🥂";
-        if (noteLabel) noteLabel.innerText = "Birthday Wish / Personal Message *";
-      } else if (templateId === 'long_distance_love') {
-        if (nameLabel) nameLabel.innerText = "Partner's First Name *";
-        if (taglineLabel) taglineLabel.innerText = "Custom Quote / Tagline Banner *";
-        if (taglineInput) taglineInput.placeholder = "e.g. Miles apart but connected by heart ✈️";
-        if (noteLabel) noteLabel.innerText = "Short Love Note / Signature Message *";
-      } else {
-        if (nameLabel) nameLabel.innerText = "Partner's First Name *";
-        if (taglineLabel) taglineLabel.innerText = "Custom Romantic Quote / Tagline Banner *";
-        if (taglineInput) taglineInput.placeholder = "e.g. Safar Khubsurat h manjil se bhi 🌹";
-        if (noteLabel) noteLabel.innerText = "Short Love Note / Signature Message *";
-      }
-
-      // Hide Sealed Letters & Love Tokens for non-anniversary themes
-      if (templateId === 'anniversary_reveal') {
-        tabBtnLetters.classList.remove('hidden');
-        tabBtnTokens.classList.remove('hidden');
-      } else {
-        tabBtnLetters.classList.add('hidden');
-        tabBtnTokens.classList.add('hidden');
-      }
+      const config = THEME_FEATURES[templateId] || THEME_FEATURES['anniversary_reveal'];
+      
+      if (nameLabel) nameLabel.innerText = config.labels.name;
+      if (taglineLabel) taglineLabel.innerText = config.labels.tagline;
+      if (noteLabel) noteLabel.innerText = config.labels.note;
+      
+      const photoLabel = document.getElementById('partnerPhotoLabel');
+      if (photoLabel) photoLabel.innerText = config.labels.photo;
 
       if (templateId === 'birthday_magic') {
         badge.innerText = '✨ Managing: Birthday Magic Plan (Active)';
