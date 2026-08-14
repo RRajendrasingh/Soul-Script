@@ -534,7 +534,6 @@ if ($cleanReceiverPhoto) {
     border: 1px solid #ebd9b5;
     background-color: #f7f3eb;
     position: relative;
-    aspect-ratio: 4 / 3;
   }
   .rb-farman-caption {
     color: #3b2b1b;
@@ -607,7 +606,7 @@ if ($cleanReceiverPhoto) {
         $capText = htmlspecialchars($m['caption'] ?? 'Cherished Memory');
       ?>
         <div onclick="openLightbox('<?= $imgUrl ?>')" class="break-inside-avoid rb-farman-card group cursor-pointer flex flex-col">
-          <div class="w-full rounded-xl overflow-hidden bg-[#f7f3eb] border border-[#ebd9b5] relative">
+          <div class="rb-farman-img-box">
             <img loading="lazy" src="<?= $imgUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-auto object-cover group-hover:scale-[1.04] transition-transform duration-500">
           </div>
           <div class="px-1">
