@@ -308,16 +308,19 @@ body {
   transform: scale(1.06);
 }
 
-/* Standard Sample Library Modal & Responsive Card Grid */
 .sample-modal-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  column-count: 2;
+  column-gap: 1rem;
   max-height: 60vh;
   overflow-y: auto;
   padding-right: 0.5rem;
 }
-
+@media (min-width: 640px) {
+  .sample-modal-grid { column-count: 3; }
+}
+@media (min-width: 768px) {
+  .sample-modal-grid { column-count: 4; }
+}
 /* Custom Sleek Dark-Gold Scrollbar for Sample Modal Grid */
 .sample-modal-grid::-webkit-scrollbar {
   width: 6px;
@@ -334,17 +337,6 @@ body {
   background: rgba(234, 195, 74, 0.8);
 }
 
-@media (min-width: 640px) {
-  .sample-modal-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-@media (min-width: 768px) {
-  .sample-modal-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
 .sample-library-card {
   width: 100%;
   position: relative;
@@ -352,14 +344,11 @@ body {
   overflow: hidden;
   background-color: #1a1518;
   border: 2px solid #4d444b;
+  margin-bottom: 1rem;
+  break-inside: avoid;
   transition: all 0.3s ease;
   cursor: pointer;
   display: block;
-}
-.sample-library-card::before {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
 }
 .sample-library-card:hover {
   border-color: rgba(234, 195, 74, 0.7);
@@ -370,12 +359,11 @@ body {
   box-shadow: 0 0 18px rgba(234, 195, 74, 0.45);
 }
 .sample-library-img {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
+  display: block;
 }
 
 /* Raksha Bandhan Royal Theme Styling & 3D Ritual Animations */
