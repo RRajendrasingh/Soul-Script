@@ -37,21 +37,45 @@ if ($cleanReceiverPhoto) {
 }
 ?>
 
-<!-- TOP-LEFT GOLDEN MANDALA CORNER ART -->
-<div class="absolute top-0 left-0 w-36 sm:w-56 opacity-35 pointer-events-none z-0">
-  <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-[#eac34a]">
-    <path d="M0 0 C60 0 100 40 100 100 C40 100 0 60 0 0 Z" fill="url(#mandalaGradSp)" opacity="0.15"/>
-    <circle cx="0" cy="0" r="180" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
-    <circle cx="0" cy="0" r="140" stroke="currentColor" stroke-width="1"/>
-    <circle cx="0" cy="0" r="100" stroke="currentColor" stroke-width="1.5"/>
-    <path d="M0 80 Q 40 40 80 0 M0 120 Q 60 60 120 0 M0 160 Q 80 80 160 0" stroke="currentColor" stroke-width="1" opacity="0.6"/>
-    <defs>
-      <linearGradient id="mandalaGradSp" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#eac34a"/>
-        <stop offset="1" stop-color="#b8860b" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-  </svg>
+<!-- RICH MANDALA BACKGROUND ARTWORK LAYER (TOP, MIDDLE & BOTTOM) -->
+<div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
+  <!-- Top-Left Mandala -->
+  <div class="absolute -top-20 -left-20 w-72 sm:w-96 h-72 sm:h-96 opacity-30 mix-blend-screen">
+    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full animate-spin-slow">
+  </div>
+
+  <!-- Top-Right Mandala -->
+  <div class="absolute -top-20 -right-20 w-72 sm:w-96 h-72 sm:h-96 opacity-30 mix-blend-screen">
+    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full rotate-90 animate-spin-slow">
+  </div>
+
+  <!-- Middle-Left Side Mandala -->
+  <div class="absolute top-1/3 -left-36 w-[450px] sm:w-[550px] opacity-15 mix-blend-screen">
+    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_side.svg" class="w-full h-full">
+  </div>
+
+  <!-- Middle-Right Side Mandala -->
+  <div class="absolute top-2/3 -right-36 w-[450px] sm:w-[550px] opacity-15 mix-blend-screen">
+    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_side.svg" class="w-full h-full">
+  </div>
+
+  <!-- Bottom-Left Mandala -->
+  <div class="absolute -bottom-24 -left-24 w-80 sm:w-96 h-80 sm:h-96 opacity-25 mix-blend-screen">
+    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full rotate-270">
+  </div>
+
+  <!-- Bottom-Right Mandala -->
+  <div class="absolute -bottom-24 -right-24 w-80 sm:w-96 h-80 sm:h-96 opacity-25 mix-blend-screen">
+    <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full rotate-180">
+  </div>
+
+  <!-- Floating Golden Twinkling Sparkle Dust Particles -->
+  <div class="absolute top-12 left-1/4 text-[#eac34a] text-xs sm:text-sm animate-ping opacity-60">✨</div>
+  <div class="absolute top-36 right-1/3 text-[#ffd700] text-sm sm:text-base animate-pulse opacity-70">✦</div>
+  <div class="absolute top-1/2 left-10 text-[#eac34a] text-lg animate-pulse opacity-50">✨</div>
+  <div class="absolute top-2/3 right-12 text-[#ffd700] text-xs sm:text-sm animate-ping opacity-60">✧</div>
+  <div class="absolute bottom-40 left-1/3 text-[#eac34a] text-sm animate-pulse opacity-70">✦</div>
+  <div class="absolute bottom-20 right-1/4 text-[#ffd700] text-base animate-ping opacity-60">✨</div>
 </div>
 
 <!-- TOP-RIGHT HANGING BRASS & TERRACOTTA DIYAS ON CHAINS -->

@@ -148,41 +148,6 @@ if (!empty($initialLockData['page_id'])) {
   </button>
 </div>
 
-  <!-- GLOBAL ROYAL MANDALA & SPARKLE DUST BACKGROUND LAYER -->
-  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-    <!-- Ambient Radial Glows -->
-    <div class="absolute top-[-10%] left-[20%] w-[50vw] h-[50vw] rounded-full bg-[#3b1e3b]/30 blur-[150px]"></div>
-    <div class="absolute bottom-[10%] right-[10%] w-[45vw] h-[45vw] rounded-full bg-[#eac34a]/15 blur-[130px]"></div>
-
-    <!-- Top-Left Mandala -->
-    <div class="absolute -top-16 -left-16 w-64 sm:w-88 h-64 sm:h-88 opacity-35 mix-blend-screen">
-      <img src="<?php echo APP_URL; ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full animate-spin-slow">
-    </div>
-
-    <!-- Top-Right Mandala -->
-    <div class="absolute -top-16 -right-16 w-64 sm:w-88 h-64 sm:h-88 opacity-35 mix-blend-screen">
-      <img src="<?php echo APP_URL; ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full rotate-90 animate-spin-slow">
-    </div>
-
-    <!-- Middle-Left Side Mandala -->
-    <div class="absolute top-1/3 -left-32 w-[400px] sm:w-[500px] opacity-20 mix-blend-screen">
-      <img src="<?php echo APP_URL; ?>/assets/images/gold_mandala_side.svg" class="w-full h-full">
-    </div>
-
-    <!-- Middle-Right Side Mandala -->
-    <div class="absolute top-2/3 -right-32 w-[400px] sm:w-[500px] opacity-20 mix-blend-screen">
-      <img src="<?php echo APP_URL; ?>/assets/images/gold_mandala_side.svg" class="w-full h-full">
-    </div>
-
-    <!-- Floating Golden Twinkling Sparkle Dust Particles -->
-    <div class="absolute top-16 left-1/4 text-[#eac34a] text-xs sm:text-sm animate-ping opacity-60">✨</div>
-    <div class="absolute top-40 right-1/3 text-[#ffd700] text-sm sm:text-base animate-pulse opacity-70">✦</div>
-    <div class="absolute top-1/2 left-8 text-[#eac34a] text-lg animate-pulse opacity-50">✨</div>
-    <div class="absolute top-2/3 right-10 text-[#ffd700] text-xs sm:text-sm animate-ping opacity-60">✧</div>
-    <div class="absolute bottom-36 left-1/3 text-[#eac34a] text-sm animate-pulse opacity-70">✦</div>
-    <div class="absolute bottom-16 right-1/4 text-[#ffd700] text-base animate-ping opacity-60">✨</div>
-  </div>
-
   <!-- STEP 7: LOCK SCREEN (Exact LockScreen.tsx DOM Layout) -->
   <main id="lockScreenView" class="w-full flex flex-col items-center justify-center p-4 <?php echo $isEditMode ? 'pt-28' : 'pt-16'; ?> pb-16 relative z-10">
     <div class="max-w-md w-full bg-[#221f21]/90 border border-[#eac34a]/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative my-8">

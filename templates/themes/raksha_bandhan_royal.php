@@ -38,7 +38,7 @@ if ($cleanReceiverPhoto) {
 ?>
 
 <!-- RICH ROYAL MANDALA BACKGROUND ARTWORK LAYER (TOP, MIDDLE & BOTTOM) -->
-<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+<div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
   <!-- Top-Left Mandala -->
   <div class="absolute -top-20 -left-20 w-72 sm:w-96 h-72 sm:h-96 opacity-40 mix-blend-screen">
     <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full animate-spin-slow">
