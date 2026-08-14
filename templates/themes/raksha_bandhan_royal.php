@@ -173,15 +173,15 @@ if ($cleanReceiverPhoto) {
 </section>
 
 <!-- RAKHI CEREMONY POPUP MODAL -->
-<div id="rakhiCeremonyModal" class="hidden fixed inset-0 z-[100] bg-[#000000e6] backdrop-blur-md overflow-y-auto flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-500">
+<div id="rakhiCeremonyModal" class="hidden fixed inset-0 z-[100] bg-[#000000f0] backdrop-blur-md overflow-y-auto flex items-start sm:items-center justify-center p-3 sm:p-6 opacity-0 transition-opacity duration-500">
   
   <!-- Close Button -->
-  <button type="button" onclick="closeCeremonyModal()" class="absolute top-6 right-6 sm:top-8 sm:right-8 w-12 h-12 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 text-[#eac34a] flex items-center justify-center hover:bg-[#eac34a] hover:text-black transition-all shadow-[0_0_20px_rgba(234,195,74,0.3)] z-[110]">
-    <i data-lucide="x" class="w-6 h-6"></i>
+  <button type="button" onclick="closeCeremonyModal()" class="fixed top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#3b1e3b]/90 border border-[#eac34a]/60 text-[#eac34a] flex items-center justify-center hover:bg-[#eac34a] hover:text-black transition-all shadow-[0_0_20px_rgba(234,195,74,0.4)] z-[120]">
+    <i data-lucide="x" class="w-5 h-5 sm:w-6 sm:h-6"></i>
   </button>
 
-  <div class="relative w-full max-w-3xl mx-auto my-12">
-    <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.4)] relative overflow-hidden transition-all duration-500 animate-thali-glow">
+  <div class="relative w-full max-w-2xl sm:max-w-3xl mx-auto my-auto py-6 sm:py-8">
+    <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-4 sm:p-8 text-center space-y-4 sm:space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.4)] relative overflow-hidden transition-all duration-500 animate-thali-glow">
     
     <!-- Hanging Brass Temple Bell -->
     <div class="flex flex-col items-center justify-center -mt-2">
