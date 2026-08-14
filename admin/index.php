@@ -110,10 +110,10 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
     </div>
 
     <!-- Filter & Search Controls -->
-    <div class="bg-[#221f21] p-6 rounded-3xl border border-[#4d444b] flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center shadow-xl">
-      <div class="flex flex-wrap gap-3 items-center flex-1">
+    <div class="bg-[#221f21] p-4 sm:p-6 rounded-3xl border border-[#4d444b] shadow-xl mb-6">
+      <div class="flex flex-wrap items-center gap-3 w-full">
         <!-- Search Input -->
-        <div class="flex-1 min-w-[220px]">
+        <div class="flex-1 min-w-[200px] max-w-md">
           <input type="text" id="searchInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3] placeholder-[#d0c3cb]/50 focus:border-[#eac34a] focus:outline-none" placeholder="Search by name, email, phone, order ID, slug..." onkeydown="if(event.key === 'Enter') applyFilters()">
         </div>
 
@@ -145,25 +145,28 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
             <option value="all" class="bg-[#151215]">All</option>
           </select>
         </div>
-      </div>
 
-      <div class="flex items-center gap-2 shrink-0">
-        <!-- Apply Filters Button -->
-        <button onclick="applyFilters()" type="button" class="px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#151215] font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer hover:opacity-90">
-          <i data-lucide="filter" class="w-4 h-4"></i>
-          <span>Apply Filters</span>
-        </button>
+        <!-- Spacer -->
+        <div class="flex-1 min-w-[20px] hidden md:block"></div>
 
-        <!-- Export CSV Button -->
-        <button onclick="exportOrdersCsv()" type="button" class="px-4 py-2.5 rounded-xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer">
-          <i data-lucide="download" class="w-4 h-4"></i>
-          <span>Export CSV (.csv)</span>
-        </button>
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Apply Filters Button -->
+          <button onclick="applyFilters()" type="button" class="px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#151215] font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer hover:opacity-90">
+            <i data-lucide="filter" class="w-4 h-4"></i>
+            <span>Apply Filters</span>
+          </button>
 
-        <button onclick="fetchOrders()" type="button" class="px-3.5 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b] text-xs font-semibold text-[#eac34a] hover:border-[#eac34a] flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-          <span>Refresh</span>
-        </button>
+          <!-- Export CSV Button -->
+          <button onclick="exportOrdersCsv()" type="button" class="px-4 py-2.5 rounded-xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Export CSV</span>
+          </button>
+
+          <button onclick="fetchOrders()" type="button" class="px-3.5 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b] text-xs font-semibold text-[#eac34a] hover:border-[#eac34a] flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Refresh</span>
+          </button>
+        </div>
       </div>
     </div>
 
