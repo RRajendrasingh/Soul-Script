@@ -272,6 +272,9 @@ if ($order_id) {
                   ['label' => '"First Trip Location?"', 'q' => 'Where did we take our very first trip together in 2022?', 'a' => 'Shimla'],
                   ['label' => '"My Secret Nickname?"', 'q' => 'What is the nickname I call you when we are alone?', 'a' => 'Piku'],
                   ['label' => '"First Date Cafe?"', 'q' => 'Where was our first date cafe?', 'a' => 'Starbucks']
+              ],
+              'music' => [
+                  'title' => 'Tum Hi Ho', 'artist' => 'Arijit Singh'
               ]
           ],
           'birthday_magic' => [
@@ -288,6 +291,9 @@ if ($order_id) {
                   ['label' => '"Childhood Nickname?"', 'q' => 'What was your funny childhood nickname?', 'a' => 'Chintu'],
                   ['label' => '"Favorite Movie?"', 'q' => 'What is your all-time favorite movie?', 'a' => 'Inception'],
                   ['label' => '"Dream Vacation?"', 'q' => 'Which country is your dream vacation destination?', 'a' => 'Japan']
+              ],
+              'music' => [
+                  'title' => 'Baar Baar Din Ye Aaye', 'artist' => 'Kishore Kumar'
               ]
           ],
           'perfect_proposal' => [
@@ -304,6 +310,9 @@ if ($order_id) {
                   ['label' => '"First Trip Location?"', 'q' => 'Where did we take our very first trip together in 2022?', 'a' => 'Shimla'],
                   ['label' => '"My Secret Nickname?"', 'q' => 'What is the nickname I call you when we are alone?', 'a' => 'Piku'],
                   ['label' => '"First Date Cafe?"', 'q' => 'Where was our first date cafe?', 'a' => 'Starbucks']
+              ],
+              'music' => [
+                  'title' => 'Perfect', 'artist' => 'Ed Sheeran'
               ]
           ],
           'long_distance_love' => [
@@ -320,6 +329,9 @@ if ($order_id) {
                   ['label' => '"First Trip Location?"', 'q' => 'Where did we take our very first trip together in 2022?', 'a' => 'Shimla'],
                   ['label' => '"My Secret Nickname?"', 'q' => 'What is the nickname I call you when we are alone?', 'a' => 'Piku'],
                   ['label' => '"First Date Cafe?"', 'q' => 'Where was our first date cafe?', 'a' => 'Starbucks']
+              ],
+              'music' => [
+                  'title' => 'Tera Yaar Hoon Main', 'artist' => 'Arijit Singh'
               ]
           ],
           'raksha_bandhan_special' => [
@@ -336,6 +348,9 @@ if ($order_id) {
                   ['label' => '"Favorite Cartoon?"', 'q' => 'What was our favorite cartoon show in childhood?', 'a' => 'Tom and Jerry'],
                   ['label' => '"Childhood Nickname?"', 'q' => 'What funny nickname did I call you in childhood?', 'a' => 'Chutki'],
                   ['label' => '"Biggest Fight?"', 'q' => 'What did we have our biggest childhood fight over?', 'a' => 'TV Remote']
+              ],
+              'music' => [
+                  'title' => 'Phoolon Ka Taaron Ka', 'artist' => 'Kishore Kumar'
               ]
           ],
           'raksha_bandhan_royal' => [
@@ -352,6 +367,9 @@ if ($order_id) {
                   ['label' => '"Favorite Cartoon?"', 'q' => 'What was our favorite cartoon show in childhood?', 'a' => 'Tom and Jerry'],
                   ['label' => '"Childhood Nickname?"', 'q' => 'What funny nickname did I call you in childhood?', 'a' => 'Chutki'],
                   ['label' => '"Biggest Fight?"', 'q' => 'What did we have our biggest childhood fight over?', 'a' => 'TV Remote']
+              ],
+              'music' => [
+                  'title' => 'Phoolon Ka Taaron Ka', 'artist' => 'Kishore Kumar'
               ]
           ]
       ];
@@ -370,6 +388,7 @@ if ($order_id) {
       $messageDefaultVal = $schema['messageDefaultVal'];
       $photoLabel = $schema['photoLabel'];
       $hintsList = $schema['hints'];
+      $defaultMusic = $schema['music'];
       
       // Keep old vars for legacy checks
       $isBirthday = ($tId === 'birthday_magic');
@@ -461,9 +480,9 @@ if ($order_id) {
             <div id="selectedTrackCard" class="bg-[#100d10] p-3 rounded-xl border border-[#eac34a]/60 flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <img id="selectedTrackImg" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=150&q=80" class="w-10 h-10 rounded-lg object-cover border border-[#4d444b]">
-                <div>
-                  <span class="block font-bold text-xs text-[#e8e0e3]" id="selectedTrackTitle">Tum Hi Ho</span>
-                  <span class="block text-[10px] text-[#eac34a]" id="selectedTrackArtist">Artist: Arijit Singh</span>
+                <div class="flex-1 min-w-0">
+                  <span class="block font-bold text-xs text-[#e8e0e3]" id="selectedTrackTitle"><?php echo htmlspecialchars($defaultMusic['title']); ?></span>
+                  <span class="block text-[10px] text-[#d0c3cb] truncate" id="selectedTrackArtist"><?php echo htmlspecialchars($defaultMusic['artist']); ?></span>
                 </div>
               </div>
               <span class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] px-2.5 py-1 rounded-full border border-[#e4b9df]/20 font-bold">✓ Selected</span>
@@ -1450,8 +1469,8 @@ Today, I want to ask you the most important question of my life. Will you take m
     }
 
     let currentSelectedMusicUrl = 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3';
-    let currentSelectedSongTitle = 'Tum Hi Ho';
-    let currentSelectedArtist = 'Arijit Singh';
+    let currentSelectedSongTitle = '<?php echo addslashes($defaultMusic['title']); ?>';
+    let currentSelectedArtist = '<?php echo addslashes($defaultMusic['artist']); ?>';
     let searchDebounceTimer = null;
 
     function setPresetQuote(quoteText) {
