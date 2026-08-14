@@ -116,17 +116,16 @@ if ($cleanReceiverPhoto) {
       </div>
 
       <!-- Right: Greetings & Titles -->
-      <div class="space-y-5 max-w-xl text-center md:text-left">
+      <div class="space-y-4 w-full md:max-w-3xl text-center md:text-left">
         <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-xs sm:text-sm font-bold shadow-lg">
           <i data-lucide="crown" class="w-4 h-4 text-[#eac34a]"></i>
           <span><?= $taglineQuote ?></span>
         </div>
 
-        <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold font-serif text-[#e8e0e3] tracking-tight leading-[1.1] drop-shadow-md">
-          Happy <br class="hidden md:block">Raksha Bandhan, <br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830]"><?= $partnerName ?></span>! <span class="text-3xl md:text-5xl inline-block -translate-y-1 animate-flame">🪔</span>
+        <h1 class="text-3xl sm:text-4xl md:text-6xl font-normal font-handwriting text-[#e8e0e3] tracking-wide leading-normal drop-shadow-md">
+          Happy Raksha Bandhan, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830] font-bold"><?= $partnerName ?></span>! <span class="text-2xl md:text-4xl inline-block -translate-y-1 animate-flame">🪔</span>
         </h1>
-        <p class="text-sm md:text-base text-[#d0c3cb] max-w-md mx-auto md:mx-0 leading-relaxed">
+        <p class="text-sm md:text-base text-[#d0c3cb] max-w-lg mx-auto md:mx-0 leading-relaxed">
           A digital celebration of our unbreakable bond, childhood memories, and sacred vows.
         </p>
       </div>
