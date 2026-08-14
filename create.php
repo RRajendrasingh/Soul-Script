@@ -522,8 +522,20 @@ Today, I want to ask you the most important question of my life. Will you take m
         </div>
       </div>
 
+      <?php
+      $themeFeatures = [
+          'anniversary_reveal' => ['letters' => true, 'tokens' => true],
+          'long_distance_love' => ['letters' => true, 'tokens' => true],
+          'birthday_magic' => ['letters' => true, 'tokens' => false],
+          'perfect_proposal' => ['letters' => true, 'tokens' => false],
+          'raksha_bandhan_special' => ['letters' => false, 'tokens' => false],
+          'raksha_bandhan_royal' => ['letters' => false, 'tokens' => false],
+      ];
+      $currentFeatures = $themeFeatures[$order['template_id'] ?? ''] ?? ['letters' => true, 'tokens' => true];
+      ?>
+
       <!-- Sealed Letters Section ("Open When..." Cards) -->
-      <div class="space-y-4 pt-4 border-t border-[#4d444b]/40">
+      <div class="space-y-4 pt-4 border-t border-[#4d444b]/40" <?php echo $currentFeatures['letters'] ? '' : 'style="display:none;"'; ?>>
         <div class="flex items-center justify-between">
           <div>
             <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">✉️ SEALED LETTERS ("OPEN WHEN..." CARDS)</label>
@@ -538,7 +550,7 @@ Today, I want to ask you the most important question of my life. Will you take m
       </div>
 
       <!-- Love Tokens & Redeemable Coupons Section -->
-      <div class="space-y-4 pt-4 border-t border-[#4d444b]/40">
+      <div class="space-y-4 pt-4 border-t border-[#4d444b]/40" <?php echo $currentFeatures['tokens'] ? '' : 'style="display:none;"'; ?>>
         <div class="flex items-center justify-between">
           <div>
             <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">🎟️ LOVE TOKENS &amp; REDEEMABLE COUPONS</label>

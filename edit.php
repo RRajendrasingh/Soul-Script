@@ -774,6 +774,7 @@ $showLogin = !$showDashboard && !$showHub;
         if (data.success) {
           const p = data.page;
           document.getElementById('activeTemplateId').value = p.template_id;
+          applyThemeVisibility(p.template_id);
           document.getElementById('partnerName').value = p.partner_name || '';
           document.getElementById('hintQuestion').value = p.hint_question || '';
           if (document.getElementById('secHintQuestion')) document.getElementById('secHintQuestion').value = p.hint_question || '';
