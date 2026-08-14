@@ -35,8 +35,7 @@ try {
             'anniversary_reveal'   => ['url' => $baseUrl . '/gift/ananya-rohan', 'pass' => 'butterfly'],
             'birthday_magic'       => ['url' => $baseUrl . '/gift/rohan-birthday', 'pass' => 'magic'],
             'perfect_proposal'    => ['url' => $baseUrl . '/gift/rahul-priya', 'pass' => 'proposal'],
-            'long_distance_love'   => ['url' => $baseUrl . '/gift/aarav-meera', 'pass' => 'reunion'],
-            'raksha_bandhan_special' => ['url' => $baseUrl . '/gift/manvi-testing', 'pass' => '1234']
+            'long_distance_love'   => ['url' => $baseUrl . '/gift/aarav-meera', 'pass' => 'reunion']
         ];
 
         foreach ($templates as &$t) {

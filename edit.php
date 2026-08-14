@@ -655,16 +655,6 @@ $showLogin = !$showDashboard && !$showHub;
           photo: "Partner's Profile Photo 🖼️"
         }
       },
-      'raksha_bandhan_special': {
-        hasLetters: false, hasTokens: false,
-        dashTitleSuffix: "'s Rakhi Dashboard 🪔",
-        labels: {
-          name: "Brother / Sister's First Name *",
-          tagline: "Sibling Motto / Tagline Banner *",
-          note: "Shagun Envelope Message / Slogan *",
-          photo: "Brother / Sister's Profile Photo 🖼️"
-        }
-      },
       'raksha_bandhan_royal': {
         hasLetters: false, hasTokens: false,
         dashTitleSuffix: "'s Rakhi Dashboard 🪔",
@@ -962,7 +952,6 @@ $showLogin = !$showDashboard && !$showHub;
         'birthday_magic': { name: 'Birthday Magic', icon: 'sparkles', color: 'from-[#1e3b30] via-[#152821] to-[#101b17]' },
         'perfect_proposal': { name: 'Perfect Proposal', icon: 'heart-handshake', color: 'from-[#3b2d1e] via-[#271d14] to-[#17130e]' },
         'long_distance_love': { name: 'Long Distance Love', icon: 'globe', color: 'from-[#1e2a3b] via-[#141b27] to-[#0e121b]' },
-        'raksha_bandhan_special': { name: 'Raksha Bandhan Special', icon: 'shield-check', color: 'from-[#3b1e22] via-[#271417] to-[#180e10]' },
         'raksha_bandhan_royal': { name: 'Raksha Bandhan Royal', icon: 'crown', color: 'from-[#3b2a1a] via-[#281c12] to-[#18110b]' }
       };
 

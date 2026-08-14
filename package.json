@@ -20,5 +20,9 @@
   "homepage": "https://github.com/RRajendrasingh/Soul-Script#readme",
   "devDependencies": {
     "@playwright/test": "^1.62.1"
+  },
+  "dependencies": {
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0"
   }
 }

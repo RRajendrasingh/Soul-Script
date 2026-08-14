@@ -31,7 +31,7 @@ INSERT INTO `templates` (`template_id`, `name`, `tagline`, `description`, `price
 ('birthday_magic', 'Birthday Magic', 'Make their special day unforgettable', 'Happy birthday hero, countdown to next birthday, "reasons I love celebrating you" list & photo gallery.', 399, 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80', 'Popular', 1),
 ('perfect_proposal', 'Perfect Proposal', 'A grand question they will never forget', 'Full emotional love letter centerpiece, romantic photo gallery & interactive Yes / Let\'s Talk response buttons.', 599, 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80', 'Most Romantic', 1),
 ('long_distance_love', 'Long Distance Love', 'Bridge the miles with love', 'Dual cities & timezones header, live countdown to your next reunion date & shared playlist row.', 449, 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80', 'Trending', 1),
-('raksha_bandhan_special', 'Raksha Bandhan Special 🪔', 'Celebrate the timeless bond of brother and sister', 'Interactive Rakhi tying ceremony, 5 sibling promise cards, childhood memory scrapbook, and digital Shagun envelope reveal.', 449, 'https://images.unsplash.com/photo-1597157639073-69284dc0fdaf?auto=format&fit=crop&w=800&q=80', 'Festival Special 🪔', 1);
+
 
 -- 2. Orders Table
 CREATE TABLE `orders` (

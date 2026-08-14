@@ -238,8 +238,7 @@ function getDB() {
                 $chk5 = $pdo->prepare("SELECT COUNT(*) FROM pages WHERE url_slug = 'mona-aman'");
                 $chk5->execute();
                 if ($chk5->fetchColumn() == 0) {
-                    $pdo->exec("INSERT INTO orders (order_id, buyer_name, buyer_phone, buyer_email, template_id, amount_paid, payment_status) VALUES ('ord_demo_rakhi_05', 'Aman Sharma', '+91 97777 88888', 'aman@example.com', 'raksha_bandhan_special', 449.00, 'paid') ON DUPLICATE KEY UPDATE payment_status='paid'");
-                    $pdo->exec("INSERT INTO pages (page_id, order_id, template_id, url_slug, edit_token, status, expires_at) VALUES ('page_demo_05', 'ord_demo_rakhi_05', 'raksha_bandhan_special', 'mona-aman', 'token_demo_edit_05', 'live', DATE_ADD(NOW(), INTERVAL 10 YEAR)) ON DUPLICATE KEY UPDATE status='live'");
+
                     $passHashRakhi = hashHintAnswer('rakhi');
                     $shagunTokensJson = json_encode([['shagun_voucher_code' => 'AMZ-RAKHI-9876']]);
                     $chkContent05 = $pdo->prepare("SELECT COUNT(*) FROM page_content WHERE page_id = 'page_demo_05'");

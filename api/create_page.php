@@ -175,7 +175,7 @@ try {
         }
     }
 
-    if (($template_id === 'birthday_magic' || $template_id === 'raksha_bandhan_special') && !empty($template_fields['reasons'])) {
+    if (($template_id === 'birthday_magic' || $template_id === 'raksha_bandhan_royal') && !empty($template_fields['reasons'])) {
         $stmtR = $db->prepare("INSERT INTO reasons_list (page_id, entry_order, reason_text) VALUES (?, ?, ?)");
         foreach ($template_fields['reasons'] as $idx => $reason) {
             if (!empty($reason)) {

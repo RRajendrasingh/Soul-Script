@@ -229,7 +229,6 @@ require_once __DIR__ . '/includes/media_helper.php';
         'birthday_magic'         => ['url' => APP_URL . '/gift/rohan-birthday', 'pass' => 'MAGIC'],
         'perfect_proposal'      => ['url' => APP_URL . '/gift/rahul-priya', 'pass' => 'PARIS'],
         'long_distance_love'    => ['url' => APP_URL . '/gift/aarav-meera', 'pass' => 'MUMBAI'],
-        'raksha_bandhan_special'  => ['url' => APP_URL . '/gift/manvi-testing', 'pass' => 'RAKHI'],
         'raksha_bandhan_royal'    => ['url' => APP_URL . '/gift/manvi-rakhi-v2', 'pass' => 'RAKHI']
     ];
 
@@ -237,10 +236,6 @@ require_once __DIR__ . '/includes/media_helper.php';
         'raksha_bandhan_royal' => [
             'collected' => ['Brother/Sister Name & Motto', '3-Step Ritual (Tilak, Diya, Rakhi)', '5 Sibling Promises / Vows', 'Shahi Farman Photos & Shagun Code'],
             'features'  => ['3-Step Tilak & Diya Ceremony', 'Sibling Fight Meter & TV Remote Rules', '3D Glassmorphism Vow Cards', 'Shahi Farman Antique Scroll & Shagun Lifafa']
-        ],
-        'raksha_bandhan_special' => [
-            'collected' => ['Brother/Sister Name & Motto', '5 Sibling Promises / Vows', 'Digital Shagun Note / Voucher Code', 'Childhood Photos with Captions'],
-            'features'  => ['Interactive Virtual Rakhi Tying', '5 Sibling Promise 3D Cards', 'Always-Visible Shagun Envelope', 'Sibling Soundtrack & Photo Gallery']
         ],
         'anniversary_reveal' => [
             'collected' => ['Relationship Start Date', '3-6 Timeline Milestones', 'Personalized Love Note', '5-10 Photo Gallery'],

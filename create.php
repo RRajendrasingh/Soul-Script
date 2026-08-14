@@ -16,7 +16,7 @@ $valid_templates = [
     'birthday_magic'        => ['name' => 'Birthday Magic',        'price' => 399],
     'perfect_proposal'      => ['name' => 'Perfect Proposal',      'price' => 599],
     'long_distance_love'    => ['name' => 'Long Distance Love',    'price' => 449],
-    'raksha_bandhan_special'=> ['name' => 'Raksha Bandhan Special', 'price' => 449],
+    'raksha_bandhan_royal'  => ['name' => 'Raksha Bandhan Royal', 'price' => 599],
 ];
 
 try {
@@ -100,7 +100,7 @@ if ($order_id) {
       </div>
 
       <?php if (strpos($preselected_template, 'raksha_bandhan') !== false): ?>
-        <div class="p-3.5 bg-gradient-to-r from-[#3b2a1a] via-[#281d12] to-[#3b2a1a] border border-[#eac34a]/60 text-[#eac34a] rounded-2xl text-xs font-bold text-center flex items-center justify-center gap-2 shadow-md">
+        <div class="p-3.5 bg-gradient-to-r from-[#3b2a1a] via-[#281d12] to-[#3b1e3b] border border-[#eac34a]/60 text-[#eac34a] rounded-2xl text-xs font-bold text-center flex items-center justify-center gap-2 shadow-md">
           <i data-lucide="gift" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
           <span>🎁 Raksha Bandhan Special: Guaranteed Amazon Cash Voucher (₹100 to ₹2,000) Unlocks on 28 Aug 12:00 PM!</span>
         </div>
@@ -334,25 +334,6 @@ if ($order_id) {
                   'title' => 'Tera Yaar Hoon Main', 'artist' => 'Arijit Singh'
               ]
           ],
-          'raksha_bandhan_special' => [
-              'recipientLabel' => "Brother / Sister's First Name *",
-              'recipientPlaceholder' => "e.g. Mona",
-              'recipientDefaultVal' => "Mona",
-              'taglineLabel' => "Custom Sibling Motto / Tagline Banner *",
-              'taglineDefault' => "World's Best Sister 👑",
-              'messageLabel' => "Shagun Envelope Message / Slogan *",
-              'messagePlaceholder' => "e.g. Happy Raksha Bandhan Mona Di! 🪔",
-              'messageDefaultVal' => "Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧 (Aur haan, TV remote mera hi रहेगा! 😄)",
-              'photoLabel' => "Brother / Sister's Profile Photo 🖼️ (Optional)",
-              'hints' => [
-                  ['label' => '"Favorite Cartoon?"', 'q' => 'What was our favorite cartoon show in childhood?', 'a' => 'Tom and Jerry'],
-                  ['label' => '"Childhood Nickname?"', 'q' => 'What funny nickname did I call you in childhood?', 'a' => 'Chutki'],
-                  ['label' => '"Biggest Fight?"', 'q' => 'What did we have our biggest childhood fight over?', 'a' => 'TV Remote']
-              ],
-              'music' => [
-                  'title' => 'Phoolon Ka Taaron Ka', 'artist' => 'Kishore Kumar'
-              ]
-          ],
           'raksha_bandhan_royal' => [
               'recipientLabel' => "Brother / Sister's First Name *",
               'recipientPlaceholder' => "e.g. Mona",
@@ -584,6 +565,7 @@ Today, I want to ask you the most important question of my life. Will you take m
             <label class="block font-semibold text-[#d0c3cb] mb-1">Shared Song or Spotify Playlist Link (Optional)</label>
             <input type="url" name="playlist_url" value="https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-sm text-[#e8e0e3]" placeholder="https://open.spotify.com/track/...">
           </div>
+        </div>
       <?php elseif (strpos($order['template_id'] ?? '', 'raksha_bandhan') !== false): ?>
         <div class="space-y-4 text-xs">
           <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">5 Sibling Promises / Vows *</label>
@@ -652,7 +634,6 @@ Today, I want to ask you the most important question of my life. Will you take m
           'long_distance_love' => ['letters' => true, 'tokens' => true],
           'birthday_magic' => ['letters' => true, 'tokens' => false],
           'perfect_proposal' => ['letters' => true, 'tokens' => false],
-          'raksha_bandhan_special' => ['letters' => false, 'tokens' => false],
           'raksha_bandhan_royal' => ['letters' => false, 'tokens' => false],
       ];
       $currentFeatures = $themeFeatures[$order['template_id'] ?? ''] ?? ['letters' => true, 'tokens' => true];
