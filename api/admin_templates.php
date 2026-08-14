@@ -25,7 +25,7 @@ try {
     }
 
     if ($method === 'GET') {
-        $stmt = $db->query("SELECT * FROM templates ORDER BY sort_order ASC, template_id ASC");
+        $stmt = $db->query("SELECT t.*, (SELECT COUNT(*) FROM orders o WHERE o.template_id = t.template_id AND o.payment_status = 'paid') as usage_count FROM templates t WHERE t.is_archived = 0 ORDER BY t.sort_order ASC, t.template_id ASC");
         $templates = $stmt->fetchAll();
 
         $baseUrl = rtrim(APP_URL, '/');
@@ -97,7 +97,7 @@ try {
             exit;
         }
 
-        // --- ACTION 3: DELETE TEMPLATE ---
+        // --- ACTION 3: DELETE TEMPLATE (SOFT DELETE) ---
         if ($action === 'delete') {
             $template_id = trim($input['template_id'] ?? '');
             if (empty($template_id)) {
@@ -105,19 +105,19 @@ try {
                 echo json_encode(['status' => 'error', 'message' => 'Template ID is required']);
                 exit;
             }
-            $stmtDel = $db->prepare("DELETE FROM templates WHERE template_id = ?");
+            $stmtDel = $db->prepare("UPDATE templates SET is_archived = 1 WHERE template_id = ?");
             $stmtDel->execute([$template_id]);
 
             // Auto-compact remaining sort_order sequence to eliminate all gaps
             try {
-                $allRemaining = $db->query("SELECT template_id FROM templates ORDER BY sort_order ASC")->fetchAll();
+                $allRemaining = $db->query("SELECT template_id FROM templates WHERE is_archived = 0 ORDER BY sort_order ASC")->fetchAll();
                 $stCompact = $db->prepare("UPDATE templates SET sort_order = ? WHERE template_id = ?");
                 foreach ($allRemaining as $cIdx => $rRow) {
                     $stCompact->execute([$cIdx + 1, $rRow['template_id']]);
                 }
             } catch (Exception $exCompact) {}
 
-            echo json_encode(['status' => 'success', 'message' => 'Template deleted successfully & sequence auto-compacted!']);
+            echo json_encode(['status' => 'success', 'message' => 'Template safely archived & sequence auto-compacted!']);
             exit;
         }
 

@@ -114,11 +114,11 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
       <div class="flex flex-wrap gap-3 items-center flex-1">
         <!-- Search Input -->
         <div class="flex-1 min-w-[220px]">
-          <input type="text" id="searchInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3] placeholder-[#d0c3cb]/50 focus:border-[#eac34a] focus:outline-none" placeholder="Search by name, email, phone, order ID, slug..." onkeyup="handleSearchKeyup(event)">
+          <input type="text" id="searchInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3] placeholder-[#d0c3cb]/50 focus:border-[#eac34a] focus:outline-none" placeholder="Search by name, email, phone, order ID, slug..." onkeydown="if(event.key === 'Enter') applyFilters()">
         </div>
 
         <!-- Payment & Page Status Filter -->
-        <select id="statusFilter" class="bg-[#151215] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" onchange="currentPage=1; fetchOrders()">
+        <select id="statusFilter" class="bg-[#151215] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
           <option value="">All Statuses</option>
           <option value="paid">🟢 Paid Orders</option>
           <option value="pending">⏳ Pending Orders</option>
@@ -127,7 +127,7 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
         </select>
 
         <!-- Date Range Filter -->
-        <select id="dateRangeFilter" class="bg-[#151215] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" onchange="currentPage=1; fetchOrders()">
+        <select id="dateRangeFilter" class="bg-[#151215] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
           <option value="all">🗓️ All Time</option>
           <option value="today">📅 Today Only</option>
           <option value="7days">📊 Last 7 Days</option>
@@ -137,7 +137,7 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
         <!-- Per Page Limit Selector -->
         <div class="flex items-center gap-1.5 bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#d0c3cb]">
           <span class="text-[11px] font-semibold text-[#b8a7b3]">Show:</span>
-          <select id="limitSelect" class="bg-transparent text-[#eac34a] font-bold focus:outline-none cursor-pointer" onchange="currentPage=1; fetchOrders()">
+          <select id="limitSelect" class="bg-transparent text-[#eac34a] font-bold focus:outline-none cursor-pointer">
             <option value="25" class="bg-[#151215]">25</option>
             <option value="50" class="bg-[#151215]" selected>50</option>
             <option value="100" class="bg-[#151215]">100</option>
@@ -148,6 +148,12 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
+        <!-- Apply Filters Button -->
+        <button onclick="applyFilters()" type="button" class="px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#151215] font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer hover:opacity-90">
+          <i data-lucide="filter" class="w-4 h-4"></i>
+          <span>Apply Filters</span>
+        </button>
+
         <!-- Export CSV Button -->
         <button onclick="exportOrdersCsv()" type="button" class="px-4 py-2.5 rounded-xl bg-[#3b1e3b] hover:bg-[#eac34a] text-[#eac34a] hover:text-[#241a00] border border-[#eac34a]/40 font-bold text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer">
           <i data-lucide="download" class="w-4 h-4"></i>
@@ -204,14 +210,10 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
 
     let currentPage = 1;
     let totalPages = 1;
-    let searchDebounceTimer = null;
 
-    function handleSearchKeyup(e) {
-      clearTimeout(searchDebounceTimer);
-      searchDebounceTimer = setTimeout(() => {
-        currentPage = 1;
-        fetchOrders();
-      }, 300);
+    function applyFilters() {
+      currentPage = 1;
+      fetchOrders();
     }
 
     function changePage(delta) {

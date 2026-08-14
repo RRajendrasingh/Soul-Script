@@ -344,7 +344,10 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
 
             <div class="absolute bottom-2 left-2 right-2 bg-black/80 backdrop-blur-md p-2 rounded-xl border border-white/10 flex items-center justify-between">
               <span class="text-xs font-bold text-[#eac34a]">₹${item.price_inr}</span>
-              <span class="text-[10px] text-[#eac34a] font-mono font-bold bg-[#100d10] px-2 py-0.5 rounded-md border border-[#eac34a]/30">Pos: #${idx + 1}</span>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[10px] text-white font-mono font-bold bg-[#3b1e3b] px-2 py-0.5 rounded-md shadow-md border border-[#e4b9df]/30" title="Total Paid Purchases">🛍️ ${item.usage_count || 0}</span>
+                <span class="text-[10px] text-[#eac34a] font-mono font-bold bg-[#100d10] px-2 py-0.5 rounded-md border border-[#eac34a]/30">Pos: #${idx + 1}</span>
+              </div>
             </div>
           </div>
 
@@ -391,7 +394,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
               <button type="button" onclick="openTemplateModal('${item.template_id}')" class="px-3 py-2 rounded-xl bg-[#3b1e3b] text-[#e4b9df] font-bold text-[10px] border border-[#e4b9df]/30 hover:bg-[#4d274d] transition-all cursor-pointer">
                 ✏️ Edit
               </button>
-              <button type="button" onclick="deleteTemplate('${item.template_id}')" class="px-2.5 py-2 rounded-xl bg-rose-950/60 text-rose-300 font-bold text-[10px] border border-rose-500/30 hover:bg-rose-900/80 transition-all cursor-pointer">
+              <button type="button" onclick="deleteTemplate('${item.template_id}', ${item.usage_count || 0})" class="px-2.5 py-2 rounded-xl bg-rose-950/60 text-rose-300 font-bold text-[10px] border border-rose-500/30 hover:bg-rose-900/80 transition-all cursor-pointer">
                 🗑️
               </button>
             </div>
@@ -688,8 +691,9 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       } catch (err) {}
     }
 
-    async function deleteTemplate(templateId) {
-      if (!confirm(`Are you sure you want to delete template "${templateId}"?`)) return;
+    async function deleteTemplate(templateId, usageCount) {
+      const uCount = parseInt(usageCount) || 0;
+      if (!confirm(`Are you sure you want to delete template "${templateId}"?\n\nThis card has ${uCount} paid purchases. Deleting it will safely archive it so existing users don't lose their data.`)) return;
       try {
         await fetch('<?php echo APP_URL; ?>/api/admin_templates.php', {
           method: 'POST',

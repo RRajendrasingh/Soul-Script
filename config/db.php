@@ -104,7 +104,8 @@ function getDB() {
                 'button_text'   => "VARCHAR(100) DEFAULT 'Personalize This Gift 🎁'",
                 'demo_url'      => "TEXT DEFAULT NULL",
                 'demo_password' => "VARCHAR(100) DEFAULT NULL",
-                'sort_order'    => "INT DEFAULT 0"
+                'sort_order'    => "INT DEFAULT 0",
+                'is_archived'   => "TINYINT(1) NOT NULL DEFAULT 0"
             ];
             foreach ($tplCols as $cName => $cDef) {
                 try {
