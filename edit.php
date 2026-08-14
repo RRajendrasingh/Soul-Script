@@ -597,7 +597,7 @@ $showLogin = !$showDashboard && !$showHub;
       </div>
 
       <!-- Scrollable Grid of Admin Sample Photos -->
-      <div id="sampleModalGrid" class="sample-modal-grid pr-1 flex-1 min-h-[300px]">
+      <div id="sampleModalGrid" class="sample-modal-grid p-2.5 flex-1 min-h-[300px]">
         <div class="col-span-full text-center py-10 text-[#d0c3cb] text-xs">
           <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto text-[#eac34a] mb-2"></i>
           Loading sample gallery photos...
