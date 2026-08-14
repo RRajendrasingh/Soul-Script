@@ -136,21 +136,21 @@ if ($cleanReceiverPhoto) {
     <div id="heroWristBannerContainer" class="w-full bg-[#151215] border border-[#eac34a]/30 rounded-[2.5rem] shadow-[0_0_50px_rgba(234,195,74,0.15)] relative overflow-hidden flex flex-col md:flex-row group transition-all duration-500 hover:shadow-[0_0_60px_rgba(234,195,74,0.3)] hover:border-[#eac34a]/60">
       
       <!-- Left side: Photorealistic Image (Brother's Wrist with Rakhi) -->
-      <div class="w-full md:w-5/12 h-48 md:h-auto relative overflow-hidden bg-gradient-to-br from-[#2a060b] to-[#140205]">
+      <div class="w-full md:w-5/12 h-56 md:h-auto relative overflow-hidden bg-gradient-to-br from-[#2a060b] to-[#140205]">
         <!-- Fallback/User Image - Set to absolute cover -->
         <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/hand_rakhi_banner.png" alt="Rakhi on Wrist" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700">
         
-        <!-- Gradient Overlay to blend with right side -->
-        <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-transparent via-[#151215]/50 to-[#151215]"></div>
+        <!-- Gradient Overlay to blend with right side/bottom -->
+        <div class="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-transparent via-transparent to-[#151215]"></div>
       </div>
 
       <!-- Right side: Content & Action Button -->
-      <div class="w-full md:w-7/12 p-6 md:p-10 flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-5 relative">
+      <div class="w-full md:w-7/12 p-6 md:py-6 md:px-8 flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-3 relative">
         <!-- Floating Sparkles -->
-        <span class="absolute top-6 right-10 text-[#eac34a] animate-ping opacity-60">✨</span>
-        <span class="absolute bottom-8 right-20 text-[#ffd700] animate-pulse opacity-70">✦</span>
+        <span class="absolute top-4 right-10 text-[#eac34a] animate-ping opacity-60">✨</span>
+        <span class="absolute bottom-6 right-16 text-[#ffd700] animate-pulse opacity-70">✦</span>
 
-        <h3 class="text-3xl md:text-4xl font-extrabold font-serif text-[#eac34a] tracking-tight drop-shadow-sm">
+        <h3 class="text-3xl md:text-3xl font-extrabold font-serif text-[#eac34a] tracking-tight drop-shadow-sm">
           Virtual Rakhi Ceremony
         </h3>
         <p class="text-xs md:text-sm text-[#d0c3cb]/90 max-w-sm leading-relaxed">
@@ -158,7 +158,7 @@ if ($cleanReceiverPhoto) {
         </p>
         
         <!-- Action Button: Opens the Modal -->
-        <button type="button" onclick="openCeremonyModal()" class="mt-2 px-8 py-3.5 md:py-4 bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-bold text-sm md:text-base uppercase tracking-widest rounded-full shadow-[0_10px_30px_rgba(234,195,74,0.4)] hover:shadow-[0_15px_40px_rgba(234,195,74,0.6)] hover:-translate-y-1 active:scale-95 transition-all cursor-pointer inline-flex items-center gap-2.5">
+        <button type="button" onclick="openCeremonyModal()" class="mt-2 px-8 py-3 bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-bold text-sm uppercase tracking-widest rounded-full shadow-[0_10px_30px_rgba(234,195,74,0.4)] hover:shadow-[0_15px_40px_rgba(234,195,74,0.6)] hover:-translate-y-1 active:scale-95 transition-all cursor-pointer inline-flex items-center gap-2.5">
           <span>Tap to Tie Rakhi</span>
           <i data-lucide="arrow-right" class="w-5 h-5"></i>
         </button>
