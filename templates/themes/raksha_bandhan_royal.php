@@ -366,6 +366,271 @@ if ($cleanReceiverPhoto) {
   </div>
 </section>
 
+<!-- SECTION 4.5: SHAHI TAMRAPATRA (OFFICIAL ROYAL SIBLING BOND CERTIFICATE) -->
+<!-- 100% Scoped Styles for Shahi Tamrapatra - Zero Global Impact -->
+<style>
+  .shahi-tamrapatra-wrapper {
+    position: relative;
+    z-index: 10;
+  }
+  .shahi-tamrapatra-sheet {
+    background: radial-gradient(circle at 50% 50%, #fffef9 0%, #faf3e1 65%, #f1dfb8 100%);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(180, 140, 60, 0.22);
+    border: 3px solid #d4af37;
+    position: relative;
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
+  .tamrapatra-inner-frame {
+    border: 2px solid #b89343;
+    position: relative;
+    border-radius: 1rem;
+    background: rgba(255, 253, 245, 0.65);
+  }
+  .tamrapatra-title-gold {
+    font-family: 'Cinzel Decorative', 'Cinzel', 'Playfair Display', Georgia, serif;
+    background: linear-gradient(180deg, #8a5a0c 0%, #b8860b 35%, #e6cb7a 65%, #7a4e08 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(184, 134, 11, 0.2));
+  }
+  .tamrapatra-cursive-sig {
+    font-family: 'Playfair Display', 'Brush Script MT', 'Alex Brush', cursive;
+    font-style: italic;
+  }
+  .shahi-red-wax-seal {
+    width: 68px;
+    height: 68px;
+    background: radial-gradient(circle at 35% 35%, #ef3b4c 0%, #a80f21 50%, #59050e 100%);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -4px 6px rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    border: 2px solid #ff7a85;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .shahi-red-wax-seal::before {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border: 1.5px dashed rgba(255, 220, 100, 0.6);
+    border-radius: 50%;
+  }
+</style>
+
+<section id="shahiTamrapatraSection" class="shahi-tamrapatra-wrapper max-w-4xl mx-auto px-4 py-10 space-y-6">
+  <!-- Section Intro -->
+  <div class="text-center space-y-2 mb-6">
+    <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ROYAL DECREE &amp; SEAL</span>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#fceabb] drop-shadow-md">Shahi Tamrapatra 📜</h2>
+    <p class="text-xs text-[#d0c3cb]">The official royal certificate certifying the eternal bond between brother and sister.</p>
+  </div>
+
+  <!-- Certificate Canvas Document (Rendered for 4K Export) -->
+  <div id="shahiTamrapatraDocument" class="shahi-tamrapatra-sheet p-4 sm:p-8 md:p-10 relative">
+    
+    <!-- Ornate Vector Gold Filigree Corners Matching Mockup -->
+    <!-- Top Left Corner -->
+    <div class="absolute top-2 left-2 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none opacity-85 z-10">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5 L5 45 C5 30 15 20 30 15 C 45 10 30 5 5 5 Z" fill="#b89343" opacity="0.9"/>
+        <path d="M5 5 C 20 20 25 40 40 40 C 35 25 25 15 5 5 Z" fill="#d4af37"/>
+        <path d="M15 15 C 30 30 45 35 60 20 C 40 15 25 25 15 15 Z" fill="#8a5a0c" opacity="0.6"/>
+        <circle cx="20" cy="20" r="4" fill="#ffd700"/>
+      </svg>
+    </div>
+    <!-- Top Right Corner -->
+    <div class="absolute top-2 right-2 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none opacity-85 z-10 scale-x-[-1]">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5 L5 45 C5 30 15 20 30 15 C 45 10 30 5 5 5 Z" fill="#b89343" opacity="0.9"/>
+        <path d="M5 5 C 20 20 25 40 40 40 C 35 25 25 15 5 5 Z" fill="#d4af37"/>
+        <path d="M15 15 C 30 30 45 35 60 20 C 40 15 25 25 15 15 Z" fill="#8a5a0c" opacity="0.6"/>
+        <circle cx="20" cy="20" r="4" fill="#ffd700"/>
+      </svg>
+    </div>
+    <!-- Bottom Left Corner -->
+    <div class="absolute bottom-2 left-2 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none opacity-85 z-10 scale-y-[-1]">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5 L5 45 C5 30 15 20 30 15 C 45 10 30 5 5 5 Z" fill="#b89343" opacity="0.9"/>
+        <path d="M5 5 C 20 20 25 40 40 40 C 35 25 25 15 5 5 Z" fill="#d4af37"/>
+        <path d="M15 15 C 30 30 45 35 60 20 C 40 15 25 25 15 15 Z" fill="#8a5a0c" opacity="0.6"/>
+        <circle cx="20" cy="20" r="4" fill="#ffd700"/>
+      </svg>
+    </div>
+    <!-- Bottom Right Corner -->
+    <div class="absolute bottom-2 right-2 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none opacity-85 z-10 scale-[-1]">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 5 L5 45 C5 30 15 20 30 15 C 45 10 30 5 5 5 Z" fill="#b89343" opacity="0.9"/>
+        <path d="M5 5 C 20 20 25 40 40 40 C 35 25 25 15 5 5 Z" fill="#d4af37"/>
+        <path d="M15 15 C 30 30 45 35 60 20 C 40 15 25 25 15 15 Z" fill="#8a5a0c" opacity="0.6"/>
+        <circle cx="20" cy="20" r="4" fill="#ffd700"/>
+      </svg>
+    </div>
+
+    <!-- Inner Certificate Border Frame -->
+    <div class="tamrapatra-inner-frame p-6 sm:p-10 text-center space-y-6 relative z-10">
+      
+      <!-- Royal Crown & Heraldic Emblem -->
+      <div class="flex flex-col items-center justify-center space-y-1">
+        <div class="w-14 h-10 text-[#b89343] flex items-center justify-center">
+          <svg viewBox="0 0 100 60" fill="#b89343" class="w-full h-full drop-shadow-sm">
+            <path d="M50 5 L62 25 L85 10 L75 45 L25 45 L15 10 L38 25 Z M25 48 L75 48 L72 55 L28 55 Z"/>
+            <circle cx="50" cy="5" r="3" fill="#ffd700"/>
+            <circle cx="15" cy="10" r="2.5" fill="#ffd700"/>
+            <circle cx="85" cy="10" r="2.5" fill="#ffd700"/>
+          </svg>
+        </div>
+        <h3 class="tamrapatra-title-gold text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-wider uppercase">
+          SHAHI TAMRAPATRA
+        </h3>
+        <span class="text-[10px] sm:text-xs font-serif uppercase tracking-[0.25em] text-[#6b4d1b] font-bold block pt-0.5">
+          CERTIFICATE OF ETERNAL SIBLING BOND
+        </span>
+      </div>
+
+      <!-- Preamble text -->
+      <p class="font-serif italic text-xs sm:text-sm text-[#4a3410] max-w-xl mx-auto leading-relaxed">
+        This Royal decree certifies the sacred and eternal bond of love, protection, and cherished companionship between:
+      </p>
+
+      <!-- Parties Names Block (Left: Brother, Right: Sister) -->
+      <div class="flex flex-row items-center justify-around gap-4 max-w-lg mx-auto py-2 border-y border-[#d4af37]/40 bg-[#faf4e3]/60 rounded-xl px-4">
+        <div class="text-center space-y-0.5 flex-1">
+          <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#7a5310] block">RESPONSIBLE BROTHER</span>
+          <strong class="font-serif text-base sm:text-xl text-[#2a1705] font-extrabold block truncate"><?= $buyerName ?></strong>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-[#ebd7b3] border border-[#b89343] flex items-center justify-center font-serif font-bold text-xs text-[#6b4d1b] shrink-0 shadow-inner">
+          &amp;
+        </div>
+        <div class="text-center space-y-0.5 flex-1">
+          <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#7a5310] block">BELOVED SISTER</span>
+          <strong class="font-serif text-base sm:text-xl text-[#2a1705] font-extrabold block truncate"><?= $partnerName ?></strong>
+        </div>
+      </div>
+
+      <!-- Formal Treaty / Vow Decree -->
+      <p class="font-serif text-xs sm:text-[13.5px] text-[#3d2b0c] leading-relaxed max-w-2xl mx-auto px-2">
+        We solemnly acknowledge the vow of lifelong protection (Raksha) and unconditional love (Bandhan). In testimony of this unbreakable kinship, both parties exchange eternal affection, joy, and shared memories. May this sacred knot bestow boundless prosperity, happiness, and divinity upon their lives.
+      </p>
+
+      <div class="text-[11px] sm:text-xs font-serif font-bold text-[#6b4d1b] italic">
+        Dated: <?= date('jS F Y') ?>
+      </div>
+
+      <!-- Signatures & Royal Red Wax Seal Centerpiece -->
+      <div class="pt-2 flex items-center justify-between gap-2 max-w-xl mx-auto border-t border-[#d4af37]/30">
+        
+        <!-- Left: Brother Signature -->
+        <div class="text-center flex-1">
+          <div class="tamrapatra-cursive-sig text-base sm:text-2xl text-[#6b4d1b] font-bold pb-1 border-b border-[#a88232]/50">
+            <?= $buyerName ?>
+          </div>
+          <span class="text-[8.5px] sm:text-[10px] font-serif uppercase tracking-widest text-[#7a5310] block pt-1 font-semibold">
+            [<?= $buyerName ?>'s Signature]
+          </span>
+        </div>
+
+        <!-- Center: 3D Crimson Red Wax Seal -->
+        <div class="px-2 shrink-0 flex flex-col items-center">
+          <div class="shahi-red-wax-seal">
+            <span class="text-xs text-[#ffe088]">👑</span>
+            <span class="text-[8px] font-black uppercase text-[#fff2c4] tracking-widest leading-none mt-0.5">SHAHI</span>
+          </div>
+        </div>
+
+        <!-- Right: Sister Signature -->
+        <div class="text-center flex-1">
+          <div class="tamrapatra-cursive-sig text-base sm:text-2xl text-[#6b4d1b] font-bold pb-1 border-b border-[#a88232]/50">
+            <?= $partnerName ?>
+          </div>
+          <span class="text-[8.5px] sm:text-[10px] font-serif uppercase tracking-widest text-[#7a5310] block pt-1 font-semibold">
+            [<?= $partnerName ?>'s Signature]
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Scribe footnote -->
+      <div class="text-[9px] sm:text-[10px] font-serif text-[#8a6526] italic pt-1">
+        Signed and sealed under the Royal Scribe Authority of SoulScript &bull; Lifetime Sacred Bond
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Download & Share Action Buttons (Full-width touch-friendly on Mobile) -->
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+    <button type="button" id="downloadCertBtn" onclick="downloadShahiTamrapatra()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-[#d4af37] via-[#f7e6a6] to-[#b89343] text-[#241a00] font-extrabold text-xs sm:text-sm uppercase tracking-wider rounded-full shadow-[0_8px_25px_rgba(212,175,55,0.45)] hover:shadow-[0_12px_35px_rgba(212,175,55,0.65)] hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2">
+      <i data-lucide="download" class="w-4 h-4 text-[#241a00]"></i>
+      <span>Download Official Certificate (4K HD)</span>
+    </button>
+
+    <button type="button" onclick="shareShahiTamrapatraWhatsApp()" class="w-full sm:w-auto px-6 py-3.5 bg-[#1f4e27] hover:bg-[#276332] text-[#98ecaa] border border-[#52b76b]/50 font-bold text-xs sm:text-sm rounded-full shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2">
+      <i data-lucide="share-2" class="w-4 h-4 text-[#98ecaa]"></i>
+      <span>Share Certificate on WhatsApp 📲</span>
+    </button>
+  </div>
+</section>
+
+<script>
+  // 4K Ultra-HD Client-Side Download Function
+  function downloadShahiTamrapatra() {
+    const btn = document.getElementById('downloadCertBtn');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> Generating 4K Certificate...';
+    btn.disabled = true;
+
+    const loadHtml2Canvas = () => {
+      return new Promise((resolve, reject) => {
+        if (window.html2canvas) return resolve();
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    };
+
+    loadHtml2Canvas().then(() => {
+      const element = document.getElementById('shahiTamrapatraDocument');
+      html2canvas(element, {
+        scale: 3, // 3x Ultra-HD 300 DPI supersampling!
+        useCORS: true,
+        backgroundColor: '#faf3e1',
+        logging: false
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Shahi_Tamrapatra_Certificate_<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $buyerName) ?>_<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $partnerName) ?>.png';
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+        if (window.lucide) lucide.createIcons();
+        if (window.confetti) {
+          confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+        }
+      }).catch(err => {
+        console.error(err);
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+        if (window.lucide) lucide.createIcons();
+      });
+    }).catch(err => {
+      console.error(err);
+      btn.innerHTML = originalContent;
+      btn.disabled = false;
+      if (window.lucide) lucide.createIcons();
+    });
+  }
+
+  function shareShahiTamrapatraWhatsApp() {
+    const text = `📜 *Official Shahi Tamrapatra — Sibling Bond Certificate* 👑\n\nThis Royal decree certifies the eternal bond of love and protection between *<?= $buyerName ?>* and *<?= $partnerName ?>*!\n\nView our official certificate on SoulScript: ${window.location.href}`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+  }
+</script>
+
 <!-- SECTION 5: WAX-SEALED ROYAL SHAGUN LIFAFA -->
 <section class="max-w-3xl mx-auto px-4 py-10 relative z-10">
   <div class="text-center space-y-2 mb-8">
