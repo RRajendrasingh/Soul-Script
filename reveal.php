@@ -1711,35 +1711,35 @@ if (!empty($initialLockData['page_id'])) {
 
         c1.textAlign = 'center';
         c1.fillStyle = '#851d2c';
-        c1.font = 'bold 34px "Cinzel", serif';
-        c1.fillText('👑  SOULSCRIPT ROYAL KEEPSAKE EDITION  👑', C_WIDTH / 2, 160);
+        c1.font = 'bold 36px "Cinzel", serif';
+        c1.fillText('👑  SOULSCRIPT ROYAL KEEPSAKE ARCHIVE  👑', C_WIDTH / 2, 160);
 
         c1.fillStyle = '#402001';
-        c1.font = '900 64px "Cinzel Decorative", "Playfair Display", Georgia, serif';
-        c1.fillText('THE SACRED SIBLING STORY', C_WIDTH / 2, 245);
+        c1.font = '900 68px "Cinzel Decorative", "Playfair Display", Georgia, serif';
+        c1.fillText('THE SACRED SIBLING STORY', C_WIDTH / 2, 250);
 
         c1.fillStyle = '#7a4204';
-        c1.font = 'italic bold 32px "Playfair Display", Georgia, serif';
-        c1.fillText('A Lifetime of Love, Laughter & Unbreakable Promises', C_WIDTH / 2, 305);
+        c1.font = 'italic bold 34px "Playfair Display", Georgia, serif';
+        c1.fillText('A Lifetime of Love, Laughter & Unbreakable Promises', C_WIDTH / 2, 315);
 
-        // Center Oval Avatar Frame
+        // Center Large 24K Gold Oval Medallion Frame
         const p1AvatarImg = await loadImgAsync(partnerPhotoUrl);
         const locketX = C_WIDTH / 2;
         const locketY = 820;
-        const locketRx = 260;
-        const locketRy = 340;
+        const locketRx = 340;
+        const locketRy = 440;
 
         c1.save();
         c1.beginPath();
-        c1.ellipse(locketX, locketY, locketRx + 24, locketRy + 24, 0, 0, Math.PI * 2);
+        c1.ellipse(locketX, locketY, locketRx + 32, locketRy + 32, 0, 0, Math.PI * 2);
         c1.fillStyle = '#d4af37';
-        c1.shadowColor = 'rgba(184, 147, 67, 0.4)';
-        c1.shadowBlur = 30;
+        c1.shadowColor = 'rgba(184, 147, 67, 0.45)';
+        c1.shadowBlur = 40;
         c1.fill();
         c1.restore();
 
         c1.beginPath();
-        c1.ellipse(locketX, locketY, locketRx + 12, locketRy + 12, 0, 0, Math.PI * 2);
+        c1.ellipse(locketX, locketY, locketRx + 16, locketRy + 16, 0, 0, Math.PI * 2);
         c1.fillStyle = '#851d2c';
         c1.fill();
 
@@ -1753,29 +1753,36 @@ if (!empty($initialLockData['page_id'])) {
         }
 
         c1.fillStyle = '#851d2c';
-        c1.font = 'italic bold 56px "Playfair Display", cursive';
-        c1.fillText(`${partnerName}  &  ${buyerName}`, C_WIDTH / 2, 1340);
+        c1.font = 'italic bold 64px "Playfair Display", cursive';
+        c1.fillText(`${partnerName}  &  ${buyerName}`, C_WIDTH / 2, 1380);
 
         c1.fillStyle = '#7a5310';
-        c1.font = '800 22px "Cinzel", Georgia, serif';
-        c1.fillText('Issued on Raksha Bandhan 2026 • Official Digital Keepsake Archive', C_WIDTH / 2, 1430);
+        c1.font = '800 24px "Cinzel", Georgia, serif';
+        c1.fillText('Issued on Raksha Bandhan 2026 • Official Digital Keepsake Archive', C_WIDTH / 2, 1460);
 
         doc.addImage(page1.cvs.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 297, 210);
 
         // ----------------------------------------------------
-        // PAGE 2: SHAHI TAMRAPATRA CERTIFICATE
+        // PAGE 2: SHAHI TAMRAPATRA CERTIFICATE (CANVAS EMBEDDED)
         // ----------------------------------------------------
         doc.addPage();
+        const page2 = createPageCanvas();
+        const c2 = page2.c;
+
         const certSvg = document.getElementById('shahiTamrapatraSvg');
         if (certSvg) {
-          const certDataUrl = await renderSvgToDataUrl(certSvg, 1600, 900);
+          const certDataUrl = await renderSvgToDataUrl(certSvg, 2200, 1238);
           if (certDataUrl) {
-            doc.addImage(certDataUrl, 'PNG', 12, 10, 273, 190);
+            const certImg = await loadImgAsync(certDataUrl);
+            if (certImg) {
+              c2.drawImage(certImg, 140, 258, 2200, 1238);
+            }
           }
         }
+        doc.addImage(page2.cvs.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 297, 210);
 
         // ----------------------------------------------------
-        // CHAPTER PAGES: SPREADS OF USER SCRAPBOOK PHOTOS (4 unique photos per page)
+        // CHAPTER PAGES: SPREADS OF USER SCRAPBOOK PHOTOS (Large, beautiful, uncropped)
         // ----------------------------------------------------
         const chapterMeta = [
           { title: 'Chapter 1: Sweet Childhood Shenanigans 📺', quote: 'Fighting over the TV remote & hiding secret chocolate wrappers! 🍫' },
@@ -1797,25 +1804,25 @@ if (!empty($initialLockData['page_id'])) {
           // Chapter Header Banner
           c.textAlign = 'center';
           c.fillStyle = '#851d2c';
-          c.font = 'bold 44px "Cinzel", serif';
-          c.fillText(meta.title, C_WIDTH / 2, 160);
+          c.font = 'bold 46px "Cinzel", serif';
+          c.fillText(meta.title, C_WIDTH / 2, 150);
 
           c.fillStyle = '#7a4204';
           c.font = 'italic bold 26px "Playfair Display", Georgia, serif';
-          c.fillText(`"${meta.quote}"`, C_WIDTH / 2, 220);
+          c.fillText(`"${meta.quote}"`, C_WIDTH / 2, 205);
 
-          // 4 Balanced Polaroid Slots per Page
+          // 4 Large Proportional Polaroid Slots
           const slots = [
-            { x: 260, y: 340, w: 440, h: 520, rot: -0.02 },
-            { x: 1320, y: 340, w: 440, h: 520, rot: 0.02 },
-            { x: 260, y: 940, w: 440, h: 520, rot: 0.02 },
-            { x: 1320, y: 940, w: 440, h: 520, rot: -0.02 }
+            { x: 160, y: 260, w: 1040, h: 660, rot: -0.015 },
+            { x: 1280, y: 260, w: 1040, h: 660, rot: 0.015 },
+            { x: 160, y: 960, w: 1040, h: 660, rot: 0.015 },
+            { x: 1280, y: 960, w: 1040, h: 660, rot: -0.015 }
           ];
 
           const startIdx = chIdx * photosPerPage;
           for (let p = 0; p < photosPerPage; p++) {
             const photoIdx = startIdx + p;
-            if (photoIdx >= totalPhotos && totalPhotos > 0) break; // Don't repeat if no more photos
+            if (photoIdx >= totalPhotos && totalPhotos > 0) break;
 
             const slot = slots[p];
             const mediaItem = mediaList[photoIdx % (totalPhotos || 1)] || { url: partnerPhotoUrl, caption: 'Cherished Memory' };
@@ -1825,11 +1832,11 @@ if (!empty($initialLockData['page_id'])) {
             c.translate(slot.x + slot.w / 2, slot.y + slot.h / 2);
             c.rotate(slot.rot);
 
-            // Polaroid Card Matting
-            c.shadowColor = 'rgba(0, 0, 0, 0.18)';
-            c.shadowBlur = 20;
+            // Polaroid Card Matting with Soft Shadow
+            c.shadowColor = 'rgba(0, 0, 0, 0.16)';
+            c.shadowBlur = 24;
             c.shadowOffsetX = 4;
-            c.shadowOffsetY = 8;
+            c.shadowOffsetY = 10;
             c.fillStyle = '#ffffff';
             c.fillRect(-slot.w / 2, -slot.h / 2, slot.w, slot.h);
 
@@ -1837,13 +1844,13 @@ if (!empty($initialLockData['page_id'])) {
             c.shadowColor = 'transparent';
             c.lineWidth = 2;
             c.strokeStyle = '#e0c99a';
-            c.strokeRect(-slot.w / 2 + 8, -slot.h / 2 + 8, slot.w - 16, slot.h - 16);
+            c.strokeRect(-slot.w / 2 + 10, -slot.h / 2 + 10, slot.w - 20, slot.h - 20);
 
-            // Draw Photo (Uncropped Natural Fit)
-            const imgAreaW = slot.w - 32;
+            // Photo Bounding Box (Uncropped Proportional Fit)
+            const imgAreaW = slot.w - 40;
             const imgAreaH = slot.h - 100;
-            const imgAreaX = -slot.w / 2 + 16;
-            const imgAreaY = -slot.h / 2 + 16;
+            const imgAreaX = -slot.w / 2 + 20;
+            const imgAreaY = -slot.h / 2 + 20;
 
             c.fillStyle = '#f8f5ee';
             c.fillRect(imgAreaX, imgAreaY, imgAreaW, imgAreaH);
@@ -1863,17 +1870,18 @@ if (!empty($initialLockData['page_id'])) {
 
             // Gold Photo Corners
             c.fillStyle = '#d4af37';
-            c.fillRect(imgAreaX, imgAreaY, 18, 4);
-            c.fillRect(imgAreaX, imgAreaY, 4, 18);
-            c.fillRect(imgAreaX + imgAreaW - 18, imgAreaY, 18, 4);
-            c.fillRect(imgAreaX + imgAreaW - 4, imgAreaY, 4, 18);
+            const cLen = 22;
+            c.fillRect(imgAreaX, imgAreaY, cLen, 5);
+            c.fillRect(imgAreaX, imgAreaY, 5, cLen);
+            c.fillRect(imgAreaX + imgAreaW - cLen, imgAreaY, cLen, 5);
+            c.fillRect(imgAreaX + imgAreaW - 5, imgAreaY, 5, cLen);
 
-            // Caption Text with Emoji Support
+            // Caption Text
             c.fillStyle = '#3a2414';
-            c.font = '600 22px "Playfair Display", Georgia, serif';
+            c.font = '600 24px "Playfair Display", Georgia, serif';
             c.textAlign = 'center';
-            const capText = (mediaItem.caption && mediaItem.caption.length > 30) 
-              ? mediaItem.caption.substring(0, 28) + '...' 
+            const capText = (mediaItem.caption && mediaItem.caption.length > 40) 
+              ? mediaItem.caption.substring(0, 38) + '...' 
               : (mediaItem.caption || 'Cherished Memory');
             c.fillText(capText, 0, slot.h / 2 - 25);
 
@@ -1892,14 +1900,14 @@ if (!empty($initialLockData['page_id'])) {
 
         cEnd.textAlign = 'center';
         cEnd.fillStyle = '#851d2c';
-        cEnd.font = 'bold 44px "Cinzel", serif';
-        cEnd.fillText('👑  THE ROYAL SHAGUN LETTER  👑', C_WIDTH / 2, 170);
+        cEnd.font = 'bold 46px "Cinzel", serif';
+        cEnd.fillText('👑  THE ROYAL SHAGUN LETTER  👑', C_WIDTH / 2, 160);
 
         // Letter Box
-        const letterBoxW = C_WIDTH - 400;
-        const letterBoxH = 650;
-        const letterBoxX = 200;
-        const letterBoxY = 240;
+        const letterBoxW = C_WIDTH - 360;
+        const letterBoxH = 680;
+        const letterBoxX = 180;
+        const letterBoxY = 220;
 
         cEnd.fillStyle = '#ffffff';
         cEnd.strokeStyle = '#d4af37';
@@ -1910,10 +1918,9 @@ if (!empty($initialLockData['page_id'])) {
         cEnd.stroke();
 
         cEnd.fillStyle = '#3a200a';
-        cEnd.font = 'italic 32px "Playfair Display", Georgia, serif';
+        cEnd.font = 'italic 34px "Playfair Display", Georgia, serif';
         cEnd.textAlign = 'center';
 
-        // Word wrap love note
         const words = loveNote.split(' ');
         let line = '';
         let lineY = letterBoxY + 120;
@@ -1923,7 +1930,7 @@ if (!empty($initialLockData['page_id'])) {
           if (metrics.width > letterBoxW - 140 && n > 0) {
             cEnd.fillText(line, C_WIDTH / 2, lineY);
             line = words[n] + ' ';
-            lineY += 50;
+            lineY += 56;
           } else {
             line = testLine;
           }
@@ -1931,29 +1938,29 @@ if (!empty($initialLockData['page_id'])) {
         cEnd.fillText(line, C_WIDTH / 2, lineY);
 
         cEnd.fillStyle = '#851d2c';
-        cEnd.font = 'italic bold 38px "Playfair Display", cursive';
-        cEnd.fillText(`— With eternal love & lifelong protection, ${buyerName}`, letterBoxX + letterBoxW - 350, letterBoxY + letterBoxH - 60);
+        cEnd.font = 'italic bold 42px "Playfair Display", cursive';
+        cEnd.fillText(`— With eternal love & lifelong protection, ${buyerName}`, letterBoxX + letterBoxW - 400, letterBoxY + letterBoxH - 60);
 
         // Dynamic QR Code Portal
         const qrContainer = document.createElement('div');
-        new QRCode(qrContainer, { text: giftUrl, width: 300, height: 300, correctLevel: QRCode.CorrectLevel.H });
+        new QRCode(qrContainer, { text: giftUrl, width: 340, height: 340, correctLevel: QRCode.CorrectLevel.H });
         await new Promise(r => setTimeout(r, 400));
         const qrCanvas = qrContainer.querySelector('canvas');
         if (qrCanvas) {
           cEnd.fillStyle = '#ffffff';
-          cEnd.fillRect(C_WIDTH / 2 - 130, 960, 260, 260);
+          cEnd.fillRect(C_WIDTH / 2 - 150, 960, 300, 300);
           cEnd.strokeStyle = '#d4af37';
-          cEnd.lineWidth = 3;
-          cEnd.strokeRect(C_WIDTH / 2 - 130, 960, 260, 260);
-          cEnd.drawImage(qrCanvas, C_WIDTH / 2 - 115, 975, 230, 230);
+          cEnd.lineWidth = 4;
+          cEnd.strokeRect(C_WIDTH / 2 - 150, 960, 300, 300);
+          cEnd.drawImage(qrCanvas, C_WIDTH / 2 - 135, 975, 270, 270);
         }
 
         cEnd.fillStyle = '#7a4204';
-        cEnd.font = 'bold 28px "Cinzel", Georgia, serif';
-        cEnd.fillText('SCAN TO RELIVE YOUR DIGITAL CELEBRATION', C_WIDTH / 2, 1310);
+        cEnd.font = 'bold 30px "Cinzel", Georgia, serif';
+        cEnd.fillText('SCAN TO RELIVE YOUR DIGITAL CELEBRATION', C_WIDTH / 2, 1340);
 
-        cEnd.font = 'italic 22px "Playfair Display", Georgia, serif';
-        cEnd.fillText('Scan with any smartphone camera to play music & experience the interactive rituals anytime at SoulScript.', C_WIDTH / 2, 1360);
+        cEnd.font = 'italic 24px "Playfair Display", Georgia, serif';
+        cEnd.fillText('Scan with any smartphone camera to play music & experience the interactive rituals anytime at SoulScript.', C_WIDTH / 2, 1400);
 
         doc.addImage(lastPage.cvs.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 297, 210);
 
