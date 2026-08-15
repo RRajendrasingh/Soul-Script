@@ -368,7 +368,7 @@ if ($cleanReceiverPhoto) {
 
 <!-- SECTION 4.5: SHAHI TAMRAPATRA (OFFICIAL ROYAL SIBLING BOND CERTIFICATE) -->
 <!-- SECTION 4.5: SHAHI TAMRAPATRA (OFFICIAL CUTE & ROYAL SIBLING BOND CERTIFICATE) -->
-<!-- 100% Scoped Styles & Pure Vector SVG Architecture - Zero Global CSS Impact -->
+<!-- 100% Scoped Styles & Photorealistic Masterpiece Engine - Zero Global CSS Impact -->
 <section id="shahiTamrapatraSection" class="relative z-10 max-w-5xl mx-auto px-4 py-12 space-y-6">
   <!-- Section Header -->
   <div class="text-center space-y-2 mb-6">
@@ -377,35 +377,10 @@ if ($cleanReceiverPhoto) {
     <p class="text-xs text-[#d0c3cb]">Official Sibling Bond Certificate — Sealed with sacred Rakhi threads &amp; lifelong promises!</p>
   </div>
 
-  <!-- SVG Certificate Container in Standard A4 Landscape Ratio (1400 x 950 / 1.47:1) -->
-  <div id="shahiTamrapatraContainer" class="w-full relative rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.85)] border-2 border-[#d4af37] overflow-hidden bg-[#faf3e1]">
-    <svg id="shahiTamrapatraSvg" viewBox="0 0 1400 950" class="w-full h-auto block select-none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Certificate Container with 3D Photorealistic Master Artwork & Dynamic Typography Overlay -->
+  <div id="shahiTamrapatraContainer" class="w-full relative rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] border-2 border-[#d4af37] overflow-hidden bg-[#faf3e1]">
+    <svg id="shahiTamrapatraSvg" viewBox="0 0 1600 900" class="w-full h-auto block select-none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <!-- Antique Warm Ivory Parchment Radial Gradient -->
-        <radialGradient id="parchmentBg" cx="50%" cy="50%" r="75%">
-          <stop offset="0%" stop-color="#fffefb"/>
-          <stop offset="55%" stop-color="#faf4e6"/>
-          <stop offset="85%" stop-color="#f5e6c8"/>
-          <stop offset="100%" stop-color="#ebd2a2"/>
-        </radialGradient>
-
-        <!-- 24K Rich Gold Gradient -->
-        <linearGradient id="goldFiligree" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#8a5a0c"/>
-          <stop offset="25%" stop-color="#c99718"/>
-          <stop offset="50%" stop-color="#ffd700"/>
-          <stop offset="75%" stop-color="#d4af37"/>
-          <stop offset="100%" stop-color="#6e4404"/>
-        </linearGradient>
-
-        <!-- Sacred Kalawa Red & Gold Gradient -->
-        <linearGradient id="moliRedGold" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#d61f33"/>
-          <stop offset="35%" stop-color="#ffd700"/>
-          <stop offset="70%" stop-color="#d61f33"/>
-          <stop offset="100%" stop-color="#ffd700"/>
-        </linearGradient>
-
         <!-- 3D Gold Embossed Heading Gradient -->
         <linearGradient id="goldTitleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="#8a5a0c"/>
@@ -414,141 +389,46 @@ if ($cleanReceiverPhoto) {
           <stop offset="100%" stop-color="#7a4b06"/>
         </linearGradient>
 
-        <!-- 3D Crimson Red Wax Seal Gradient -->
-        <radialGradient id="waxSealGrad" cx="35%" cy="35%" r="65%">
-          <stop offset="0%" stop-color="#ff4757"/>
-          <stop offset="30%" stop-color="#c01525"/>
-          <stop offset="70%" stop-color="#850915"/>
-          <stop offset="100%" stop-color="#4a040b"/>
-        </radialGradient>
-
-        <!-- Filters for 3D Shadows & Glow -->
+        <!-- Filters for 3D Drop Shadows & Glow -->
         <filter id="goldTextShadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#8a5a0c" flood-opacity="0.35"/>
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#8a5a0c" flood-opacity="0.45"/>
         </filter>
-        <filter id="waxSealShadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000000" flood-opacity="0.55"/>
+        <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#ffffff" flood-opacity="0.8"/>
         </filter>
       </defs>
 
-      <!-- Parchment Canvas Background -->
-      <rect width="1400" height="950" fill="url(#parchmentBg)"/>
+      <!-- Embedded High-Resolution 3D Master Artwork (Kundan Rakhi, Silk Kalawa Borders, Badges, Wax Seal) -->
+      <image href="<?= htmlspecialchars(APP_URL) ?>/assets/images/cute_rakhi_cert_bg.jpg" x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
 
-      <!-- Sacred Red & Gold Silk Rakhi Braided Outer Border (Kalawa / Mauli) -->
-      <rect x="25" y="25" width="1350" height="900" rx="20" fill="none" stroke="#d61f33" stroke-width="7"/>
-      <rect x="25" y="25" width="1350" height="900" rx="20" fill="none" stroke="#ffd700" stroke-width="7" stroke-dasharray="14,14"/>
-
-      <!-- Outer 24K Gold Filigree Rect Border -->
-      <rect x="36" y="36" width="1328" height="878" rx="16" fill="none" stroke="url(#goldFiligree)" stroke-width="3"/>
-
-      <!-- Inner Thin Inset Border -->
-      <rect x="48" y="48" width="1304" height="854" rx="12" fill="none" stroke="#b8860b" stroke-width="1.5" stroke-opacity="0.75"/>
-      <rect x="56" y="56" width="1288" height="838" rx="10" fill="none" stroke="#d61f33" stroke-width="1" stroke-dasharray="6,4" stroke-opacity="0.6"/>
-
-      <!-- Ornate Gold & Ruby Corner Filigrees -->
-      <!-- Top-Left Corner -->
-      <g transform="translate(48, 48)">
-        <path d="M0,0 L0,75 Q0,40 40,40 Q75,40 75,0 Z" fill="url(#goldFiligree)" opacity="0.9"/>
-        <circle cx="24" cy="24" r="6" fill="#d61f33"/>
-        <circle cx="24" cy="24" r="3" fill="#ffd700"/>
-      </g>
-      <!-- Top-Right Corner -->
-      <g transform="translate(1352, 48) scale(-1, 1)">
-        <path d="M0,0 L0,75 Q0,40 40,40 Q75,40 75,0 Z" fill="url(#goldFiligree)" opacity="0.9"/>
-        <circle cx="24" cy="24" r="6" fill="#d61f33"/>
-        <circle cx="24" cy="24" r="3" fill="#ffd700"/>
-      </g>
-      <!-- Bottom-Left Corner -->
-      <g transform="translate(48, 902) scale(1, -1)">
-        <path d="M0,0 L0,75 Q0,40 40,40 Q75,40 75,0 Z" fill="url(#goldFiligree)" opacity="0.9"/>
-        <circle cx="24" cy="24" r="6" fill="#d61f33"/>
-        <circle cx="24" cy="24" r="3" fill="#ffd700"/>
-      </g>
-      <!-- Bottom-Right Corner -->
-      <g transform="translate(1352, 902) scale(-1, -1)">
-        <path d="M0,0 L0,75 Q0,40 40,40 Q75,40 75,0 Z" fill="url(#goldFiligree)" opacity="0.9"/>
-        <circle cx="24" cy="24" r="6" fill="#d61f33"/>
-        <circle cx="24" cy="24" r="3" fill="#ffd700"/>
-      </g>
-
-      <!-- TOP CENTER: Handcrafted Kundan & Pearl Gold Rakhi Medallion -->
-      <g transform="translate(700, 92)">
-        <!-- Silk Thread extending Left & Right -->
-        <line x1="-180" y1="0" x2="-45" y2="0" stroke="#d61f33" stroke-width="4"/>
-        <line x1="-180" y1="0" x2="-45" y2="0" stroke="#ffd700" stroke-width="4" stroke-dasharray="8,8"/>
-        <circle cx="-120" cy="0" r="5" fill="#ffd700"/>
-        <circle cx="-65" cy="0" r="6" fill="#fffdf0" stroke="#b8860b" stroke-width="1.5"/>
-
-        <line x1="45" y1="0" x2="180" y2="0" stroke="#d61f33" stroke-width="4"/>
-        <line x1="45" y1="0" x2="180" y2="0" stroke="#ffd700" stroke-width="4" stroke-dasharray="8,8"/>
-        <circle cx="120" cy="0" r="5" fill="#ffd700"/>
-        <circle cx="65" cy="0" r="6" fill="#fffdf0" stroke="#b8860b" stroke-width="1.5"/>
-
-        <!-- Outer Pearl Ring (12 Pearls) -->
-        <circle cx="0" cy="0" r="38" fill="none" stroke="#ffd700" stroke-width="2"/>
-        <circle cx="-32" cy="0" r="4.5" fill="#fffdf0" stroke="#b8860b"/>
-        <circle cx="32" cy="0" r="4.5" fill="#fffdf0" stroke="#b8860b"/>
-        <circle cx="0" cy="-32" r="4.5" fill="#fffdf0" stroke="#b8860b"/>
-        <circle cx="0" cy="32" r="4.5" fill="#fffdf0" stroke="#b8860b"/>
-        <circle cx="-23" cy="-23" r="4.5" fill="#fffdf0" stroke="#b8860b"/>
-        <circle cx="23" cy="-23" r="4.5" fill="#fffdf0" stroke="#b8860b"/>
-        <circle cx="-23" cy="23" r="4.5" fill="#fffdf0" stroke="#b8860b"/>
-        <circle cx="23" cy="23" r="4.5" fill="#fffdf0" stroke="#b8860b"/>
-
-        <!-- Gold Flower Centerpiece -->
-        <circle cx="0" cy="0" r="26" fill="url(#goldFiligree)" stroke="#7a4e08" stroke-width="1.5"/>
-        <circle cx="0" cy="0" r="16" fill="#d61f33" stroke="#ffd700" stroke-width="1.5"/>
-        <circle cx="0" cy="0" r="8" fill="#10b981" stroke="#ffd700" stroke-width="1.2"/>
-        <circle cx="0" cy="0" r="3.5" fill="#ffd700"/>
-      </g>
-
-      <!-- LEFT BADGE: World's Best Sister Medallion -->
-      <g transform="translate(195, 175)">
-        <circle cx="0" cy="0" r="48" fill="#fff9eb" stroke="#d4af37" stroke-width="2.5" filter="url(#goldTextShadow)"/>
-        <circle cx="0" cy="0" r="42" fill="none" stroke="#d61f33" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <text x="0" y="-18" text-anchor="middle" font-size="16">👑</text>
-        <text x="0" y="-2" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="10.5" font-weight="900" fill="#7a5310" letter-spacing="1">WORLD'S</text>
-        <text x="0" y="11" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11.5" font-weight="900" fill="#b91c1c" letter-spacing="1.5">BEST</text>
-        <text x="0" y="25" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="10.5" font-weight="900" fill="#7a5310" letter-spacing="1">SISTER</text>
-      </g>
-
-      <!-- RIGHT BADGE: Official Crime Partner Brother Shield -->
-      <g transform="translate(1205, 175)">
-        <path d="M-42,-38 L42,-38 L42,10 Q42,42 0,55 Q-42,42 -42,10 Z" fill="#fff9eb" stroke="#d4af37" stroke-width="2.5" filter="url(#goldTextShadow)"/>
-        <path d="M-36,-32 L36,-32 L36,8 Q36,36 0,48 Q-36,36 -36,8 Z" fill="none" stroke="#d61f33" stroke-width="1.2" stroke-dasharray="4,3"/>
-        <text x="0" y="-16" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="9" font-weight="900" fill="#7a5310" letter-spacing="1">OFFICIAL</text>
-        <text x="0" y="-2" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="10" font-weight="900" fill="#b91c1c" letter-spacing="1">CRIME</text>
-        <text x="0" y="12" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="9.5" font-weight="900" fill="#7a5310" letter-spacing="1">PARTNER</text>
-        <text x="0" y="27" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="900" fill="#241403" letter-spacing="1.5">BROTHER</text>
-      </g>
-
+      <!-- Live Dynamic Typography Overlay (Positioned in Center Parchment Area) -->
       <!-- Calligraphy Heading: SHAHI TAMRAPATRA -->
-      <text x="700" y="180" text-anchor="middle" font-family="'Cinzel Decorative', 'Cinzel', 'Playfair Display', Georgia, serif" font-size="46" font-weight="900" fill="url(#goldTitleGrad)" filter="url(#goldTextShadow)" letter-spacing="3">SHAHI TAMRAPATRA</text>
+      <text x="800" y="265" text-anchor="middle" font-family="'Cinzel Decorative', 'Cinzel', 'Playfair Display', Georgia, serif" font-size="44" font-weight="900" fill="url(#goldTitleGrad)" filter="url(#goldTextShadow)" letter-spacing="3">SHAHI TAMRAPATRA</text>
 
       <!-- Subtitle: Official Sibling Bond Certificate -->
-      <text x="700" y="218" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="24" font-weight="bold" fill="#851d2c" letter-spacing="1">Official Sibling Bond Certificate 💖</text>
+      <text x="800" y="302" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="24" font-weight="bold" fill="#851d2c" letter-spacing="1">Official Sibling Bond Certificate 💖</text>
 
       <!-- Preamble Tagline -->
-      <text x="700" y="260" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="13" font-weight="800" fill="#7a5310" letter-spacing="4">PROCLAIMED WITH SACRED LOVE BETWEEN:</text>
+      <text x="800" y="342" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12.5" font-weight="800" fill="#7a5310" letter-spacing="4">PROCLAIMED WITH SACRED LOVE BETWEEN:</text>
 
-      <!-- Parties Names Box -->
-      <rect x="230" y="285" width="940" height="88" rx="18" fill="#fcf6e8" stroke="#d4af37" stroke-width="1.8" fill-opacity="0.95"/>
-      <line x1="700" y1="292" x2="700" y2="366" stroke="#d4af37" stroke-width="1" stroke-dasharray="4,4" opacity="0.6"/>
+      <!-- Parties Names Block -->
+      <rect x="330" y="360" width="940" height="74" rx="16" fill="#fcf6e8" stroke="#d4af37" stroke-width="1.5" fill-opacity="0.9"/>
+      <line x1="800" y1="366" x2="800" y2="428" stroke="#d4af37" stroke-width="1" stroke-dasharray="4,4" opacity="0.6"/>
 
-      <!-- Brother Column (Left) -->
-      <text x="440" y="320" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12" font-weight="800" fill="#7a5310" letter-spacing="3">RESPONSIBLE BROTHER</text>
-      <text x="440" y="354" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="27" font-weight="900" fill="#241403"><?= htmlspecialchars($buyerName) ?> 🛡️</text>
+      <!-- Sister Column (Left) -->
+      <text x="560" y="390" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a5310" letter-spacing="2.5">BELOVED SISTER</text>
+      <text x="560" y="418" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="24" font-weight="900" fill="#241403"><?= htmlspecialchars($partnerName) ?> 👑</text>
 
       <!-- Center Love Medallion -->
-      <circle cx="700" cy="329" r="19" fill="#ffe4e8" stroke="#d61f33" stroke-width="1.5"/>
-      <text x="700" y="336" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="16" font-weight="bold" fill="#d61f33">💖</text>
+      <circle cx="800" cy="397" r="16" fill="#ffe4e8" stroke="#d61f33" stroke-width="1.2"/>
+      <text x="800" y="403" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="14" font-weight="bold" fill="#d61f33">💖</text>
 
-      <!-- Sister Column (Right) -->
-      <text x="960" y="320" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12" font-weight="800" fill="#7a5310" letter-spacing="3">BELOVED SISTER</text>
-      <text x="960" y="354" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="27" font-weight="900" fill="#241403"><?= htmlspecialchars($partnerName) ?> 👑</text>
+      <!-- Brother Column (Right) -->
+      <text x="1040" y="390" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a5310" letter-spacing="2.5">RESPONSIBLE BROTHER</text>
+      <text x="1040" y="418" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="24" font-weight="900" fill="#241403"><?= htmlspecialchars($buyerName) ?> 🛡️</text>
 
       <!-- Sibling Promises Section Title -->
-      <text x="700" y="415" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="15" font-weight="900" fill="#9c1b2c" letter-spacing="3">✦ THE SACRED SIBLING PROMISES ✦</text>
+      <text x="800" y="468" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="14.5" font-weight="900" fill="#9c1b2c" letter-spacing="3">✦ THE SACRED SIBLING PROMISES ✦</text>
 
       <!-- Dynamic Sibling Promises Loop (Supports Custom User Vows & Defaults) -->
       <?php 
@@ -560,8 +440,8 @@ if ($cleanReceiverPhoto) {
         "To celebrate this unique, irreplaceable bond of love, laughter, and lifelong protection 🪔✨."
       ];
       $vowCount = count($certVows);
-      $startY = $vowCount <= 3 ? 465 : ($vowCount == 4 ? 452 : 448);
-      $stepY = $vowCount <= 3 ? 42 : ($vowCount == 4 ? 36 : 32);
+      $startY = $vowCount <= 3 ? 508 : ($vowCount == 4 ? 498 : 494);
+      $stepY = $vowCount <= 3 ? 38 : ($vowCount == 4 ? 32 : 28);
       
       foreach ($certVows as $vIdx => $vText): 
         $currentY = $startY + ($vIdx * $stepY);
@@ -570,35 +450,25 @@ if ($cleanReceiverPhoto) {
           $cleanVow = mb_substr($cleanVow, 0, 92) . '...';
         }
       ?>
-        <text x="700" y="<?= $currentY ?>" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="16" fill="#382408" font-weight="600"><?= ($vIdx + 1) ?>. <?= $cleanVow ?></text>
+        <text x="800" y="<?= $currentY ?>" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="15" fill="#382408" font-weight="600"><?= ($vIdx + 1) ?>. <?= $cleanVow ?></text>
       <?php endforeach; ?>
 
       <!-- Official Date & Rakhi Day Stamp -->
-      <text x="700" y="638" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="15" font-style="italic" font-weight="700" fill="#7a5310">Issued with love on this auspicious day of Raksha Bandhan &bull; <?= date('jS F Y') ?></text>
+      <text x="800" y="655" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="14" font-style="italic" font-weight="700" fill="#7a5310">Issued with love on this auspicious day of Raksha Bandhan &bull; <?= date('jS F Y') ?></text>
 
-      <!-- Signatures & Crimson Red Wax Seal Centerpiece -->
-      <!-- Brother Signature (Left) -->
-      <line x1="200" y1="730" x2="540" y2="730" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
-      <text x="370" y="715" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="34" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($buyerName) ?> ♡</text>
-      <text x="370" y="756" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a5310" letter-spacing="2">[BROTHER'S SIGNATURE]</text>
+      <!-- Signatures Centerpiece -->
+      <!-- Sister Signature (Left) -->
+      <line x1="330" y1="735" x2="650" y2="735" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
+      <text x="490" y="722" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="30" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($partnerName) ?> ♡</text>
+      <text x="490" y="756" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="10.5" font-weight="800" fill="#7a5310" letter-spacing="2">[SISTER'S SIGNATURE]</text>
 
-      <!-- 3D Crimson Red Wax Seal with Golden Rakhi Emblem (Center) -->
-      <g transform="translate(700, 725)" filter="url(#waxSealShadow)">
-        <circle cx="0" cy="0" r="48" fill="url(#waxSealGrad)" stroke="#ff7a85" stroke-width="1.5"/>
-        <circle cx="0" cy="0" r="41" fill="none" stroke="#ffe088" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.85"/>
-        <!-- Golden Diya / Rakhi Motif -->
-        <path d="M-14,-10 L-8,2 L0,-6 L8,2 L14,-10 L10,6 L-10,6 Z" fill="#ffe088"/>
-        <!-- Seal Text: SHAHI -->
-        <text x="0" y="20" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="900" fill="#fff2c4" letter-spacing="2">SHAHI</text>
-      </g>
-
-      <!-- Sister Signature (Right) -->
-      <line x1="860" y1="730" x2="1200" y2="730" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
-      <text x="1030" y="715" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="34" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($partnerName) ?> ♡</text>
-      <text x="1030" y="756" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a5310" letter-spacing="2">[SISTER'S SIGNATURE]</text>
+      <!-- Brother Signature (Right) -->
+      <line x1="750" y1="735" x2="1070" y2="735" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
+      <text x="910" y="722" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="30" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($buyerName) ?> ♡</text>
+      <text x="910" y="756" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="10.5" font-weight="800" fill="#7a5310" letter-spacing="2">[BROTHER'S SIGNATURE]</text>
 
       <!-- Scribe Authority Footnote -->
-      <text x="700" y="818" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="13" font-style="italic" fill="#8a6526">Signed, sealed &amp; protected under the Royal Scribe Authority of SoulScript &bull; Lifetime Sacred Bond 🌸</text>
+      <text x="800" y="805" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="12" font-style="italic" fill="#8a6526">Signed, sealed &amp; protected under the Royal Scribe Authority of SoulScript &bull; Lifetime Sacred Bond 🌸</text>
     </svg>
   </div>
 
