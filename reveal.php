@@ -76,6 +76,8 @@ if (!empty($initialLockData['page_id'])) {
   require_once __DIR__ . '/includes/head.php'; 
   ?>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body class="bg-[#151215] text-[#e8e0e3] font-sans min-h-screen relative overflow-x-hidden">
 
@@ -1298,6 +1300,477 @@ if (!empty($initialLockData['page_id'])) {
     function shareShahiTamrapatraWhatsApp() {
       const text = `📜 *Official Shahi Tamrapatra — Sibling Bond Certificate* 👑\n\nThis Royal decree certifies the eternal bond of love and protection between *<?= addslashes($buyerName ?? '') ?>* and *<?= addslashes($partnerName ?? '') ?>*!\n\nView our official certificate on SoulScript: ${window.location.href}`;
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // Helper: Safely load image as HTMLImageElement with CORS handling
+    function loadImgAsync(src) {
+      return new Promise((resolve) => {
+        if (!src) return resolve(null);
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = () => {
+          // Fallback retry without crossOrigin if local/data URL
+          const img2 = new Image();
+          img2.onload = () => resolve(img2);
+          img2.onerror = () => resolve(null);
+          img2.src = src;
+        };
+        img.src = src;
+      });
+    }
+
+    // ==========================================
+    // 1. WALL COLLAGE POSTER GENERATOR (300 DPI A4/A3)
+    // ==========================================
+    async function downloadWallKeepsakePoster() {
+      const btn = document.getElementById('btnWallPoster');
+      const origText = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> Generating 300 DPI Wall Poster...';
+        btn.disabled = true;
+      }
+
+      try {
+        const partnerName = window.__partnerName || 'Sister';
+        const buyerName = window.__buyerName || 'Brother';
+        const partnerPhotoUrl = window.__partnerPhoto || '<?= APP_URL ?>/assets/default_gallery/sample_fa6955df.webp';
+        const mediaList = (window.__giftMedia && window.__giftMedia.length > 0) 
+          ? window.__giftMedia 
+          : [{ url: partnerPhotoUrl, caption: 'Cherished Memory' }];
+
+        // Canvas 2480 x 3508 (A4 300 DPI Print Standard)
+        const canvas = document.createElement('canvas');
+        canvas.width = 2480;
+        canvas.height = 3508;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        // 1. Base Ivory Linen Canvas
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        bgGrad.addColorStop(0, '#fdfbf7');
+        bgGrad.addColorStop(0.5, '#f7f1e3');
+        bgGrad.addColorStop(1, '#fdfbf7');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 2. Ornate Outer 24K Gold & Crimson Border
+        ctx.lineWidth = 14;
+        ctx.strokeStyle = '#d4af37';
+        ctx.strokeRect(60, 60, canvas.width - 120, canvas.height - 120);
+
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#851d2c';
+        ctx.strokeRect(85, 85, canvas.width - 170, canvas.height - 170);
+
+        // Corner Filigrees
+        const drawCornerFiligree = (cx, cy, flipX, flipY) => {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+          ctx.fillStyle = '#b89343';
+          ctx.beginPath();
+          ctx.arc(0, 0, 24, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#851d2c';
+          ctx.beginPath();
+          ctx.arc(0, 0, 10, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        };
+        drawCornerFiligree(85, 85, false, false);
+        drawCornerFiligree(canvas.width - 85, 85, true, false);
+        drawCornerFiligree(85, canvas.height - 85, false, true);
+        drawCornerFiligree(canvas.width - 85, canvas.height - 85, true, true);
+
+        // 3. Top Rakhi Crest & Header
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#851d2c';
+        ctx.font = 'bold 36px serif';
+        ctx.fillText('👑  ✦  SOULSCRIPT ROYAL ARCHIVE  ✦  👑', canvas.width / 2, 175);
+
+        ctx.fillStyle = '#4a2602';
+        ctx.font = '900 68px "Cinzel Decorative", "Cinzel", "Playfair Display", Georgia, serif';
+        ctx.fillText('The Sacred Sibling Journey', canvas.width / 2, 260);
+
+        ctx.fillStyle = '#7a4204';
+        ctx.font = 'italic bold 42px "Playfair Display", Georgia, serif';
+        ctx.fillText(`${partnerName} & ${buyerName} — Cherished Lifetime Memories`, canvas.width / 2, 325);
+
+        // 4. Center Oval 24K Gold Locket (Sister's Portrait)
+        const locketX = canvas.width / 2;
+        const locketY = 1680;
+        const locketRx = 330;
+        const locketRy = 420;
+
+        // Outer Gold Locket Glow & Frame
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(locketX, locketY, locketRx + 32, locketRy + 32, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#d4af37';
+        ctx.shadowColor = 'rgba(184, 147, 67, 0.45)';
+        ctx.shadowBlur = 40;
+        ctx.fill();
+        ctx.restore();
+
+        ctx.beginPath();
+        ctx.ellipse(locketX, locketY, locketRx + 16, locketRy + 16, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#851d2c';
+        ctx.fill();
+
+        // Load & Draw Avatar inside Locket
+        const avatarImg = await loadImgAsync(partnerPhotoUrl);
+        if (avatarImg) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.ellipse(locketX, locketY, locketRx, locketRy, 0, 0, Math.PI * 2);
+          ctx.clip();
+          ctx.drawImage(avatarImg, locketX - locketRx, locketY - locketRy, locketRx * 2, locketRy * 2);
+          ctx.restore();
+        }
+
+        // Locket Crown & Ribbon
+        ctx.fillStyle = '#d4af37';
+        ctx.beginPath();
+        ctx.arc(locketX, locketY - locketRy - 20, 26, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 5. Surrounding Uncropped Polaroid Mosaic Grid
+        const polaroidSlots = [
+          { x: 420, y: 560, w: 320, h: 360, rot: -0.04 },
+          { x: 960, y: 520, w: 320, h: 360, rot: 0.02 },
+          { x: 1520, y: 520, w: 320, h: 360, rot: -0.02 },
+          { x: 2060, y: 560, w: 320, h: 360, rot: 0.04 },
+          { x: 380, y: 1040, w: 330, h: 370, rot: 0.03 },
+          { x: 920, y: 980, w: 330, h: 370, rot: -0.03 },
+          { x: 1560, y: 980, w: 330, h: 370, rot: 0.03 },
+          { x: 2100, y: 1040, w: 330, h: 370, rot: -0.03 },
+          { x: 360, y: 1540, w: 330, h: 380, rot: -0.04 },
+          { x: 2120, y: 1540, w: 330, h: 380, rot: 0.04 },
+          { x: 380, y: 2040, w: 330, h: 370, rot: 0.03 },
+          { x: 920, y: 2100, w: 330, h: 370, rot: -0.03 },
+          { x: 1560, y: 2100, w: 330, h: 370, rot: 0.03 },
+          { x: 2100, y: 2040, w: 330, h: 370, rot: -0.03 },
+          { x: 420, y: 2540, w: 320, h: 360, rot: -0.03 },
+          { x: 960, y: 2580, w: 320, h: 360, rot: 0.02 },
+          { x: 1520, y: 2580, w: 320, h: 360, rot: -0.02 },
+          { x: 2060, y: 2540, w: 320, h: 360, rot: 0.03 }
+        ];
+
+        for (let i = 0; i < polaroidSlots.length; i++) {
+          const slot = polaroidSlots[i];
+          const mediaItem = mediaList[i % mediaList.length];
+          const photoImg = await loadImgAsync(mediaItem.url);
+
+          ctx.save();
+          ctx.translate(slot.x, slot.y);
+          ctx.rotate(slot.rot);
+
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.18)';
+          ctx.shadowBlur = 18;
+          ctx.shadowOffsetX = 4;
+          ctx.shadowOffsetY = 8;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(-slot.w / 2, -slot.h / 2, slot.w, slot.h);
+
+          ctx.shadowColor = 'transparent';
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = '#e0c99a';
+          ctx.strokeRect(-slot.w / 2 + 6, -slot.h / 2 + 6, slot.w - 12, slot.h - 12);
+
+          const imgAreaW = slot.w - 24;
+          const imgAreaH = slot.h - 70;
+          const imgAreaX = -slot.w / 2 + 12;
+          const imgAreaY = -slot.h / 2 + 12;
+
+          ctx.fillStyle = '#f8f5ee';
+          ctx.fillRect(imgAreaX, imgAreaY, imgAreaW, imgAreaH);
+
+          if (photoImg) {
+            const aspect = photoImg.width / photoImg.height;
+            let drawW = imgAreaW;
+            let drawH = imgAreaW / aspect;
+            if (drawH > imgAreaH) {
+              drawH = imgAreaH;
+              drawW = imgAreaH * aspect;
+            }
+            const drawX = imgAreaX + (imgAreaW - drawW) / 2;
+            const drawY = imgAreaY + (imgAreaH - drawH) / 2;
+            ctx.drawImage(photoImg, drawX, drawY, drawW, drawH);
+          }
+
+          ctx.fillStyle = '#d4af37';
+          const cornerSize = 14;
+          ctx.fillRect(imgAreaX, imgAreaY, cornerSize, 3);
+          ctx.fillRect(imgAreaX, imgAreaY, 3, cornerSize);
+          ctx.fillRect(imgAreaX + imgAreaW - cornerSize, imgAreaY, cornerSize, 3);
+          ctx.fillRect(imgAreaX + imgAreaW - 3, imgAreaY, 3, cornerSize);
+
+          ctx.fillStyle = '#3a2414';
+          ctx.font = '600 15px "Playfair Display", Georgia, serif';
+          ctx.textAlign = 'center';
+          const capText = (mediaItem.caption && mediaItem.caption.length > 28) 
+            ? mediaItem.caption.substring(0, 26) + '...' 
+            : (mediaItem.caption || 'Cherished Memory');
+          ctx.fillText(capText, 0, slot.h / 2 - 18);
+
+          ctx.restore();
+        }
+
+        ctx.textAlign = 'center';
+        const plaqueY = 3020;
+        ctx.fillStyle = '#d4af37';
+        ctx.beginPath();
+        ctx.roundRect(canvas.width / 2 - 450, plaqueY, 900, 75, 18);
+        ctx.fill();
+
+        ctx.fillStyle = '#241402';
+        ctx.font = 'bold 28px "Cinzel", Georgia, serif';
+        ctx.fillText('✦  SEALED WITH ETERNAL LOVE • RAKSHA BANDHAN 2026  ✦', canvas.width / 2, plaqueY + 48);
+
+        ctx.fillStyle = '#851d2c';
+        ctx.font = 'italic bold 44px "Playfair Display", cursive';
+        ctx.fillText(`${partnerName} ♡`, canvas.width / 2 - 320, plaqueY + 180);
+        ctx.fillText(`${buyerName} ♡`, canvas.width / 2 + 320, plaqueY + 180);
+
+        ctx.fillStyle = '#7a4204';
+        ctx.font = '800 18px "Cinzel", Georgia, serif';
+        ctx.fillText("[SISTER'S SIGNATURE]", canvas.width / 2 - 320, plaqueY + 220);
+        ctx.fillText("[BROTHER'S SIGNATURE]", canvas.width / 2 + 320, plaqueY + 220);
+
+        ctx.fillStyle = '#7a5310';
+        ctx.font = 'italic 20px "Playfair Display", Georgia, serif';
+        ctx.fillText(`Protected by SoulScript Royal Archive • Verification ID: ${window.__certId || 'SS-RB-2026'} • 300 DPI Museum Edition`, canvas.width / 2, plaqueY + 310);
+
+        const link = document.createElement('a');
+        link.download = `Wall_Collage_Poster_${buyerName}_${partnerName}.png`;
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+
+        if (btn) {
+          btn.innerHTML = origText;
+          btn.disabled = false;
+        }
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 150, spread: 85, origin: { y: 0.6 } });
+        }
+      } catch (err) {
+        console.error('Wall Poster Generation Error:', err);
+        if (btn) {
+          btn.innerHTML = origText;
+          btn.disabled = false;
+        }
+        alert('Could not generate 300 DPI Wall Poster. Please try again.');
+      }
+    }
+
+    // ==========================================
+    // 2. MULTI-PAGE KEEPSAKE PHOTOBOOK (PDF)
+    // ==========================================
+    async function downloadSiblingPhotobookPDF() {
+      const btn = document.getElementById('btnPhotobook');
+      const origText = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> Generating Luxury Photobook PDF...';
+        btn.disabled = true;
+      }
+
+      try {
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+          throw new Error('jsPDF library not loaded');
+        }
+
+        const partnerName = window.__partnerName || 'Sister';
+        const buyerName = window.__buyerName || 'Brother';
+        const partnerPhotoUrl = window.__partnerPhoto || '<?= APP_URL ?>/assets/default_gallery/sample_fa6955df.webp';
+        const mediaList = (window.__giftMedia && window.__giftMedia.length > 0) ? window.__giftMedia : [];
+        const loveNote = window.__loveNote || 'Thank you for being the most wonderful sibling in the universe!';
+        const giftUrl = window.location.href;
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: 'a4'
+        });
+
+        const pageWidth = 297;
+        const pageHeight = 210;
+
+        const drawPageBackground = () => {
+          doc.setFillColor(252, 248, 239);
+          doc.rect(0, 0, pageWidth, pageHeight, 'F');
+          doc.setLineWidth(1.2);
+          doc.setDrawColor(212, 175, 55);
+          doc.rect(8, 8, pageWidth - 16, pageHeight - 16);
+          doc.setLineWidth(0.4);
+          doc.setDrawColor(133, 29, 44);
+          doc.rect(11, 11, pageWidth - 22, pageHeight - 22);
+        };
+
+        drawPageBackground();
+        doc.setTextColor(133, 29, 44);
+        doc.setFont('times', 'bold');
+        doc.setFontSize(14);
+        doc.text('👑  SOULSCRIPT ROYAL KEEPSAKE EDITION  👑', pageWidth / 2, 24, { align: 'center' });
+        doc.setTextColor(64, 32, 1);
+        doc.setFontSize(28);
+        doc.text('THE SACRED SIBLING STORY', pageWidth / 2, 38, { align: 'center' });
+        doc.setTextColor(122, 66, 4);
+        doc.setFont('times', 'italic');
+        doc.setFontSize(14);
+        doc.text(`A Lifetime of Love, Laughter & Unbreakable Promises`, pageWidth / 2, 47, { align: 'center' });
+
+        const avatarImg = await loadImgAsync(partnerPhotoUrl);
+        if (avatarImg) {
+          doc.setFillColor(212, 175, 55);
+          doc.roundedRect(pageWidth / 2 - 37, 56, 74, 94, 6, 6, 'F');
+          doc.setFillColor(255, 255, 255);
+          doc.roundedRect(pageWidth / 2 - 35, 58, 70, 90, 4, 4, 'F');
+          doc.addImage(avatarImg, 'JPEG', pageWidth / 2 - 33, 60, 66, 86);
+        }
+
+        doc.setTextColor(133, 29, 44);
+        doc.setFont('times', 'bolditalic');
+        doc.setFontSize(22);
+        doc.text(`${partnerName}  &  ${buyerName}`, pageWidth / 2, 168, { align: 'center' });
+        doc.setTextColor(122, 83, 16);
+        doc.setFont('times', 'normal');
+        doc.setFontSize(10);
+        doc.text(`Issued on Raksha Bandhan 2026 • Official Digital Keepsake Archive`, pageWidth / 2, 180, { align: 'center' });
+
+        doc.addPage();
+        drawPageBackground();
+
+        const certSvg = document.getElementById('shahiTamrapatraSvg');
+        if (certSvg) {
+          const svgClone = certSvg.cloneNode(true);
+          svgClone.setAttribute('width', '1600');
+          svgClone.setAttribute('height', '900');
+          const svgString = new XMLSerializer().serializeToString(svgClone);
+          const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+          const URL = window.URL || window.webkitURL || window;
+          const blobURL = URL.createObjectURL(svgBlob);
+          const certImg = await loadImgAsync(blobURL);
+          if (certImg) {
+            doc.addImage(certImg, 'PNG', 14, 14, pageWidth - 28, pageHeight - 28);
+          }
+          URL.revokeObjectURL(blobURL);
+        }
+
+        const chapters = [
+          { title: 'Chapter 1: Sweet Childhood Shenanigans', quote: 'Fighting over the TV remote & hiding secret chocolate wrappers! 🍫📺' },
+          { title: 'Chapter 2: Unfiltered Laughter & Inside Jokes', quote: 'Crime partners in every mischief, sharing secrets the world will never know! 🤫✨' },
+          { title: 'Chapter 3: Lifelong Protection & Sacred Bond', quote: 'Always standing as an unbreakable shield through every milestone of life! 💖🪔' }
+        ];
+
+        for (let chIdx = 0; chIdx < chapters.length; chIdx++) {
+          doc.addPage();
+          drawPageBackground();
+          const ch = chapters[chIdx];
+          doc.setTextColor(133, 29, 44);
+          doc.setFont('times', 'bold');
+          doc.setFontSize(18);
+          doc.text(ch.title, pageWidth / 2, 22, { align: 'center' });
+          doc.setTextColor(122, 66, 4);
+          doc.setFont('times', 'italic');
+          doc.setFontSize(10.5);
+          doc.text(`"${ch.quote}"`, pageWidth / 2, 28, { align: 'center' });
+
+          const startPhotoIdx = chIdx * 4;
+          const photoPositions = [
+            { x: 20, y: 35, w: 120, h: 72 },
+            { x: 155, y: 35, w: 120, h: 72 },
+            { x: 20, y: 118, w: 120, h: 72 },
+            { x: 155, y: 118, w: 120, h: 72 }
+          ];
+
+          for (let pIdx = 0; pIdx < 4; pIdx++) {
+            const pos = photoPositions[pIdx];
+            const mediaItem = mediaList[(startPhotoIdx + pIdx) % (mediaList.length || 1)] || { url: partnerPhotoUrl, caption: 'Cherished Memory' };
+            doc.setFillColor(255, 255, 255);
+            doc.setDrawColor(212, 175, 55);
+            doc.setLineWidth(0.4);
+            doc.roundedRect(pos.x, pos.y, pos.w, pos.h, 3, 3, 'FD');
+
+            const pImg = await loadImgAsync(mediaItem.url);
+            if (pImg) {
+              const imgBoxW = pos.w - 10;
+              const imgBoxH = pos.h - 18;
+              const aspect = pImg.width / pImg.height;
+              let drawW = imgBoxW;
+              let drawH = imgBoxW / aspect;
+              if (drawH > imgBoxH) {
+                drawH = imgBoxH;
+                drawW = imgBoxH * aspect;
+              }
+              const drawX = pos.x + 5 + (imgBoxW - drawW) / 2;
+              const drawY = pos.y + 4 + (imgBoxH - drawH) / 2;
+              doc.addImage(pImg, 'JPEG', drawX, drawY, drawW, drawH);
+            }
+            doc.setTextColor(58, 36, 20);
+            doc.setFont('times', 'normal');
+            doc.setFontSize(8.5);
+            const cap = (mediaItem.caption && mediaItem.caption.length > 35) ? mediaItem.caption.substring(0, 32) + '...' : (mediaItem.caption || 'Cherished Memory');
+            doc.text(cap, pos.x + pos.w / 2, pos.y + pos.h - 5, { align: 'center' });
+          }
+        }
+
+        doc.addPage();
+        drawPageBackground();
+        doc.setTextColor(133, 29, 44);
+        doc.setFont('times', 'bold');
+        doc.setFontSize(18);
+        doc.text('👑  THE ROYAL SHAGUN LETTER  👑', pageWidth / 2, 24, { align: 'center' });
+        doc.setFillColor(255, 253, 248);
+        doc.setDrawColor(212, 175, 55);
+        doc.setLineWidth(0.6);
+        doc.roundedRect(25, 32, pageWidth - 50, 80, 4, 4, 'FD');
+        doc.setTextColor(64, 32, 1);
+        doc.setFont('times', 'italic');
+        doc.setFontSize(11);
+        const splitText = doc.splitTextToSize(`"${loveNote}"`, pageWidth - 70);
+        doc.text(splitText, 35, 45);
+        doc.setTextColor(133, 29, 44);
+        doc.setFont('times', 'bolditalic');
+        doc.setFontSize(13);
+        doc.text(`— With eternal love, ${buyerName}`, pageWidth - 40, 104, { align: 'right' });
+
+        const qrContainer = document.createElement('div');
+        new QRCode(qrContainer, { text: giftUrl, width: 256, height: 256, correctLevel: QRCode.CorrectLevel.H });
+        await new Promise(r => setTimeout(r, 400));
+        const qrCanvas = qrContainer.querySelector('canvas');
+        if (qrCanvas) {
+          const qrDataUrl = qrCanvas.toDataURL('image/png');
+          doc.setFillColor(255, 255, 255);
+          doc.roundedRect(pageWidth / 2 - 20, 120, 40, 40, 3, 3, 'F');
+          doc.addImage(qrDataUrl, 'PNG', pageWidth / 2 - 18, 122, 36, 36);
+        }
+        doc.setTextColor(122, 66, 4);
+        doc.setFont('times', 'bold');
+        doc.setFontSize(10);
+        doc.text('SCAN TO RELIVE YOUR DIGITAL CELEBRATION', pageWidth / 2, 168, { align: 'center' });
+        doc.setFont('times', 'italic');
+        doc.setFontSize(8.5);
+        doc.text('Scan with any smartphone camera to play music & experience the interactive rituals anytime at SoulScript.', pageWidth / 2, 174, { align: 'center' });
+
+        doc.save(`Sibling_Memory_Book_${buyerName}_${partnerName}.pdf`);
+        if (btn) {
+          btn.innerHTML = origText;
+          btn.disabled = false;
+        }
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 180, spread: 90, origin: { y: 0.6 } });
+        }
+      } catch (err) {
+        console.error('Photobook PDF Generation Error:', err);
+        if (btn) {
+          btn.innerHTML = origText;
+          btn.disabled = false;
+        }
+        alert('Could not generate Photobook PDF. Please try again.');
+      }
     }
 
     function cleanAttrStr(str) {

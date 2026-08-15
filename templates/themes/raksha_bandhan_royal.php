@@ -723,6 +723,74 @@ if ($cleanReceiverPhoto) {
   </div>
 </section>
 
+<!-- SECTION 6.5: ROYAL KEEPSAKE ACTION CENTER (PRINTABLE PHOTOBOOK & WALL POSTER) -->
+<section class="max-w-4xl mx-auto px-4 py-12 relative z-10">
+  <div class="text-center space-y-2 mb-8">
+    <div class="inline-flex items-center gap-2 bg-[#d4af37]/20 border border-[#d4af37] px-4 py-1 rounded-full text-xs font-bold text-[#fceabb] uppercase tracking-widest">
+      <span>👑 PHYSICAL &bull; PRINTABLE KEEPSAKES</span>
+    </div>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#fceabb] drop-shadow-md">Printable Memory Keepsakes 🖼️📖</h2>
+    <p class="text-xs text-[#d0c3cb]">Turn your digital memories into 300 DPI high-definition physical treasures to print, frame, or bind!</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Keepsake Card 1: Wall Collage Poster -->
+    <div class="bg-gradient-to-br from-[#2b1f13] via-[#1c150c] to-[#151008] border-2 border-[#d4af37]/70 rounded-3xl p-6 sm:p-7 shadow-[0_15px_40px_rgba(0,0,0,0.85)] flex flex-col justify-between space-y-5 relative overflow-hidden group hover:border-[#ffd700] transition-all">
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="px-3 py-1 bg-[#d4af37]/30 border border-[#d4af37] rounded-full text-[10px] font-black uppercase tracking-wider text-[#ffd700]">FRAME READY (A4/A3)</span>
+          <span class="text-2xl">🖼️</span>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#fceabb]">Wall Collage Poster</h3>
+        <p class="text-xs text-[#d5c7bc] leading-relaxed">
+          A luxury 300 DPI wall-frame keepsake featuring <?= $partnerName ?>'s portrait in a 24K gold locket, surrounded by an uncropped polaroid memory mosaic.
+        </p>
+      </div>
+
+      <button type="button" id="btnWallPoster" onclick="downloadWallKeepsakePoster()" class="w-full py-3.5 bg-gradient-to-r from-[#d4af37] via-[#f7e6a6] to-[#b89343] text-[#241a00] font-extrabold text-xs sm:text-sm uppercase tracking-wider rounded-full shadow-[0_8px_25px_rgba(212,175,55,0.45)] hover:shadow-[0_12px_35px_rgba(212,175,55,0.65)] hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2">
+        <i data-lucide="image" class="w-4 h-4 text-[#241a00]"></i>
+        <span>Download Wall Poster (300 DPI)</span>
+      </button>
+    </div>
+
+    <!-- Keepsake Card 2: Multi-Page Photobook PDF -->
+    <div class="bg-gradient-to-br from-[#1a2e20] via-[#122016] to-[#0c150e] border-2 border-[#10b981]/70 rounded-3xl p-6 sm:p-7 shadow-[0_15px_40px_rgba(0,0,0,0.85)] flex flex-col justify-between space-y-5 relative overflow-hidden group hover:border-[#34d399] transition-all">
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="px-3 py-1 bg-[#10b981]/30 border border-[#10b981] rounded-full text-[10px] font-black uppercase tracking-wider text-[#a7f3d0]">MULTI-PAGE ALBUM (PDF)</span>
+          <span class="text-2xl">📖</span>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#a7f3d0]">Sibling Keepsake Book</h3>
+        <p class="text-xs text-[#c5dbcc] leading-relaxed">
+          A luxury 6-page printable storybook album with Royal Cover, Shahi Tamrapatra Certificate, chapter stories, and a dynamic QR code to relive this website anytime!
+        </p>
+      </div>
+
+      <button type="button" id="btnPhotobook" onclick="downloadSiblingPhotobookPDF()" class="w-full py-3.5 bg-gradient-to-r from-[#10b981] via-[#34d399] to-[#059669] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider rounded-full shadow-[0_8px_25px_rgba(16,185,129,0.45)] hover:shadow-[0_12px_35px_rgba(16,185,129,0.65)] hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2">
+        <i data-lucide="book-open" class="w-4 h-4 text-white"></i>
+        <span>Download Keepsake Book (PDF)</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Data Variables for Client-Side Zero-Storage Keepsake Generators -->
+<script>
+  window.__giftMedia = <?= json_encode(array_map(function($m) {
+    return [
+      'url' => resolveMediaUrl($m['file_path'] ?? ''),
+      'caption' => $m['caption'] ?? 'Cherished Memory'
+    ];
+  }, $media ?? [])) ?>;
+  window.__partnerPhoto = <?= json_encode($receiverPhotoUrl ?? '') ?>;
+  window.__partnerName = <?= json_encode($partnerName ?? 'Sister') ?>;
+  window.__buyerName = <?= json_encode($buyerName ?? 'Brother') ?>;
+  window.__giftSlug = <?= json_encode($slug ?? '') ?>;
+  window.__appUrl = <?= json_encode(APP_URL ?? '') ?>;
+  window.__loveNote = <?= json_encode($loveNoteText ?? '') ?>;
+  window.__certId = <?= json_encode($certId ?? ('SS-RB-' . date('Y') . '-8942')) ?>;
+</script>
+
 <!-- Footer Bar -->
 <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
   <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]"><?= $buyerName ?></strong> for <strong class="text-[#eac34a]"><?= $partnerName ?></strong></p>
