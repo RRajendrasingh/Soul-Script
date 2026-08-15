@@ -1233,56 +1233,66 @@ if (!empty($initialLockData['page_id'])) {
         btn.disabled = true;
       }
 
-      const loadHtml2Canvas = () => {
-        return new Promise((resolve, reject) => {
-          if (window.html2canvas) return resolve();
-          const script = document.createElement('script');
-          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-          script.onload = resolve;
-          script.onerror = reject;
-          document.head.appendChild(script);
-        });
-      };
+      const svg = document.getElementById('shahiTamrapatraSvg');
+      if (!svg) {
+        if (btn) {
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
+        return;
+      }
 
-      loadHtml2Canvas().then(() => {
-        const element = document.getElementById('shahiTamrapatraDocument');
-        if (!element) return;
-        html2canvas(element, {
-          scale: 3, // 3x Ultra-HD 300 DPI supersampling!
-          useCORS: true,
-          backgroundColor: '#faf3e1',
-          logging: false
-        }).then(canvas => {
-          const link = document.createElement('a');
-          const buyer = '<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $buyerName ?? 'Brother') ?>';
-          const partner = '<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $partnerName ?? 'Sister') ?>';
-          link.download = `Shahi_Tamrapatra_Certificate_${buyer}_${partner}.png`;
-          link.href = canvas.toDataURL('image/png', 1.0);
-          link.click();
-          if (btn) {
-            btn.innerHTML = originalContent;
-            btn.disabled = false;
-          }
-          if (window.lucide) lucide.createIcons();
-          if (typeof confetti === 'function') {
-            confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
-          }
-        }).catch(err => {
-          console.error(err);
-          if (btn) {
-            btn.innerHTML = originalContent;
-            btn.disabled = false;
-          }
-          if (window.lucide) lucide.createIcons();
-        });
-      }).catch(err => {
-        console.error(err);
+      // Clone SVG and prepare for pure high-density rasterization
+      const svgClone = svg.cloneNode(true);
+      svgClone.setAttribute('width', '3840');
+      svgClone.setAttribute('height', '2605');
+
+      const svgString = new XMLSerializer().serializeToString(svgClone);
+      const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      const URL = window.URL || window.webkitURL || window;
+      const blobURL = URL.createObjectURL(svgBlob);
+
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        // 4K Ultra-HD Master Resolution (3840 x 2605)
+        canvas.width = 3840;
+        canvas.height = 2605;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(blobURL);
+
+        const link = document.createElement('a');
+        const buyer = '<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $buyerName ?? 'Brother') ?>';
+        const partner = '<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $partnerName ?? 'Sister') ?>';
+        link.download = `Shahi_Tamrapatra_Certificate_${buyer}_${partner}.png`;
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+
         if (btn) {
           btn.innerHTML = originalContent;
           btn.disabled = false;
         }
         if (window.lucide) lucide.createIcons();
-      });
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 100, spread: 75, origin: { y: 0.6 } });
+        }
+      };
+
+      img.onerror = function(err) {
+        console.error('SVG Render Error:', err);
+        URL.revokeObjectURL(blobURL);
+        if (btn) {
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
+        if (window.lucide) lucide.createIcons();
+        alert('Could not generate 4K image directly. Please try again.');
+      };
+
+      img.src = blobURL;
     }
 
     function shareShahiTamrapatraWhatsApp() {
