@@ -550,21 +550,28 @@ if ($cleanReceiverPhoto) {
       <!-- Sibling Promises Section Title -->
       <text x="700" y="415" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="15" font-weight="900" fill="#9c1b2c" letter-spacing="3">✦ THE SACRED SIBLING PROMISES ✦</text>
 
-      <!-- 5 Relatable & Heart-Melting Sibling Promises -->
-      <!-- Vow 1 -->
-      <text x="700" y="452" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="16.5" fill="#382408" font-weight="600">1. To always share the last slice of pizza 🍕 and hide each other's secret chocolate wrappers 🍫.</text>
+      <!-- Dynamic Sibling Promises Loop (Supports Custom User Vows & Defaults) -->
+      <?php 
+      $certVows = !empty($promisesList) ? array_slice($promisesList, 0, 5) : [
+        "To always share the last slice of pizza 🍕 and hide each other's secret chocolate wrappers 🍫.",
+        "To defend each other from parents' scoldings, even when 100% guilty! 🤫",
+        "To never spoil movie endings (and TV remote belongs to the Sister forever!) 📺",
+        "To always have each other's back through every childhood fight and life milestone 💖.",
+        "To celebrate this unique, irreplaceable bond of love, laughter, and lifelong protection 🪔✨."
+      ];
+      $vowCount = count($certVows);
+      $startY = $vowCount <= 3 ? 465 : ($vowCount == 4 ? 452 : 448);
+      $stepY = $vowCount <= 3 ? 42 : ($vowCount == 4 ? 36 : 32);
       
-      <!-- Vow 2 -->
-      <text x="700" y="487" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="16.5" fill="#382408" font-weight="600">2. To defend each other from parents' scoldings, even when 100% guilty! 🤫</text>
-      
-      <!-- Vow 3 -->
-      <text x="700" y="522" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="16.5" fill="#382408" font-weight="600">3. To never spoil movie endings (and TV remote belongs to the Sister forever!) 📺</text>
-      
-      <!-- Vow 4 -->
-      <text x="700" y="557" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="16.5" fill="#382408" font-weight="600">4. To always have each other's back through every childhood fight and life milestone 💖.</text>
-      
-      <!-- Vow 5 -->
-      <text x="700" y="592" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="16.5" fill="#382408" font-weight="600">5. To celebrate this unique, irreplaceable bond of love, laughter, and lifelong protection 🪔✨.</text>
+      foreach ($certVows as $vIdx => $vText): 
+        $currentY = $startY + ($vIdx * $stepY);
+        $cleanVow = htmlspecialchars($vText);
+        if (mb_strlen($cleanVow) > 95) {
+          $cleanVow = mb_substr($cleanVow, 0, 92) . '...';
+        }
+      ?>
+        <text x="700" y="<?= $currentY ?>" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="16" fill="#382408" font-weight="600"><?= ($vIdx + 1) ?>. <?= $cleanVow ?></text>
+      <?php endforeach; ?>
 
       <!-- Official Date & Rakhi Day Stamp -->
       <text x="700" y="638" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="15" font-style="italic" font-weight="700" fill="#7a5310">Issued with love on this auspicious day of Raksha Bandhan &bull; <?= date('jS F Y') ?></text>
