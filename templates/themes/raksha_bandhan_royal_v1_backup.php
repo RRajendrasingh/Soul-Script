@@ -37,10 +37,7 @@ if ($cleanReceiverPhoto) {
 }
 ?>
 
-<!-- FLOATING MARIGOLD PETALS & STARDUST CANVAS (60 FPS LUXURY AMBIENCE) -->
-<canvas id="floatingMarigoldCanvas" class="fixed inset-0 pointer-events-none z-[1] w-full h-full"></canvas>
-
-<!-- RICH ROYAL MANDALA BACKGROUND ARTWORK LAYER -->
+<!-- RICH ROYAL MANDALA BACKGROUND ARTWORK LAYER (TOP, MIDDLE & BOTTOM) -->
 <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
   <!-- Top-Left Mandala -->
   <div class="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-48 h-48 sm:w-80 sm:h-80 opacity-[0.08] sm:opacity-20 mix-blend-screen">
@@ -71,6 +68,14 @@ if ($cleanReceiverPhoto) {
   <div class="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-56 h-56 sm:w-96 sm:h-96 opacity-[0.08] sm:opacity-20 mix-blend-screen">
     <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/gold_mandala_corner.svg" class="w-full h-full rotate-180">
   </div>
+
+  <!-- Floating Golden Twinkling Sparkle Dust Particles -->
+  <div class="absolute top-12 left-1/4 text-[#eac34a] text-xs sm:text-sm animate-ping opacity-60">✨</div>
+  <div class="absolute top-36 right-1/3 text-[#ffd700] text-sm sm:text-base animate-pulse opacity-70">✦</div>
+  <div class="absolute top-1/2 left-10 text-[#eac34a] text-lg animate-pulse opacity-50">✨</div>
+  <div class="absolute top-2/3 right-12 text-[#ffd700] text-xs sm:text-sm animate-ping opacity-60">✧</div>
+  <div class="absolute bottom-40 left-1/3 text-[#eac34a] text-sm animate-pulse opacity-70">✦</div>
+  <div class="absolute bottom-20 right-1/4 text-[#ffd700] text-base animate-ping opacity-60">✨</div>
 </div>
 
 <!-- TOP-RIGHT HANGING BRASS & TERRACOTTA DIYAS ON CHAINS -->
@@ -89,80 +94,79 @@ if ($cleanReceiverPhoto) {
   </div>
 </div>
 
-<!-- ======================================================= -->
-<!-- ACT 1: AUSPICIOUS START (HERO BANNER & AARTI THALI) -->
-<!-- ======================================================= -->
+<!-- SECTION 1: HERO HEADER & DOUBLE GOLDEN RING AVATAR -->
 <section class="relative pt-24 pb-12 px-4 text-center sm:text-left z-10 w-full">
   <div class="max-w-5xl mx-auto space-y-12">
     
     <!-- Top Row: Profile & Titles -->
     <div class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-8 md:gap-16">
       
-      <!-- Left: Double Golden Ring Photo Avatar Frame with Dynamic Rakhi & Tilak -->
+      <!-- Left: Double Golden Ring Photo Avatar Frame -->
       <div id="doubleGoldenRingAvatar" class="relative w-48 h-48 md:w-56 md:h-56 rounded-full bg-gradient-to-tr from-[#cca830] via-[#ffd700] to-[#b8860b] p-1.5 shadow-[0_0_60px_rgba(234,195,74,0.45)] shrink-0 group hover:scale-105 transition-transform duration-500">
         <div class="w-full h-full rounded-full border-[3px] border-[#100d10] p-1 bg-gradient-to-br from-[#2a060b] to-[#140205]">
           <div class="w-full h-full bg-[#151215] rounded-full overflow-hidden flex items-center justify-center relative shadow-inner">
             <?= $photoAvatarHtml ?>
-            
-            <!-- Live Tilak Mark -->
             <div id="tilakMarkOnAvatar" class="hidden absolute top-10 md:top-12 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-gradient-to-tr from-red-600 via-red-500 to-amber-400 shadow-[0_0_20px_#ef4444] z-30 flex items-center justify-center">
               <span class="w-2 h-2 rounded-full bg-white/90"></span>
             </div>
-
-            <!-- Live Tied Rakhi Badge Overlay -->
-            <div id="rakhiTiedOnAvatar" class="hidden absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-[#2a060b] via-[#3b0811] to-[#2a060b] border border-[#eac34a] rounded-full shadow-[0_0_20px_rgba(234,195,74,0.7)] z-30 flex items-center gap-1.5">
-              <span id="tiedRakhiIcon" class="text-xs">👑</span>
-              <span class="text-[9px] font-extrabold text-[#ffd700] uppercase tracking-wider whitespace-nowrap">Rakhi Tied 🧵</span>
-            </div>
           </div>
         </div>
+        <!-- Decorative Glow Base -->
         <div class="absolute -inset-4 bg-[#eac34a]/10 blur-xl rounded-full z-[-1] animate-pulse-slow"></div>
       </div>
 
       <!-- Right: Greetings & Titles -->
       <div class="space-y-4 w-full md:max-w-3xl text-center md:text-left">
-        <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-[11px] md:text-[15px] font-bold shadow-lg">
+        <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#3b1e3b]/80 border border-[#eac34a]/40 backdrop-blur-md text-[#eac34a] text-[10px] md:text-[16px] font-bold shadow-lg">
           <i data-lucide="crown" class="w-4 h-4 text-[#eac34a]"></i>
           <span><?= $taglineQuote ?></span>
         </div>
 
-        <h1 class="text-[40px] md:text-[64px] font-bold font-handwriting text-[#e8e0e3] tracking-wide leading-[1.2] drop-shadow-md py-2">
-          Happy Raksha Bandhan, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830] pl-1 pr-2"><?= $partnerName ?></span><span class="ml-1">!</span> <span class="text-[26px] md:text-[40px] inline-block -translate-y-1 animate-flame">🪔</span>
+        <!-- 42px (Mobile) and 68px (Desktop) are exact Golden Ratio steps from 16px -->
+        <h1 class="text-[42px] md:text-[68px] font-bold font-handwriting text-[#e8e0e3] tracking-wide leading-[1.2] drop-shadow-md py-2">
+          Happy Raksha Bandhan, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#cca830] pl-1 pr-2"><?= $partnerName ?></span><span class="ml-1">!</span> <span class="text-[26px] md:text-[42px] inline-block -translate-y-1 animate-flame">🪔</span>
         </h1>
+        <!-- 16px is the base size, 1.618 is the golden line-height -->
         <p class="text-[14px] md:text-[16px] text-[#d0c3cb] max-w-lg mx-auto md:mx-0 leading-[1.618]">
-          A sacred royal celebration of our eternal sibling bond, childhood mischiefs, and unbreakable promises.
+          A digital celebration of our unbreakable bond, childhood memories, and sacred vows.
         </p>
       </div>
 
     </div>
 
-    <!-- WRIST RAKHI HERO CEREMONY BANNER -->
+    <!-- Bottom Row: PHOTOREALISTIC WRIST RAKHI HERO BANNER -->
     <div id="heroWristBannerContainer" class="w-full bg-[#151215] border border-[#eac34a]/30 rounded-[2.5rem] shadow-[0_0_50px_rgba(234,195,74,0.15)] relative overflow-hidden flex flex-col md:flex-row group transition-all duration-500 hover:shadow-[0_0_60px_rgba(234,195,74,0.3)] hover:border-[#eac34a]/60">
+      
+      <!-- Left side: Photorealistic Image (Brother's Wrist with Rakhi) -->
       <div class="w-full md:w-5/12 h-56 md:h-auto relative overflow-hidden bg-gradient-to-br from-[#2a060b] to-[#140205]">
+        <!-- Fallback/User Image - Set to absolute cover -->
         <img src="<?= htmlspecialchars(APP_URL) ?>/assets/images/hand_rakhi_banner.png" alt="Rakhi on Wrist" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700">
+        
+        <!-- Gradient Overlay to blend with right side/bottom -->
         <div class="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-transparent via-transparent to-[#151215]"></div>
       </div>
 
-      <div class="w-full md:w-7/12 p-6 md:py-8 md:px-10 flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-3.5 relative">
+      <!-- Right side: Content & Action Button -->
+      <div class="w-full md:w-7/12 p-6 md:py-6 md:px-8 flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-3 relative">
+        <!-- Floating Sparkles -->
         <span class="absolute top-4 right-10 text-[#eac34a] animate-ping opacity-60">✨</span>
         <span class="absolute bottom-6 right-16 text-[#ffd700] animate-pulse opacity-70">✦</span>
 
-        <span class="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#eac34a] bg-[#3b1e3b] px-3.5 py-1 rounded-full border border-[#eac34a]/40 shadow-inner">
-          SACRED CEREMONY 🧵
-        </span>
-
-        <h3 class="text-[26px] md:text-[38px] font-extrabold font-serif text-[#eac34a] tracking-tight drop-shadow-sm leading-[1.2]">
+        <!-- 26px (Mobile) and 42px (Desktop) -->
+        <h3 class="text-[26px] md:text-[42px] font-extrabold font-serif text-[#eac34a] tracking-tight drop-shadow-sm leading-[1.2]">
           Virtual Rakhi Ceremony
         </h3>
-        <p class="text-[14px] md:text-[15px] text-[#d0c3cb]/90 max-w-md leading-[1.618]">
-          Perform the sacred rituals of Tilak, Diya Aarti, Pushpa Varsha, and tie your favorite Royal Rakhi!
+        <p class="text-[14px] md:text-[16px] text-[#d0c3cb]/90 max-w-sm leading-[1.618]">
+          Animated golden Rakhi tying ceremony. Complete the sacred rituals of Tilak, Aarti, and Shagun.
         </p>
         
-        <button type="button" onclick="openCeremonyModal()" class="mt-2 px-8 py-3.5 bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-bold text-sm uppercase tracking-widest rounded-full shadow-[0_10px_30px_rgba(234,195,74,0.4)] hover:shadow-[0_15px_40px_rgba(234,195,74,0.6)] hover:-translate-y-1 active:scale-95 transition-all cursor-pointer inline-flex items-center gap-2.5">
-          <span>Tap to Start Ceremony</span>
+        <!-- Action Button: Opens the Modal -->
+        <button type="button" onclick="openCeremonyModal()" class="mt-2 px-8 py-3 bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-bold text-sm uppercase tracking-widest rounded-full shadow-[0_10px_30px_rgba(234,195,74,0.4)] hover:shadow-[0_15px_40px_rgba(234,195,74,0.6)] hover:-translate-y-1 active:scale-95 transition-all cursor-pointer inline-flex items-center gap-2.5">
+          <span>Tap to Tie Rakhi</span>
           <i data-lucide="arrow-right" class="w-5 h-5"></i>
         </button>
       </div>
+
     </div>
 
   </div>
@@ -170,123 +174,130 @@ if ($cleanReceiverPhoto) {
 
 <!-- RAKHI CEREMONY POPUP MODAL -->
 <div id="rakhiCeremonyModal" class="hidden fixed inset-0 z-[100] bg-[#000000f0] backdrop-blur-md overflow-y-auto flex items-start sm:items-center justify-center p-3 sm:p-6 opacity-0 transition-opacity duration-500">
+  
+  <!-- Close Button -->
   <button type="button" onclick="closeCeremonyModal()" class="fixed top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#3b1e3b]/90 border border-[#eac34a]/60 text-[#eac34a] flex items-center justify-center hover:bg-[#eac34a] hover:text-black transition-all shadow-[0_0_20px_rgba(234,195,74,0.4)] z-[120]">
     <i data-lucide="x" class="w-5 h-5 sm:w-6 sm:h-6"></i>
   </button>
 
   <div class="relative w-full max-w-2xl sm:max-w-3xl mx-auto my-auto py-6 sm:py-8">
-    <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-5 sm:p-8 text-center space-y-5 sm:space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.4)] relative overflow-hidden transition-all duration-500 animate-thali-glow">
-      
-      <!-- Hanging Brass Temple Bell -->
-      <div class="flex flex-col items-center justify-center -mt-2">
-        <div class="w-0.5 h-6 bg-[#eac34a]/60"></div>
-        <div id="hangingBellItem" onclick="ringHangingBell()" title="Tap to Ring Temple Bell" class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-500 border-2 border-[#eac34a] p-1 shadow-[0_0_20px_rgba(234,195,74,0.6)] cursor-pointer hover:scale-110 transition-all flex items-center justify-center group z-30">
-          <span id="hangingBellIcon" class="text-2xl">🔔</span>
-          <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2.5 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">Ring Bell 🔔</span>
-        </div>
+    <div id="royalThaliContainer" class="bg-gradient-to-br from-[#3b0811] via-[#240409] to-[#140205] border-2 border-[#eac34a] backdrop-blur-xl rounded-3xl p-4 sm:p-8 text-center space-y-4 sm:space-y-6 shadow-[0_0_60px_rgba(234,195,74,0.4)] relative overflow-hidden transition-all duration-500 animate-thali-glow">
+    
+    <!-- Hanging Brass Temple Bell -->
+    <div class="flex flex-col items-center justify-center -mt-2">
+      <div class="w-0.5 h-6 bg-[#eac34a]/60"></div>
+      <div id="hangingBellItem" onclick="ringHangingBell()" title="Tap to Ring Temple Bell (घंटी बजाएं)" class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-500 border-2 border-[#eac34a] p-1 shadow-[0_0_20px_rgba(234,195,74,0.6)] cursor-pointer hover:scale-110 transition-all flex items-center justify-center group z-30">
+        <span id="hangingBellIcon" class="text-2xl">🔔</span>
+        <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2.5 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">Ring Bell 🔔</span>
       </div>
+    </div>
 
-      <!-- Vedic Mantra Banner -->
-      <div class="bg-[#1a0307] p-3.5 rounded-2xl border border-[#eac34a]/40 max-w-lg mx-auto shadow-inner space-y-1.5">
-        <div class="flex items-center justify-between text-left">
-          <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#eac34a] flex items-center gap-1">
-            <span>🕉️</span> <span>SACRED RAKSHA SUTRA MANTRA</span>
-          </span>
-          <button type="button" onclick="playVedicChantSound(); playTempleBellSound();" class="text-[10px] font-bold text-[#eac34a] bg-[#3b1e3b] px-3 py-1 rounded-full border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all cursor-pointer flex items-center gap-1">
-            <span>▶️</span> <span>Play Chants &amp; Bells</span>
-          </button>
-        </div>
-        <p class="font-serif text-xs text-[#f7d070] italic tracking-wide">
-          "ॐ येन बद्धो बली राजा दानवेन्द्रो महाबलः। तेन त्वामभि बध्नामि रक्षे मा चल मा चल॥"
-        </p>
+    <div class="flex items-center justify-center gap-2">
+      <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.25em] text-[#eac34a] bg-[#3b1e3b] px-4 py-1.5 rounded-full border border-[#eac34a]/40 shadow-inner flex items-center gap-1.5">
+        <span>✨</span> <span>VIRTUAL RAKHI SHRINE &amp; SACRED RITUALS</span> <span>✨</span>
+      </span>
+    </div>
+
+    <!-- Vedic Raksha Sutra Mantra Audio Banner -->
+    <div class="bg-[#1a0307] p-3.5 rounded-2xl border border-[#eac34a]/40 max-w-lg mx-auto shadow-inner space-y-1.5">
+      <div class="flex items-center justify-between text-left">
+        <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#eac34a] flex items-center gap-1">
+          <span>🕉️</span> <span>SACRED RAKSHA SUTRA MANTRA</span>
+        </span>
+        <button type="button" onclick="playVedicChantSound(); playTempleBellSound();" class="text-[10px] font-bold text-[#eac34a] bg-[#3b1e3b] px-3 py-1 rounded-full border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all cursor-pointer flex items-center gap-1">
+          <span>▶️</span> <span>Play Chants &amp; Bells</span>
+        </button>
       </div>
+      <p class="font-serif text-xs text-[#f7d070] italic tracking-wide">
+        "ॐ येन बद्धो बली राजा दानवेन्द्रो महाबलः। तेन त्वामभि बध्नामि रक्षे मा चल मा चल॥"
+      </p>
+    </div>
 
-      <div class="space-y-1">
-        <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Ceremony 🧵</h2>
-        <p class="text-xs text-[#d0c3cb]/90 max-w-md mx-auto">Perform sacred rituals: Ring Bell, Apply Tilak, Light Diya Aarti, Shower Flowers, Offer Sweets &amp; Tie Royal Rakhi!</p>
-      </div>
+    <div class="space-y-1">
+      <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Virtual Rakhi Ceremony 🧵</h2>
+      <p class="text-xs text-[#d0c3cb]/90 max-w-md mx-auto">Perform sacred rituals: Ring Bell, Apply Roli-Chandan Tilak, Light Diya Aarti, Shower Flowers, Offer Sweets, and Tie Royal Rakhi!</p>
+    </div>
 
-      <!-- Centerpiece Royal Aarti Thali Graphic Ring -->
-      <div class="relative w-56 h-56 sm:w-64 sm:h-64 mx-auto my-4 flex items-center justify-center">
-        <div id="thaliOuterRing" class="absolute inset-0 rounded-full bg-gradient-to-tr from-[#cca830] via-[#ffd700] to-[#b8860b] p-[6px] shadow-[0_0_45px_rgba(234,195,74,0.45)] transition-transform duration-1000">
-          <div class="w-full h-full bg-gradient-to-br from-[#2a060b] via-[#3b0811] to-[#180306] rounded-full border-4 border-[#eac34a]/60 flex items-center justify-center relative shadow-inner overflow-hidden">
-            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#eac34a_1px,transparent_1px)] [background-size:12px_12px]"></div>
+    <!-- Centerpiece Royal Aarti Thali Graphic Ring with Drag Handles -->
+    <div class="relative w-56 h-56 sm:w-64 sm:h-64 mx-auto my-4 flex items-center justify-center">
+      <!-- Outer Golden Carved Thali Plate -->
+      <div id="thaliOuterRing" class="absolute inset-0 rounded-full bg-gradient-to-tr from-[#cca830] via-[#ffd700] to-[#b8860b] p-[6px] shadow-[0_0_45px_rgba(234,195,74,0.45)] transition-transform duration-1000">
+        <div class="w-full h-full bg-gradient-to-br from-[#2a060b] via-[#3b0811] to-[#180306] rounded-full border-4 border-[#eac34a]/60 flex items-center justify-center relative shadow-inner overflow-hidden">
+          
+          <!-- Decorative Marigold Flower Petals Accents -->
+          <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#eac34a_1px,transparent_1px)] [background-size:12px_12px]"></div>
 
-            <!-- 1. Tilak -->
-            <div id="dragRoliItem" onclick="applyRoyalTilak()" title="Apply Roli-Chandan Tilak (Step 1)" class="absolute top-4 left-5 sm:left-7 w-11 h-11 rounded-full bg-gradient-to-tr from-red-700 via-red-600 to-amber-500 border-2 border-[#eac34a] p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
-              <span class="text-sm font-bold text-white shadow-sm">🔴</span>
-              <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">1. Tilak</span>
-            </div>
+          <!-- Roli-Chawal Bowl (Kumkum) Left -->
+          <div id="dragRoliItem" draggable="true" onclick="applyRoyalTilak()" title="Apply Roli-Chandan Tilak (Step 1)" class="absolute top-4 left-5 sm:left-7 w-11 h-11 rounded-full bg-gradient-to-tr from-red-700 via-red-600 to-amber-500 border-2 border-[#eac34a] p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
+            <span class="text-sm font-bold text-white shadow-sm">🔴</span>
+            <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">1. Tilak</span>
+          </div>
 
-            <!-- 2. Diya -->
-            <div id="diyaFlameContainer" onclick="lightRoyalDiya()" title="Light Diya & Aarti (Step 2)" class="absolute top-3 right-5 sm:right-7 w-11 h-11 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 border-2 border-[#eac34a] p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
-              <span id="diyaFlameIcon" class="text-xl">🪔</span>
-              <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">2. Diya</span>
-            </div>
+          <!-- Brass Aarti Diya Flame Top/Center -->
+          <div id="diyaFlameContainer" draggable="true" onclick="lightRoyalDiya()" title="Light Diya & Aarti (Step 2)" class="absolute top-3 right-5 sm:right-7 w-11 h-11 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 border-2 border-[#eac34a] p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
+            <span id="diyaFlameIcon" class="text-xl">🪔</span>
+            <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">2. Diya</span>
+          </div>
 
-            <!-- Flowers -->
-            <div onclick="triggerPushpaVarsha()" title="Shower Flowers" class="absolute bottom-4 left-6 sm:left-8 w-10 h-10 rounded-full bg-gradient-to-tr from-pink-600 via-rose-500 to-yellow-400 border-2 border-[#eac34a] p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
-              <span class="text-base">🌸</span>
-              <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">Flowers</span>
-            </div>
+          <!-- Flower Shower Basket Bottom Left -->
+          <div onclick="triggerPushpaVarsha()" title="Shower Flowers (पुष्प वर्षा)" class="absolute bottom-4 left-6 sm:left-8 w-10 h-10 rounded-full bg-gradient-to-tr from-pink-600 via-rose-500 to-yellow-400 border-2 border-[#eac34a] p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
+            <span class="text-base">🌸</span>
+            <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">Flowers</span>
+          </div>
 
-            <!-- Sweets -->
-            <div onclick="offerSweetPrasad()" title="Offer Sweet Prasad" class="absolute bottom-4 right-6 sm:right-8 w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 via-orange-400 to-yellow-300 border-2 border-[#eac34a] p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
-              <span class="text-base">🍬</span>
-              <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">Sweets</span>
-            </div>
+          <!-- Sweet Prasad Offering Bottom Right -->
+          <div onclick="offerSweetPrasad()" title="Offer Sweet Prasad (मिठाई)" class="absolute bottom-4 right-6 sm:right-8 w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 via-orange-400 to-yellow-300 border-2 border-[#eac34a] p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
+            <span class="text-base">🍬</span>
+            <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">Sweets</span>
+          </div>
 
-            <!-- 3. Rakhi -->
-            <div id="dragRakhiItem" onclick="tieRoyalRakhi()" title="Tie Royal Rakhi (Step 3)" class="absolute bottom-2 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#b8860b] border-2 border-white p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
-              <span class="text-xl">🧵</span>
-              <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">3. Rakhi</span>
-            </div>
+          <!-- Royal Silk Rakhi Thread Center Bottom -->
+          <div id="dragRakhiItem" draggable="true" onclick="tieRoyalRakhi()" title="Tie Royal Rakhi (Step 3)" class="absolute bottom-2 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#b8860b] border-2 border-white p-1 shadow-2xl cursor-pointer hover:scale-115 transition-all flex items-center justify-center group z-20">
+            <span class="text-xl">🧵</span>
+            <span class="absolute -bottom-5 text-[9px] font-extrabold text-[#eac34a] whitespace-nowrap bg-[#100d10] px-2 py-0.5 rounded-full border border-[#eac34a]/40 opacity-90">3. Rakhi</span>
+          </div>
 
-            <div class="w-14 h-14 rounded-full bg-[#1e0407] border-2 border-[#eac34a]/40 flex flex-col items-center justify-center text-center p-1 shadow-inner">
-              <span class="text-lg animate-pulse">🌸</span>
-              <span class="text-[7px] font-extrabold text-[#eac34a] uppercase tracking-wider">Aarti Thali</span>
-            </div>
+          <!-- Center Flower Emblem -->
+          <div class="w-14 h-14 rounded-full bg-[#1e0407] border-2 border-[#eac34a]/40 flex flex-col items-center justify-center text-center p-1 shadow-inner">
+            <span class="text-lg animate-pulse">🌸</span>
+            <span class="text-[7px] font-extrabold text-[#eac34a] uppercase tracking-wider">Aarti Thali</span>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Action Buttons -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-2xl mx-auto pt-2">
-        <button type="button" onclick="applyRoyalTilak()" id="tilakBtn" class="px-3 py-3 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
-          <span class="text-lg">🔴</span>
-          <span class="font-serif text-[11px]">Step 1: Tilak</span>
-        </button>
+    <!-- Ritual Action Buttons -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-2xl mx-auto pt-2">
+      <button type="button" onclick="applyRoyalTilak()" id="tilakBtn" class="px-3 py-3 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
+        <span class="text-lg">🔴</span>
+        <span class="font-serif text-[11px]">Step 1: Tilak</span>
+      </button>
 
-        <button type="button" onclick="lightRoyalDiya()" id="diyaBtn" class="px-3 py-3 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
-          <span class="text-lg" id="diyaIconSpan">🪔</span>
-          <span class="font-serif text-[11px]">Step 2: Light Diya</span>
-        </button>
+      <button type="button" onclick="lightRoyalDiya()" id="diyaBtn" class="px-3 py-3 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
+        <span class="text-lg" id="diyaIconSpan">🪔</span>
+        <span class="font-serif text-[11px]">Step 2: Light Diya</span>
+      </button>
 
-        <button type="button" onclick="triggerPushpaVarsha(); offerSweetPrasad();" class="px-3 py-3 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
-          <span class="text-lg">🌸🍬</span>
-          <span class="font-serif text-[11px]">Flowers &amp; Sweets</span>
-        </button>
+      <button type="button" onclick="triggerPushpaVarsha(); offerSweetPrasad();" class="px-3 py-3 rounded-2xl bg-[#2a060b] hover:bg-[#eac34a] text-[#f7d070] hover:text-[#241a00] border-2 border-[#eac34a]/50 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer shadow-lg hover:scale-105">
+        <span class="text-lg">🌸🍬</span>
+        <span class="font-serif text-[11px]">Flowers &amp; Sweets</span>
+      </button>
 
-        <button type="button" onclick="tieRoyalRakhi()" id="rakhiBtn" class="px-3 py-3 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#eac34a] text-[#241a00] font-extrabold text-xs flex flex-col items-center gap-1 shadow-[0_0_25px_rgba(234,195,74,0.4)] hover:scale-105 transition-all cursor-pointer">
-          <span class="text-lg">🧵</span>
-          <span class="font-serif text-[11px]">Step 3: Tie Rakhi</span>
-        </button>
-      </div>
+      <button type="button" onclick="tieRoyalRakhi()" id="rakhiBtn" class="px-3 py-3 rounded-2xl bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#eac34a] text-[#241a00] font-extrabold text-xs flex flex-col items-center gap-1 shadow-[0_0_25px_rgba(234,195,74,0.4)] hover:scale-105 transition-all cursor-pointer">
+        <span class="text-lg">🧵</span>
+        <span class="font-serif text-[11px]">Step 3: Tie Rakhi</span>
+      </button>
+    </div>
 
-      <div id="rakhiRitualStatus" class="text-xs font-bold text-[#eac34a] min-h-[24px] pt-1 tracking-wide">
-        Ring Temple Bell 🔔 or tap Step 1 to apply Kumkum-Chandan Tilak! 🔴
-      </div>
+    <div id="rakhiRitualStatus" class="text-xs font-bold text-[#eac34a] min-h-[24px] pt-1 tracking-wide">
+      Ring Temple Bell 🔔 or tap Step 1 to apply Kumkum-Chandan Tilak! 🔴
     </div>
   </div>
-</div>
+</section>
 
-<!-- ======================================================= -->
-<!-- ACT 2: SIBLING NOSTALGIA & MEMORIES -->
-<!-- ======================================================= -->
-
-<!-- SECTION 2: SIBLING FIGHT METER & TV REMOTE RULES -->
+<!-- SECTION 3: SIBLING FIGHT METER & TV REMOTE RULES -->
 <section class="max-w-4xl mx-auto px-4 py-8 relative z-10">
-  <div class="bg-[#2a060b]/90 border-2 border-[#eac34a]/40 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative backdrop-blur-md">
+  <div class="bg-[#2a060b]/90 border-2 border-[#eac34a]/40 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
     <div class="text-center space-y-1">
       <span class="text-[10px] font-bold uppercase tracking-widest text-[#eac34a]">SIBLING HUMOR &amp; STATS 📺</span>
       <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">Fight Meter &amp; Remote Rules 🤫</h3>
@@ -296,7 +307,7 @@ if ($cleanReceiverPhoto) {
       <div class="bg-[#180306] p-4.5 rounded-2xl border border-[#eac34a]/30 space-y-2">
         <div class="flex justify-between text-xs font-bold">
           <span class="text-[#e8e0e3]">TV Remote Sharing Ratio</span>
-          <span class="text-[#eac34a]">80% <?= $partnerName ?> / 20% <?= $buyerName ?></span>
+          <span class="text-[#eac34a]">80% Sister / 20% Brother</span>
         </div>
         <div class="w-full h-3 bg-black/60 rounded-full overflow-hidden p-0.5 border border-[#eac34a]/30">
           <div class="h-full bg-gradient-to-r from-[#eac34a] to-[#ff4d6d] rounded-full w-[80%]"></div>
@@ -314,144 +325,63 @@ if ($cleanReceiverPhoto) {
       </div>
     </div>
   </div>
-</section>
+    </div>
+  </div>
+</div>
 
-<!-- SECTION 3: SHAHI FARMAN UNROLLING SCROLL GALLERY (OUR CHERISHED MOMENTS) -->
-<style>
-  .rb-farman-section {
-    position: relative;
-    z-index: 10;
-  }
-  .rb-farman-parchment {
-    background: linear-gradient(to right, #cfb580 0%, #ebd7b3 2.5%, #fdfbf5 8%, #fffdf8 50%, #fdfbf5 92%, #ebd7b3 97.5%, #cfb580 100%);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), inset 0 0 35px rgba(160, 120, 50, 0.2);
-    border-top: 4px solid #c9a658;
-    border-bottom: 4px solid #c9a658;
-    position: relative;
-    border-radius: 1.5rem;
-  }
-  .rb-farman-rod-left, .rb-farman-rod-right {
-    position: absolute;
-    top: -24px;
-    bottom: -24px;
-    width: 22px;
-    background: linear-gradient(to right, #523b13 0%, #b89343 35%, #f7e6a6 50%, #b89343 75%, #3d2b0c 100%);
-    border-radius: 11px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.5);
-    z-index: 25;
-  }
-  .rb-farman-rod-left { left: -12px; }
-  .rb-farman-rod-right { right: -12px; }
-  .rb-farman-rod-left::before, .rb-farman-rod-left::after,
-  .rb-farman-rod-right::before, .rb-farman-rod-right::after {
-    content: "";
-    position: absolute;
-    width: 32px;
-    height: 18px;
-    left: -5px;
-    background: radial-gradient(ellipse at center, #fff2c4 0%, #d4af37 50%, #523b13 100%);
-    border-radius: 9px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.3);
-  }
-  .rb-farman-rod-left::before, .rb-farman-rod-right::before { top: -12px; }
-  .rb-farman-rod-left::after, .rb-farman-rod-right::after { bottom: -12px; }
-
-  .rb-farman-card {
-    background: #fcfbfa;
-    border: 2px solid #dfc690;
-    box-shadow: 0 4px 18px rgba(110, 85, 45, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.9);
-    border-radius: 1.25rem;
-    padding: 0.65rem;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .rb-farman-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    border-color: #b89343;
-    box-shadow: 0 12px 28px rgba(110, 85, 45, 0.25);
-  }
-  .rb-farman-img-box {
-    border-radius: 0.85rem;
-    overflow: hidden;
-    border: 1px solid #ebd9b5;
-    background-color: #f7f3eb;
-    position: relative;
-  }
-  .rb-farman-caption {
-    color: #3b2b1b;
-    font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
-    font-size: 0.78rem;
-    font-weight: 700;
-    text-align: center;
-    margin-top: 0.55rem;
-    line-height: 1.3;
-    letter-spacing: 0.01em;
-  }
-</style>
-
-<section class="rb-farman-section max-w-5xl mx-auto px-4 py-12 space-y-8">
-  <div class="text-center space-y-2 mb-8">
-    <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ROYAL MEMORY SCROLL</span>
-    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#fceabb] drop-shadow-md">Our Cherished Moments ✨</h2>
-    <p class="text-xs text-[#d0c3cb]">Every memory photo uploaded by <?= $buyerName ?> framed inside the unrolling antique parchment scroll.</p>
+<!-- SECTION 4: 3D GLASSMORPHISM SIBLING PROMISE CARDS -->
+<section id="siblingVowsSection" class="max-w-5xl mx-auto px-4 py-10 relative z-10 space-y-8">
+  <div class="text-center space-y-2">
+    <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">BROTHER &amp; SISTER VOWS</span>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]"><?= count($promisesList) ?> Sacred Sibling Vows 🛡️</h2>
+    <div class="w-16 h-[2.5px] bg-[#eac34a] mx-auto mt-2 rounded-full shadow-[0_0_10px_#eac34a]"></div>
   </div>
 
-  <div class="rb-farman-parchment p-5 sm:p-10 relative">
-    <div class="rb-farman-rod-left"></div>
-    <div class="rb-farman-rod-right"></div>
-
-    <!-- Floral Corner Accents -->
-    <div class="absolute top-2 left-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10">
-      <svg viewBox="0 0 100 100" fill="none">
-        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
-        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
-        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
-        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
-      </svg>
-    </div>
-    <div class="absolute top-2 right-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10 scale-x-[-1]">
-      <svg viewBox="0 0 100 100" fill="none">
-        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
-        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
-        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
-        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
-      </svg>
-    </div>
-
-    <!-- Photo Cards Masonry Grid -->
-    <div class="columns-2 sm:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6 relative z-20">
-      <?php foreach ($media as $m): 
-        $imgUrl = htmlspecialchars(resolveMediaUrl($m['file_path'] ?? ''));
-        $capText = htmlspecialchars($m['caption'] ?? 'Cherished Memory');
-      ?>
-        <div onclick="openLightbox('<?= $imgUrl ?>')" class="break-inside-avoid rb-farman-card group cursor-pointer flex flex-col">
-          <div class="rb-farman-img-box">
-            <img loading="lazy" src="<?= $imgUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-auto object-cover group-hover:scale-[1.04] transition-transform duration-500">
-          </div>
-          <div class="px-1">
-            <p class="rb-farman-caption truncate" title="<?= $capText ?>"><?= $capText ?></p>
-          </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <?php foreach ($promisesList as $pIdx => $pText): ?>
+      <!-- Premium Glassmorphism Promise Card -->
+      <div class="p-6 space-y-5 shadow-2xl relative group overflow-hidden border border-[#eac34a]/30 hover:border-[#eac34a]/80 rounded-2xl transition-all duration-500 bg-gradient-to-br from-[#2a060b]/90 via-[#151215]/95 to-[#3b1e3b]/90 backdrop-blur-xl hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(234,195,74,0.15)]">
+        
+        <!-- Subtle Glow Overlay on Hover -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#eac34a]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"></div>
+        
+        <!-- Subtle Mandala/Floral Watermark -->
+        <div class="absolute -bottom-6 -right-6 text-[#eac34a]/5 text-9xl pointer-events-none z-0 rotate-12 group-hover:rotate-45 transition-transform duration-1000">
+          ❁
         </div>
-      <?php endforeach; ?>
-    </div>
+
+        <div class="relative z-10 flex items-center justify-between">
+          <span class="w-10 h-10 rounded-full bg-[#100d10] border border-[#eac34a]/50 text-[#eac34a] font-bold text-xs flex items-center justify-center font-serif shadow-lg group-hover:bg-[#eac34a] group-hover:text-[#100d10] transition-colors duration-300">#<?= $pIdx + 1 ?></span>
+          <i data-lucide="shield-check" class="w-6 h-6 text-[#eac34a]/60 group-hover:text-[#eac34a] transition-colors"></i>
+        </div>
+        <p class="relative z-10 text-base font-serif text-[#e8e0e3] leading-relaxed italic pt-2">
+          "<?= htmlspecialchars($pText) ?>"
+        </p>
+        <div class="relative z-10 flex items-center gap-2 pt-4 border-t border-[#eac34a]/10 mt-auto">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#eac34a] animate-pulse"></span>
+          <span class="text-[10px] text-[#eac34a] uppercase tracking-widest font-extrabold opacity-80">SACRED VOW TO <?= $partnerName ?></span>
+        </div>
+      </div>
+    <?php endforeach; ?>
   </div>
 </section>
 
-<!-- ======================================================= -->
-<!-- ACT 3: ROYAL CLIMAX & PHYSICAL KEEPSAKES -->
-<!-- ======================================================= -->
-
-<!-- SECTION 4: SHAHI TAMRAPATRA (OFFICIAL SIBLING BOND CERTIFICATE) -->
+<!-- SECTION 4.5: SHAHI TAMRAPATRA (OFFICIAL ROYAL SIBLING BOND CERTIFICATE) -->
+<!-- SECTION 4.5: SHAHI TAMRAPATRA (OFFICIAL SIBLING BOND CERTIFICATE) -->
+<!-- 100% Scoped Styles & Masterpiece Vector Engine - Zero Global CSS Impact -->
 <section id="shahiTamrapatraSection" class="relative z-10 max-w-5xl mx-auto px-4 py-12 space-y-6">
+  <!-- Section Header -->
   <div class="text-center space-y-2 mb-6">
     <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ROYAL DECREE &amp; SEAL</span>
     <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#fceabb] drop-shadow-md">Shahi Tamrapatra 📜💖</h2>
     <p class="text-xs text-[#d0c3cb]">Official Sibling Bond Certificate — Sealed with sacred Rakhi threads &amp; lifelong promises!</p>
   </div>
 
+  <!-- Finalized Certificate Container -->
   <div id="shahiTamrapatraContainer" class="w-full relative rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] border-2 border-[#d4af37] overflow-hidden bg-[#fdf9ee]">
     <svg id="shahiTamrapatraSvg" viewBox="0 0 1600 900" class="w-full h-auto block select-none" xmlns="http://www.w3.org/2000/svg">
       <defs>
+        <!-- Deep Bronze-Gold Heading Gradient -->
         <linearGradient id="shahiGoldHeading" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="#402001"/>
           <stop offset="30%" stop-color="#7a4204"/>
@@ -470,48 +400,64 @@ if ($cleanReceiverPhoto) {
           ? ('data:image/jpeg;base64,' . base64_encode(file_get_contents($frameFilePath))) 
           : (htmlspecialchars(APP_URL) . '/assets/images/shahi_master_certificate_frame.jpg');
       ?>
+      <!-- Embedded High-Resolution Master Frame (Base64 Self-Contained Data URI - Zero CORS Blocking) -->
       <image href="<?= $frameSrc ?>" x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
 
-      <!-- Heading -->
+      <!-- Live Dynamic Typography Overlay -->
+      <!-- Calligraphy Heading: SHAHI TAMRAPATRA -->
       <text x="800" y="270" text-anchor="middle" font-family="'Cinzel Decorative', 'Cinzel', 'Playfair Display', Georgia, serif" font-size="52" font-weight="900" fill="url(#shahiGoldHeading)" filter="url(#shahiTextShadow)" letter-spacing="4">SHAHI TAMRAPATRA</text>
+
+      <!-- Subtitle: Official Sibling Bond Certificate -->
       <text x="800" y="315" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="28" font-weight="bold" fill="#851d2c" letter-spacing="1">Official Sibling Bond Certificate 💖</text>
 
-      <!-- Parties Names Row with Center Heart Medallion -->
+      <!-- Parties Names Row with Center 3D Heart Medallion -->
+      <!-- Sister (Left) -->
       <text x="490" y="380" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="34" font-weight="900" fill="#241402"><?= htmlspecialchars($partnerName) ?></text>
+
+      <!-- Center 3D Heart Medallion -->
       <circle cx="800" cy="368" r="24" fill="#851d2c" stroke="#ffd700" stroke-width="2.5"/>
       <circle cx="800" cy="368" r="18" fill="#ffebee"/>
       <text x="800" y="375" text-anchor="middle" font-size="20">💖</text>
+
+      <!-- Brother (Right) -->
       <text x="1110" y="380" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="34" font-weight="900" fill="#241402"><?= htmlspecialchars($buyerName) ?></text>
 
-      <!-- 2x2 Clean Balanced Sibling Promises Grid -->
+      <!-- 2x2 Clean Balanced Sibling Promises Grid with Emojis -->
       <?php 
       $vow1 = !empty($promisesList[0]) ? htmlspecialchars($promisesList[0]) : "Always Share Pizza 🍕";
       $vow2 = !empty($promisesList[1]) ? htmlspecialchars($promisesList[1]) : "Keep All Secrets 🤫";
       $vow3 = !empty($promisesList[2]) ? htmlspecialchars($promisesList[2]) : "Fight Over TV Remote 📺";
       $vow4 = !empty($promisesList[3]) ? htmlspecialchars($promisesList[3]) : "Eternal Support 💖";
       ?>
+      <!-- Row 1 -->
       <text x="520" y="475" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="21" font-weight="700" fill="#301802"><?= $vow1 ?></text>
       <text x="1080" y="475" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="21" font-weight="700" fill="#301802"><?= $vow2 ?></text>
+
+      <!-- Row 2 -->
       <text x="520" y="535" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="21" font-weight="700" fill="#301802"><?= $vow3 ?></text>
       <text x="1080" y="535" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="21" font-weight="700" fill="#301802"><?= $vow4 ?></text>
 
       <!-- Signatures & Verification ID Row -->
+      <!-- Sister Signature (Left) -->
       <line x1="260" y1="675" x2="560" y2="675" stroke="#b89343" stroke-width="1.8" opacity="0.8"/>
       <text x="410" y="658" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="34" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($partnerName) ?> ♡</text>
       <text x="410" y="700" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11.5" font-weight="800" fill="#7a4d0e" letter-spacing="2">[SISTER'S SIGNATURE]</text>
 
+      <!-- Brother Signature (Right) -->
       <line x1="1040" y1="675" x2="1340" y2="675" stroke="#b89343" stroke-width="1.8" opacity="0.8"/>
       <text x="1190" y="658" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="34" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($buyerName) ?> ♡</text>
       <text x="1190" y="700" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11.5" font-weight="800" fill="#7a4d0e" letter-spacing="2">[BROTHER'S SIGNATURE]</text>
 
+      <!-- Official Verification Serial ID Tag (Coursera Standard) -->
       <?php $certId = 'SS-RB-' . date('Y') . '-' . strtoupper(substr(md5($gift['id'] ?? '8942'), 0, 4)); ?>
       <text x="1190" y="730" text-anchor="middle" font-family="'Cinzel', 'Courier New', monospace" font-size="12" font-weight="800" fill="#4a2602" letter-spacing="2">CERTIFICATE ID: <?= $certId ?></text>
 
+      <!-- Bottom Date & Scribe Tag -->
       <text x="800" y="605" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="13" font-style="italic" fill="#7a5310">Issued with sacred love &bull; Raksha Bandhan <?= date('jS F Y') ?> &bull; Digital Archive Verified 🔒</text>
     </svg>
   </div>
 
-  <!-- Download & Share Action Buttons -->
+  <!-- Download & Share Action Buttons (Full-width touch-friendly on Mobile) -->
   <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
     <button type="button" id="downloadCertBtn" onclick="downloadShahiTamrapatra()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-[#d4af37] via-[#f7e6a6] to-[#b89343] text-[#241a00] font-extrabold text-xs sm:text-sm uppercase tracking-wider rounded-full shadow-[0_8px_25px_rgba(212,175,55,0.45)] hover:shadow-[0_12px_35px_rgba(212,175,55,0.65)] hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2">
       <i data-lucide="download" class="w-4 h-4 text-[#241a00]"></i>
@@ -525,37 +471,7 @@ if ($cleanReceiverPhoto) {
   </div>
 </section>
 
-<!-- SECTION 5: 3D GLASSMORPHISM SIBLING PROMISE CARDS -->
-<section id="siblingVowsSection" class="max-w-5xl mx-auto px-4 py-10 relative z-10 space-y-8">
-  <div class="text-center space-y-2">
-    <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">BROTHER &amp; SISTER VOWS</span>
-    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]"><?= count($promisesList) ?> Sacred Sibling Vows 🛡️</h2>
-    <div class="w-16 h-[2.5px] bg-[#eac34a] mx-auto mt-2 rounded-full shadow-[0_0_10px_#eac34a]"></div>
-  </div>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    <?php foreach ($promisesList as $pIdx => $pText): ?>
-      <div class="p-6 space-y-5 shadow-2xl relative group overflow-hidden border border-[#eac34a]/30 hover:border-[#eac34a]/80 rounded-2xl transition-all duration-500 bg-gradient-to-br from-[#2a060b]/90 via-[#151215]/95 to-[#3b1e3b]/90 backdrop-blur-xl hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(234,195,74,0.15)]">
-        <div class="absolute inset-0 bg-gradient-to-b from-[#eac34a]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"></div>
-        <div class="absolute -bottom-6 -right-6 text-[#eac34a]/5 text-9xl pointer-events-none z-0 rotate-12 group-hover:rotate-45 transition-transform duration-1000">❁</div>
-
-        <div class="relative z-10 flex items-center justify-between">
-          <span class="w-10 h-10 rounded-full bg-[#100d10] border border-[#eac34a]/50 text-[#eac34a] font-bold text-xs flex items-center justify-center font-serif shadow-lg group-hover:bg-[#eac34a] group-hover:text-[#100d10] transition-colors duration-300">#<?= $pIdx + 1 ?></span>
-          <i data-lucide="shield-check" class="w-6 h-6 text-[#eac34a]/60 group-hover:text-[#eac34a] transition-colors"></i>
-        </div>
-        <p class="relative z-10 text-base font-serif text-[#e8e0e3] leading-relaxed italic pt-2">
-          "<?= htmlspecialchars($pText) ?>"
-        </p>
-        <div class="relative z-10 flex items-center gap-2 pt-4 border-t border-[#eac34a]/10 mt-auto">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#eac34a] animate-pulse"></span>
-          <span class="text-[10px] text-[#eac34a] uppercase tracking-widest font-extrabold opacity-80">SACRED VOW TO <?= $partnerName ?></span>
-        </div>
-      </div>
-    <?php endforeach; ?>
-  </div>
-</section>
-
-<!-- SECTION 6: WAX-SEALED 3D ROYAL SHAGUN LIFAFA -->
+<!-- SECTION 5: WAX-SEALED ROYAL SHAGUN LIFAFA -->
 <section class="max-w-3xl mx-auto px-4 py-10 relative z-10">
   <div class="text-center space-y-2 mb-8">
     <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">SPECIAL GIFT &amp; BLESSINGS</span>
@@ -563,9 +479,9 @@ if ($cleanReceiverPhoto) {
     <p class="text-xs text-[#d0c3cb]">Tap the wax-sealed lifafa to reveal your gift voucher and personal letter!</p>
   </div>
 
-  <!-- Closed Envelope UI with Royal Wax Seal -->
-  <div id="shagunEnvelopeContainer" onclick="toggleShagunLifafa()" class="bg-gradient-to-br from-[#800f1c] via-[#590a13] to-[#2b0509] border-2 border-[#eac34a] rounded-3xl p-8 text-center cursor-pointer shadow-[0_0_40px_rgba(234,195,74,0.3)] hover:scale-[1.02] active:scale-95 transition-all relative overflow-hidden group">
-    <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-500 border-2 border-white text-[#241a00] flex items-center justify-center mx-auto mb-3 text-2xl font-serif font-bold shadow-[0_0_25px_rgba(234,195,74,0.8)] group-hover:scale-110 transition-transform">
+  <!-- Closed Envelope UI -->
+  <div id="shagunEnvelopeContainer" onclick="toggleShagunLifafa()" class="bg-gradient-to-br from-[#800f1c] via-[#590a13] to-[#2b0509] border-2 border-[#eac34a] rounded-3xl p-8 text-center cursor-pointer shadow-[0_0_40px_rgba(234,195,74,0.3)] hover:scale-[1.02] transition-all relative overflow-hidden group">
+    <div class="wax-seal-badge w-14 h-14 rounded-full text-[#eac34a] flex items-center justify-center mx-auto mb-3 text-xl font-serif font-bold">
       ॐ
     </div>
     <div class="space-y-2">
@@ -576,7 +492,7 @@ if ($cleanReceiverPhoto) {
   </div>
 
   <!-- Opened Envelope Content -->
-  <div id="shagunLetterContent" class="hidden bg-[#221f21] border-2 border-[#eac34a] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative animate-fade-in">
+  <div id="shagunLetterContent" class="hidden bg-[#221f21] border-2 border-[#eac34a] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
     <div class="flex items-center justify-between border-b border-[#4d444b]/60 pb-4">
       <span class="text-xs font-bold text-[#eac34a] uppercase tracking-wider flex items-center gap-1.5">
         <i data-lucide="heart" class="w-4 h-4 text-[#eac34a]"></i>
@@ -660,7 +576,154 @@ if ($cleanReceiverPhoto) {
   </div>
 </section>
 
-<!-- SECTION 7: ROYAL KEEPSAKE ACTION CENTER (PRINTABLE PHOTOBOOK & WALL POSTER) -->
+<!-- SECTION 6: SHAHI FARMAN UNROLLING SCROLL GALLERY (ALL PHOTOS) -->
+<!-- SCOPED CSS FOR RAKHI PARCHMENT SCROLL GALLERY (100% Isolated - Zero Global CSS Leak) -->
+<style>
+  .rb-farman-section {
+    position: relative;
+    z-index: 10;
+  }
+  .rb-farman-parchment {
+    background: linear-gradient(to right, #cfb580 0%, #ebd7b3 2.5%, #fdfbf5 8%, #fffdf8 50%, #fdfbf5 92%, #ebd7b3 97.5%, #cfb580 100%);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), inset 0 0 35px rgba(160, 120, 50, 0.2);
+    border-top: 4px solid #c9a658;
+    border-bottom: 4px solid #c9a658;
+    position: relative;
+    border-radius: 1.5rem;
+  }
+  /* Golden Roller Rods Left & Right */
+  .rb-farman-rod-left, .rb-farman-rod-right {
+    position: absolute;
+    top: -24px;
+    bottom: -24px;
+    width: 22px;
+    background: linear-gradient(to right, #523b13 0%, #b89343 35%, #f7e6a6 50%, #b89343 75%, #3d2b0c 100%);
+    border-radius: 11px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.5);
+    z-index: 25;
+  }
+  .rb-farman-rod-left { left: -12px; }
+  .rb-farman-rod-right { right: -12px; }
+  .rb-farman-rod-left::before, .rb-farman-rod-left::after,
+  .rb-farman-rod-right::before, .rb-farman-rod-right::after {
+    content: "";
+    position: absolute;
+    width: 32px;
+    height: 18px;
+    left: -5px;
+    background: radial-gradient(ellipse at center, #fff2c4 0%, #d4af37 50%, #523b13 100%);
+    border-radius: 9px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .rb-farman-rod-left::before, .rb-farman-rod-right::before { top: -12px; }
+  .rb-farman-rod-left::after, .rb-farman-rod-right::after { bottom: -12px; }
+
+  /* Photo Cards Matching User Mockup Colors */
+  .rb-farman-card {
+    background: #fcfbfa;
+    border: 2px solid #dfc690;
+    box-shadow: 0 4px 18px rgba(110, 85, 45, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+    border-radius: 1.25rem;
+    padding: 0.65rem;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .rb-farman-card:hover {
+    transform: translateY(-5px);
+    border-color: #b89343;
+    box-shadow: 0 12px 28px rgba(110, 85, 45, 0.25);
+  }
+  .rb-farman-img-box {
+    border-radius: 0.85rem;
+    overflow: hidden;
+    border: 1px solid #ebd9b5;
+    background-color: #f7f3eb;
+    position: relative;
+  }
+  .rb-farman-caption {
+    color: #3b2b1b;
+    font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 0.55rem;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+  }
+</style>
+
+<section class="rb-farman-section max-w-5xl mx-auto px-4 py-12 space-y-8">
+  <!-- Section Title -->
+  <div class="text-center space-y-2 mb-8">
+    <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ROYAL MEMORY SCROLL</span>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#fceabb] drop-shadow-md">Our Cherished Moments ✨</h2>
+    <p class="text-xs text-[#d0c3cb]">Every memory photo uploaded by <?= $buyerName ?> framed inside the unrolling antique parchment scroll.</p>
+  </div>
+
+  <!-- Antique Parchment Scroll Container -->
+  <div class="rb-farman-parchment p-5 sm:p-10 relative">
+    <!-- Decorative Wooden Scroll Handles -->
+    <div class="rb-farman-rod-left"></div>
+    <div class="rb-farman-rod-right"></div>
+
+    <!-- Corner Watercolor Floral Ornaments -->
+    <!-- Top-Left Floral -->
+    <div class="absolute top-2 left-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
+        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
+        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
+        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
+      </svg>
+    </div>
+    <!-- Top-Right Floral -->
+    <div class="absolute top-2 right-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10 scale-x-[-1]">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
+        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
+        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
+        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
+      </svg>
+    </div>
+    <!-- Bottom-Left Floral -->
+    <div class="absolute bottom-2 left-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10 scale-y-[-1]">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
+        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
+        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
+        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
+      </svg>
+    </div>
+    <!-- Bottom-Right Floral -->
+    <div class="absolute bottom-2 right-3 w-10 h-10 sm:w-14 sm:h-14 pointer-events-none opacity-80 z-10 scale-[-1]">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M15 45 C 25 25, 45 15, 65 15 C 45 30, 30 45, 15 45 Z" fill="#88a86e" opacity="0.85"/>
+        <path d="M30 60 C 25 40, 40 25, 60 30 C 45 40, 40 55, 30 60 Z" fill="#e88495"/>
+        <circle cx="40" cy="40" r="11" fill="#ec7085"/>
+        <circle cx="40" cy="40" r="4.5" fill="#fde68a"/>
+      </svg>
+    </div>
+
+    <!-- Photo Cards Masonry Grid (Pinterest Style with Mockup Colors) -->
+    <div class="columns-2 sm:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6 relative z-20">
+      <?php foreach ($media as $m): 
+        $imgUrl = htmlspecialchars(resolveMediaUrl($m['file_path'] ?? ''));
+        $capText = htmlspecialchars($m['caption'] ?? 'Cherished Memory');
+      ?>
+        <div onclick="openLightbox('<?= $imgUrl ?>')" class="break-inside-avoid rb-farman-card group cursor-pointer flex flex-col">
+          <div class="rb-farman-img-box">
+            <img loading="lazy" src="<?= $imgUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-auto object-cover group-hover:scale-[1.04] transition-transform duration-500">
+          </div>
+          <div class="px-1">
+            <p class="rb-farman-caption truncate" title="<?= $capText ?>"><?= $capText ?></p>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6.5: ROYAL KEEPSAKE ACTION CENTER (PRINTABLE PHOTOBOOK & WALL POSTER) -->
 <section class="max-w-4xl mx-auto px-4 py-12 relative z-10">
   <div class="text-center space-y-2 mb-8">
     <div class="inline-flex items-center gap-2 bg-[#d4af37]/20 border border-[#d4af37] px-4 py-1 rounded-full text-xs font-bold text-[#fceabb] uppercase tracking-widest">
@@ -699,7 +762,7 @@ if ($cleanReceiverPhoto) {
         </div>
         <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#a7f3d0]">Sibling Keepsake Book</h3>
         <p class="text-xs text-[#c5dbcc] leading-relaxed">
-          A luxury 7-page printable storybook album with Royal Cover, Shahi Tamrapatra Certificate, chapter stories, and a dynamic QR code to relive this website anytime!
+          A luxury 6-page printable storybook album with Royal Cover, Shahi Tamrapatra Certificate, chapter stories, and a dynamic QR code to relive this website anytime!
         </p>
       </div>
 
@@ -711,11 +774,22 @@ if ($cleanReceiverPhoto) {
   </div>
 </section>
 
-<!-- Fullscreen Photo Lightbox Modal -->
-<div id="rbLightboxModal" class="fixed inset-0 z-[150] bg-black/90 backdrop-blur-md hidden items-center justify-center p-4 cursor-pointer" onclick="closeLightbox()">
-  <button type="button" onclick="closeLightbox()" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-[#2a060b] border border-[#eac34a] text-[#eac34a] flex items-center justify-center text-xl hover:bg-[#eac34a] hover:text-black transition-all">✕</button>
-  <img id="rbLightboxImg" src="" class="max-w-[90vw] max-h-[85vh] object-contain rounded-2xl border-2 border-[#eac34a] shadow-[0_0_50px_rgba(234,195,74,0.4)]" onclick="event.stopPropagation()">
-</div>
+<!-- Data Variables for Client-Side Zero-Storage Keepsake Generators -->
+<script>
+  window.__giftMedia = <?= json_encode(array_map(function($m) {
+    return [
+      'url' => resolveMediaUrl($m['file_path'] ?? ''),
+      'caption' => $m['caption'] ?? 'Cherished Memory'
+    ];
+  }, $media ?? [])) ?>;
+  window.__partnerPhoto = <?= json_encode($receiverPhotoUrl ?? '') ?>;
+  window.__partnerName = <?= json_encode($partnerName ?? 'Sister') ?>;
+  window.__buyerName = <?= json_encode($buyerName ?? 'Brother') ?>;
+  window.__giftSlug = <?= json_encode($slug ?? '') ?>;
+  window.__appUrl = <?= json_encode(APP_URL ?? '') ?>;
+  window.__loveNote = <?= json_encode($loveNoteText ?? '') ?>;
+  window.__certId = <?= json_encode($certId ?? ('SS-RB-' . date('Y') . '-8942')) ?>;
+</script>
 
 <!-- Footer Bar -->
 <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
@@ -727,82 +801,3 @@ if ($cleanReceiverPhoto) {
     </button>
   </div>
 </footer>
-
-<!-- FLOATING MARIGOLD & STARDUST CANVAS SCRIPT -->
-<script>
-  (function initFloatingMarigoldPetals() {
-    const canvas = document.getElementById('floatingMarigoldCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    });
-
-    const petals = [];
-    const petalColors = ['#f59e0b', '#fbbf24', '#d97706', '#ffd700', '#f43f5e'];
-
-    for (let i = 0; i < 35; i++) {
-      petals.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: Math.random() * 5 + 3,
-        dx: Math.random() * 1.2 - 0.6,
-        dy: Math.random() * 0.8 + 0.5,
-        rot: Math.random() * Math.PI * 2,
-        rotSpeed: Math.random() * 0.03 - 0.015,
-        color: petalColors[Math.floor(Math.random() * petalColors.length)],
-        opacity: Math.random() * 0.5 + 0.3
-      });
-    }
-
-    function animatePetals() {
-      ctx.clearRect(0, 0, width, height);
-
-      petals.forEach(p => {
-        p.x += p.dx;
-        p.y += p.dy;
-        p.rot += p.rotSpeed;
-
-        if (p.y > height + 20) { p.y = -20; p.x = Math.random() * width; }
-        if (p.x > width + 20) { p.x = -20; }
-        if (p.x < -20) { p.x = width + 20; }
-
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.opacity;
-
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.r * 1.8, p.r, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      });
-
-      requestAnimationFrame(animatePetals);
-    }
-    animatePetals();
-  })();
-
-  function openLightbox(url) {
-    const modal = document.getElementById('rbLightboxModal');
-    const img = document.getElementById('rbLightboxImg');
-    if (modal && img) {
-      img.src = url;
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-  }
-
-  function closeLightbox() {
-    const modal = document.getElementById('rbLightboxModal');
-    if (modal) {
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
-  }
-</script>

@@ -1180,19 +1180,24 @@ if (!empty($initialLockData['page_id'])) {
       const btn = document.getElementById('rakhiBtn');
       if (btn) btn.innerHTML = `<span class="text-base">✓ 🧵</span><span class="font-serif">${designTitle} Tied!</span>`;
 
-      // Visually bind Rakhi onto Brother's Wrist
+      // Visually bind Rakhi onto Brother's Wrist & Avatar
       const wristNotice = document.getElementById('wristEmptyNotice');
       const tiedRakhiOverlay = document.getElementById('tiedRakhiOnWrist');
       const tiedRakhiIcon = document.getElementById('tiedRakhiIcon');
+      const tiedOnAvatar = document.getElementById('rakhiTiedOnAvatar');
 
       if (wristNotice) wristNotice.classList.add('hidden');
       if (tiedRakhiOverlay) {
         tiedRakhiOverlay.classList.remove('hidden');
         if (tiedRakhiIcon) tiedRakhiIcon.textContent = rakhiEmojiMap[rakhiRitualProgress.selectedDesign] || '🧵';
       }
+      if (tiedOnAvatar) {
+        tiedOnAvatar.classList.remove('hidden');
+        if (tiedRakhiIcon) tiedRakhiIcon.textContent = rakhiEmojiMap[rakhiRitualProgress.selectedDesign] || '👑';
+      }
       
       const status = document.getElementById('rakhiRitualStatus');
-      if (status) status.innerHTML = `🎉 <strong>${designTitle} Rakhi Tied on Brother's Wrist!</strong> Sacred blessings &amp; Shagun Envelope Unlocked! 💖`;
+      if (status) status.innerHTML = `🎉 <strong>${designTitle} Rakhi Tied!</strong> Sacred blessings &amp; Shagun Envelope Unlocked! 💖`;
       
       if (typeof confetti === 'function') {
         // Wave 1: Golden Confetti & Rose Petals
