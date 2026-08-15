@@ -394,8 +394,14 @@ if ($cleanReceiverPhoto) {
         </filter>
       </defs>
 
-      <!-- Embedded High-Resolution Master Frame (Flat 2D, Kalawa Border, Kundan Medallion, Badges, Diya Seal) -->
-      <image href="<?= htmlspecialchars(APP_URL) ?>/assets/images/shahi_master_certificate_frame.jpg" x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
+      <?php 
+      $frameFilePath = __DIR__ . '/../../assets/images/shahi_master_certificate_frame.jpg';
+      $frameSrc = (file_exists($frameFilePath)) 
+          ? ('data:image/jpeg;base64,' . base64_encode(file_get_contents($frameFilePath))) 
+          : (htmlspecialchars(APP_URL) . '/assets/images/shahi_master_certificate_frame.jpg');
+      ?>
+      <!-- Embedded High-Resolution Master Frame (Base64 Self-Contained Data URI - Zero CORS Blocking) -->
+      <image href="<?= $frameSrc ?>" x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
 
       <!-- Live Dynamic Typography Overlay -->
       <!-- Calligraphy Heading: SHAHI TAMRAPATRA -->
