@@ -538,10 +538,10 @@ if ($cleanReceiverPhoto) {
 
       <!-- Official Verification Serial ID Tag (Coursera Standard) -->
       <?php $certId = 'SS-RB-' . date('Y') . '-' . strtoupper(substr(md5($gift['id'] ?? '8942'), 0, 4)); ?>
-      <text x="1190" y="735" text-anchor="middle" font-family="'Cinzel', 'Courier New', monospace" font-size="12" font-weight="800" fill="#4a2602" letter-spacing="2">CERTIFICATE ID: <?= $certId ?></text>
+      <text x="1190" y="730" text-anchor="middle" font-family="'Cinzel', 'Courier New', monospace" font-size="12" font-weight="800" fill="#4a2602" letter-spacing="2">CERTIFICATE ID: <?= $certId ?></text>
 
-      <!-- Bottom Date & Scribe Tag -->
-      <text x="800" y="805" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="13" font-style="italic" fill="#7a5310">Issued with sacred love &bull; Raksha Bandhan <?= date('jS F Y') ?> &bull; Digital Archive Verified 🔒</text>
+      <!-- Bottom Date & Scribe Tag (Positioned cleanly above seal) -->
+      <text x="800" y="605" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="13" font-style="italic" fill="#7a5310">Issued with sacred love &bull; Raksha Bandhan <?= date('jS F Y') ?> &bull; Digital Archive Verified 🔒</text>
     </svg>
   </div>
 
