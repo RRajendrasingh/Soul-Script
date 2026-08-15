@@ -1225,6 +1225,71 @@ if (!empty($initialLockData['page_id'])) {
         .replace(/'/g, '&#039;');
     }
 
+    function downloadShahiTamrapatra() {
+      const btn = document.getElementById('downloadCertBtn');
+      const originalContent = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> Generating 4K Certificate...';
+        btn.disabled = true;
+      }
+
+      const loadHtml2Canvas = () => {
+        return new Promise((resolve, reject) => {
+          if (window.html2canvas) return resolve();
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      };
+
+      loadHtml2Canvas().then(() => {
+        const element = document.getElementById('shahiTamrapatraDocument');
+        if (!element) return;
+        html2canvas(element, {
+          scale: 3, // 3x Ultra-HD 300 DPI supersampling!
+          useCORS: true,
+          backgroundColor: '#faf3e1',
+          logging: false
+        }).then(canvas => {
+          const link = document.createElement('a');
+          const buyer = '<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $buyerName ?? 'Brother') ?>';
+          const partner = '<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $partnerName ?? 'Sister') ?>';
+          link.download = `Shahi_Tamrapatra_Certificate_${buyer}_${partner}.png`;
+          link.href = canvas.toDataURL('image/png', 1.0);
+          link.click();
+          if (btn) {
+            btn.innerHTML = originalContent;
+            btn.disabled = false;
+          }
+          if (window.lucide) lucide.createIcons();
+          if (typeof confetti === 'function') {
+            confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+          }
+        }).catch(err => {
+          console.error(err);
+          if (btn) {
+            btn.innerHTML = originalContent;
+            btn.disabled = false;
+          }
+          if (window.lucide) lucide.createIcons();
+        });
+      }).catch(err => {
+        console.error(err);
+        if (btn) {
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
+        if (window.lucide) lucide.createIcons();
+      });
+    }
+
+    function shareShahiTamrapatraWhatsApp() {
+      const text = `📜 *Official Shahi Tamrapatra — Sibling Bond Certificate* 👑\n\nThis Royal decree certifies the eternal bond of love and protection between *<?= addslashes($buyerName ?? '') ?>* and *<?= addslashes($partnerName ?? '') ?>*!\n\nView our official certificate on SoulScript: ${window.location.href}`;
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
     function cleanAttrStr(str) {
       if (!str) return '';
       return String(str).replace(/'/g, "\\'").replace(/"/g, '\\"');
