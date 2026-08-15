@@ -398,34 +398,34 @@ if ($cleanReceiverPhoto) {
       <!-- Embedded High-Resolution 3D Master Artwork (Kundan Rakhi, Silk Kalawa Borders, Badges, Wax Seal) -->
       <image href="<?= htmlspecialchars(APP_URL) ?>/assets/images/cute_rakhi_cert_bg.jpg" x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
 
-      <!-- Live Dynamic Typography Overlay (Positioned in Center Parchment Area with Ample Clearance) -->
+      <!-- Live Dynamic Typography Overlay (Positioned with 100% Clear Tassel Clearance) -->
       <!-- Calligraphy Heading: SHAHI TAMRAPATRA -->
-      <text x="800" y="295" text-anchor="middle" font-family="'Cinzel Decorative', 'Cinzel', 'Playfair Display', Georgia, serif" font-size="46" font-weight="900" fill="url(#deepBronzeGoldGrad)" filter="url(#subtleTextShadow)" letter-spacing="4">SHAHI TAMRAPATRA</text>
+      <text x="800" y="380" text-anchor="middle" font-family="'Cinzel Decorative', 'Cinzel', 'Playfair Display', Georgia, serif" font-size="44" font-weight="900" fill="url(#deepBronzeGoldGrad)" filter="url(#subtleTextShadow)" letter-spacing="4">SHAHI TAMRAPATRA</text>
 
       <!-- Subtitle: Official Sibling Bond Certificate -->
-      <text x="800" y="335" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="25" font-weight="bold" fill="#851d2c" letter-spacing="1">Official Sibling Bond Certificate 💖</text>
+      <text x="800" y="415" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="23" font-weight="bold" fill="#851d2c" letter-spacing="1">Official Sibling Bond Certificate 💖</text>
 
       <!-- Preamble Tagline -->
-      <text x="800" y="375" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12.5" font-weight="800" fill="#6e4204" letter-spacing="4">PROCLAIMED WITH SACRED LOVE BETWEEN:</text>
+      <text x="800" y="450" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12" font-weight="800" fill="#6e4204" letter-spacing="4">PROCLAIMED WITH SACRED LOVE BETWEEN:</text>
 
       <!-- Parties Names Row (Directly on Parchment - No Artificial White Box) -->
       <!-- Sister Column (Left) -->
-      <text x="540" y="415" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11.5" font-weight="800" fill="#7a4d0e" letter-spacing="2.5">BELOVED SISTER</text>
-      <text x="540" y="448" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="27" font-weight="900" fill="#2b1402"><?= htmlspecialchars($partnerName) ?> 👑</text>
+      <text x="540" y="485" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a4d0e" letter-spacing="2.5">BELOVED SISTER</text>
+      <text x="540" y="515" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="26" font-weight="900" fill="#2b1402"><?= htmlspecialchars($partnerName) ?> 👑</text>
 
       <!-- Center Love Medallion -->
-      <circle cx="800" cy="430" r="18" fill="#ffebee" stroke="#d61f33" stroke-width="1.5"/>
-      <text x="800" y="437" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="15" font-weight="bold" fill="#d61f33">💖</text>
+      <circle cx="800" cy="500" r="16" fill="#ffebee" stroke="#d61f33" stroke-width="1.5"/>
+      <text x="800" y="506" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="14" font-weight="bold" fill="#d61f33">💖</text>
 
       <!-- Brother Column (Right) -->
-      <text x="1060" y="415" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11.5" font-weight="800" fill="#7a4d0e" letter-spacing="2.5">RESPONSIBLE BROTHER</text>
-      <text x="1060" y="448" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="27" font-weight="900" fill="#2b1402"><?= htmlspecialchars($buyerName) ?> 🛡️</text>
+      <text x="1060" y="485" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a4d0e" letter-spacing="2.5">RESPONSIBLE BROTHER</text>
+      <text x="1060" y="515" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="26" font-weight="900" fill="#2b1402"><?= htmlspecialchars($buyerName) ?> 🛡️</text>
 
       <!-- Delicate Decorative Divider -->
-      <line x1="420" y1="468" x2="1180" y2="468" stroke="#d4af37" stroke-width="1.2" stroke-dasharray="6,4" opacity="0.65"/>
+      <line x1="420" y1="535" x2="1180" y2="535" stroke="#d4af37" stroke-width="1.2" stroke-dasharray="6,4" opacity="0.65"/>
 
       <!-- Sibling Promises Section Title -->
-      <text x="800" y="504" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="15" font-weight="900" fill="#9c1b2c" letter-spacing="3">✦ THE SACRED SIBLING PROMISES ✦</text>
+      <text x="800" y="568" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="14.5" font-weight="900" fill="#9c1b2c" letter-spacing="3">✦ THE SACRED SIBLING PROMISES ✦</text>
 
       <!-- Dynamic Sibling Promises Loop (Supports Custom User Vows & Defaults) -->
       <?php 
@@ -437,8 +437,8 @@ if ($cleanReceiverPhoto) {
         "To celebrate this unique, irreplaceable bond of love, laughter, and lifelong protection 🪔✨."
       ];
       $vowCount = count($certVows);
-      $startY = $vowCount <= 3 ? 546 : ($vowCount == 4 ? 538 : 532);
-      $stepY = $vowCount <= 3 ? 38 : ($vowCount == 4 ? 32 : 28);
+      $startY = $vowCount <= 3 ? 606 : ($vowCount == 4 ? 598 : 594);
+      $stepY = $vowCount <= 3 ? 34 : ($vowCount == 4 ? 28 : 25);
       
       foreach ($certVows as $vIdx => $vText): 
         $currentY = $startY + ($vIdx * $stepY);
@@ -447,25 +447,25 @@ if ($cleanReceiverPhoto) {
           $cleanVow = mb_substr($cleanVow, 0, 92) . '...';
         }
       ?>
-        <text x="800" y="<?= $currentY ?>" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="16" fill="#2b1402" font-weight="600"><?= ($vIdx + 1) ?>. <?= $cleanVow ?></text>
+        <text x="800" y="<?= $currentY ?>" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="15" fill="#2b1402" font-weight="600"><?= ($vIdx + 1) ?>. <?= $cleanVow ?></text>
       <?php endforeach; ?>
 
       <!-- Official Date & Rakhi Day Stamp -->
-      <text x="800" y="688" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="14.5" font-style="italic" font-weight="700" fill="#6e4204">Issued with love on this auspicious day of Raksha Bandhan &bull; <?= date('jS F Y') ?></text>
+      <text x="800" y="728" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="13.5" font-style="italic" font-weight="700" fill="#6e4204">Issued with love on this auspicious day of Raksha Bandhan &bull; <?= date('jS F Y') ?></text>
 
       <!-- Signatures Centerpiece -->
       <!-- Sister Signature (Left) -->
-      <line x1="320" y1="760" x2="660" y2="760" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
-      <text x="490" y="746" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="34" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($partnerName) ?> ♡</text>
-      <text x="490" y="782" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a4d0e" letter-spacing="2">[SISTER'S SIGNATURE]</text>
+      <line x1="320" y1="785" x2="660" y2="785" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
+      <text x="490" y="774" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="30" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($partnerName) ?> ♡</text>
+      <text x="490" y="805" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="10" font-weight="800" fill="#7a4d0e" letter-spacing="2">[SISTER'S SIGNATURE]</text>
 
       <!-- Brother Signature (Right) -->
-      <line x1="740" y1="760" x2="1080" y2="760" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
-      <text x="910" y="746" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="34" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($buyerName) ?> ♡</text>
-      <text x="910" y="782" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a4d0e" letter-spacing="2">[BROTHER'S SIGNATURE]</text>
+      <line x1="740" y1="785" x2="1080" y2="785" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
+      <text x="910" y="774" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="30" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($buyerName) ?> ♡</text>
+      <text x="910" y="805" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="10" font-weight="800" fill="#7a4d0e" letter-spacing="2">[BROTHER'S SIGNATURE]</text>
 
       <!-- Scribe Authority Footnote -->
-      <text x="800" y="828" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="12.5" font-style="italic" fill="#7a5310">Signed, sealed &amp; protected under the Royal Scribe Authority of SoulScript &bull; Lifetime Sacred Bond 🌸</text>
+      <text x="800" y="842" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="11.5" font-style="italic" fill="#7a5310">Signed, sealed &amp; protected under the Royal Scribe Authority of SoulScript &bull; Lifetime Sacred Bond 🌸</text>
     </svg>
   </div>
 
