@@ -576,11 +576,13 @@ if ($cleanReceiverPhoto) {
 
 <script>
   // 4K Ultra-HD Client-Side Download Function
-  function downloadShahiTamrapatra() {
+  window.downloadShahiTamrapatra = function() {
     const btn = document.getElementById('downloadCertBtn');
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> Generating 4K Certificate...';
-    btn.disabled = true;
+    const originalContent = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> Generating 4K Certificate...';
+      btn.disabled = true;
+    }
 
     const loadHtml2Canvas = () => {
       return new Promise((resolve, reject) => {
@@ -595,6 +597,7 @@ if ($cleanReceiverPhoto) {
 
     loadHtml2Canvas().then(() => {
       const element = document.getElementById('shahiTamrapatraDocument');
+      if (!element) return;
       html2canvas(element, {
         scale: 3, // 3x Ultra-HD 300 DPI supersampling!
         useCORS: true,
@@ -605,30 +608,36 @@ if ($cleanReceiverPhoto) {
         link.download = 'Shahi_Tamrapatra_Certificate_<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $buyerName) ?>_<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $partnerName) ?>.png';
         link.href = canvas.toDataURL('image/png', 1.0);
         link.click();
-        btn.innerHTML = originalContent;
-        btn.disabled = false;
+        if (btn) {
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
         if (window.lucide) lucide.createIcons();
         if (window.confetti) {
           confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
         }
       }).catch(err => {
         console.error(err);
-        btn.innerHTML = originalContent;
-        btn.disabled = false;
+        if (btn) {
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
         if (window.lucide) lucide.createIcons();
       });
     }).catch(err => {
       console.error(err);
-      btn.innerHTML = originalContent;
-      btn.disabled = false;
+      if (btn) {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+      }
       if (window.lucide) lucide.createIcons();
     });
-  }
+  };
 
-  function shareShahiTamrapatraWhatsApp() {
+  window.shareShahiTamrapatraWhatsApp = function() {
     const text = `📜 *Official Shahi Tamrapatra — Sibling Bond Certificate* 👑\n\nThis Royal decree certifies the eternal bond of love and protection between *<?= $buyerName ?>* and *<?= $partnerName ?>*!\n\nView our official certificate on SoulScript: ${window.location.href}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
-  }
+  };
 </script>
 
 <!-- SECTION 5: WAX-SEALED ROYAL SHAGUN LIFAFA -->
