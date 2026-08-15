@@ -367,18 +367,18 @@ if ($cleanReceiverPhoto) {
 </section>
 
 <!-- SECTION 4.5: SHAHI TAMRAPATRA (OFFICIAL ROYAL SIBLING BOND CERTIFICATE) -->
-<!-- SECTION 4.5: SHAHI TAMRAPATRA (OFFICIAL CUTE & ROYAL SIBLING BOND CERTIFICATE) -->
-<!-- 100% Scoped Styles & Photorealistic Masterpiece Engine - Zero Global CSS Impact -->
-<section id="shahiTamrapatraSection" class="relative z-10 max-w-5xl mx-auto px-4 py-12 space-y-6">
+<!-- SECTION 4.5.A: OPTION A - CURRENT CERTIFICATE -->
+<section id="shahiTamrapatraSectionA" class="relative z-10 max-w-5xl mx-auto px-4 py-8 space-y-6">
   <!-- Section Header -->
-  <div class="text-center space-y-2 mb-6">
-    <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ROYAL DECREE &amp; SEAL</span>
-    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#fceabb] drop-shadow-md">Shahi Tamrapatra 📜💖</h2>
-    <p class="text-xs text-[#d0c3cb]">Official Sibling Bond Certificate — Sealed with sacred Rakhi threads &amp; lifelong promises!</p>
+  <div class="text-center space-y-2 mb-4">
+    <div class="inline-flex items-center gap-2 bg-[#d4af37]/20 border border-[#d4af37] px-4 py-1 rounded-full text-xs font-bold text-[#fceabb] uppercase tracking-widest">
+      <span>✨ OPTION A (CURRENT LIVE CERTIFICATE)</span>
+    </div>
+    <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#fceabb] drop-shadow-md">Shahi Tamrapatra — Option A 📜</h2>
   </div>
 
-  <!-- Certificate Container with 3D Photorealistic Master Artwork & Dynamic Typography Overlay -->
-  <div id="shahiTamrapatraContainer" class="w-full relative rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] border-2 border-[#d4af37] overflow-hidden bg-[#faf3e1]">
+  <!-- Certificate Container Option A -->
+  <div id="shahiTamrapatraContainerA" class="w-full relative rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] border-2 border-[#d4af37] overflow-hidden bg-[#faf3e1]">
     <svg id="shahiTamrapatraSvg" viewBox="0 0 1600 900" class="w-full h-auto block select-none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <!-- Deep Royal Bronze-Gold Heading Gradient -->
@@ -395,39 +395,26 @@ if ($cleanReceiverPhoto) {
         </filter>
       </defs>
 
-      <!-- Embedded High-Resolution 3D Master Artwork (Kundan Rakhi, Silk Kalawa Borders, Badges, Wax Seal) -->
+      <!-- Embedded High-Resolution 3D Master Artwork -->
       <image href="<?= htmlspecialchars(APP_URL) ?>/assets/images/cute_rakhi_cert_bg.jpg" x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
 
-      <!-- Live Dynamic Typography Overlay (Positioned with 100% Clear Tassel Clearance) -->
-      <!-- Calligraphy Heading: SHAHI TAMRAPATRA -->
+      <!-- Live Dynamic Typography Overlay -->
       <text x="800" y="380" text-anchor="middle" font-family="'Cinzel Decorative', 'Cinzel', 'Playfair Display', Georgia, serif" font-size="44" font-weight="900" fill="url(#deepBronzeGoldGrad)" filter="url(#subtleTextShadow)" letter-spacing="4">SHAHI TAMRAPATRA</text>
-
-      <!-- Subtitle: Official Sibling Bond Certificate -->
       <text x="800" y="415" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="23" font-weight="bold" fill="#851d2c" letter-spacing="1">Official Sibling Bond Certificate 💖</text>
-
-      <!-- Preamble Tagline -->
       <text x="800" y="450" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="12" font-weight="800" fill="#6e4204" letter-spacing="4">PROCLAIMED WITH SACRED LOVE BETWEEN:</text>
 
-      <!-- Parties Names Row (Directly on Parchment - No Artificial White Box) -->
-      <!-- Sister Column (Left) -->
       <text x="540" y="485" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a4d0e" letter-spacing="2.5">BELOVED SISTER</text>
       <text x="540" y="515" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="26" font-weight="900" fill="#2b1402"><?= htmlspecialchars($partnerName) ?> 👑</text>
 
-      <!-- Center Love Medallion -->
       <circle cx="800" cy="500" r="16" fill="#ffebee" stroke="#d61f33" stroke-width="1.5"/>
       <text x="800" y="506" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="14" font-weight="bold" fill="#d61f33">💖</text>
 
-      <!-- Brother Column (Right) -->
       <text x="1060" y="485" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11" font-weight="800" fill="#7a4d0e" letter-spacing="2.5">RESPONSIBLE BROTHER</text>
       <text x="1060" y="515" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="26" font-weight="900" fill="#2b1402"><?= htmlspecialchars($buyerName) ?> 🛡️</text>
 
-      <!-- Delicate Decorative Divider -->
       <line x1="420" y1="535" x2="1180" y2="535" stroke="#d4af37" stroke-width="1.2" stroke-dasharray="6,4" opacity="0.65"/>
-
-      <!-- Sibling Promises Section Title -->
       <text x="800" y="568" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="14.5" font-weight="900" fill="#9c1b2c" letter-spacing="3">✦ THE SACRED SIBLING PROMISES ✦</text>
 
-      <!-- Dynamic Sibling Promises Loop (Supports Custom User Vows & Defaults) -->
       <?php 
       $certVows = !empty($promisesList) ? array_slice($promisesList, 0, 5) : [
         "To always share the last slice of pizza 🍕 and hide each other's secret chocolate wrappers 🍫.",
@@ -450,35 +437,119 @@ if ($cleanReceiverPhoto) {
         <text x="800" y="<?= $currentY ?>" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="15" fill="#2b1402" font-weight="600"><?= ($vIdx + 1) ?>. <?= $cleanVow ?></text>
       <?php endforeach; ?>
 
-      <!-- Official Date & Rakhi Day Stamp -->
       <text x="800" y="728" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="13.5" font-style="italic" font-weight="700" fill="#6e4204">Issued with love on this auspicious day of Raksha Bandhan &bull; <?= date('jS F Y') ?></text>
 
-      <!-- Signatures Centerpiece -->
-      <!-- Sister Signature (Left) -->
       <line x1="320" y1="785" x2="660" y2="785" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
       <text x="490" y="774" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="30" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($partnerName) ?> ♡</text>
       <text x="490" y="805" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="10" font-weight="800" fill="#7a4d0e" letter-spacing="2">[SISTER'S SIGNATURE]</text>
 
-      <!-- Brother Signature (Right) -->
       <line x1="740" y1="785" x2="1080" y2="785" stroke="#b89343" stroke-width="1.5" opacity="0.8"/>
       <text x="910" y="774" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="30" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($buyerName) ?> ♡</text>
       <text x="910" y="805" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="10" font-weight="800" fill="#7a4d0e" letter-spacing="2">[BROTHER'S SIGNATURE]</text>
 
-      <!-- Scribe Authority Footnote -->
       <text x="800" y="842" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="11.5" font-style="italic" fill="#7a5310">Signed, sealed &amp; protected under the Royal Scribe Authority of SoulScript &bull; Lifetime Sacred Bond 🌸</text>
     </svg>
   </div>
 
-  <!-- Download & Share Action Buttons (Full-width touch-friendly on Mobile) -->
+  <!-- Action Buttons Option A -->
   <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-    <button type="button" id="downloadCertBtn" onclick="downloadShahiTamrapatra()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-[#d4af37] via-[#f7e6a6] to-[#b89343] text-[#241a00] font-extrabold text-xs sm:text-sm uppercase tracking-wider rounded-full shadow-[0_8px_25px_rgba(212,175,55,0.45)] hover:shadow-[0_12px_35px_rgba(212,175,55,0.65)] hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2">
+    <button type="button" id="downloadCertBtn" onclick="downloadShahiTamrapatra()" class="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-[#d4af37] via-[#f7e6a6] to-[#b89343] text-[#241a00] font-extrabold text-xs uppercase tracking-wider rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2">
       <i data-lucide="download" class="w-4 h-4 text-[#241a00]"></i>
-      <span>Download Official Certificate (4K HD)</span>
+      <span>Download Option A (4K HD)</span>
     </button>
+  </div>
+</section>
 
-    <button type="button" onclick="shareShahiTamrapatraWhatsApp()" class="w-full sm:w-auto px-6 py-3.5 bg-[#1f4e27] hover:bg-[#276332] text-[#98ecaa] border border-[#52b76b]/50 font-bold text-xs sm:text-sm rounded-full shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2">
-      <i data-lucide="share-2" class="w-4 h-4 text-[#98ecaa]"></i>
-      <span>Share Certificate on WhatsApp 📲</span>
+<!-- SECTION 4.5.B: OPTION B - NEW CUSTOM MASTERPIECE CERTIFICATE -->
+<section id="shahiTamrapatraSectionB" class="relative z-10 max-w-5xl mx-auto px-4 py-12 space-y-6">
+  <!-- Section Header -->
+  <div class="text-center space-y-2 mb-4">
+    <div class="inline-flex items-center gap-2 bg-gradient-to-r from-[#10b981]/30 via-[#059669]/20 to-[#10b981]/30 border-2 border-[#10b981] px-5 py-1.5 rounded-full text-xs font-black text-[#a7f3d0] uppercase tracking-widest shadow-lg animate-pulse">
+      <span>👑 OPTION B: NEW CUSTOM MASTERPIECE CERTIFICATE</span>
+    </div>
+    <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#fceabb] drop-shadow-md">Shahi Tamrapatra — Option B 📜💖</h2>
+    <p class="text-xs text-[#d0c3cb]">Flat 2D top-down layout &bull; 2×2 Sibling Promises &bull; Verification Serial ID &bull; 3D Diya Wax Seal</p>
+  </div>
+
+  <!-- Certificate Container Option B -->
+  <div id="shahiTamrapatraContainerB" class="w-full relative rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] border-2 border-[#d4af37] overflow-hidden bg-[#fdf9ee]">
+    <svg id="shahiTamrapatraSvgB" viewBox="0 0 1600 900" class="w-full h-auto block select-none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Deep Bronze-Gold Heading Gradient for Option B -->
+        <linearGradient id="optBGoldHeading" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#402001"/>
+          <stop offset="30%" stop-color="#7a4204"/>
+          <stop offset="60%" stop-color="#aa6c12"/>
+          <stop offset="100%" stop-color="#402001"/>
+        </linearGradient>
+
+        <filter id="optBTextShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#ffffff" flood-opacity="0.95"/>
+        </filter>
+      </defs>
+
+      <!-- Embedded High-Resolution Blank Master Frame (Flat 2D, Kalawa Border, Kundan Medallion, Badges, Diya Seal) -->
+      <image href="<?= htmlspecialchars(APP_URL) ?>/assets/images/shahi_master_certificate_frame.jpg" x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
+
+      <!-- Live Dynamic Typography Overlay (Positioned with Perfect Harmony in Center Parchment) -->
+      <!-- Calligraphy Heading: SHAHI TAMRAPATRA -->
+      <text x="800" y="270" text-anchor="middle" font-family="'Cinzel Decorative', 'Cinzel', 'Playfair Display', Georgia, serif" font-size="52" font-weight="900" fill="url(#optBGoldHeading)" filter="url(#optBTextShadow)" letter-spacing="4">SHAHI TAMRAPATRA</text>
+
+      <!-- Subtitle: Official Sibling Bond Certificate -->
+      <text x="800" y="315" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="28" font-weight="bold" fill="#851d2c" letter-spacing="1">Official Sibling Bond Certificate 💖</text>
+
+      <!-- Parties Names Row with Center 3D Heart Medallion -->
+      <!-- Sister (Left) -->
+      <text x="490" y="380" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="34" font-weight="900" fill="#241402"><?= htmlspecialchars($partnerName) ?></text>
+
+      <!-- Center 3D Heart Medallion -->
+      <circle cx="800" cy="368" r="24" fill="#851d2c" stroke="#ffd700" stroke-width="2.5"/>
+      <circle cx="800" cy="368" r="18" fill="#ffebee"/>
+      <text x="800" y="375" text-anchor="middle" font-size="20">💖</text>
+
+      <!-- Brother (Right) -->
+      <text x="1110" y="380" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="34" font-weight="900" fill="#241402"><?= htmlspecialchars($buyerName) ?></text>
+
+      <!-- 2x2 Clean Balanced Sibling Promises Grid with Emojis -->
+      <?php 
+      $vow1 = !empty($promisesList[0]) ? htmlspecialchars($promisesList[0]) : "Always Share Pizza 🍕";
+      $vow2 = !empty($promisesList[1]) ? htmlspecialchars($promisesList[1]) : "Keep All Secrets 🤫";
+      $vow3 = !empty($promisesList[2]) ? htmlspecialchars($promisesList[2]) : "Fight Over TV Remote 📺";
+      $vow4 = !empty($promisesList[3]) ? htmlspecialchars($promisesList[3]) : "Eternal Support 💖";
+      ?>
+      <!-- Row 1 -->
+      <text x="520" y="475" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="21" font-weight="700" fill="#301802"><?= $vow1 ?></text>
+      <text x="1080" y="475" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="21" font-weight="700" fill="#301802"><?= $vow2 ?></text>
+
+      <!-- Row 2 -->
+      <text x="520" y="535" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="21" font-weight="700" fill="#301802"><?= $vow3 ?></text>
+      <text x="1080" y="535" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="21" font-weight="700" fill="#301802"><?= $vow4 ?></text>
+
+      <!-- Signatures & Verification ID Row -->
+      <!-- Sister Signature (Left) -->
+      <line x1="260" y1="675" x2="560" y2="675" stroke="#b89343" stroke-width="1.8" opacity="0.8"/>
+      <text x="410" y="658" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="34" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($partnerName) ?> ♡</text>
+      <text x="410" y="700" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11.5" font-weight="800" fill="#7a4d0e" letter-spacing="2">[SISTER'S SIGNATURE]</text>
+
+      <!-- Brother Signature (Right) -->
+      <line x1="1040" y1="675" x2="1340" y2="675" stroke="#b89343" stroke-width="1.8" opacity="0.8"/>
+      <text x="1190" y="658" text-anchor="middle" font-family="'Playfair Display', 'Brush Script MT', cursive" font-style="italic" font-size="34" font-weight="bold" fill="#851d2c"><?= htmlspecialchars($buyerName) ?> ♡</text>
+      <text x="1190" y="700" text-anchor="middle" font-family="'Cinzel', Georgia, serif" font-size="11.5" font-weight="800" fill="#7a4d0e" letter-spacing="2">[BROTHER'S SIGNATURE]</text>
+
+      <!-- Official Verification Serial ID Tag (Coursera Standard) -->
+      <?php $certId = 'SS-RB-' . date('Y') . '-' . strtoupper(substr(md5($gift['id'] ?? '8942'), 0, 4)); ?>
+      <text x="1190" y="735" text-anchor="middle" font-family="'Cinzel', 'Courier New', monospace" font-size="12" font-weight="800" fill="#4a2602" letter-spacing="2">CERTIFICATE ID: <?= $certId ?></text>
+
+      <!-- Bottom Date & Scribe Tag -->
+      <text x="800" y="805" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="13" font-style="italic" fill="#7a5310">Issued with sacred love &bull; Raksha Bandhan <?= date('jS F Y') ?> &bull; Digital Archive Verified 🔒</text>
+    </svg>
+  </div>
+
+  <!-- Action Buttons Option B -->
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+    <button type="button" id="downloadCertBtnB" onclick="downloadShahiTamrapatraB()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-[#10b981] via-[#34d399] to-[#059669] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider rounded-full shadow-[0_8px_25px_rgba(16,185,129,0.45)] hover:shadow-[0_12px_35px_rgba(16,185,129,0.65)] hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2">
+      <i data-lucide="download" class="w-4 h-4 text-white"></i>
+      <span>Download Option B (4K HD)</span>
     </button>
   </div>
 </section>

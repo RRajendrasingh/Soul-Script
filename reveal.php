@@ -1295,6 +1295,75 @@ if (!empty($initialLockData['page_id'])) {
       img.src = blobURL;
     }
 
+    function downloadShahiTamrapatraB() {
+      const btn = document.getElementById('downloadCertBtnB');
+      const originalContent = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> Generating 4K Option B Certificate...';
+        btn.disabled = true;
+      }
+
+      const svg = document.getElementById('shahiTamrapatraSvgB');
+      if (!svg) {
+        if (btn) {
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
+        return;
+      }
+
+      // Clone SVG and prepare for pure high-density rasterization
+      const svgClone = svg.cloneNode(true);
+      svgClone.setAttribute('width', '3840');
+      svgClone.setAttribute('height', '2160');
+
+      const svgString = new XMLSerializer().serializeToString(svgClone);
+      const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      const URL = window.URL || window.webkitURL || window;
+      const blobURL = URL.createObjectURL(svgBlob);
+
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 3840;
+        canvas.height = 2160;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(blobURL);
+
+        const link = document.createElement('a');
+        const buyer = '<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $buyerName ?? 'Brother') ?>';
+        const partner = '<?= preg_replace('/[^a-zA-Z0-9_-]/', '', $partnerName ?? 'Sister') ?>';
+        link.download = `Shahi_Tamrapatra_Masterpiece_Certificate_${buyer}_${partner}.png`;
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+
+        if (btn) {
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
+        if (window.lucide) lucide.createIcons();
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+        }
+      };
+
+      img.onerror = function(err) {
+        console.error('SVG Option B Render Error:', err);
+        URL.revokeObjectURL(blobURL);
+        if (btn) {
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
+        if (window.lucide) lucide.createIcons();
+        alert('Could not generate Option B 4K image. Please try again.');
+      };
+
+      img.src = blobURL;
+    }
+
     function shareShahiTamrapatraWhatsApp() {
       const text = `📜 *Official Shahi Tamrapatra — Sibling Bond Certificate* 👑\n\nThis Royal decree certifies the eternal bond of love and protection between *<?= addslashes($buyerName ?? '') ?>* and *<?= addslashes($partnerName ?? '') ?>*!\n\nView our official certificate on SoulScript: ${window.location.href}`;
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
