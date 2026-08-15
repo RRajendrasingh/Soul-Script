@@ -1626,13 +1626,13 @@ if (!empty($initialLockData['page_id'])) {
     }
 
     // ==========================================
-    // 2. MULTI-PAGE KEEPSAKE PHOTOBOOK (PDF)
+    // 2. MULTI-PAGE KEEPSAKE PHOTOBOOK (PDF) - HIGH-RES CANVAS ENGINE
     // ==========================================
     async function downloadSiblingPhotobookPDF() {
       const btn = document.getElementById('btnPhotobook');
       const origText = btn ? btn.innerHTML : '';
       if (btn) {
-        btn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> Generating Luxury Photobook PDF...';
+        btn.innerHTML = '<span class="inline-block animate-spin mr-1">⏳</span> Compiling Luxury Photobook PDF...';
         btn.disabled = true;
       }
 
@@ -1655,173 +1655,310 @@ if (!empty($initialLockData['page_id'])) {
           format: 'a4'
         });
 
-        const pageWidth = 297;
-        const pageHeight = 210;
+        const C_WIDTH = 2480;
+        const C_HEIGHT = 1754;
 
-        const drawPageBackground = () => {
-          doc.setFillColor(252, 248, 239);
-          doc.rect(0, 0, pageWidth, pageHeight, 'F');
-          doc.setLineWidth(1.2);
-          doc.setDrawColor(212, 175, 55);
-          doc.rect(8, 8, pageWidth - 16, pageHeight - 16);
-          doc.setLineWidth(0.4);
-          doc.setDrawColor(133, 29, 44);
-          doc.rect(11, 11, pageWidth - 22, pageHeight - 22);
+        // Helper: Create a fresh High-Res Canvas Page
+        const createPageCanvas = () => {
+          const cvs = document.createElement('canvas');
+          cvs.width = C_WIDTH;
+          cvs.height = C_HEIGHT;
+          const c = cvs.getContext('2d');
+          c.imageSmoothingEnabled = true;
+          c.imageSmoothingQuality = 'high';
+
+          // Base Ivory Linen Background
+          const grad = c.createLinearGradient(0, 0, C_WIDTH, C_HEIGHT);
+          grad.addColorStop(0, '#fdfbf7');
+          grad.addColorStop(0.5, '#f7f1e3');
+          grad.addColorStop(1, '#fdfbf7');
+          c.fillStyle = grad;
+          c.fillRect(0, 0, C_WIDTH, C_HEIGHT);
+
+          // Ornate 24K Gold & Crimson Border
+          c.lineWidth = 10;
+          c.strokeStyle = '#d4af37';
+          c.strokeRect(50, 50, C_WIDTH - 100, C_HEIGHT - 100);
+
+          c.lineWidth = 3;
+          c.strokeStyle = '#851d2c';
+          c.strokeRect(68, 68, C_WIDTH - 136, C_HEIGHT - 136);
+
+          // Corner Filigrees
+          const drawCorner = (cx, cy) => {
+            c.fillStyle = '#b89343';
+            c.beginPath();
+            c.arc(cx, cy, 18, 0, Math.PI * 2);
+            c.fill();
+            c.fillStyle = '#851d2c';
+            c.beginPath();
+            c.arc(cx, cy, 8, 0, Math.PI * 2);
+            c.fill();
+          };
+          drawCorner(68, 68);
+          drawCorner(C_WIDTH - 68, 68);
+          drawCorner(68, C_HEIGHT - 68);
+          drawCorner(C_WIDTH - 68, C_HEIGHT - 68);
+
+          return { cvs, c };
         };
 
         // ----------------------------------------------------
         // PAGE 1: ROYAL COVER
         // ----------------------------------------------------
-        drawPageBackground();
-        doc.setTextColor(133, 29, 44);
-        doc.setFont('times', 'bold');
-        doc.setFontSize(14);
-        doc.text('👑  SOULSCRIPT ROYAL KEEPSAKE EDITION  👑', pageWidth / 2, 24, { align: 'center' });
-        doc.setTextColor(64, 32, 1);
-        doc.setFontSize(28);
-        doc.text('THE SACRED SIBLING STORY', pageWidth / 2, 38, { align: 'center' });
-        doc.setTextColor(122, 66, 4);
-        doc.setFont('times', 'italic');
-        doc.setFontSize(14);
-        doc.text(`A Lifetime of Love, Laughter & Unbreakable Promises`, pageWidth / 2, 47, { align: 'center' });
+        const page1 = createPageCanvas();
+        const c1 = page1.c;
 
-        const avatarImg = await loadImgAsync(partnerPhotoUrl);
-        const avatarDataUrl = imgToDataUrl(avatarImg);
-        if (avatarDataUrl) {
-          doc.setFillColor(212, 175, 55);
-          doc.roundedRect(pageWidth / 2 - 37, 56, 74, 94, 6, 6, 'F');
-          doc.setFillColor(255, 255, 255);
-          doc.roundedRect(pageWidth / 2 - 35, 58, 70, 90, 4, 4, 'F');
-          doc.addImage(avatarDataUrl, 'JPEG', pageWidth / 2 - 33, 60, 66, 86);
+        c1.textAlign = 'center';
+        c1.fillStyle = '#851d2c';
+        c1.font = 'bold 34px "Cinzel", serif';
+        c1.fillText('👑  SOULSCRIPT ROYAL KEEPSAKE EDITION  👑', C_WIDTH / 2, 160);
+
+        c1.fillStyle = '#402001';
+        c1.font = '900 64px "Cinzel Decorative", "Playfair Display", Georgia, serif';
+        c1.fillText('THE SACRED SIBLING STORY', C_WIDTH / 2, 245);
+
+        c1.fillStyle = '#7a4204';
+        c1.font = 'italic bold 32px "Playfair Display", Georgia, serif';
+        c1.fillText('A Lifetime of Love, Laughter & Unbreakable Promises', C_WIDTH / 2, 305);
+
+        // Center Oval Avatar Frame
+        const p1AvatarImg = await loadImgAsync(partnerPhotoUrl);
+        const locketX = C_WIDTH / 2;
+        const locketY = 820;
+        const locketRx = 260;
+        const locketRy = 340;
+
+        c1.save();
+        c1.beginPath();
+        c1.ellipse(locketX, locketY, locketRx + 24, locketRy + 24, 0, 0, Math.PI * 2);
+        c1.fillStyle = '#d4af37';
+        c1.shadowColor = 'rgba(184, 147, 67, 0.4)';
+        c1.shadowBlur = 30;
+        c1.fill();
+        c1.restore();
+
+        c1.beginPath();
+        c1.ellipse(locketX, locketY, locketRx + 12, locketRy + 12, 0, 0, Math.PI * 2);
+        c1.fillStyle = '#851d2c';
+        c1.fill();
+
+        if (p1AvatarImg) {
+          c1.save();
+          c1.beginPath();
+          c1.ellipse(locketX, locketY, locketRx, locketRy, 0, 0, Math.PI * 2);
+          c1.clip();
+          c1.drawImage(p1AvatarImg, locketX - locketRx, locketY - locketRy, locketRx * 2, locketRy * 2);
+          c1.restore();
         }
 
-        doc.setTextColor(133, 29, 44);
-        doc.setFont('times', 'bolditalic');
-        doc.setFontSize(22);
-        doc.text(`${partnerName}  &  ${buyerName}`, pageWidth / 2, 168, { align: 'center' });
-        doc.setTextColor(122, 83, 16);
-        doc.setFont('times', 'normal');
-        doc.setFontSize(10);
-        doc.text(`Issued on Raksha Bandhan 2026 • Official Digital Keepsake Archive`, pageWidth / 2, 180, { align: 'center' });
+        c1.fillStyle = '#851d2c';
+        c1.font = 'italic bold 56px "Playfair Display", cursive';
+        c1.fillText(`${partnerName}  &  ${buyerName}`, C_WIDTH / 2, 1340);
+
+        c1.fillStyle = '#7a5310';
+        c1.font = '800 22px "Cinzel", Georgia, serif';
+        c1.fillText('Issued on Raksha Bandhan 2026 • Official Digital Keepsake Archive', C_WIDTH / 2, 1430);
+
+        doc.addImage(page1.cvs.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 297, 210);
 
         // ----------------------------------------------------
         // PAGE 2: SHAHI TAMRAPATRA CERTIFICATE
         // ----------------------------------------------------
         doc.addPage();
-        drawPageBackground();
-
         const certSvg = document.getElementById('shahiTamrapatraSvg');
         if (certSvg) {
           const certDataUrl = await renderSvgToDataUrl(certSvg, 1600, 900);
           if (certDataUrl) {
-            doc.addImage(certDataUrl, 'PNG', 14, 14, pageWidth - 28, pageHeight - 28);
+            doc.addImage(certDataUrl, 'PNG', 12, 10, 273, 190);
           }
         }
 
         // ----------------------------------------------------
-        // PAGES 3 to 5: CHAPTER STORIES & POLAROID MEMORIES
+        // CHAPTER PAGES: SPREADS OF USER SCRAPBOOK PHOTOS (4 unique photos per page)
         // ----------------------------------------------------
-        const chapters = [
-          { title: 'Chapter 1: Sweet Childhood Shenanigans', quote: 'Fighting over the TV remote & hiding secret chocolate wrappers! 🍫📺' },
-          { title: 'Chapter 2: Unfiltered Laughter & Inside Jokes', quote: 'Crime partners in every mischief, sharing secrets the world will never know! 🤫✨' },
-          { title: 'Chapter 3: Lifelong Protection & Sacred Bond', quote: 'Always standing as an unbreakable shield through every milestone of life! 💖🪔' }
+        const chapterMeta = [
+          { title: 'Chapter 1: Sweet Childhood Shenanigans 📺', quote: 'Fighting over the TV remote & hiding secret chocolate wrappers! 🍫' },
+          { title: 'Chapter 2: Unfiltered Laughter & Secrets 🤫', quote: 'Crime partners in every mischief, sharing secrets the world will never know! ✨' },
+          { title: 'Chapter 3: Lifelong Protection & Sacred Bond 💖', quote: 'Always standing as an unbreakable shield through every milestone of life! 🪔' },
+          { title: 'Chapter 4: Precious Milestones & Adventures 🌸', quote: 'Celebrating irreplaceable memories etched in our hearts forever! 🌟' }
         ];
 
-        for (let chIdx = 0; chIdx < chapters.length; chIdx++) {
-          doc.addPage();
-          drawPageBackground();
-          const ch = chapters[chIdx];
-          doc.setTextColor(133, 29, 44);
-          doc.setFont('times', 'bold');
-          doc.setFontSize(18);
-          doc.text(ch.title, pageWidth / 2, 22, { align: 'center' });
-          doc.setTextColor(122, 66, 4);
-          doc.setFont('times', 'italic');
-          doc.setFontSize(10.5);
-          doc.text(`"${ch.quote}"`, pageWidth / 2, 28, { align: 'center' });
+        const photosPerPage = 4;
+        const totalPhotos = mediaList.length;
+        const totalChapterPages = Math.max(1, Math.ceil(totalPhotos / photosPerPage));
 
-          const startPhotoIdx = chIdx * 4;
-          const photoPositions = [
-            { x: 20, y: 35, w: 120, h: 72 },
-            { x: 155, y: 35, w: 120, h: 72 },
-            { x: 20, y: 118, w: 120, h: 72 },
-            { x: 155, y: 118, w: 120, h: 72 }
+        for (let chIdx = 0; chIdx < totalChapterPages; chIdx++) {
+          doc.addPage();
+          const pageObj = createPageCanvas();
+          const c = pageObj.c;
+          const meta = chapterMeta[chIdx % chapterMeta.length];
+
+          // Chapter Header Banner
+          c.textAlign = 'center';
+          c.fillStyle = '#851d2c';
+          c.font = 'bold 44px "Cinzel", serif';
+          c.fillText(meta.title, C_WIDTH / 2, 160);
+
+          c.fillStyle = '#7a4204';
+          c.font = 'italic bold 26px "Playfair Display", Georgia, serif';
+          c.fillText(`"${meta.quote}"`, C_WIDTH / 2, 220);
+
+          // 4 Balanced Polaroid Slots per Page
+          const slots = [
+            { x: 260, y: 340, w: 440, h: 520, rot: -0.02 },
+            { x: 1320, y: 340, w: 440, h: 520, rot: 0.02 },
+            { x: 260, y: 940, w: 440, h: 520, rot: 0.02 },
+            { x: 1320, y: 940, w: 440, h: 520, rot: -0.02 }
           ];
 
-          for (let pIdx = 0; pIdx < 4; pIdx++) {
-            const pos = photoPositions[pIdx];
-            const mediaItem = mediaList[(startPhotoIdx + pIdx) % (mediaList.length || 1)] || { url: partnerPhotoUrl, caption: 'Cherished Memory' };
-            doc.setFillColor(255, 255, 255);
-            doc.setDrawColor(212, 175, 55);
-            doc.setLineWidth(0.4);
-            doc.roundedRect(pos.x, pos.y, pos.w, pos.h, 3, 3, 'FD');
+          const startIdx = chIdx * photosPerPage;
+          for (let p = 0; p < photosPerPage; p++) {
+            const photoIdx = startIdx + p;
+            if (photoIdx >= totalPhotos && totalPhotos > 0) break; // Don't repeat if no more photos
 
+            const slot = slots[p];
+            const mediaItem = mediaList[photoIdx % (totalPhotos || 1)] || { url: partnerPhotoUrl, caption: 'Cherished Memory' };
             const pImg = await loadImgAsync(mediaItem.url);
-            const pDataUrl = imgToDataUrl(pImg);
-            if (pDataUrl) {
-              const imgBoxW = pos.w - 10;
-              const imgBoxH = pos.h - 18;
+
+            c.save();
+            c.translate(slot.x + slot.w / 2, slot.y + slot.h / 2);
+            c.rotate(slot.rot);
+
+            // Polaroid Card Matting
+            c.shadowColor = 'rgba(0, 0, 0, 0.18)';
+            c.shadowBlur = 20;
+            c.shadowOffsetX = 4;
+            c.shadowOffsetY = 8;
+            c.fillStyle = '#ffffff';
+            c.fillRect(-slot.w / 2, -slot.h / 2, slot.w, slot.h);
+
+            // Gold Border Trim
+            c.shadowColor = 'transparent';
+            c.lineWidth = 2;
+            c.strokeStyle = '#e0c99a';
+            c.strokeRect(-slot.w / 2 + 8, -slot.h / 2 + 8, slot.w - 16, slot.h - 16);
+
+            // Draw Photo (Uncropped Natural Fit)
+            const imgAreaW = slot.w - 32;
+            const imgAreaH = slot.h - 100;
+            const imgAreaX = -slot.w / 2 + 16;
+            const imgAreaY = -slot.h / 2 + 16;
+
+            c.fillStyle = '#f8f5ee';
+            c.fillRect(imgAreaX, imgAreaY, imgAreaW, imgAreaH);
+
+            if (pImg) {
               const aspect = (pImg.naturalWidth || pImg.width || 800) / (pImg.naturalHeight || pImg.height || 600);
-              let drawW = imgBoxW;
-              let drawH = imgBoxW / aspect;
-              if (drawH > imgBoxH) {
-                drawH = imgBoxH;
-                drawW = imgBoxH * aspect;
+              let drawW = imgAreaW;
+              let drawH = imgAreaW / aspect;
+              if (drawH > imgAreaH) {
+                drawH = imgAreaH;
+                drawW = imgAreaH * aspect;
               }
-              const drawX = pos.x + 5 + (imgBoxW - drawW) / 2;
-              const drawY = pos.y + 4 + (imgBoxH - drawH) / 2;
-              doc.addImage(pDataUrl, 'JPEG', drawX, drawY, drawW, drawH);
+              const drawX = imgAreaX + (imgAreaW - drawW) / 2;
+              const drawY = imgAreaY + (imgAreaH - drawH) / 2;
+              c.drawImage(pImg, drawX, drawY, drawW, drawH);
             }
-            doc.setTextColor(58, 36, 20);
-            doc.setFont('times', 'normal');
-            doc.setFontSize(8.5);
-            const cap = (mediaItem.caption && mediaItem.caption.length > 35) ? mediaItem.caption.substring(0, 32) + '...' : (mediaItem.caption || 'Cherished Memory');
-            doc.text(cap, pos.x + pos.w / 2, pos.y + pos.h - 5, { align: 'center' });
+
+            // Gold Photo Corners
+            c.fillStyle = '#d4af37';
+            c.fillRect(imgAreaX, imgAreaY, 18, 4);
+            c.fillRect(imgAreaX, imgAreaY, 4, 18);
+            c.fillRect(imgAreaX + imgAreaW - 18, imgAreaY, 18, 4);
+            c.fillRect(imgAreaX + imgAreaW - 4, imgAreaY, 4, 18);
+
+            // Caption Text with Emoji Support
+            c.fillStyle = '#3a2414';
+            c.font = '600 22px "Playfair Display", Georgia, serif';
+            c.textAlign = 'center';
+            const capText = (mediaItem.caption && mediaItem.caption.length > 30) 
+              ? mediaItem.caption.substring(0, 28) + '...' 
+              : (mediaItem.caption || 'Cherished Memory');
+            c.fillText(capText, 0, slot.h / 2 - 25);
+
+            c.restore();
           }
+
+          doc.addImage(pageObj.cvs.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 297, 210);
         }
 
         // ----------------------------------------------------
-        // PAGE 6: BACK COVER (SHAGUN LETTER & DIGITAL QR PORTAL)
+        // FINAL PAGE: ROYAL SHAGUN LETTER & DIGITAL QR PORTAL
         // ----------------------------------------------------
         doc.addPage();
-        drawPageBackground();
-        doc.setTextColor(133, 29, 44);
-        doc.setFont('times', 'bold');
-        doc.setFontSize(18);
-        doc.text('👑  THE ROYAL SHAGUN LETTER  👑', pageWidth / 2, 24, { align: 'center' });
-        doc.setFillColor(255, 253, 248);
-        doc.setDrawColor(212, 175, 55);
-        doc.setLineWidth(0.6);
-        doc.roundedRect(25, 32, pageWidth - 50, 80, 4, 4, 'FD');
-        doc.setTextColor(64, 32, 1);
-        doc.setFont('times', 'italic');
-        doc.setFontSize(11);
-        const splitText = doc.splitTextToSize(`"${loveNote}"`, pageWidth - 70);
-        doc.text(splitText, 35, 45);
-        doc.setTextColor(133, 29, 44);
-        doc.setFont('times', 'bolditalic');
-        doc.setFontSize(13);
-        doc.text(`— With eternal love, ${buyerName}`, pageWidth - 40, 104, { align: 'right' });
+        const lastPage = createPageCanvas();
+        const cEnd = lastPage.c;
 
+        cEnd.textAlign = 'center';
+        cEnd.fillStyle = '#851d2c';
+        cEnd.font = 'bold 44px "Cinzel", serif';
+        cEnd.fillText('👑  THE ROYAL SHAGUN LETTER  👑', C_WIDTH / 2, 170);
+
+        // Letter Box
+        const letterBoxW = C_WIDTH - 400;
+        const letterBoxH = 650;
+        const letterBoxX = 200;
+        const letterBoxY = 240;
+
+        cEnd.fillStyle = '#ffffff';
+        cEnd.strokeStyle = '#d4af37';
+        cEnd.lineWidth = 4;
+        cEnd.beginPath();
+        cEnd.roundRect(letterBoxX, letterBoxY, letterBoxW, letterBoxH, 24);
+        cEnd.fill();
+        cEnd.stroke();
+
+        cEnd.fillStyle = '#3a200a';
+        cEnd.font = 'italic 32px "Playfair Display", Georgia, serif';
+        cEnd.textAlign = 'center';
+
+        // Word wrap love note
+        const words = loveNote.split(' ');
+        let line = '';
+        let lineY = letterBoxY + 120;
+        for (let n = 0; n < words.length; n++) {
+          const testLine = line + words[n] + ' ';
+          const metrics = cEnd.measureText(testLine);
+          if (metrics.width > letterBoxW - 140 && n > 0) {
+            cEnd.fillText(line, C_WIDTH / 2, lineY);
+            line = words[n] + ' ';
+            lineY += 50;
+          } else {
+            line = testLine;
+          }
+        }
+        cEnd.fillText(line, C_WIDTH / 2, lineY);
+
+        cEnd.fillStyle = '#851d2c';
+        cEnd.font = 'italic bold 38px "Playfair Display", cursive';
+        cEnd.fillText(`— With eternal love & lifelong protection, ${buyerName}`, letterBoxX + letterBoxW - 350, letterBoxY + letterBoxH - 60);
+
+        // Dynamic QR Code Portal
         const qrContainer = document.createElement('div');
-        new QRCode(qrContainer, { text: giftUrl, width: 256, height: 256, correctLevel: QRCode.CorrectLevel.H });
+        new QRCode(qrContainer, { text: giftUrl, width: 300, height: 300, correctLevel: QRCode.CorrectLevel.H });
         await new Promise(r => setTimeout(r, 400));
         const qrCanvas = qrContainer.querySelector('canvas');
         if (qrCanvas) {
-          const qrDataUrl = qrCanvas.toDataURL('image/png');
-          doc.setFillColor(255, 255, 255);
-          doc.roundedRect(pageWidth / 2 - 20, 120, 40, 40, 3, 3, 'F');
-          doc.addImage(qrDataUrl, 'PNG', pageWidth / 2 - 18, 122, 36, 36);
+          cEnd.fillStyle = '#ffffff';
+          cEnd.fillRect(C_WIDTH / 2 - 130, 960, 260, 260);
+          cEnd.strokeStyle = '#d4af37';
+          cEnd.lineWidth = 3;
+          cEnd.strokeRect(C_WIDTH / 2 - 130, 960, 260, 260);
+          cEnd.drawImage(qrCanvas, C_WIDTH / 2 - 115, 975, 230, 230);
         }
-        doc.setTextColor(122, 66, 4);
-        doc.setFont('times', 'bold');
-        doc.setFontSize(10);
-        doc.text('SCAN TO RELIVE YOUR DIGITAL CELEBRATION', pageWidth / 2, 168, { align: 'center' });
-        doc.setFont('times', 'italic');
-        doc.setFontSize(8.5);
-        doc.text('Scan with any smartphone camera to play music & experience the interactive rituals anytime at SoulScript.', pageWidth / 2, 174, { align: 'center' });
+
+        cEnd.fillStyle = '#7a4204';
+        cEnd.font = 'bold 28px "Cinzel", Georgia, serif';
+        cEnd.fillText('SCAN TO RELIVE YOUR DIGITAL CELEBRATION', C_WIDTH / 2, 1310);
+
+        cEnd.font = 'italic 22px "Playfair Display", Georgia, serif';
+        cEnd.fillText('Scan with any smartphone camera to play music & experience the interactive rituals anytime at SoulScript.', C_WIDTH / 2, 1360);
+
+        doc.addImage(lastPage.cvs.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 297, 210);
 
         doc.save(`Sibling_Memory_Book_${buyerName}_${partnerName}.pdf`);
+
         if (btn) {
           btn.innerHTML = origText;
           btn.disabled = false;
