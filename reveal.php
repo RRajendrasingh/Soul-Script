@@ -714,9 +714,18 @@ if (!empty($initialLockData['page_id'])) {
         container.innerHTML = data.html_content;
         lucide.createIcons();
 
-        // Re-initialize any specific theme scripts here if needed,
-        // Since we render from PHP, we might just call init scripts if they are defined
-        // We'll trust the inline onclicks and global functions for now.
+        // Initialize Global Keepsake Data Variables
+        window.__giftMedia = (media || []).map(m => ({
+          url: normalizeMediaUrlJs(m.file_path || m.url),
+          caption: m.caption || 'Cherished Memory'
+        }));
+        window.__partnerPhoto = cleanReceiverPhoto || '<?php echo APP_URL; ?>/assets/default_gallery/sample_fa6955df.webp';
+        window.__partnerName = content.partner_name || 'Sister';
+        window.__buyerName = content.buyer_name || 'Brother';
+        window.__giftSlug = currentSlug;
+        window.__appUrl = APP_URL;
+        window.__loveNote = content.love_note_text || content.love_letter_text || 'Thank you for being the most wonderful sibling in the universe!';
+        window.__certId = 'SS-RB-' + new Date().getFullYear() + '-' + (data.page_id ? data.page_id.toString().padStart(4, '0') : '8942');
 
       } else {
         // Fallback layout

@@ -41,9 +41,11 @@ $pageTitle = $pageTitle ?? (defined('APP_NAME') ? APP_NAME . ' — Romantic Surp
 <!-- Global CSS Design Tokens & Layout Rules (With Cache-Busting) -->
 <link rel="stylesheet" href="<?php echo defined('APP_URL') ? APP_URL : ''; ?>/assets/css/main.css?v=<?php echo time(); ?>_border_fix">
 
-<!-- Client-Side Image Compressor & Lucide Icons -->
+<!-- Client-Side Image Compressor & Lucide Icons & PDF/QR Engines -->
 <script src="<?php echo defined('APP_URL') ? APP_URL : ''; ?>/assets/js/compressor.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   html, body {
     overflow-x: hidden !important;
