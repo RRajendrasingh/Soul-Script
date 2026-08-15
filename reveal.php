@@ -1574,6 +1574,57 @@ if (!empty($initialLockData['page_id'])) {
       }
     }
 
+    // Helper: Convert HTMLImageElement to Clean Base64 Data URL (100% Reliable for jsPDF)
+    function imgToDataUrl(img, type = 'image/jpeg', quality = 0.92) {
+      if (!img) return null;
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || img.width || 800;
+        canvas.height = img.naturalHeight || img.height || 600;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        return canvas.toDataURL(type, quality);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // Helper: Render SVG to Data URL via Canvas
+    function renderSvgToDataUrl(svgElement, width = 1600, height = 900) {
+      if (!svgElement) return Promise.resolve(null);
+      return new Promise((resolve) => {
+        try {
+          const svgClone = svgElement.cloneNode(true);
+          svgClone.setAttribute('width', width.toString());
+          svgClone.setAttribute('height', height.toString());
+          const svgString = new XMLSerializer().serializeToString(svgClone);
+          const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+          const URL = window.URL || window.webkitURL || window;
+          const blobURL = URL.createObjectURL(svgBlob);
+
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            URL.revokeObjectURL(blobURL);
+            resolve(canvas.toDataURL('image/png'));
+          };
+          img.onerror = function() {
+            URL.revokeObjectURL(blobURL);
+            resolve(null);
+          };
+          img.src = blobURL;
+        } catch (err) {
+          resolve(null);
+        }
+      });
+    }
+
     // ==========================================
     // 2. MULTI-PAGE KEEPSAKE PHOTOBOOK (PDF)
     // ==========================================
@@ -1618,6 +1669,9 @@ if (!empty($initialLockData['page_id'])) {
           doc.rect(11, 11, pageWidth - 22, pageHeight - 22);
         };
 
+        // ----------------------------------------------------
+        // PAGE 1: ROYAL COVER
+        // ----------------------------------------------------
         drawPageBackground();
         doc.setTextColor(133, 29, 44);
         doc.setFont('times', 'bold');
@@ -1632,12 +1686,13 @@ if (!empty($initialLockData['page_id'])) {
         doc.text(`A Lifetime of Love, Laughter & Unbreakable Promises`, pageWidth / 2, 47, { align: 'center' });
 
         const avatarImg = await loadImgAsync(partnerPhotoUrl);
-        if (avatarImg) {
+        const avatarDataUrl = imgToDataUrl(avatarImg);
+        if (avatarDataUrl) {
           doc.setFillColor(212, 175, 55);
           doc.roundedRect(pageWidth / 2 - 37, 56, 74, 94, 6, 6, 'F');
           doc.setFillColor(255, 255, 255);
           doc.roundedRect(pageWidth / 2 - 35, 58, 70, 90, 4, 4, 'F');
-          doc.addImage(avatarImg, 'JPEG', pageWidth / 2 - 33, 60, 66, 86);
+          doc.addImage(avatarDataUrl, 'JPEG', pageWidth / 2 - 33, 60, 66, 86);
         }
 
         doc.setTextColor(133, 29, 44);
@@ -1649,25 +1704,23 @@ if (!empty($initialLockData['page_id'])) {
         doc.setFontSize(10);
         doc.text(`Issued on Raksha Bandhan 2026 • Official Digital Keepsake Archive`, pageWidth / 2, 180, { align: 'center' });
 
+        // ----------------------------------------------------
+        // PAGE 2: SHAHI TAMRAPATRA CERTIFICATE
+        // ----------------------------------------------------
         doc.addPage();
         drawPageBackground();
 
         const certSvg = document.getElementById('shahiTamrapatraSvg');
         if (certSvg) {
-          const svgClone = certSvg.cloneNode(true);
-          svgClone.setAttribute('width', '1600');
-          svgClone.setAttribute('height', '900');
-          const svgString = new XMLSerializer().serializeToString(svgClone);
-          const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-          const URL = window.URL || window.webkitURL || window;
-          const blobURL = URL.createObjectURL(svgBlob);
-          const certImg = await loadImgAsync(blobURL);
-          if (certImg) {
-            doc.addImage(certImg, 'PNG', 14, 14, pageWidth - 28, pageHeight - 28);
+          const certDataUrl = await renderSvgToDataUrl(certSvg, 1600, 900);
+          if (certDataUrl) {
+            doc.addImage(certDataUrl, 'PNG', 14, 14, pageWidth - 28, pageHeight - 28);
           }
-          URL.revokeObjectURL(blobURL);
         }
 
+        // ----------------------------------------------------
+        // PAGES 3 to 5: CHAPTER STORIES & POLAROID MEMORIES
+        // ----------------------------------------------------
         const chapters = [
           { title: 'Chapter 1: Sweet Childhood Shenanigans', quote: 'Fighting over the TV remote & hiding secret chocolate wrappers! 🍫📺' },
           { title: 'Chapter 2: Unfiltered Laughter & Inside Jokes', quote: 'Crime partners in every mischief, sharing secrets the world will never know! 🤫✨' },
@@ -1704,10 +1757,11 @@ if (!empty($initialLockData['page_id'])) {
             doc.roundedRect(pos.x, pos.y, pos.w, pos.h, 3, 3, 'FD');
 
             const pImg = await loadImgAsync(mediaItem.url);
-            if (pImg) {
+            const pDataUrl = imgToDataUrl(pImg);
+            if (pDataUrl) {
               const imgBoxW = pos.w - 10;
               const imgBoxH = pos.h - 18;
-              const aspect = pImg.width / pImg.height;
+              const aspect = (pImg.naturalWidth || pImg.width || 800) / (pImg.naturalHeight || pImg.height || 600);
               let drawW = imgBoxW;
               let drawH = imgBoxW / aspect;
               if (drawH > imgBoxH) {
@@ -1716,7 +1770,7 @@ if (!empty($initialLockData['page_id'])) {
               }
               const drawX = pos.x + 5 + (imgBoxW - drawW) / 2;
               const drawY = pos.y + 4 + (imgBoxH - drawH) / 2;
-              doc.addImage(pImg, 'JPEG', drawX, drawY, drawW, drawH);
+              doc.addImage(pDataUrl, 'JPEG', drawX, drawY, drawW, drawH);
             }
             doc.setTextColor(58, 36, 20);
             doc.setFont('times', 'normal');
@@ -1726,6 +1780,9 @@ if (!empty($initialLockData['page_id'])) {
           }
         }
 
+        // ----------------------------------------------------
+        // PAGE 6: BACK COVER (SHAGUN LETTER & DIGITAL QR PORTAL)
+        // ----------------------------------------------------
         doc.addPage();
         drawPageBackground();
         doc.setTextColor(133, 29, 44);
