@@ -57,11 +57,11 @@ require_once __DIR__ . '/includes/media_helper.php';
             <i data-lucide="arrow-right" class="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform"></i>
           </a>
 
-          <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="group flex items-center justify-center gap-3 px-6 py-3.5 sm:py-4 rounded-full border border-[#4d444b] hover:border-[#eac34a]/60 text-[#d0c3cb] hover:text-[#e8e0e3] transition-all duration-300 font-sans text-xs uppercase tracking-wider font-semibold cursor-pointer whitespace-nowrap">
+          <a href="#gallery" class="group flex items-center justify-center gap-3 px-6 py-3.5 sm:py-4 rounded-full border border-[#4d444b] hover:border-[#eac34a]/60 text-[#d0c3cb] hover:text-[#e8e0e3] transition-all duration-300 font-sans text-xs uppercase tracking-wider font-semibold cursor-pointer whitespace-nowrap">
             <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#eac34a]/40 flex items-center justify-center group-hover:border-[#eac34a] group-hover:bg-[#eac34a]/10 transition-all shrink-0">
               <i data-lucide="play" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#eac34a] fill-[#eac34a]"></i>
             </div>
-            <span class="whitespace-nowrap font-bold tracking-wider">TRY LIVE DEMO</span>
+            <span class="whitespace-nowrap font-bold tracking-wider">EXPLORE LIVE SAMPLES</span>
           </a>
         </div>
 
