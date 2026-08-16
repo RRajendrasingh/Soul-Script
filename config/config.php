@@ -29,10 +29,10 @@ if (!defined('APP_URL')) {
 
 // ── Database ──────────────────────────────────────────────────────────────────
 // All values come from config.env.php. Defaults auto-detect Local vs Production if config.env.php is missing.
-$isLocalHost = isset($_SERVER['HTTP_HOST']) && (
+$isLocalHost = php_sapi_name() === 'cli' || (isset($_SERVER['HTTP_HOST']) && (
     strpos($_SERVER['HTTP_HOST'], 'localhost') !== false ||
     strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false
-);
+));
 
 if (!defined('DB_HOST')) define('DB_HOST', $isLocalHost ? '127.0.0.1' : 'localhost');
 if (!defined('DB_PORT')) define('DB_PORT', $isLocalHost ? '3307' : '3306');

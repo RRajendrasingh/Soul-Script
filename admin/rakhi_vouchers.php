@@ -116,6 +116,23 @@ if ($isLoggedIn) {
         }
     }
 
+    // Auto-sync any paid Rakhi orders that don't have allocation records yet
+    try {
+        $stmtPaidUnallocated = $db->query("
+            SELECT o.order_id, p.page_id 
+            FROM orders o 
+            LEFT JOIN pages p ON o.order_id = p.order_id 
+            LEFT JOIN rakhi_voucher_allocations rva ON o.order_id = rva.order_id 
+            WHERE o.payment_status = 'paid' 
+              AND (o.template_id = 'raksha_bandhan_royal' OR o.template_id LIKE '%rakhi%') 
+              AND rva.id IS NULL
+        ");
+        $unallocatedOrders = $stmtPaidUnallocated->fetchAll();
+        foreach ($unallocatedOrders as $uOrd) {
+            allocateRakhiVoucher($uOrd['order_id'], $uOrd['page_id'] ?? null);
+        }
+    } catch (Exception $exSync) {}
+
     // Fetch Metrics
     $totalAllocations = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations")->fetchColumn();
     $totalVaultCodes  = $db->query("SELECT COUNT(*) FROM rakhi_vouchers_vault")->fetchColumn();

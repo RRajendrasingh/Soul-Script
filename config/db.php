@@ -335,10 +335,7 @@ function getDB() {
                 ]);
                 exit;
             }
-            // Ensure demo seeds are active
-            try {
-                initDatabase($pdo);
-            } catch (Exception $exSeed) { /* ignore */ }
+            throw $e;
         }
     }
     return $pdo;

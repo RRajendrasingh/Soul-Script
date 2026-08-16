@@ -51,6 +51,12 @@ try {
         $stmt = $db->prepare("UPDATE orders SET payment_status = 'paid', razorpay_payment_id = ? WHERE order_id = ?");
         $stmt->execute([$payment_id, $order_id]);
 
+        // Auto-allocate Rakhi voucher if order is for Rakhi template
+        try {
+            require_once __DIR__ . '/../includes/voucher_helper.php';
+            allocateRakhiVoucher($order_id);
+        } catch (Exception $exV) {}
+
         echo json_encode([
             'success' => true,
             'message' => 'Payment status updated to paid via server webhook',
