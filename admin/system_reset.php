@@ -36,34 +36,14 @@ if ($isLoggedIn) {
             $db->exec("DELETE FROM rakhi_voucher_allocations");
             $db->exec("DELETE FROM rakhi_vouchers_vault");
 
-            // 2. Identify Showcase Page IDs & Order IDs to protect
-            $inClause = "'" . implode("','", $showcaseSlugs) . "'";
-            $showcaseRows = $db->query("SELECT page_id, order_id FROM pages WHERE url_slug IN ($inClause)")->fetchAll();
-            
-            $protectedPageIds = array_filter(array_column($showcaseRows, 'page_id'));
-            $protectedOrderIds = array_filter(array_column($showcaseRows, 'order_id'));
+            // 2. Delete test reasons, proposals, page_content, and pages (keeping official demo pages)
+            $db->exec("DELETE FROM reasons_list WHERE page_id NOT LIKE 'page_demo_%'");
+            $db->exec("DELETE FROM proposal_responses WHERE page_id NOT LIKE 'page_demo_%'");
+            $db->exec("DELETE FROM page_content WHERE page_id NOT LIKE 'page_demo_%'");
+            $db->exec("DELETE FROM pages WHERE page_id NOT LIKE 'page_demo_%'");
 
-            // 3. Delete non-showcase reasons, proposals, page_content, and pages
-            if (!empty($protectedPageIds)) {
-                $pIdsIn = "'" . implode("','", $protectedPageIds) . "'";
-                $db->exec("DELETE FROM reasons_list WHERE page_id NOT IN ($pIdsIn)");
-                $db->exec("DELETE FROM proposal_responses WHERE page_id NOT IN ($pIdsIn)");
-                $db->exec("DELETE FROM page_content WHERE page_id NOT IN ($pIdsIn)");
-                $db->exec("DELETE FROM pages WHERE page_id NOT IN ($pIdsIn)");
-            } else {
-                $db->exec("DELETE FROM reasons_list");
-                $db->exec("DELETE FROM proposal_responses");
-                $db->exec("DELETE FROM page_content");
-                $db->exec("DELETE FROM pages");
-            }
-
-            // 4. Delete non-showcase orders
-            if (!empty($protectedOrderIds)) {
-                $oIdsIn = "'" . implode("','", $protectedOrderIds) . "'";
-                $db->exec("DELETE FROM orders WHERE order_id NOT IN ($oIdsIn)");
-            } else {
-                $db->exec("DELETE FROM orders");
-            }
+            // 3. Delete test orders (keeping official demo orders)
+            $db->exec("DELETE FROM orders WHERE order_id NOT LIKE 'ord_demo_%'");
 
             $msg = "🎉 Safe System Reset Complete! All test orders, test customer pages, and dummy vouchers have been completely wiped. Official showcase demo pages were safely preserved. All metrics are now 0.";
             $msgType = 'success';
