@@ -1,0 +1,158 @@
+{
+  "built_features": [
+    {
+      "id": "feat_tech_stack",
+      "title": "💻 Core Full-Stack Architecture",
+      "category": "Technology Stack",
+      "description": "Engineered with PHP 8.2 (Backend), Vanilla JavaScript (zero-dependency, lightweight frontend), Tailwind CSS (curated obsidian-plum luxury palette), Hostinger Cloud MySQL, and HTML5 Canvas (300 DPI high-res compositing engine).",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    },
+    {
+      "id": "feat_db_tables",
+      "title": "🗄️ Relational Database Engine (7 Core Tables)",
+      "category": "Database Architecture",
+      "description": "Architected 7 production-grade tables with auto-migration: `orders`, `pages`, `page_content`, `reasons_list`, `proposal_responses`, `rakhi_voucher_allocations`, `rakhi_vouchers_vault`, and `affiliate_products`.",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    },
+    {
+      "id": "feat_apis",
+      "title": "🔌 19 REST API Micro-Endpoints",
+      "category": "Backend & API Services",
+      "description": "Built 19 modular JSON endpoints covering order creation, buyer authentication, hint verification, coupon claiming, dynamic template configuration, live stats, and Razorpay payment webhooks.",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    },
+    {
+      "id": "feat_security",
+      "title": "🔒 Security, Cryptography & QR Tokens",
+      "category": "Security & Cryptography",
+      "description": "Implemented SHA-256 password hint verification with salt hashing, 64-character Buyer Edit Tokens, dynamic printable QR codes, anti-tamper sessions, and protection against unauthorized page tampering.",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    },
+    {
+      "id": "feat_themes",
+      "title": "🎨 5 Dynamic Celebration Themes",
+      "category": "User Experience",
+      "description": "Anniversary Timeline (milestone chapters), Birthday Magic (confetti & cake), Perfect Proposal (interactive Yes/No runaway button), Long-Distance Love (timezone clock & letters), and Raksha Bandhan Royal Luxury.",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    },
+    {
+      "id": "feat_media_vault",
+      "title": "💾 Persistent Media Vault & Dual-Storage Protection",
+      "category": "Media Engine",
+      "description": "Integrated dual-storage mirroring on Hostinger (`uploads_persistent/`), client-side & server-side WebP compression, and PHP auto-healing preventing customer polaroids and avatar photos from Git resets.",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    },
+    {
+      "id": "feat_rakhi_engine",
+      "title": "🎁 Raksha Bandhan 3-Act Royal Experience",
+      "category": "Festive Engine",
+      "description": "Act 1: Sibling Nostalgia & Remote Fight Meter; Act 2: 3D Shagun Lifafa with Scratch-to-Reveal and Shahi Tamrapatra Certificate; Act 3: Amazon Cash Voucher Reveal & Live Sister Avatar Badge with 60 FPS floating marigold petals.",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    },
+    {
+      "id": "feat_photobook",
+      "title": "📄 A4 Landscape Photobook PDF & Keepsake Poster",
+      "category": "Canvas & PDF Engine",
+      "description": "Engineered 300 DPI canvas compositing engine that generates a 6-page printable A4 landscape sibling photobook and a royal framed wall poster with QR codes and embedded calligraphic typography.",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    },
+    {
+      "id": "feat_lottery_vault",
+      "title": "🎟️ Pure Lottery Draw & Amazon Voucher Vault",
+      "category": "E-Commerce & Gamification",
+      "description": "Built a 100% pure random lottery draw (`ORDER BY RAND()`) pulling available vouchers from the vault pool, consolidated into 1 unified master table with single-line non-wrapping formatting.",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    },
+    {
+      "id": "feat_admin_center",
+      "title": "⚙️ Complete Admin Control Center & Safe Reset",
+      "category": "Administration",
+      "description": "Full administrative suite: Orders & Sales dashboard, Gift Cards Manager, Sample Gallery showcase, Amazon Affiliate Store settings, and 1-Click Safe System Reset with personal email whitelist protection.",
+      "status": "completed",
+      "completed_at": "2026-08-16"
+    }
+  ],
+  "pending_tasks": [
+    {
+      "id": "task_custom_domain",
+      "title": "🌐 Custom Domain Purchase & Global Migration",
+      "category": "Infrastructure",
+      "priority": "High",
+      "description": "Purchase brand domain (e.g. soulscript.in / soulscript.com). Update APP_URL in config/config.php, Razorpay webhook callback URLs, OpenGraph WhatsApp preview meta tags, and QR code base links.",
+      "status": "pending"
+    },
+    {
+      "id": "task_ai_emojis",
+      "title": "✨ AI-Emoji & Modern Aesthetic Content Polish",
+      "category": "Copywriting & UI",
+      "priority": "Medium",
+      "description": "Review landing page, order creation steps, and surprise reveal cards to infuse modern vibrant emojis (✨ 🎁 👑 💖 🌸 📜 🪔 💫 🍫) and high-conversion copy.",
+      "status": "pending"
+    },
+    {
+      "id": "task_mobile_overflow",
+      "title": "📱 Mobile Viewport & Screen Overflow Fixes",
+      "category": "Responsive UI",
+      "priority": "High",
+      "description": "Audit small screens (320px–390px iPhone/Android) to ensure zero horizontal text clipping, perfectly scaled fight meter sliders, and responsive container padding.",
+      "status": "pending"
+    },
+    {
+      "id": "task_amazon_vouchers",
+      "title": "🎁 Amazon India Gift Cards Bulk Purchase Guide",
+      "category": "Operations",
+      "priority": "High",
+      "description": "Step-by-step guide for purchasing instant Amazon India e-Gift cards in batches (₹100, ₹150, ₹250, ₹500, ₹2000) and uploading CSV to /admin/rakhi_vouchers.php.",
+      "status": "pending"
+    },
+    {
+      "id": "task_affiliate_catalog",
+      "title": "🛒 Amazon Affiliate Curated Product Catalog",
+      "category": "Monetization",
+      "priority": "Medium",
+      "description": "Populate /admin/affiliate_settings.php with top-selling Rakhi gifts (Cadbury hampers, luxury dry fruits, smartwatches, personalized keepsakes) using your Amazon Associate Tag.",
+      "status": "pending"
+    },
+    {
+      "id": "task_razorpay_live",
+      "title": "💳 Razorpay Live Mode Key Migration",
+      "category": "Payments",
+      "priority": "High",
+      "description": "Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to live mode credentials in config/config.env.php on Hostinger server.",
+      "status": "pending"
+    },
+    {
+      "id": "task_lock_reset",
+      "title": "🔒 Lock / Hide System Reset Tool on Live Launch",
+      "category": "Security",
+      "priority": "High",
+      "description": "After completing the 10-friends test and final wipe, remove the reset navigation button or require master password confirmation to eliminate accidental data loss.",
+      "status": "pending"
+    },
+    {
+      "id": "task_photobook_polish",
+      "title": "📄 Photobook PDF & Poster Typography Polish",
+      "category": "Design & Print",
+      "priority": "Medium",
+      "description": "Enlarge sibling names in royal calligraphy font, optimize signature line spacing, and format sibling vows into clean cards.",
+      "status": "pending"
+    },
+    {
+      "id": "task_viral_ads",
+      "title": "🎬 Aug 21 AI Viral Video Ad Generation",
+      "category": "Marketing & Ads",
+      "priority": "Medium",
+      "description": "Generate 3 emotional TV-commercial style video ads using Google Veo 2 / Luma Dream Machine + ElevenLabs Hindi voiceover + CapCut for Instagram Reels & YouTube Shorts.",
+      "status": "pending"
+    }
+  ]
+}
