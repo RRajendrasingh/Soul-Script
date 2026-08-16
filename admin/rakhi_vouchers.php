@@ -144,7 +144,16 @@ if ($isLoggedIn) {
         $msgType = 'success';
     }
 
-    // Auto-sync any paid Rakhi orders that don't have allocation records yet
+    // Purge any accidental allocations for 0-amount or demo showcase orders
+    try {
+        $db->exec("
+            DELETE rva FROM rakhi_voucher_allocations rva
+            JOIN orders o ON rva.order_id = o.order_id
+            WHERE o.amount_paid <= 0 OR o.order_id LIKE 'ord_demo_%'
+        ");
+    } catch (Exception $exPurge) {}
+
+    // Auto-sync only REAL PAID Rakhi orders (amount_paid > 0) that don't have allocation records yet
     try {
         $stmtPaidUnallocated = $db->query("
             SELECT o.order_id, p.page_id 
@@ -152,6 +161,8 @@ if ($isLoggedIn) {
             LEFT JOIN pages p ON o.order_id = p.order_id 
             LEFT JOIN rakhi_voucher_allocations rva ON o.order_id = rva.order_id 
             WHERE o.payment_status = 'paid' 
+              AND o.amount_paid > 0
+              AND o.order_id NOT LIKE 'ord_demo_%'
               AND (o.template_id = 'raksha_bandhan_royal' OR o.template_id LIKE '%rakhi%') 
               AND rva.id IS NULL
         ");
@@ -161,18 +172,21 @@ if ($isLoggedIn) {
         }
     } catch (Exception $exSync) {}
 
-    // Fetch Simple Dashboard Metrics
-    $totalOrders      = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations")->fetchColumn();
+    // Fetch Simple Dashboard Metrics (Real Paid Orders Only)
+    $totalOrders      = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations a JOIN orders o ON a.order_id = o.order_id WHERE o.payment_status = 'paid' AND o.amount_paid > 0 AND o.order_id NOT LIKE 'ord_demo_%'")->fetchColumn();
     $availableVault   = $db->query("SELECT COUNT(*) FROM rakhi_vouchers_vault WHERE status = 'available'")->fetchColumn();
-    $assignedOrders   = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations WHERE voucher_code IS NOT NULL")->fetchColumn();
-    $unassignedOrders = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations WHERE voucher_code IS NULL")->fetchColumn();
+    $assignedOrders   = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations a JOIN orders o ON a.order_id = o.order_id WHERE a.voucher_code IS NOT NULL AND o.payment_status = 'paid' AND o.amount_paid > 0 AND o.order_id NOT LIKE 'ord_demo_%'")->fetchColumn();
+    $unassignedOrders = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations a JOIN orders o ON a.order_id = o.order_id WHERE a.voucher_code IS NULL AND o.payment_status = 'paid' AND o.amount_paid > 0 AND o.order_id NOT LIKE 'ord_demo_%'")->fetchColumn();
 
-    // Unified Master Table Query: Orders + Lucky Draw Voucher
+    // Unified Master Table Query: Real Paid Customer Orders Only
     $masterList = $db->query("
-        SELECT a.*, o.buyer_name, o.buyer_email, o.created_at as order_date, p.url_slug as gift_slug
+        SELECT a.*, o.buyer_name, o.buyer_email, o.amount_paid, o.created_at as order_date, p.url_slug as gift_slug
         FROM rakhi_voucher_allocations a
         JOIN orders o ON a.order_id = o.order_id
         LEFT JOIN pages p ON a.order_id = p.order_id
+        WHERE o.payment_status = 'paid'
+          AND o.amount_paid > 0
+          AND o.order_id NOT LIKE 'ord_demo_%'
         ORDER BY a.id DESC LIMIT 100
     ")->fetchAll();
 }

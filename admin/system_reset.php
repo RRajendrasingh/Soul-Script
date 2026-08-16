@@ -83,10 +83,9 @@ if ($isLoggedIn) {
         }
     }
 
-    // Fetch Current DB Counts
     $orderCount       = $db->query("SELECT COUNT(*) FROM orders")->fetchColumn();
     $pageCount        = $db->query("SELECT COUNT(*) FROM pages")->fetchColumn();
-    $rakhiOrdersCount = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations")->fetchColumn();
+    $rakhiOrdersCount = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations a JOIN orders o ON a.order_id = o.order_id WHERE o.payment_status = 'paid' AND o.amount_paid > 0 AND o.order_id NOT LIKE 'ord_demo_%'")->fetchColumn();
     $vaultCodeCount   = $db->query("SELECT COUNT(*) FROM rakhi_vouchers_vault")->fetchColumn();
 }
 ?>
