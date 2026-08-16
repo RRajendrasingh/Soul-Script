@@ -27,25 +27,55 @@ $msgType = 'success';
 // Official Showcase Pages that MUST NEVER be deleted
 $showcaseSlugs = ['ananya-rohan', 'kavya-aarav', 'priya-aman', 'aanya-kabir', 'mona-aman', 'manvi-rakhi-v2'];
 
+$ownerEmail = 'rajendrasinghrathore613@gmail.com';
+
 if ($isLoggedIn) {
     $db = getDB();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'execute_safe_reset') {
         try {
+            $preserveOwner = !empty($_POST['preserve_owner_email']);
+
             // 1. Delete all Rakhi Voucher Allocations & Vault test codes
             $db->exec("DELETE FROM rakhi_voucher_allocations");
             $db->exec("DELETE FROM rakhi_vouchers_vault");
 
-            // 2. Delete test reasons, proposals, page_content, and pages (keeping official demo pages)
-            $db->exec("DELETE FROM reasons_list WHERE page_id NOT LIKE 'page_demo_%'");
-            $db->exec("DELETE FROM proposal_responses WHERE page_id NOT LIKE 'page_demo_%'");
-            $db->exec("DELETE FROM page_content WHERE page_id NOT LIKE 'page_demo_%'");
-            $db->exec("DELETE FROM pages WHERE page_id NOT LIKE 'page_demo_%'");
+            // 2. Identify Protected Page IDs and Order IDs
+            $protectedPageSql = "SELECT page_id FROM pages WHERE page_id LIKE 'page_demo_%'";
+            $protectedOrderSql = "SELECT order_id FROM orders WHERE order_id LIKE 'ord_demo_%'";
 
-            // 3. Delete test orders (keeping official demo orders)
-            $db->exec("DELETE FROM orders WHERE order_id NOT LIKE 'ord_demo_%'");
+            if ($preserveOwner) {
+                $protectedPageSql .= " OR order_id IN (SELECT order_id FROM orders WHERE buyer_email = " . $db->quote($ownerEmail) . ")";
+                $protectedOrderSql .= " OR buyer_email = " . $db->quote($ownerEmail);
+            }
 
-            $msg = "🎉 Safe System Reset Complete! All test orders, test customer pages, and dummy vouchers have been completely wiped. Official showcase demo pages were safely preserved. All metrics are now 0.";
+            $protectedPageIds = $db->query($protectedPageSql)->fetchAll(PDO::FETCH_COLUMN);
+            $protectedOrderIds = $db->query($protectedOrderSql)->fetchAll(PDO::FETCH_COLUMN);
+
+            // 3. Delete non-protected reasons, proposals, page_content, and pages
+            if (!empty($protectedPageIds)) {
+                $pIdsIn = "'" . implode("','", array_map('addslashes', $protectedPageIds)) . "'";
+                $db->exec("DELETE FROM reasons_list WHERE page_id NOT IN ($pIdsIn)");
+                $db->exec("DELETE FROM proposal_responses WHERE page_id NOT IN ($pIdsIn)");
+                $db->exec("DELETE FROM page_content WHERE page_id NOT IN ($pIdsIn)");
+                $db->exec("DELETE FROM pages WHERE page_id NOT IN ($pIdsIn)");
+            } else {
+                $db->exec("DELETE FROM reasons_list WHERE page_id NOT LIKE 'page_demo_%'");
+                $db->exec("DELETE FROM proposal_responses WHERE page_id NOT LIKE 'page_demo_%'");
+                $db->exec("DELETE FROM page_content WHERE page_id NOT LIKE 'page_demo_%'");
+                $db->exec("DELETE FROM pages WHERE page_id NOT LIKE 'page_demo_%'");
+            }
+
+            // 4. Delete non-protected orders
+            if (!empty($protectedOrderIds)) {
+                $oIdsIn = "'" . implode("','", array_map('addslashes', $protectedOrderIds)) . "'";
+                $db->exec("DELETE FROM orders WHERE order_id NOT IN ($oIdsIn)");
+            } else {
+                $db->exec("DELETE FROM orders WHERE order_id NOT LIKE 'ord_demo_%'");
+            }
+
+            $extraMsg = $preserveOwner ? " (Personal email '{$ownerEmail}' orders safely preserved)" : "";
+            $msg = "🎉 Safe System Reset Complete! All scratch test orders, test pages, and dummy vouchers have been completely wiped. Official showcase demo pages were safely preserved{$extraMsg}.";
             $msgType = 'success';
         } catch (Exception $e) {
             $msg = "❌ Error during reset: " . $e->getMessage();
@@ -191,8 +221,18 @@ if ($isLoggedIn) {
           </div>
         </div>
 
-        <form method="POST" onsubmit="return confirm('⚠️ ARE YOU SURE? This will purge all test orders and dummy vouchers. Official showcase pages will be preserved.');" class="pt-2">
+        <form method="POST" onsubmit="return confirm('⚠️ ARE YOU SURE? This will purge all test orders and dummy vouchers. Official showcase pages will be preserved.');" class="pt-2 space-y-4">
           <input type="hidden" name="action" value="execute_safe_reset">
+
+          <!-- OWNER EMAIL PRESERVATION CHECKBOX -->
+          <div class="p-3.5 bg-[#151215] rounded-xl border border-[#eac34a]/30 flex items-center justify-between gap-3">
+            <label class="flex items-center gap-3 cursor-pointer text-xs font-semibold text-[#e8e0e3]">
+              <input type="checkbox" name="preserve_owner_email" value="1" checked class="w-4 h-4 rounded text-[#eac34a] focus:ring-[#eac34a] bg-[#221f21] border-[#4d444b]">
+              <span>🛡️ Preserve orders created with my personal email (<strong><?php echo htmlspecialchars($ownerEmail); ?></strong>)</span>
+            </label>
+            <span class="text-[10px] uppercase font-bold text-[#a4e4b9] bg-[#1e3b20] px-2.5 py-0.5 rounded-full border border-[#a4e4b9]/30 shrink-0">Safe Guard</span>
+          </div>
+
           <button type="submit" class="w-full py-4 bg-gradient-to-r from-rose-600 via-rose-700 to-rose-800 hover:brightness-110 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2">
             <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
             <span>Execute 1-Click Safe Reset (Purge Test Data)</span>
