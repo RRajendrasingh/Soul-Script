@@ -34,7 +34,7 @@ function getRandomVoucherAmount() {
 }
 
 /**
- * Allocate Rakhi Voucher for a given Order and Page
+ * Allocate Rakhi Lucky Voucher for a given Order (Pure Random Lottery Draw)
  */
 function allocateRakhiVoucher($orderId, $pageId = null) {
     if (empty($orderId)) return null;
@@ -54,20 +54,30 @@ function allocateRakhiVoucher($orderId, $pageId = null) {
                 $updPage->execute([$pageId, $orderId]);
                 $existing['page_id'] = $pageId;
             }
+            // If already allocated but has no voucher_code, try to draw a lucky code from available vault
+            if (empty($existing['voucher_code'])) {
+                $stmtVault = $db->prepare("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' ORDER BY RAND() LIMIT 1");
+                $stmtVault->execute();
+                $vaultItem = $stmtVault->fetch();
+                if ($vaultItem) {
+                    $db->prepare("UPDATE rakhi_vouchers_vault SET status = 'assigned', assigned_order_id = ?, assigned_at = NOW() WHERE id = ?")->execute([$orderId, $vaultItem['id']]);
+                    $db->prepare("UPDATE rakhi_voucher_allocations SET voucher_code = ?, allocated_amount = ? WHERE id = ?")->execute([$vaultItem['voucher_code'], $vaultItem['amount'], $existing['id']]);
+                    $existing['voucher_code'] = $vaultItem['voucher_code'];
+                    $existing['allocated_amount'] = $vaultItem['amount'];
+                }
+            }
             return $existing;
         }
 
-        // Calculate amount
-        $amount = getRandomVoucherAmount();
-        $assignedCode = null;
-
-        // Try to claim available code from vault matching this amount
-        $stmtVault = $db->prepare("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' AND amount = ? ORDER BY id ASC LIMIT 1");
-        $stmtVault->execute([$amount]);
+        // Draw a random lucky voucher directly from whatever is available in the vault!
+        $stmtVault = $db->prepare("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' ORDER BY RAND() LIMIT 1");
+        $stmtVault->execute();
         $vaultItem = $stmtVault->fetch();
 
+        $amount = $vaultItem ? intval($vaultItem['amount']) : 100;
+        $assignedCode = $vaultItem ? $vaultItem['voucher_code'] : null;
+
         if ($vaultItem) {
-            $assignedCode = $vaultItem['voucher_code'];
             $updVault = $db->prepare("UPDATE rakhi_vouchers_vault SET status = 'assigned', assigned_order_id = ?, assigned_at = NOW() WHERE id = ?");
             $updVault->execute([$orderId, $vaultItem['id']]);
         }

@@ -27,7 +27,7 @@ $msgType = 'success';
 if ($isLoggedIn) {
     $db = getDB();
 
-    // Handle Test Unlock Mode Switch Action
+    // 1. Handle Test Unlock Mode Switch Action
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_test_mode') {
         $mode = trim($_POST['test_mode'] ?? 'production');
         $customDate = trim($_POST['override_date'] ?? '');
@@ -37,7 +37,7 @@ if ($isLoggedIn) {
             'override_date' => $customDate,
             'updated_at' => date('Y-m-d H:i:s')
         ]));
-        $msg = "⚡ Unlock Mode Settings Saved Successfully! Mode: " . strtoupper($mode);
+        $msg = "⚡ Unlock Mode Settings Saved! Current Mode: " . strtoupper($mode);
         $msgType = 'success';
     }
 
@@ -50,13 +50,12 @@ if ($isLoggedIn) {
     $currentMode = $overrideData['test_mode'] ?? 'production';
     $currentOverrideDate = $overrideData['override_date'] ?? '';
 
-    // Handle Bulk CSV / Text Import
+    // 2. Handle Bulk CSV / Text Import (Lottery Pool)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'import_vouchers') {
         $defaultAmount = intval($_POST['voucher_amount'] ?? 100);
-        $entriesToInsert = []; // Array of ['code' => ..., 'amount' => ...]
-        $insertedAmounts = [];
+        $entriesToInsert = [];
 
-        // Check if CSV File Uploaded (Supports: Column 1 = code, Column 2 = amount)
+        // Check if CSV File Uploaded
         if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] === UPLOAD_ERR_OK) {
             $tmpPath = $_FILES['csv_file']['tmp_name'];
             $fileContent = file_get_contents($tmpPath);
@@ -65,12 +64,8 @@ if ($isLoggedIn) {
                 $cols = explode(",", $line);
                 $code = trim($cols[0] ?? '');
                 $rowAmount = isset($cols[1]) && is_numeric(trim($cols[1])) ? intval(trim($cols[1])) : $defaultAmount;
-                
                 if (!empty($code) && strtolower($code) !== 'code' && strtolower($code) !== 'voucher_code') {
-                    $entriesToInsert[] = [
-                        'code' => $code,
-                        'amount' => $rowAmount
-                    ];
+                    $entriesToInsert[] = ['code' => $code, 'amount' => $rowAmount];
                 }
             }
         }
@@ -83,10 +78,7 @@ if ($isLoggedIn) {
                 $tCode = trim($cols[0] ?? '');
                 $tAmount = isset($cols[1]) && is_numeric(trim($cols[1])) ? intval(trim($cols[1])) : $defaultAmount;
                 if (!empty($tCode)) {
-                    $entriesToInsert[] = [
-                        'code' => $tCode,
-                        'amount' => $tAmount
-                    ];
+                    $entriesToInsert[] = ['code' => $tCode, 'amount' => $tAmount];
                 }
             }
         }
@@ -105,74 +97,50 @@ if ($isLoggedIn) {
             foreach ($entriesToInsert as $entry) {
                 $insStmt->execute([$entry['code'], $entry['amount']]);
                 $rCount = $insStmt->rowCount();
-                if ($rCount === 1) {
-                    $addedCount++;
-                } elseif ($rCount === 2) {
-                    $updatedCount++;
-                }
-                $insertedAmounts[$entry['amount']] = true;
+                if ($rCount === 1) $addedCount++;
+                elseif ($rCount === 2) $updatedCount++;
             }
 
-            // Auto-assign newly added codes to unassigned pending allocations matching ALL imported amounts
-            $amountsToProcess = [100, 150, 250, 500, 2000];
+            // Lottery Draw: Auto-assign random available codes to any unassigned pending orders
+            $unassignedList = $db->query("SELECT * FROM rakhi_voucher_allocations WHERE voucher_code IS NULL ORDER BY id ASC")->fetchAll();
             $assignedCount = 0;
-
-            foreach ($amountsToProcess as $amt) {
-                $stmtUnassigned = $db->prepare("SELECT * FROM rakhi_voucher_allocations WHERE voucher_code IS NULL AND allocated_amount = ? ORDER BY id ASC");
-                $stmtUnassigned->execute([$amt]);
-                $unassignedList = $stmtUnassigned->fetchAll();
-
-                foreach ($unassignedList as $un) {
-                    $stmtAvail = $db->prepare("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' AND amount = ? ORDER BY id ASC LIMIT 1");
-                    $stmtAvail->execute([$amt]);
-                    $availCode = $stmtAvail->fetch();
-
-                    if ($availCode) {
-                        $db->prepare("UPDATE rakhi_vouchers_vault SET status = 'assigned', assigned_order_id = ?, assigned_at = NOW() WHERE id = ?")->execute([$un['order_id'], $availCode['id']]);
-                        $db->prepare("UPDATE rakhi_voucher_allocations SET voucher_code = ? WHERE id = ?")->execute([$availCode['voucher_code'], $un['id']]);
-                        $assignedCount++;
-                    }
+            foreach ($unassignedList as $un) {
+                $availCode = $db->query("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' ORDER BY RAND() LIMIT 1")->fetch();
+                if ($availCode) {
+                    $db->prepare("UPDATE rakhi_vouchers_vault SET status = 'assigned', assigned_order_id = ?, assigned_at = NOW() WHERE id = ?")->execute([$un['order_id'], $availCode['id']]);
+                    $db->prepare("UPDATE rakhi_voucher_allocations SET voucher_code = ?, allocated_amount = ? WHERE id = ?")->execute([$availCode['voucher_code'], $availCode['amount'], $un['id']]);
+                    $assignedCount++;
                 }
             }
 
-            $msg = "✅ Processed " . count($entriesToInsert) . " vouchers ({$addedCount} new added, {$updatedCount} updated) & auto-assigned {$assignedCount} pending orders!";
+            $msg = "✅ Added " . count($entriesToInsert) . " vouchers into lottery pool & assigned {$assignedCount} pending orders!";
             $msgType = 'success';
         } else {
-            $msg = "❌ Please upload a valid CSV file or paste voucher codes.";
+            $msg = "❌ Please upload a CSV file or paste voucher codes.";
             $msgType = 'error';
         }
     }
 
-    // Handle Manual Sync Action
+    // 3. Handle Manual Random Sync Action
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'sync_all_allocations') {
-        $amountsToProcess = [100, 150, 250, 500, 2000];
+        $unassignedList = $db->query("SELECT * FROM rakhi_voucher_allocations WHERE voucher_code IS NULL ORDER BY id ASC")->fetchAll();
         $assignedCount = 0;
-
-        foreach ($amountsToProcess as $amt) {
-            $stmtUnassigned = $db->prepare("SELECT * FROM rakhi_voucher_allocations WHERE voucher_code IS NULL AND allocated_amount = ? ORDER BY id ASC");
-            $stmtUnassigned->execute([$amt]);
-            $unassignedList = $stmtUnassigned->fetchAll();
-
-            foreach ($unassignedList as $un) {
-                $stmtAvail = $db->prepare("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' AND amount = ? ORDER BY id ASC LIMIT 1");
-                $stmtAvail->execute([$amt]);
-                $availCode = $stmtAvail->fetch();
-
-                if ($availCode) {
-                    $db->prepare("UPDATE rakhi_vouchers_vault SET status = 'assigned', assigned_order_id = ?, assigned_at = NOW() WHERE id = ?")->execute([$un['order_id'], $availCode['id']]);
-                    $db->prepare("UPDATE rakhi_voucher_allocations SET voucher_code = ? WHERE id = ?")->execute([$availCode['voucher_code'], $un['id']]);
-                    $assignedCount++;
-                }
+        foreach ($unassignedList as $un) {
+            $availCode = $db->query("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' ORDER BY RAND() LIMIT 1")->fetch();
+            if ($availCode) {
+                $db->prepare("UPDATE rakhi_vouchers_vault SET status = 'assigned', assigned_order_id = ?, assigned_at = NOW() WHERE id = ?")->execute([$un['order_id'], $availCode['id']]);
+                $db->prepare("UPDATE rakhi_voucher_allocations SET voucher_code = ?, allocated_amount = ? WHERE id = ?")->execute([$availCode['voucher_code'], $availCode['amount'], $un['id']]);
+                $assignedCount++;
             }
         }
-        $msg = "🔄 Auto-Sync Complete: {$assignedCount} pending orders matched with available vault codes!";
+        $msg = "🎲 Random Lottery Sync: {$assignedCount} orders received random available vouchers!";
         $msgType = 'success';
     }
 
-    // Handle Clear Available Codes Action (For Testing)
+    // 4. Handle Clear Unused Vault Action (Test Mode)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'clear_available_vault') {
         $deleted = $db->exec("DELETE FROM rakhi_vouchers_vault WHERE status = 'available'");
-        $msg = "🗑️ Cleared {$deleted} unassigned available codes from vault.";
+        $msg = "🗑️ Cleared {$deleted} unassigned codes from vault.";
         $msgType = 'success';
     }
 
@@ -193,28 +161,19 @@ if ($isLoggedIn) {
         }
     } catch (Exception $exSync) {}
 
-    // Fetch Metrics
-    $totalAllocations = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations")->fetchColumn();
-    $totalVaultCodes  = $db->query("SELECT COUNT(*) FROM rakhi_vouchers_vault")->fetchColumn();
+    // Fetch Simple Dashboard Metrics
+    $totalOrders      = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations")->fetchColumn();
     $availableVault   = $db->query("SELECT COUNT(*) FROM rakhi_vouchers_vault WHERE status = 'available'")->fetchColumn();
+    $assignedOrders   = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations WHERE voucher_code IS NOT NULL")->fetchColumn();
     $unassignedOrders = $db->query("SELECT COUNT(*) FROM rakhi_voucher_allocations WHERE voucher_code IS NULL")->fetchColumn();
 
-    // Breakdown by denomination
-    $denomStats = $db->query("
-        SELECT allocated_amount, COUNT(*) as total_orders, 
-               SUM(CASE WHEN voucher_code IS NOT NULL THEN 1 ELSE 0 END) as assigned_count
-        FROM rakhi_voucher_allocations 
-        GROUP BY allocated_amount 
-        ORDER BY allocated_amount ASC
-    ")->fetchAll();
-
-    // Recent Allocations
-    $recentAllocations = $db->query("
-        SELECT a.*, o.buyer_name, o.buyer_email, o.created_at as order_date, t.name as template_name
+    // Unified Master Table Query: Orders + Lucky Draw Voucher
+    $masterList = $db->query("
+        SELECT a.*, o.buyer_name, o.buyer_email, o.created_at as order_date, p.slug as gift_slug
         FROM rakhi_voucher_allocations a
         JOIN orders o ON a.order_id = o.order_id
-        LEFT JOIN templates t ON o.template_id = t.template_id
-        ORDER BY a.id DESC LIMIT 50
+        LEFT JOIN pages p ON a.order_id = p.order_id
+        ORDER BY a.id DESC LIMIT 100
     ")->fetchAll();
 }
 ?>
@@ -222,7 +181,7 @@ if ($isLoggedIn) {
 <html lang="en">
 <head>
   <?php 
-  $pageTitle = 'Rakhi Voucher Vault Manager — ' . APP_NAME;
+  $pageTitle = 'Rakhi Voucher Vault & Lucky Draw — ' . APP_NAME;
   require_once __DIR__ . '/../includes/head.php'; 
   ?>
 </head>
@@ -246,7 +205,7 @@ if ($isLoggedIn) {
         </div>
         <div>
           <h2 class="text-2xl font-bold font-serif text-[#e8e0e3]">Admin Vault Login</h2>
-          <p class="text-xs text-[#d0c3cb] mt-1">Raksha Bandhan Voucher &amp; Affiliate Control Center</p>
+          <p class="text-xs text-[#d0c3cb] mt-1">Raksha Bandhan Voucher &amp; Lucky Draw Manager</p>
         </div>
         <?php if ($loginError): ?>
           <div class="p-3 bg-rose-900/40 border border-rose-500/40 text-rose-300 rounded-xl text-xs font-semibold">
@@ -262,8 +221,8 @@ if ($isLoggedIn) {
             <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Admin Password</label>
             <input type="password" name="admin_pass" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" required>
           </div>
-          <button type="submit" class="w-full py-3.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all cursor-pointer">
-            Log In To Vault Manager
+          <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-[#eac34a] to-[#d4af37] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg hover:brightness-110 transition-all cursor-pointer">
+            Unlock Vault Access
           </button>
         </form>
       </div>
@@ -275,8 +234,8 @@ if ($isLoggedIn) {
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#4d444b]/40 pb-6">
         <div>
           <span class="text-[10px] uppercase font-extrabold tracking-[0.2em] text-[#eac34a] block">Festive Control Center</span>
-          <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]">🎁 Rakhi Amazon Voucher Vault</h1>
-          <p class="text-xs text-[#d0c3cb] mt-1">Manage bulk Amazon voucher codes, view probability allocations, and upload CSV batches.</p>
+          <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]">🎁 Rakhi Amazon Voucher &amp; Lucky Draw</h1>
+          <p class="text-xs text-[#d0c3cb] mt-1">Upload voucher codes into the lottery pool — codes are randomly assigned to Rakhi buyers!</p>
         </div>
       </div>
 
@@ -286,99 +245,71 @@ if ($isLoggedIn) {
         </div>
       <?php endif; ?>
 
-      <!-- METRICS GRID -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <!-- SIMPLE 3-CARD METRICS -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-[#221f21] p-5 rounded-2xl border border-[#4d444b]/40 space-y-1">
-          <span class="text-[10px] uppercase font-extrabold text-[#d0c3cb]/70">Total Rakhi Orders</span>
-          <div class="text-2xl font-bold font-serif text-[#e8e0e3]"><?php echo number_format($totalAllocations); ?></div>
+          <span class="text-[10px] uppercase font-extrabold text-[#d0c3cb]/70">🛒 Total Rakhi Orders</span>
+          <div class="text-3xl font-bold font-serif text-[#e8e0e3]"><?php echo number_format($totalOrders); ?></div>
+          <p class="text-[11px] text-[#d0c3cb]/60"><?php echo number_format($assignedOrders); ?> assigned, <?php echo number_format($unassignedOrders); ?> pending</p>
         </div>
-        <div class="bg-[#221f21] p-5 rounded-2xl border border-[#eac34a]/30 space-y-1">
-          <span class="text-[10px] uppercase font-extrabold text-[#eac34a]">Vault Codes Available</span>
-          <div class="text-2xl font-bold font-serif text-[#eac34a]"><?php echo number_format($availableVault); ?></div>
+
+        <div class="bg-[#221f21] p-5 rounded-2xl border border-[#eac34a]/40 space-y-1">
+          <span class="text-[10px] uppercase font-extrabold text-[#eac34a]">🎁 Available in Vault Pool</span>
+          <div class="text-3xl font-bold font-serif text-[#eac34a]"><?php echo number_format($availableVault); ?></div>
+          <p class="text-[11px] text-[#eac34a]/70">Ready to be drawn for new buyers</p>
         </div>
-        <div class="bg-[#221f21] p-5 rounded-2xl border border-[#4d444b]/40 space-y-1">
-          <span class="text-[10px] uppercase font-extrabold text-[#d0c3cb]/70">Total Loaded Codes</span>
-          <div class="text-2xl font-bold font-serif text-[#e8e0e3]"><?php echo number_format($totalVaultCodes); ?></div>
-        </div>
-        <div class="bg-[#221f21] p-5 rounded-2xl border border-rose-500/30 space-y-1">
-          <span class="text-[10px] uppercase font-extrabold text-rose-400">Unassigned Pending</span>
-          <div class="text-2xl font-bold font-serif text-rose-400"><?php echo number_format($unassignedOrders); ?></div>
+
+        <div class="bg-[#221f21] p-5 rounded-2xl border border-[#a4e4b9]/40 space-y-1">
+          <span class="text-[10px] uppercase font-extrabold text-[#a4e4b9]">🎲 Lucky Draw Status</span>
+          <div class="text-xl font-bold font-serif text-[#a4e4b9]">
+            <?php echo $unassignedOrders === 0 ? '100% Assigned ✅' : $unassignedOrders . ' Orders Need Codes ⚠️'; ?>
+          </div>
+          <p class="text-[11px] text-[#a4e4b9]/70">Pure Random Draw from Vault</p>
         </div>
       </div>
 
-      <!-- QUICK ACTION TOOLBAR -->
-      <div class="flex flex-wrap items-center justify-between gap-3 bg-[#1c181c] p-4 rounded-2xl border border-[#4d444b]/40">
-        <div class="flex items-center gap-2">
-          <form method="POST" class="inline-block">
-            <input type="hidden" name="action" value="sync_all_allocations">
-            <button type="submit" class="px-4 py-2 bg-[#3b1e3b] hover:bg-[#eac34a] hover:text-[#241a00] text-[#eac34a] border border-[#eac34a]/40 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-md">
-              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-              <span>Re-Sync &amp; Auto-Assign Pending Orders</span>
-            </button>
-          </form>
-
-          <form method="POST" onsubmit="return confirm('Clear all unused available codes from vault? (Assigned codes will not be touched)');" class="inline-block">
-            <input type="hidden" name="action" value="clear_available_vault">
-            <button type="submit" class="px-4 py-2 bg-[#2a060b] hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-md">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-              <span>Clear Unused Vault Codes</span>
-            </button>
-          </form>
-        </div>
-        <span class="text-[11px] text-[#d0c3cb]/80">💡 Use <em>Re-Sync</em> whenever you upload new codes to immediately fulfill pending orders.</span>
-      </div>
-
-      <!-- TEST MODE & DATE OVERRIDE CARD -->
-      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-4">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#4d444b]/40 pb-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 flex items-center justify-center font-bold">
-              <i data-lucide="sliders" class="w-5 h-5"></i>
-            </div>
-            <div>
-              <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">🛠️ Test Unlock &amp; Target Unlock Date Settings</h3>
-              <p class="text-xs text-[#d0c3cb]">Set custom reveal date/time or toggle instant test unlock mode anytime.</p>
-            </div>
+      <!-- UNLOCK SETTINGS & QUICK CONTROLS -->
+      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/30 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#4d444b]/40 pb-3">
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="clock" class="w-5 h-5 text-[#eac34a]"></i>
+            <h3 class="text-base font-bold font-serif text-[#e8e0e3]">Target Unlock Date &amp; Test Mode</h3>
           </div>
           <span class="px-3 py-1 rounded-full text-xs font-bold font-mono <?php 
-            if ($currentMode === 'unlocked_now') {
-                echo 'bg-[#1e3b20] text-[#a4e4b9] border border-[#a4e4b9]/40';
-            } elseif ($currentMode === 'custom_date') {
-                echo 'bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40';
-            } else {
-                echo 'bg-[#151215] text-[#d0c3cb] border border-[#4d444b]';
-            }
+            if ($currentMode === 'unlocked_now') echo 'bg-[#1e3b20] text-[#a4e4b9] border border-[#a4e4b9]/40';
+            elseif ($currentMode === 'custom_date') echo 'bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40';
+            else echo 'bg-[#151215] text-[#d0c3cb] border border-[#4d444b]';
           ?>">
-            Status: <?php 
+            Active: <?php 
               if ($currentMode === 'unlocked_now') echo '⚡ TEST UNLOCKED NOW';
-              elseif ($currentMode === 'custom_date') echo '📅 CUSTOM DATE (' . htmlspecialchars($currentOverrideDate) . ')';
+              elseif ($currentMode === 'custom_date') echo '📅 CUSTOM (' . htmlspecialchars($currentOverrideDate) . ')';
               else echo '🟢 PRODUCTION (28 AUG 12:00 PM)';
             ?>
           </span>
         </div>
 
-        <form method="POST" class="space-y-4">
+        <form method="POST" class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
           <input type="hidden" name="action" value="save_test_mode">
           
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <label class="block text-xs font-bold text-[#d0c3cb]">Unlock Mode</label>
-              <select name="test_mode" id="testModeSelect" onchange="toggleCustomDateInput()" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
-                <option value="production" <?php echo $currentMode === 'production' ? 'selected' : ''; ?>>🟢 Production Mode (Default: 28 Aug 2026, 12:00 PM IST)</option>
-                <option value="custom_date" <?php echo $currentMode === 'custom_date' ? 'selected' : ''; ?>>📅 Custom Target Date &amp; Time Picker</option>
-                <option value="unlocked_now" <?php echo $currentMode === 'unlocked_now' ? 'selected' : ''; ?>>⚡ Instant Test Unlock Mode (Unlocked Right Now for Testing!)</option>
-              </select>
-            </div>
-
-            <div id="customDateContainer" class="space-y-1 <?php echo $currentMode === 'custom_date' ? '' : 'hidden'; ?>">
-              <label class="block text-xs font-bold text-[#eac34a]">Select Target Date &amp; Time IST</label>
-              <input type="datetime-local" name="override_date" value="<?php echo htmlspecialchars($currentOverrideDate ?: '2026-08-14T12:00'); ?>" class="w-full bg-[#151215] border border-[#eac34a]/60 rounded-xl px-4 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
-            </div>
+          <div>
+            <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Unlock Mode</label>
+            <select name="test_mode" id="testModeSelect" onchange="toggleCustomDateInput()" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+              <option value="production" <?php echo $currentMode === 'production' ? 'selected' : ''; ?>>🟢 Production (28 Aug 2026, 12:00 PM IST)</option>
+              <option value="custom_date" <?php echo $currentMode === 'custom_date' ? 'selected' : ''; ?>>📅 Custom Date &amp; Time</option>
+              <option value="unlocked_now" <?php echo $currentMode === 'unlocked_now' ? 'selected' : ''; ?>>⚡ Instant Unlocked Now (Test Mode)</option>
+            </select>
           </div>
 
-          <button type="submit" class="px-6 py-2.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all cursor-pointer whitespace-nowrap">
-            Save Unlock Mode &amp; Date Settings
-          </button>
+          <div id="customDateContainer" class="<?php echo $currentMode === 'custom_date' ? '' : 'hidden'; ?>">
+            <label class="block text-xs font-bold text-[#eac34a] mb-1">Custom Date &amp; Time (IST)</label>
+            <input type="datetime-local" name="override_date" value="<?php echo htmlspecialchars($currentOverrideDate ?: '2026-08-16T14:10'); ?>" class="w-full bg-[#151215] border border-[#eac34a]/60 rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+          </div>
+
+          <div>
+            <button type="submit" class="w-full py-2 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all cursor-pointer">
+              Save Unlock Settings
+            </button>
+          </div>
         </form>
 
         <script>
@@ -386,36 +317,26 @@ if ($isLoggedIn) {
             const select = document.getElementById('testModeSelect');
             const container = document.getElementById('customDateContainer');
             if (select && container) {
-              if (select.value === 'custom_date') {
-                container.classList.remove('hidden');
-              } else {
-                container.classList.add('hidden');
-              }
+              container.classList.toggle('hidden', select.value !== 'custom_date');
             }
           }
         </script>
       </div>
 
-      <!-- BULK CSV & TEXT IMPORT FORM -->
-      <div class="bg-[#221f21] p-6 sm:p-8 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-5">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#4d444b]/40 pb-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 flex items-center justify-center font-bold">
-              <i data-lucide="upload-cloud" class="w-5 h-5"></i>
-            </div>
+      <!-- 1-CLICK BULK VOUCHER STOCKER -->
+      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/40 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#4d444b]/40 pb-3">
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="upload-cloud" class="w-5 h-5 text-[#eac34a]"></i>
             <div>
-              <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">1-Click Bulk Amazon Voucher Import</h3>
-              <p class="text-xs text-[#d0c3cb]">Upload CSV Excel file (supports 2 columns: code, amount) or paste codes to stock vault.</p>
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">Add Amazon Vouchers to Lottery Pool</h3>
+              <p class="text-xs text-[#d0c3cb]">Upload CSV or paste codes below — codes will be automatically drawn for pending &amp; new orders!</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <a href="download_sample.php?type=csv" class="px-3.5 py-2 bg-[#151215] hover:bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md transition-all">
-              <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
-              <span>Download Excel (.csv)</span>
-            </a>
-            <a href="download_sample.php?type=txt" class="px-3.5 py-2 bg-[#151215] hover:bg-[#3b1e3b] text-[#d0c3cb] border border-[#4d444b] rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md transition-all">
-              <i data-lucide="file-text" class="w-4 h-4"></i>
-              <span>Download Text (.txt)</span>
+            <a href="download_sample.php?type=csv" class="px-3 py-1.5 bg-[#151215] hover:bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
+              <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
+              <span>Sample CSV</span>
             </a>
           </div>
         </div>
@@ -425,120 +346,131 @@ if ($isLoggedIn) {
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Default Denomination (if CSV has no column 2)</label>
-              <select name="voucher_amount" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
-                <option value="100">₹100 Voucher (Standard 75%)</option>
-                <option value="150">₹150 Voucher (18%)</option>
-                <option value="250">₹250 Voucher (5%)</option>
-                <option value="500">₹500 Voucher (1.5%)</option>
-                <option value="2000">₹2,000 Mega Bumper (0.5%)</option>
+              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Default Amount (if CSV has 1 column)</label>
+              <select name="voucher_amount" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+                <option value="100">₹100 Amazon Voucher</option>
+                <option value="150">₹150 Amazon Voucher</option>
+                <option value="250">₹250 Amazon Voucher</option>
+                <option value="500">₹500 Amazon Voucher</option>
+                <option value="2000">₹2,000 Mega Bumper Voucher</option>
               </select>
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Upload CSV / Excel File</label>
-              <input type="file" name="csv_file" accept=".csv,.txt,.xlsx" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#d0c3cb] file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#eac34a] file:text-[#241a00]">
+              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Upload CSV (code, amount)</label>
+              <input type="file" name="csv_file" accept=".csv,.txt,.xlsx" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-2 py-1.5 text-xs text-[#d0c3cb] file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#eac34a] file:text-[#241a00]">
             </div>
 
-            <div class="sm:col-span-1">
-              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Or Paste Codes (e.g. CODE, AMOUNT)</label>
-              <textarea name="bulk_text_codes" rows="3" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="AMZ-100-XXXX, 100&#10;AMZ-150-YYYY, 150"></textarea>
+            <div>
+              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Or Paste Codes (CODE, AMOUNT)</label>
+              <textarea name="bulk_text_codes" rows="2" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-1.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="AMZ-100-XXXX, 100&#10;AMZ-500-YYYY, 500"></textarea>
             </div>
           </div>
 
-          <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-[#eac34a] via-[#f7d774] to-[#cca830] hover:brightness-110 text-[#241a00] font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            <span>Import &amp; Auto-Assign Vouchers to Orders</span>
-          </button>
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-[#eac34a] to-[#cca830] hover:brightness-110 text-[#241a00] font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition-all cursor-pointer flex items-center gap-1.5">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              <span>Add Vouchers to Pool</span>
+            </button>
+
+            <div class="flex items-center gap-2">
+              <button type="submit" form="syncForm" class="px-3.5 py-2 bg-[#3b1e3b] hover:bg-[#eac34a] hover:text-[#241a00] text-[#eac34a] border border-[#eac34a]/40 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1">
+                <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
+                <span>Random Draw for Pending</span>
+              </button>
+              <button type="submit" form="clearForm" onclick="return confirm('Delete all unused available codes from vault?');" class="px-3.5 py-2 bg-[#2a060b] hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>Clear Unused</span>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <form id="syncForm" method="POST" class="hidden">
+          <input type="hidden" name="action" value="sync_all_allocations">
+        </form>
+        <form id="clearForm" method="POST" class="hidden">
+          <input type="hidden" name="action" value="clear_available_vault">
         </form>
       </div>
 
-      <!-- DENOMINATION BREAKDOWN TABLE -->
-      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#4d444b]/40 shadow-xl space-y-4">
-        <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Probability Tier Allocations</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          <?php foreach ($denomStats as $st): ?>
-            <div class="bg-[#151215] p-4 rounded-2xl border border-[#4d444b]/30 space-y-1">
-              <span class="text-xs font-extrabold text-[#eac34a]">₹<?php echo $st['allocated_amount']; ?> Tier</span>
-              <div class="text-xs text-[#d0c3cb]">Orders: <strong><?php echo $st['total_orders']; ?></strong></div>
-              <div class="text-xs text-[#a4e4b9]">Assigned: <strong><?php echo $st['assigned_count']; ?></strong></div>
-            </div>
-          <?php endforeach; ?>
-        </div>
-      </div>
-
-      <!-- RECENT ALLOCATIONS TABLE -->
+      <!-- UNIFIED MASTER TABLE: RAKHI ORDERS & LUCKY DRAWS -->
       <div class="bg-[#221f21] p-6 rounded-3xl border border-[#4d444b]/40 shadow-xl space-y-4 overflow-x-auto">
-        <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Recent Orders &amp; Voucher Status</h3>
+        <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3">
+          <div>
+            <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">📋 Rakhi Orders &amp; Assigned Lucky Vouchers</h3>
+            <p class="text-xs text-[#d0c3cb]">All customer orders and the Amazon voucher codes they will unlock on Raksha Bandhan.</p>
+          </div>
+          <span class="text-xs text-[#eac34a] font-bold"><?php echo count($masterList); ?> Total Orders</span>
+        </div>
+
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="border-b border-[#4d444b]/40 text-[#d0c3cb] font-extrabold">
               <th class="py-3 px-3">Order ID</th>
-              <th class="py-3 px-3">Buyer Name</th>
-              <th class="py-3 px-3">Tier Amount</th>
-              <th class="py-3 px-3">Assigned Code</th>
-              <th class="py-3 px-3">Status</th>
-              <th class="py-3 px-3">Date</th>
+              <th class="py-3 px-3">Buyer Name &amp; Email</th>
+              <th class="py-3 px-3">Gift Page Link</th>
+              <th class="py-3 px-3">🎁 Lucky Voucher Code</th>
+              <th class="py-3 px-3">Amount</th>
+              <th class="py-3 px-3">Unlock Status</th>
+              <th class="py-3 px-3">Order Date</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-[#4d444b]/20">
-            <?php foreach ($recentAllocations as $row): ?>
-              <tr class="hover:bg-[#151215]/50 transition-all">
-                <td class="py-3 px-3 font-mono text-[#eac34a]"><?php echo htmlspecialchars($row['order_id']); ?></td>
-                <td class="py-3 px-3"><?php echo htmlspecialchars($row['buyer_name']); ?></td>
-                <td class="py-3 px-3 font-extrabold text-[#e8e0e3]">₹<?php echo $row['allocated_amount']; ?></td>
-                <td class="py-3 px-3 font-mono text-[#d0c3cb]"><?php echo htmlspecialchars($row['voucher_code'] ?: '⚠️ Pending Vault Code'); ?></td>
-                <td class="py-3 px-3">
-                  <?php if (!empty($row['voucher_code'])): ?>
-                    <span class="px-2 py-0.5 rounded-full bg-[#1e3b20] text-[#a4e4b9] text-[10px] font-bold">Ready for Unlock</span>
-                  <?php else: ?>
-                    <span class="px-2 py-0.5 rounded-full bg-rose-900/40 text-rose-300 text-[10px] font-bold">Needs Code</span>
-                  <?php endif; ?>
-                </td>
-                <td class="py-3 px-3 text-[#d0c3cb]/70"><?php echo date('d M Y, h:i A', strtotime($row['order_date'])); ?></td>
+            <?php if (empty($masterList)): ?>
+              <tr>
+                <td colspan="7" class="py-8 text-center text-[#d0c3cb]">No Rakhi orders found yet.</td>
               </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- VAULT CODES INVENTORY TABLE -->
-      <?php 
-      $vaultInventory = $db->query("SELECT * FROM rakhi_vouchers_vault ORDER BY id DESC LIMIT 50")->fetchAll();
-      ?>
-      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#4d444b]/40 shadow-xl space-y-4 overflow-x-auto">
-        <div class="flex items-center justify-between">
-          <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Vault Inventory (Codes in Database)</h3>
-          <span class="text-xs text-[#d0c3cb]">Showing up to 50 recent codes</span>
-        </div>
-        <table class="w-full text-left border-collapse text-xs">
-          <thead>
-            <tr class="border-b border-[#4d444b]/40 text-[#d0c3cb] font-extrabold">
-              <th class="py-3 px-3">ID</th>
-              <th class="py-3 px-3">Voucher Code</th>
-              <th class="py-3 px-3">Denomination</th>
-              <th class="py-3 px-3">Status</th>
-              <th class="py-3 px-3">Assigned Order</th>
-              <th class="py-3 px-3">Loaded Date</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-[#4d444b]/20">
-            <?php foreach ($vaultInventory as $vRow): ?>
-              <tr class="hover:bg-[#151215]/50 transition-all">
-                <td class="py-3 px-3 text-[#d0c3cb]/60"><?php echo $vRow['id']; ?></td>
-                <td class="py-3 px-3 font-mono font-bold text-[#eac34a]"><?php echo htmlspecialchars($vRow['voucher_code']); ?></td>
-                <td class="py-3 px-3 font-extrabold text-[#e8e0e3]">₹<?php echo $vRow['amount']; ?></td>
-                <td class="py-3 px-3">
-                  <?php if ($vRow['status'] === 'available'): ?>
-                    <span class="px-2 py-0.5 rounded-full bg-[#1e3b20] text-[#a4e4b9] text-[10px] font-bold">🟢 Available in Vault</span>
-                  <?php else: ?>
-                    <span class="px-2 py-0.5 rounded-full bg-[#3b1e3b] text-[#eac34a] text-[10px] font-bold">🔒 Assigned to Order</span>
-                  <?php endif; ?>
-                </td>
-                <td class="py-3 px-3 font-mono text-[#d0c3cb]"><?php echo htmlspecialchars($vRow['assigned_order_id'] ?: '—'); ?></td>
-                <td class="py-3 px-3 text-[#d0c3cb]/70"><?php echo date('d M Y, h:i A', strtotime($vRow['created_at'])); ?></td>
-              </tr>
-            <?php endforeach; ?>
+            <?php else: ?>
+              <?php foreach ($masterList as $row): ?>
+                <tr class="hover:bg-[#151215]/50 transition-all">
+                  <td class="py-3.5 px-3 font-mono text-[#eac34a] font-bold"><?php echo htmlspecialchars($row['order_id']); ?></td>
+                  <td class="py-3.5 px-3">
+                    <div class="font-bold text-[#e8e0e3]"><?php echo htmlspecialchars($row['buyer_name']); ?></div>
+                    <div class="text-[10px] text-[#d0c3cb]/70"><?php echo htmlspecialchars($row['buyer_email']); ?></div>
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <?php if (!empty($row['gift_slug'])): ?>
+                      <a href="<?php echo APP_URL . '/gift/' . urlencode($row['gift_slug']); ?>" target="_blank" class="inline-flex items-center gap-1 text-[#eac34a] hover:underline font-mono">
+                        <span>/gift/<?php echo htmlspecialchars($row['gift_slug']); ?></span>
+                        <i data-lucide="external-link" class="w-3 h-3"></i>
+                      </a>
+                    <?php else: ?>
+                      <span class="text-[#d0c3cb]/50">—</span>
+                    <?php endif; ?>
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <?php if (!empty($row['voucher_code'])): ?>
+                      <span class="font-mono bg-[#151215] px-2.5 py-1 rounded-lg border border-[#a4e4b9]/30 text-white font-bold tracking-wider">
+                        <?php echo htmlspecialchars($row['voucher_code']); ?>
+                      </span>
+                    <?php else: ?>
+                      <span class="px-2 py-1 rounded-lg bg-rose-900/40 text-rose-300 font-bold text-[10px]">
+                        ⚠️ Needs Code from Vault
+                      </span>
+                    <?php endif; ?>
+                  </td>
+                  <td class="py-3.5 px-3 font-black text-sm text-[#a4e4b9]">
+                    ₹<?php echo $row['allocated_amount']; ?>
+                  </td>
+                  <td class="py-3.5 px-3">
+                    <?php if (!empty($row['voucher_code'])): ?>
+                      <span class="px-2.5 py-1 rounded-full bg-[#1e3b20] text-[#a4e4b9] text-[10px] font-bold inline-flex items-center gap-1">
+                        <i data-lucide="check-circle" class="w-3 h-3"></i>
+                        <span>Ready for Unlock</span>
+                      </span>
+                    <?php else: ?>
+                      <span class="px-2.5 py-1 rounded-full bg-rose-900/40 text-rose-300 text-[10px] font-bold">
+                        Pending Code
+                      </span>
+                    <?php endif; ?>
+                  </td>
+                  <td class="py-3.5 px-3 text-[#d0c3cb]/70 font-mono">
+                    <?php echo date('d M Y, h:i A', strtotime($row['order_date'])); ?>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
