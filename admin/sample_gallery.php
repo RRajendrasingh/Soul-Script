@@ -48,7 +48,7 @@ if (empty($_SESSION['admin_logged_in'])) {
         <label for="sampleFileInput" class="flex-1 sm:flex-none cursor-pointer bg-gradient-to-r from-[#eac34a] to-[#d8ad2e] text-[#151215] font-semibold text-xs sm:text-sm px-5 py-3 rounded-2xl hover:opacity-90 transition flex items-center justify-center gap-2 shadow-lg">
           <i data-lucide="upload-cloud" class="w-4 h-4"></i> Upload Sample Photo
         </label>
-        <input type="file" id="sampleFileInput" accept="image/*" class="hidden" onchange="handleSampleUpload(this.files[0])">
+        <input type="file" id="sampleFileInput" accept="image/*" class="hidden" onclick="this.value=''" onchange="handleSampleUpload(this.files[0])">
 
         <a href="<?php echo APP_URL; ?>/admin/index.php" class="bg-[#3b1e3b] text-[#e8e0e3] border border-[#e4b9df]/40 font-semibold text-xs sm:text-sm px-4 py-3 rounded-2xl hover:bg-[#4d274d] transition flex items-center gap-2">
           <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
@@ -270,7 +270,12 @@ if (empty($_SESSION['admin_logged_in'])) {
     function closeSampleModal() {
       document.getElementById('sampleEditModal').classList.add('hidden');
       currentUploadFile = null;
-      document.getElementById('sampleFileInput').value = '';
+      // Reset file input completely so onchange fires again for next upload
+      const inp = document.getElementById('sampleFileInput');
+      inp.value = '';
+      // Replace input node to fully clear browser file cache (belt + suspenders)
+      const newInp = inp.cloneNode(true);
+      inp.parentNode.replaceChild(newInp, inp);
     }
 
     async function submitSampleMeta(e) {
