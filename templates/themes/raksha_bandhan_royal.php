@@ -321,6 +321,7 @@ if ($cleanReceiverPhoto) {
   .rb-farman-section {
     position: relative;
     z-index: 10;
+    overflow-x: clip;
   }
   .rb-farman-parchment {
     background: linear-gradient(to right, #cfb580 0%, #ebd7b3 2.5%, #fdfbf5 8%, #fffdf8 50%, #fdfbf5 92%, #ebd7b3 97.5%, #cfb580 100%);
@@ -340,8 +341,8 @@ if ($cleanReceiverPhoto) {
     box-shadow: 0 8px 25px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.5);
     z-index: 25;
   }
-  .rb-farman-rod-left { left: -12px; }
-  .rb-farman-rod-right { right: -12px; }
+  .rb-farman-rod-left { left: -10px; }
+  .rb-farman-rod-right { right: -10px; }
   .rb-farman-rod-left::before, .rb-farman-rod-left::after,
   .rb-farman-rod-right::before, .rb-farman-rod-right::after {
     content: "";
@@ -356,6 +357,13 @@ if ($cleanReceiverPhoto) {
   }
   .rb-farman-rod-left::before, .rb-farman-rod-right::before { top: -12px; }
   .rb-farman-rod-left::after, .rb-farman-rod-right::after { bottom: -12px; }
+
+  @media (max-width: 640px) {
+    .rb-farman-rod-left { left: -6px; width: 14px; }
+    .rb-farman-rod-right { right: -6px; width: 14px; }
+    .rb-farman-rod-left::before, .rb-farman-rod-left::after,
+    .rb-farman-rod-right::before, .rb-farman-rod-right::after { width: 22px; height: 14px; left: -4px; }
+  }
 
   .rb-farman-card {
     background: #fcfbfa;
