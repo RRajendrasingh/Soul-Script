@@ -108,7 +108,7 @@ if ($isLoggedIn) {
 
   <?php require_once __DIR__ . '/../includes/header.php'; ?>
 
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-16 relative z-10 space-y-8">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-20 relative z-10 space-y-8">
 
     <?php if (!$isLoggedIn): ?>
       <!-- LOGIN SCREEN -->

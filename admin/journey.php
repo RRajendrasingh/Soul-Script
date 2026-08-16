@@ -155,7 +155,7 @@ $completionRate = $totalItems > 0 ? round(($builtCount / $totalItems) * 100) : 1
 
   <?php require_once __DIR__ . '/../includes/header.php'; ?>
 
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-20 relative z-10 space-y-8">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-20 relative z-10 space-y-8">
 
     <?php if (!$isLoggedIn): ?>
       <!-- LOGIN SCREEN -->

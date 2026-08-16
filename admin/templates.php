@@ -56,7 +56,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
     <?php require_once __DIR__ . '/nav_header.php'; ?>
 
     <!-- Stats & Guidelines Alert -->
