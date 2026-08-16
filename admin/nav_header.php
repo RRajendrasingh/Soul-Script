@@ -25,6 +25,10 @@ $currentAdminScript = basename($_SERVER['PHP_SELF']);
         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
         <span>Amazon Affiliate Store 🛒</span>
       </a>
+      <a href="system_reset.php" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 <?php echo $currentAdminScript === 'system_reset.php' ? 'bg-rose-600 text-white shadow-md' : 'bg-[#151215] text-rose-300 border border-rose-500/40 hover:bg-rose-900/40 hover:text-white'; ?>">
+        <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
+        <span>System Reset ⚙️</span>
+      </a>
     </div>
     <div class="w-full xl:w-auto flex justify-center xl:justify-end">
       <a href="index.php?logout=1" class="px-4 py-2 rounded-xl text-xs font-bold text-rose-300 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/40 transition-all flex items-center gap-1.5 shadow-md">
