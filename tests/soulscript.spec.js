@@ -50,4 +50,50 @@ test.describe('SoulScript Deep E2E Automated Verification Suite', () => {
     await expect(lockElem).toBeVisible({ timeout: 25000 });
   });
 
+  test('5. Sample Gallery Admin - Multiple Consecutive Uploads Verification', async ({ page }) => {
+    // 1. Login to admin panel
+    await page.goto('/admin/index.php');
+    const userInput = page.locator('input[name="admin_user"]');
+    if (await userInput.isVisible()) {
+      await page.fill('input[name="admin_user"]', 'admin');
+      await page.fill('input[name="admin_pass"]', 'soulscript123');
+      await page.click('button[type="submit"]');
+      await page.waitForLoadState('networkidle');
+    }
+
+    // 2. Open Sample Gallery
+    await page.goto('/admin/sample_gallery.php');
+    await expect(page.locator('h1')).toContainText('Default Sample Gallery Manager');
+
+    // Create a dummy image payload
+    const dummyPngBuffer = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+      'base64'
+    );
+
+    // 3. Upload First Image
+    await page.setInputFiles('#sampleFileInput', {
+      name: 'test_upload_1.png',
+      mimeType: 'image/png',
+      buffer: dummyPngBuffer
+    });
+    await expect(page.locator('#sampleEditModal')).toBeVisible({ timeout: 10000 });
+    await page.fill('#modalCaption', 'Auto Test 1');
+    await page.selectOption('#modalCategory', 'anniversary');
+    await page.click('#modalSubmitBtn');
+    await expect(page.locator('#sampleEditModal')).toBeHidden({ timeout: 20000 });
+
+    // 4. Upload Second Image Immediately (Verifies onchange and roundKb work seamlessly)
+    await page.setInputFiles('#sampleFileInput', {
+      name: 'test_upload_2.png',
+      mimeType: 'image/png',
+      buffer: dummyPngBuffer
+    });
+    await expect(page.locator('#sampleEditModal')).toBeVisible({ timeout: 10000 });
+    await page.fill('#modalCaption', 'Auto Test 2');
+    await page.selectOption('#modalCategory', 'birthday');
+    await page.click('#modalSubmitBtn');
+    await expect(page.locator('#sampleEditModal')).toBeHidden({ timeout: 20000 });
+  });
+
 });
