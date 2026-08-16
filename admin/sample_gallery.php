@@ -270,12 +270,8 @@ if (empty($_SESSION['admin_logged_in'])) {
     function closeSampleModal() {
       document.getElementById('sampleEditModal').classList.add('hidden');
       currentUploadFile = null;
-      // Reset file input completely so onchange fires again for next upload
       const inp = document.getElementById('sampleFileInput');
-      inp.value = '';
-      // Replace input node to fully clear browser file cache (belt + suspenders)
-      const newInp = inp.cloneNode(true);
-      inp.parentNode.replaceChild(newInp, inp);
+      if (inp) inp.value = '';
     }
 
     async function submitSampleMeta(e) {
@@ -363,7 +359,8 @@ if (empty($_SESSION['admin_logged_in'])) {
     }
 
     function roundKb(bytes) {
-      return roundKb ? roundKb = (bytes / 1024).toFixed(1) : (bytes / 1024).toFixed(1);
+      if (!bytes || isNaN(bytes)) return '0.0';
+      return (bytes / 1024).toFixed(1);
     }
   </script>
 </body>
