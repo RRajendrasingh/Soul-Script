@@ -175,7 +175,6 @@ if ($isLoggedIn) {
         $msg = "🗑️ Cleared {$deleted} unassigned available codes from vault.";
         $msgType = 'success';
     }
-    }
 
     // Auto-sync any paid Rakhi orders that don't have allocation records yet
     try {
