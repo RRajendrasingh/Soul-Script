@@ -113,9 +113,9 @@ require_once __DIR__ . '/includes/media_helper.php';
               <div class="w-14 h-14 rounded-full bg-[#3b1e3b] border border-[#eac34a]/40 flex items-center justify-center text-[#eac34a] shadow-[0_0_20px_rgba(234,195,74,0.2)]">
                 <i data-lucide="gift" class="w-7 h-7 text-[#eac34a]"></i>
               </div>
-              <div class="px-2">
-                <span class="font-serif text-2xl text-[#e8e0e3] font-bold block truncate"><?php echo $heroTemplateName; ?></span>
-                <span class="font-sans text-xs text-[#eac34a] tracking-widest uppercase mt-1 block truncate"><?php echo $heroTagline; ?></span>
+              <div class="px-2 space-y-1">
+                <span class="font-serif text-xl font-bold text-[#e8e0e3] block truncate leading-tight"><?php echo $heroTemplateName; ?></span>
+                <span class="font-sans text-[11px] text-[#eac34a] font-semibold tracking-wider uppercase block truncate"><?php echo $heroTagline; ?></span>
               </div>
             </div>
 
