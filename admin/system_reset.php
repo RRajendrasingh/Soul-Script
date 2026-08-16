@@ -32,11 +32,9 @@ if ($isLoggedIn) {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'execute_safe_reset') {
         try {
-            $db->beginTransaction();
-
-            // 1. Truncate Rakhi Voucher Allocations & Vault Tables
-            $db->exec("TRUNCATE TABLE rakhi_voucher_allocations");
-            $db->exec("TRUNCATE TABLE rakhi_vouchers_vault");
+            // 1. Delete all Rakhi Voucher Allocations & Vault test codes
+            $db->exec("DELETE FROM rakhi_voucher_allocations");
+            $db->exec("DELETE FROM rakhi_vouchers_vault");
 
             // 2. Identify Showcase Page IDs & Order IDs to protect
             $inClause = "'" . implode("','", $showcaseSlugs) . "'";
@@ -45,7 +43,7 @@ if ($isLoggedIn) {
             $protectedPageIds = array_filter(array_column($showcaseRows, 'page_id'));
             $protectedOrderIds = array_filter(array_column($showcaseRows, 'order_id'));
 
-            // 3. Delete non-showcase reasons & proposals
+            // 3. Delete non-showcase reasons, proposals, page_content, and pages
             if (!empty($protectedPageIds)) {
                 $pIdsIn = "'" . implode("','", $protectedPageIds) . "'";
                 $db->exec("DELETE FROM reasons_list WHERE page_id NOT IN ($pIdsIn)");
@@ -67,12 +65,9 @@ if ($isLoggedIn) {
                 $db->exec("DELETE FROM orders");
             }
 
-            $db->commit();
-
             $msg = "🎉 Safe System Reset Complete! All test orders, test customer pages, and dummy vouchers have been completely wiped. Official showcase demo pages were safely preserved. All metrics are now 0.";
             $msgType = 'success';
         } catch (Exception $e) {
-            $db->rollBack();
             $msg = "❌ Error during reset: " . $e->getMessage();
             $msgType = 'error';
         }
