@@ -169,7 +169,7 @@ if ($isLoggedIn) {
 
     // Unified Master Table Query: Orders + Lucky Draw Voucher
     $masterList = $db->query("
-        SELECT a.*, o.buyer_name, o.buyer_email, o.created_at as order_date, p.slug as gift_slug
+        SELECT a.*, o.buyer_name, o.buyer_email, o.created_at as order_date, p.url_slug as gift_slug
         FROM rakhi_voucher_allocations a
         JOIN orders o ON a.order_id = o.order_id
         LEFT JOIN pages p ON a.order_id = p.order_id
