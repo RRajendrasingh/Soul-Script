@@ -25,6 +25,10 @@ $currentAdminScript = basename($_SERVER['PHP_SELF']);
         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
         <span>Amazon Affiliate Store 🛒</span>
       </a>
+      <a href="journey.php" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 <?php echo $currentAdminScript === 'journey.php' ? 'bg-[#eac34a] text-[#241a00] shadow-md' : 'bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:bg-[#3b1e3b] hover:text-[#eac34a]'; ?>">
+        <i data-lucide="compass" class="w-4 h-4"></i>
+        <span>Our Journey 🚀</span>
+      </a>
       <a href="system_reset.php" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 <?php echo $currentAdminScript === 'system_reset.php' ? 'bg-rose-600 text-white shadow-md' : 'bg-[#151215] text-rose-300 border border-rose-500/40 hover:bg-rose-900/40 hover:text-white'; ?>">
         <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
         <span>System Reset ⚙️</span>
