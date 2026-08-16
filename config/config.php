@@ -9,6 +9,9 @@ if (!headers_sent()) {
     header("X-Robots-Tag: noindex, nofollow", true);
 }
 
+// Ensure Indian Standard Time (IST) globally across all timestamps
+date_default_timezone_set('Asia/Kolkata');
+
 define('APP_NAME', 'SoulScript');
 define('APP_TAGLINE', 'Personalized Surprise Reveal Websites');
 

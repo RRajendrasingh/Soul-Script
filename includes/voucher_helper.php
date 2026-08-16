@@ -90,7 +90,7 @@ function allocateRakhiVoucher($orderId, $pageId = null) {
 }
 
 /**
- * Get Effective Unlock Timestamp (Supports Admin Test Mode Override & Custom Date)
+ * Get Effective Unlock Timestamp (Supports Admin Test Mode Override & Custom Date with IST Timezone)
  */
 function getEffectiveUnlockTimestamp() {
     $overrideFile = __DIR__ . '/../config/rakhi_unlock_override.json';
@@ -102,19 +102,48 @@ function getEffectiveUnlockTimestamp() {
             return time() - 100; // Always unlocked for immediate testing!
         }
         if ($mode === 'custom_date' && !empty($data['override_date'])) {
-            $ts = strtotime($data['override_date']);
-            if ($ts !== false) return $ts;
+            $rawDate = str_replace('T', ' ', trim($data['override_date']));
+            try {
+                $tz = new DateTimeZone('Asia/Kolkata');
+                // Try format Y-m-d H:i
+                $dt = DateTime::createFromFormat('Y-m-d H:i', $rawDate, $tz);
+                if (!$dt) {
+                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $rawDate, $tz);
+                }
+                if ($dt) {
+                    return $dt->getTimestamp();
+                }
+                $ts = strtotime($rawDate . ' Asia/Kolkata');
+                if ($ts !== false) return $ts;
+            } catch (Exception $e) {
+                // Fallback to strtotime
+                $ts = strtotime($rawDate);
+                if ($ts !== false) return $ts;
+            }
         }
     }
-    return strtotime('2026-08-28 12:00:00');
+    try {
+        $dtProd = new DateTime('2026-08-28 12:00:00', new DateTimeZone('Asia/Kolkata'));
+        return $dtProd->getTimestamp();
+    } catch (Exception $e) {
+        return strtotime('2026-08-28 12:00:00');
+    }
 }
 
 /**
- * Get Formatted Unlock Date String
+ * Get Formatted Full Unlock Date String (e.g., 28 August 2026, 12:00 PM IST)
  */
 function getFormattedUnlockDate() {
     $ts = getEffectiveUnlockTimestamp();
     return date('d F Y, h:i A', $ts) . ' IST';
+}
+
+/**
+ * Get Formatted Short Unlock Date String for badges & banners (e.g., 28 Aug 12:00 PM)
+ */
+function getFormattedUnlockDateShort() {
+    $ts = getEffectiveUnlockTimestamp();
+    return date('d M h:i A', $ts);
 }
 
 /**
