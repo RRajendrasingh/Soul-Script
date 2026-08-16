@@ -113,15 +113,13 @@ function getDB() {
                 } catch (Exception $exTplCol) {}
             }
 
-            // Sync Raksha Bandhan Royal template into DB safely
+            // Sync Raksha Bandhan Royal template into DB safely if missing
             try {
                 $chkRoyal = $pdo->prepare("SELECT COUNT(*) FROM templates WHERE template_id = 'raksha_bandhan_royal'");
                 $chkRoyal->execute();
                 if ($chkRoyal->fetchColumn() == 0) {
                     $pdo->exec("INSERT INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
                     ('raksha_bandhan_royal', 'Raksha Bandhan Royal 👑', 'Shahi Farman Scroll & 3-Step Rakhi Ritual', 'Interactive 3-Step Tilak & Diya ceremony, Sibling Fight Meter, 3D Glass Vows, Shahi Farman Parchment Photo Scroll, and Wax-Sealed Shagun Envelope.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Royal Special 👑', 'Personalize Royal Gift 🎁', 'https://digitalyogi24.com/gift/manvi-rakhi-v2', 'rakhi', 1, 2)");
-                } else {
-                    $pdo->exec("UPDATE templates SET active = 1, demo_url = 'https://digitalyogi24.com/gift/manvi-rakhi-v2' WHERE template_id = 'raksha_bandhan_royal'");
                 }
             } catch (Exception $exTpl) {}
 
