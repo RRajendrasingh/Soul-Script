@@ -395,84 +395,90 @@ if ($isLoggedIn) {
       </div>
 
       <!-- UNIFIED MASTER TABLE: RAKHI ORDERS & LUCKY DRAWS -->
-      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#4d444b]/40 shadow-xl space-y-4 overflow-x-auto">
-        <div class="flex items-center justify-between border-b border-[#4d444b]/40 pb-3">
+      <div class="bg-[#221f21] p-5 sm:p-6 rounded-3xl border border-[#4d444b]/40 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#4d444b]/40 pb-3">
           <div>
             <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">📋 Rakhi Orders &amp; Assigned Lucky Vouchers</h3>
             <p class="text-xs text-[#d0c3cb]">All customer orders and the Amazon voucher codes they will unlock on Raksha Bandhan.</p>
           </div>
-          <span class="text-xs text-[#eac34a] font-bold"><?php echo count($masterList); ?> Total Orders</span>
+          <span class="text-xs text-[#eac34a] font-bold bg-[#151215] px-3 py-1 rounded-full border border-[#eac34a]/30 self-start sm:self-auto">
+            <?php echo count($masterList); ?> Total Orders
+          </span>
         </div>
 
-        <table class="w-full text-left border-collapse text-xs">
-          <thead>
-            <tr class="border-b border-[#4d444b]/40 text-[#d0c3cb] font-extrabold">
-              <th class="py-3 px-3">Order ID</th>
-              <th class="py-3 px-3">Buyer Name &amp; Email</th>
-              <th class="py-3 px-3">Gift Page Link</th>
-              <th class="py-3 px-3">🎁 Lucky Voucher Code</th>
-              <th class="py-3 px-3">Amount</th>
-              <th class="py-3 px-3">Unlock Status</th>
-              <th class="py-3 px-3">Order Date</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-[#4d444b]/20">
-            <?php if (empty($masterList)): ?>
-              <tr>
-                <td colspan="7" class="py-8 text-center text-[#d0c3cb]">No Rakhi orders found yet.</td>
+        <div class="overflow-x-auto -mx-5 sm:mx-0 px-5 sm:px-0">
+          <table class="w-full text-left border-collapse text-xs min-w-[780px]">
+            <thead>
+              <tr class="border-b border-[#4d444b]/40 text-[#d0c3cb] font-extrabold text-[11px] uppercase tracking-wider">
+                <th class="py-3 px-3 whitespace-nowrap">Order ID</th>
+                <th class="py-3 px-3 whitespace-nowrap">Buyer Details</th>
+                <th class="py-3 px-3 whitespace-nowrap">Gift Page Link</th>
+                <th class="py-3 px-3 whitespace-nowrap">🎁 Lucky Voucher Code</th>
+                <th class="py-3 px-3 whitespace-nowrap">Amount</th>
+                <th class="py-3 px-3 whitespace-nowrap">Unlock Status</th>
+                <th class="py-3 px-3 whitespace-nowrap">Order Date</th>
               </tr>
-            <?php else: ?>
-              <?php foreach ($masterList as $row): ?>
-                <tr class="hover:bg-[#151215]/50 transition-all">
-                  <td class="py-3.5 px-3 font-mono text-[#eac34a] font-bold"><?php echo htmlspecialchars($row['order_id']); ?></td>
-                  <td class="py-3.5 px-3">
-                    <div class="font-bold text-[#e8e0e3]"><?php echo htmlspecialchars($row['buyer_name']); ?></div>
-                    <div class="text-[10px] text-[#d0c3cb]/70"><?php echo htmlspecialchars($row['buyer_email']); ?></div>
-                  </td>
-                  <td class="py-3.5 px-3">
-                    <?php if (!empty($row['gift_slug'])): ?>
-                      <a href="<?php echo APP_URL . '/gift/' . urlencode($row['gift_slug']); ?>" target="_blank" class="inline-flex items-center gap-1 text-[#eac34a] hover:underline font-mono">
-                        <span>/gift/<?php echo htmlspecialchars($row['gift_slug']); ?></span>
-                        <i data-lucide="external-link" class="w-3 h-3"></i>
-                      </a>
-                    <?php else: ?>
-                      <span class="text-[#d0c3cb]/50">—</span>
-                    <?php endif; ?>
-                  </td>
-                  <td class="py-3.5 px-3">
-                    <?php if (!empty($row['voucher_code'])): ?>
-                      <span class="font-mono bg-[#151215] px-2.5 py-1 rounded-lg border border-[#a4e4b9]/30 text-white font-bold tracking-wider">
-                        <?php echo htmlspecialchars($row['voucher_code']); ?>
-                      </span>
-                    <?php else: ?>
-                      <span class="px-2 py-1 rounded-lg bg-rose-900/40 text-rose-300 font-bold text-[10px]">
-                        ⚠️ Needs Code from Vault
-                      </span>
-                    <?php endif; ?>
-                  </td>
-                  <td class="py-3.5 px-3 font-black text-sm text-[#a4e4b9]">
-                    ₹<?php echo $row['allocated_amount']; ?>
-                  </td>
-                  <td class="py-3.5 px-3">
-                    <?php if (!empty($row['voucher_code'])): ?>
-                      <span class="px-2.5 py-1 rounded-full bg-[#1e3b20] text-[#a4e4b9] text-[10px] font-bold inline-flex items-center gap-1">
-                        <i data-lucide="check-circle" class="w-3 h-3"></i>
-                        <span>Ready for Unlock</span>
-                      </span>
-                    <?php else: ?>
-                      <span class="px-2.5 py-1 rounded-full bg-rose-900/40 text-rose-300 text-[10px] font-bold">
-                        Pending Code
-                      </span>
-                    <?php endif; ?>
-                  </td>
-                  <td class="py-3.5 px-3 text-[#d0c3cb]/70 font-mono">
-                    <?php echo date('d M Y, h:i A', strtotime($row['order_date'])); ?>
-                  </td>
+            </thead>
+            <tbody class="divide-y divide-[#4d444b]/20">
+              <?php if (empty($masterList)): ?>
+                <tr>
+                  <td colspan="7" class="py-8 text-center text-[#d0c3cb]">No Rakhi orders found yet.</td>
                 </tr>
-              <?php endforeach; ?>
-            <?php endif; ?>
-          </tbody>
-        </table>
+              <?php else: ?>
+                <?php foreach ($masterList as $row): ?>
+                  <tr class="hover:bg-[#151215]/50 transition-all">
+                    <td class="py-3.5 px-3 font-mono text-[#eac34a] font-bold whitespace-nowrap">
+                      <?php echo htmlspecialchars($row['order_id']); ?>
+                    </td>
+                    <td class="py-3.5 px-3 min-w-[140px]">
+                      <div class="font-bold text-[#e8e0e3] leading-tight"><?php echo htmlspecialchars($row['buyer_name']); ?></div>
+                      <div class="text-[10px] text-[#d0c3cb]/70 font-mono mt-0.5"><?php echo htmlspecialchars($row['buyer_email']); ?></div>
+                    </td>
+                    <td class="py-3.5 px-3 whitespace-nowrap">
+                      <?php if (!empty($row['gift_slug'])): ?>
+                        <a href="<?php echo APP_URL . '/gift/' . urlencode($row['gift_slug']); ?>" target="_blank" class="inline-flex items-center gap-1.5 text-[#eac34a] hover:underline font-mono bg-[#151215] px-2.5 py-1 rounded-lg border border-[#eac34a]/30">
+                          <span>/gift/<?php echo htmlspecialchars($row['gift_slug']); ?></span>
+                          <i data-lucide="external-link" class="w-3 h-3"></i>
+                        </a>
+                      <?php else: ?>
+                        <span class="text-[#d0c3cb]/50">—</span>
+                      <?php endif; ?>
+                    </td>
+                    <td class="py-3.5 px-3 whitespace-nowrap">
+                      <?php if (!empty($row['voucher_code'])): ?>
+                        <span class="font-mono bg-[#151215] px-3 py-1.5 rounded-xl border border-[#a4e4b9]/30 text-white font-bold tracking-widest inline-block shadow-inner">
+                          <?php echo htmlspecialchars($row['voucher_code']); ?>
+                        </span>
+                      <?php else: ?>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-900/40 text-rose-300 font-bold text-[10px] whitespace-nowrap">
+                          ⚠️ Needs Code from Vault
+                        </span>
+                      <?php endif; ?>
+                    </td>
+                    <td class="py-3.5 px-3 font-black text-sm text-[#a4e4b9] whitespace-nowrap">
+                      ₹<?php echo $row['allocated_amount']; ?>
+                    </td>
+                    <td class="py-3.5 px-3 whitespace-nowrap">
+                      <?php if (!empty($row['voucher_code'])): ?>
+                        <span class="px-2.5 py-1 rounded-full bg-[#1e3b20] text-[#a4e4b9] text-[10px] font-bold inline-flex items-center gap-1 whitespace-nowrap">
+                          <i data-lucide="check-circle" class="w-3 h-3"></i>
+                          <span>Ready for Unlock</span>
+                        </span>
+                      <?php else: ?>
+                        <span class="px-2.5 py-1 rounded-full bg-rose-900/40 text-rose-300 text-[10px] font-bold whitespace-nowrap">
+                          Pending Code
+                        </span>
+                      <?php endif; ?>
+                    </td>
+                    <td class="py-3.5 px-3 text-[#d0c3cb]/70 font-mono whitespace-nowrap">
+                      <?php echo date('d M Y, h:i A', strtotime($row['order_date'])); ?>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
       </div>
 
     <?php endif; ?>
