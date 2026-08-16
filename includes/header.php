@@ -31,7 +31,7 @@ $isAdminPage = $isAdminPage ?? false;
       <a href="<?php echo APP_URL; ?>/#gallery" class="text-[#d0c3cb] border-b-2 border-transparent hover:text-[#e4b9df] transition-colors py-1">
         Templates &amp; Pricing
       </a>
-      <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="text-[#eac34a] hover:text-[#ffe088] flex items-center gap-1.5 transition-all py-1 border-b-2 border-transparent hover:border-[#eac34a]">
+      <a href="<?php echo APP_URL; ?>/#gallery" class="text-[#eac34a] hover:text-[#ffe088] flex items-center gap-1.5 transition-all py-1 border-b-2 border-transparent hover:border-[#eac34a]">
         <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
         <span>Live Demo</span>
       </a>
@@ -84,7 +84,7 @@ $isAdminPage = $isAdminPage ?? false;
         <i data-lucide="layout" class="w-4 h-4"></i>
         <span>Templates &amp; Pricing</span>
       </a>
-      <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" onclick="toggleMobileNavMenu()" class="px-4 py-3 rounded-xl bg-[#221f21] text-[#eac34a] border border-[#4d444b] flex items-center gap-2.5">
+      <a href="<?php echo APP_URL; ?>/#gallery" onclick="toggleMobileNavMenu()" class="px-4 py-3 rounded-xl bg-[#221f21] text-[#eac34a] border border-[#4d444b] flex items-center gap-2.5">
         <i data-lucide="sparkles" class="w-4 h-4"></i>
         <span>Live Demo</span>
       </a>
