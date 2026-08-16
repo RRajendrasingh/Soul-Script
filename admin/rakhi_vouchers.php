@@ -92,19 +92,29 @@ if ($isLoggedIn) {
         }
 
         $addedCount = 0;
+        $updatedCount = 0;
 
         if (!empty($entriesToInsert)) {
-            $insStmt = $db->prepare("INSERT IGNORE INTO rakhi_vouchers_vault (voucher_code, amount, status) VALUES (?, ?, 'available')");
+            $insStmt = $db->prepare("
+                INSERT INTO rakhi_vouchers_vault (voucher_code, amount, status) 
+                VALUES (?, ?, 'available')
+                ON DUPLICATE KEY UPDATE 
+                amount = IF(status = 'available', VALUES(amount), amount)
+            ");
+
             foreach ($entriesToInsert as $entry) {
                 $insStmt->execute([$entry['code'], $entry['amount']]);
-                if ($insStmt->rowCount() > 0) {
+                $rCount = $insStmt->rowCount();
+                if ($rCount === 1) {
                     $addedCount++;
-                    $insertedAmounts[$entry['amount']] = true;
+                } elseif ($rCount === 2) {
+                    $updatedCount++;
                 }
+                $insertedAmounts[$entry['amount']] = true;
             }
 
             // Auto-assign newly added codes to unassigned pending allocations matching ALL imported amounts
-            $amountsToProcess = !empty($insertedAmounts) ? array_keys($insertedAmounts) : [100, 150, 250, 500, 2000];
+            $amountsToProcess = [100, 150, 250, 500, 2000];
             $assignedCount = 0;
 
             foreach ($amountsToProcess as $amt) {
@@ -125,12 +135,46 @@ if ($isLoggedIn) {
                 }
             }
 
-            $msg = "✅ Successfully imported {$addedCount} Amazon Vouchers into vault and auto-assigned {$assignedCount} pending orders!";
+            $msg = "✅ Processed " . count($entriesToInsert) . " vouchers ({$addedCount} new added, {$updatedCount} updated) & auto-assigned {$assignedCount} pending orders!";
             $msgType = 'success';
         } else {
             $msg = "❌ Please upload a valid CSV file or paste voucher codes.";
             $msgType = 'error';
         }
+    }
+
+    // Handle Manual Sync Action
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'sync_all_allocations') {
+        $amountsToProcess = [100, 150, 250, 500, 2000];
+        $assignedCount = 0;
+
+        foreach ($amountsToProcess as $amt) {
+            $stmtUnassigned = $db->prepare("SELECT * FROM rakhi_voucher_allocations WHERE voucher_code IS NULL AND allocated_amount = ? ORDER BY id ASC");
+            $stmtUnassigned->execute([$amt]);
+            $unassignedList = $stmtUnassigned->fetchAll();
+
+            foreach ($unassignedList as $un) {
+                $stmtAvail = $db->prepare("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' AND amount = ? ORDER BY id ASC LIMIT 1");
+                $stmtAvail->execute([$amt]);
+                $availCode = $stmtAvail->fetch();
+
+                if ($availCode) {
+                    $db->prepare("UPDATE rakhi_vouchers_vault SET status = 'assigned', assigned_order_id = ?, assigned_at = NOW() WHERE id = ?")->execute([$un['order_id'], $availCode['id']]);
+                    $db->prepare("UPDATE rakhi_voucher_allocations SET voucher_code = ? WHERE id = ?")->execute([$availCode['voucher_code'], $un['id']]);
+                    $assignedCount++;
+                }
+            }
+        }
+        $msg = "🔄 Auto-Sync Complete: {$assignedCount} pending orders matched with available vault codes!";
+        $msgType = 'success';
+    }
+
+    // Handle Clear Available Codes Action (For Testing)
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'clear_available_vault') {
+        $deleted = $db->exec("DELETE FROM rakhi_vouchers_vault WHERE status = 'available'");
+        $msg = "🗑️ Cleared {$deleted} unassigned available codes from vault.";
+        $msgType = 'success';
+    }
     }
 
     // Auto-sync any paid Rakhi orders that don't have allocation records yet
@@ -263,6 +307,28 @@ if ($isLoggedIn) {
         </div>
       </div>
 
+      <!-- QUICK ACTION TOOLBAR -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-[#1c181c] p-4 rounded-2xl border border-[#4d444b]/40">
+        <div class="flex items-center gap-2">
+          <form method="POST" class="inline-block">
+            <input type="hidden" name="action" value="sync_all_allocations">
+            <button type="submit" class="px-4 py-2 bg-[#3b1e3b] hover:bg-[#eac34a] hover:text-[#241a00] text-[#eac34a] border border-[#eac34a]/40 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-md">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>Re-Sync &amp; Auto-Assign Pending Orders</span>
+            </button>
+          </form>
+
+          <form method="POST" onsubmit="return confirm('Clear all unused available codes from vault? (Assigned codes will not be touched)');" class="inline-block">
+            <input type="hidden" name="action" value="clear_available_vault">
+            <button type="submit" class="px-4 py-2 bg-[#2a060b] hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-md">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Clear Unused Vault Codes</span>
+            </button>
+          </form>
+        </div>
+        <span class="text-[11px] text-[#d0c3cb]/80">💡 Use <em>Re-Sync</em> whenever you upload new codes to immediately fulfill pending orders.</span>
+      </div>
+
       <!-- TEST MODE & DATE OVERRIDE CARD -->
       <div class="bg-[#221f21] p-6 rounded-3xl border border-[#eac34a]/40 shadow-2xl space-y-4">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#4d444b]/40 pb-4">
@@ -340,7 +406,7 @@ if ($isLoggedIn) {
             </div>
             <div>
               <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">1-Click Bulk Amazon Voucher Import</h3>
-              <p class="text-xs text-[#d0c3cb]">Upload CSV Excel file or paste gift codes to stock your vault instantly.</p>
+              <p class="text-xs text-[#d0c3cb]">Upload CSV Excel file (supports 2 columns: code, amount) or paste codes to stock vault.</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
@@ -360,7 +426,7 @@ if ($isLoggedIn) {
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Voucher Denomination</label>
+              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Default Denomination (if CSV has no column 2)</label>
               <select name="voucher_amount" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
                 <option value="100">₹100 Voucher (Standard 75%)</option>
                 <option value="150">₹150 Voucher (18%)</option>
@@ -376,8 +442,8 @@ if ($isLoggedIn) {
             </div>
 
             <div class="sm:col-span-1">
-              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Or Paste Codes (One Per Line)</label>
-              <textarea name="bulk_text_codes" rows="3" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="AMZ-100-XXXX&#10;AMZ-100-YYYY"></textarea>
+              <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Or Paste Codes (e.g. CODE, AMOUNT)</label>
+              <textarea name="bulk_text_codes" rows="3" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="AMZ-100-XXXX, 100&#10;AMZ-150-YYYY, 150"></textarea>
             </div>
           </div>
 
@@ -431,6 +497,47 @@ if ($isLoggedIn) {
                   <?php endif; ?>
                 </td>
                 <td class="py-3 px-3 text-[#d0c3cb]/70"><?php echo date('d M Y, h:i A', strtotime($row['order_date'])); ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- VAULT CODES INVENTORY TABLE -->
+      <?php 
+      $vaultInventory = $db->query("SELECT * FROM rakhi_vouchers_vault ORDER BY id DESC LIMIT 50")->fetchAll();
+      ?>
+      <div class="bg-[#221f21] p-6 rounded-3xl border border-[#4d444b]/40 shadow-xl space-y-4 overflow-x-auto">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Vault Inventory (Codes in Database)</h3>
+          <span class="text-xs text-[#d0c3cb]">Showing up to 50 recent codes</span>
+        </div>
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-[#4d444b]/40 text-[#d0c3cb] font-extrabold">
+              <th class="py-3 px-3">ID</th>
+              <th class="py-3 px-3">Voucher Code</th>
+              <th class="py-3 px-3">Denomination</th>
+              <th class="py-3 px-3">Status</th>
+              <th class="py-3 px-3">Assigned Order</th>
+              <th class="py-3 px-3">Loaded Date</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#4d444b]/20">
+            <?php foreach ($vaultInventory as $vRow): ?>
+              <tr class="hover:bg-[#151215]/50 transition-all">
+                <td class="py-3 px-3 text-[#d0c3cb]/60"><?php echo $vRow['id']; ?></td>
+                <td class="py-3 px-3 font-mono font-bold text-[#eac34a]"><?php echo htmlspecialchars($vRow['voucher_code']); ?></td>
+                <td class="py-3 px-3 font-extrabold text-[#e8e0e3]">₹<?php echo $vRow['amount']; ?></td>
+                <td class="py-3 px-3">
+                  <?php if ($vRow['status'] === 'available'): ?>
+                    <span class="px-2 py-0.5 rounded-full bg-[#1e3b20] text-[#a4e4b9] text-[10px] font-bold">🟢 Available in Vault</span>
+                  <?php else: ?>
+                    <span class="px-2 py-0.5 rounded-full bg-[#3b1e3b] text-[#eac34a] text-[10px] font-bold">🔒 Assigned to Order</span>
+                  <?php endif; ?>
+                </td>
+                <td class="py-3 px-3 font-mono text-[#d0c3cb]"><?php echo htmlspecialchars($vRow['assigned_order_id'] ?: '—'); ?></td>
+                <td class="py-3 px-3 text-[#d0c3cb]/70"><?php echo date('d M Y, h:i A', strtotime($vRow['created_at'])); ?></td>
               </tr>
             <?php endforeach; ?>
           </tbody>
