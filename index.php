@@ -23,6 +23,20 @@ require_once __DIR__ . '/includes/media_helper.php';
   <?php 
   $current_page = 'home';
   require_once __DIR__ . '/includes/header.php'; 
+
+  // Fetch primary featured template for dynamic hero mockup (Position #1)
+  $primaryTemplate = null;
+  try {
+      $dbHero = getDB();
+      $stmtHero = $dbHero->query("SELECT * FROM templates WHERE active = 1 ORDER BY sort_order ASC, template_id ASC LIMIT 1");
+      $primaryTemplate = $stmtHero->fetch();
+  } catch (Exception $exH) {}
+
+  $heroDemoUrl = !empty($primaryTemplate['demo_url']) ? $primaryTemplate['demo_url'] : (APP_URL . '/#gallery');
+  $heroCoverImg = !empty($primaryTemplate['preview_image_url']) ? resolveMediaUrl($primaryTemplate['preview_image_url']) : 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=800';
+  $heroTemplateName = !empty($primaryTemplate['name']) ? htmlspecialchars($primaryTemplate['name']) : 'Romantic Special 👑';
+  $heroTagline = !empty($primaryTemplate['tagline']) ? htmlspecialchars($primaryTemplate['tagline']) : 'A Night To Remember';
+  $heroPassword = !empty($primaryTemplate['demo_password']) ? htmlspecialchars($primaryTemplate['demo_password']) : '';
   ?>
 
   <!-- Hero Section -->
@@ -82,7 +96,7 @@ require_once __DIR__ . '/includes/media_helper.php';
         </div>
       </div>
 
-      <!-- Right Column: Phone Mockup Frame & Background Spinning Circles -->
+      <!-- Right Column: Dynamic Phone Mockup Frame (Position #1 Sync) -->
       <div class="w-full lg:w-1/2 flex justify-center lg:justify-end relative overflow-hidden py-4">
         <!-- Spinning Background Outline Circles -->
         <div class="absolute top-1/4 left-4 sm:-left-8 w-64 h-64 rounded-full border border-[#eac34a]/20 animate-spin z-10 pointer-events-none" style="animation-duration: 20s;"></div>
@@ -97,26 +111,27 @@ require_once __DIR__ . '/includes/media_helper.php';
 
             <div class="pt-8 flex flex-col items-center gap-4">
               <div class="w-14 h-14 rounded-full bg-[#3b1e3b] border border-[#eac34a]/40 flex items-center justify-center text-[#eac34a] shadow-[0_0_20px_rgba(234,195,74,0.2)]">
-                <i data-lucide="heart" class="w-7 h-7 fill-[#eac34a]/30"></i>
+                <i data-lucide="gift" class="w-7 h-7 text-[#eac34a]"></i>
               </div>
-              <div>
-                <span class="font-serif text-2xl text-[#e8e0e3] font-bold block">For Sarah</span>
-                <span class="font-sans text-xs text-[#eac34a] tracking-widest uppercase mt-1 block">A Night To Remember</span>
+              <div class="px-2">
+                <span class="font-serif text-2xl text-[#e8e0e3] font-bold block truncate"><?php echo $heroTemplateName; ?></span>
+                <span class="font-sans text-xs text-[#eac34a] tracking-widest uppercase mt-1 block truncate"><?php echo $heroTagline; ?></span>
               </div>
             </div>
 
-            <div class="relative aspect-4/3 rounded-2xl overflow-hidden border border-[#eac34a]/20 shadow-md">
-              <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=800" alt="Preview" class="w-full h-full object-cover opacity-80">
+            <div class="relative aspect-4/3 rounded-2xl overflow-hidden border border-[#eac34a]/30 shadow-md bg-[#100d10]">
+              <img src="<?php echo $heroCoverImg; ?>" alt="<?php echo $heroTemplateName; ?>" class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500">
               <div class="absolute inset-0 bg-gradient-to-t from-[#151215] via-transparent to-transparent"></div>
             </div>
 
             <div class="space-y-3 pb-4">
-              <div class="w-full bg-[#221f21] border border-[#4d444b] rounded-xl py-3 px-4 text-xs font-mono text-[#d0c3cb]/60">
-                Enter the memory...
+              <div class="w-full bg-[#221f21] border border-[#4d444b] rounded-xl py-3 px-4 text-xs font-mono text-[#d0c3cb]/80 flex items-center justify-center gap-1.5 shadow-inner">
+                <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span><?php echo !empty($heroPassword) ? ('Hint Key: ' . $heroPassword) : 'Enter secret hint...'; ?></span>
               </div>
-              <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="w-full bg-[#eac34a] text-[#241a00] font-sans text-xs font-bold uppercase tracking-wider py-3 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-[#ffe088] transition-all">
-                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                <span>Unlock Memory</span>
+              <a href="<?php echo $heroDemoUrl; ?>" <?php echo (strpos($heroDemoUrl, 'http') === 0) ? 'target="_blank"' : ''; ?> class="w-full bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-sans text-xs font-bold uppercase tracking-wider py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all cursor-pointer">
+                <i data-lucide="eye" class="w-3.5 h-3.5 text-[#241a00]"></i>
+                <span>Explore Live Sample ↗</span>
               </a>
             </div>
           </div>
@@ -125,31 +140,26 @@ require_once __DIR__ . '/includes/media_helper.php';
     </div>
   </section>
 
-  <!-- Interactive Sample Demos Banner -->
+  <!-- Interactive Features & Trust Highlights Banner -->
   <section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-20">
     <div class="bg-[#221f21] border border-[#eac34a]/30 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
       <div class="space-y-2 text-center md:text-left">
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3b1e3b] text-[#e4b9df] text-xs font-semibold uppercase tracking-wider">
           <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-          <span>Interactive Sample Demos Ready</span>
+          <span>Experience The Magic</span>
         </div>
         <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">
-          Experience how your partner will unlock their surprise
+          Every Gift Includes Interactive Soundtracks, Hint Locks &amp; Memories
         </h3>
         <p class="text-xs sm:text-sm text-[#d0c3cb]">
-          Test our live password hint gate! Try the sample pages for Anniversary Reveal and Perfect Proposal right now.
+          Explore all our interactive occasion templates below. Each card features its own real live demo with zero-knowledge password protection!
         </p>
       </div>
 
       <div class="flex flex-wrap items-center gap-3 shrink-0">
-        <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="px-5 py-2.5 rounded-full bg-[#151215] text-[#eac34a] hover:bg-[#3b1e3b] font-semibold text-xs border border-[#eac34a]/40 shadow-sm transition-all flex items-center gap-1.5">
-          <i data-lucide="heart" class="w-4 h-4 fill-[#eac34a]"></i>
-          <span>Anniversary Demo (Hint: shimla)</span>
-        </a>
-
-        <a href="<?php echo APP_URL; ?>/gift/priya-aman" target="_blank" class="px-5 py-2.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs shadow-md transition-all flex items-center gap-1.5">
-          <i data-lucide="sparkles" class="w-4 h-4"></i>
-          <span>Proposal Demo (Hint: paris)</span>
+        <a href="#gallery" class="px-6 py-3 rounded-full bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+          <i data-lucide="layout-grid" class="w-4 h-4 text-[#241a00]"></i>
+          <span>Explore All 5 Templates ↗</span>
         </a>
       </div>
     </div>
@@ -174,7 +184,7 @@ require_once __DIR__ . '/includes/media_helper.php';
           </div>
           <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Choose Occasion Template</h3>
           <p class="text-xs text-[#d0c3cb] leading-relaxed">
-            Pick from Anniversary Reveal (₹499), Birthday Magic (₹399), Perfect Proposal (₹599), or Long Distance Love (₹449). Pay securely via Razorpay.
+            Pick from Raksha Bandhan Royal, Anniversary Reveal, Birthday Magic, Perfect Proposal, or Long Distance Love. Pay securely via Razorpay.
           </p>
         </div>
 
@@ -196,9 +206,12 @@ require_once __DIR__ . '/includes/media_helper.php';
           </div>
           <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Share Private Link</h3>
           <p class="text-xs text-[#d0c3cb] leading-relaxed">
-            Receive your custom link (`soulscript.in/gift/ananya-rohan`). Send it via WhatsApp or Instagram. Your partner unlocks it to reveal the surprise!
+            Receive your custom link (`soulscript.in/gift/your-surprise-link`). Send it via WhatsApp or Instagram. Your partner unlocks it to reveal the surprise!
           </p>
         </div>
+      </div>
+    </div>
+  </section>
   </section>
 
   <!-- Templates & Pricing Section -->
@@ -223,14 +236,6 @@ require_once __DIR__ . '/includes/media_helper.php';
         $stmtTpl = $dbTpl->query("SELECT * FROM templates WHERE active = 1 ORDER BY sort_order ASC, template_id ASC");
         $activeTemplates = $stmtTpl->fetchAll();
     } catch (Exception $exT) {}
-
-    $defaultDemos = [
-        'anniversary_reveal'     => ['url' => APP_URL . '/gift/ananya-rohan', 'pass' => 'SHIMLA'],
-        'birthday_magic'         => ['url' => APP_URL . '/gift/rohan-birthday', 'pass' => 'MAGIC'],
-        'perfect_proposal'      => ['url' => APP_URL . '/gift/rahul-priya', 'pass' => 'PARIS'],
-        'long_distance_love'    => ['url' => APP_URL . '/gift/aarav-meera', 'pass' => 'MUMBAI'],
-        'raksha_bandhan_royal'    => ['url' => APP_URL . '/gift/manvi-rakhi-v2', 'pass' => 'RAKHI']
-    ];
 
     $templateSpecs = [
         'raksha_bandhan_royal' => [
@@ -267,8 +272,8 @@ require_once __DIR__ . '/includes/media_helper.php';
         $tCover = resolveMediaUrl($t['preview_image_url']);
         $tCreateUrl = APP_URL . '/create.php?template=' . urlencode($tid);
 
-        $tDemoUrl = !empty($t['demo_url']) ? $t['demo_url'] : ($defaultDemos[$tid]['url'] ?? '');
-        $tDemoPass = !empty($t['demo_password']) ? $t['demo_password'] : ($defaultDemos[$tid]['pass'] ?? '');
+        $tDemoUrl = !empty($t['demo_url']) ? $t['demo_url'] : '';
+        $tDemoPass = !empty($t['demo_password']) ? $t['demo_password'] : '';
 
         // Determine concise single-line button text exactly matching Screenshot 1
         $tBtnLabel = 'CUSTOMIZE (₹' . number_format($tPrice, 0) . ')';
@@ -421,7 +426,7 @@ require_once __DIR__ . '/includes/media_helper.php';
           <div class="flex items-center justify-between pb-4 border-b border-[#4d444b]/50">
             <div class="flex items-center gap-2 text-xs font-mono text-[#d0c3cb]">
               <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-              <span>soulscript.in/gift/ananya-rohan</span>
+              <span>soulscript.in/gift/your-private-link</span>
             </div>
             <span class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] border border-[#e4b9df]/30 px-2 py-0.5 rounded font-mono">Protected</span>
           </div>

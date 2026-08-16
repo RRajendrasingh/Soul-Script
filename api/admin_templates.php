@@ -30,21 +30,10 @@ try {
 
         $baseUrl = rtrim(APP_URL, '/');
 
-        // Populate default demo URLs if empty
-        $defaultDemos = [
-            'anniversary_reveal'   => ['url' => $baseUrl . '/gift/ananya-rohan', 'pass' => 'butterfly'],
-            'birthday_magic'       => ['url' => $baseUrl . '/gift/rohan-birthday', 'pass' => 'magic'],
-            'perfect_proposal'    => ['url' => $baseUrl . '/gift/rahul-priya', 'pass' => 'proposal'],
-            'long_distance_love'   => ['url' => $baseUrl . '/gift/aarav-meera', 'pass' => 'reunion']
-        ];
-
         foreach ($templates as &$t) {
-            $tid = $t['template_id'];
-            if (empty($t['demo_url']) && isset($defaultDemos[$tid])) {
-                $t['demo_url'] = $defaultDemos[$tid]['url'];
-                $t['demo_password'] = $defaultDemos[$tid]['pass'];
-            }
-            $t['create_url'] = $baseUrl . '/create.php?template=' . urlencode($tid);
+            $t['demo_url'] = $t['demo_url'] ?? '';
+            $t['demo_password'] = $t['demo_password'] ?? '';
+            $t['create_url'] = $baseUrl . '/create.php?template=' . urlencode($t['template_id']);
             $t['preview_image_url'] = resolveMediaUrl($t['preview_image_url']);
             $t['price_inr'] = (float)$t['price_inr'];
             $t['active'] = (int)$t['active'];
