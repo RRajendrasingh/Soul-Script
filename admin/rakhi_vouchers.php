@@ -52,10 +52,11 @@ if ($isLoggedIn) {
 
     // Handle Bulk CSV / Text Import
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'import_vouchers') {
-        $amount = intval($_POST['voucher_amount'] ?? 100);
-        $rawCodes = [];
+        $defaultAmount = intval($_POST['voucher_amount'] ?? 100);
+        $entriesToInsert = []; // Array of ['code' => ..., 'amount' => ...]
+        $insertedAmounts = [];
 
-        // Check if CSV File Uploaded
+        // Check if CSV File Uploaded (Supports: Column 1 = code, Column 2 = amount)
         if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] === UPLOAD_ERR_OK) {
             $tmpPath = $_FILES['csv_file']['tmp_name'];
             $fileContent = file_get_contents($tmpPath);
@@ -63,8 +64,13 @@ if ($isLoggedIn) {
             foreach ($lines as $line) {
                 $cols = explode(",", $line);
                 $code = trim($cols[0] ?? '');
+                $rowAmount = isset($cols[1]) && is_numeric(trim($cols[1])) ? intval(trim($cols[1])) : $defaultAmount;
+                
                 if (!empty($code) && strtolower($code) !== 'code' && strtolower($code) !== 'voucher_code') {
-                    $rawCodes[] = $code;
+                    $entriesToInsert[] = [
+                        'code' => $code,
+                        'amount' => $rowAmount
+                    ];
                 }
             }
         }
@@ -73,42 +79,53 @@ if ($isLoggedIn) {
         if (!empty($_POST['bulk_text_codes'])) {
             $textLines = explode("\n", str_replace("\r", "", $_POST['bulk_text_codes']));
             foreach ($textLines as $tLine) {
-                $tCode = trim($tLine);
+                $cols = explode(",", $tLine);
+                $tCode = trim($cols[0] ?? '');
+                $tAmount = isset($cols[1]) && is_numeric(trim($cols[1])) ? intval(trim($cols[1])) : $defaultAmount;
                 if (!empty($tCode)) {
-                    $rawCodes[] = $tCode;
+                    $entriesToInsert[] = [
+                        'code' => $tCode,
+                        'amount' => $tAmount
+                    ];
                 }
             }
         }
 
-        $rawCodes = array_unique($rawCodes);
         $addedCount = 0;
 
-        if (!empty($rawCodes)) {
+        if (!empty($entriesToInsert)) {
             $insStmt = $db->prepare("INSERT IGNORE INTO rakhi_vouchers_vault (voucher_code, amount, status) VALUES (?, ?, 'available')");
-            foreach ($rawCodes as $c) {
-                $insStmt->execute([$c, $amount]);
+            foreach ($entriesToInsert as $entry) {
+                $insStmt->execute([$entry['code'], $entry['amount']]);
                 if ($insStmt->rowCount() > 0) {
                     $addedCount++;
+                    $insertedAmounts[$entry['amount']] = true;
                 }
             }
 
-            // Auto-assign newly added codes to unassigned pending allocations matching this amount
-            $stmtUnassigned = $db->prepare("SELECT * FROM rakhi_voucher_allocations WHERE voucher_code IS NULL AND allocated_amount = ? ORDER BY id ASC");
-            $stmtUnassigned->execute([$amount]);
-            $unassignedList = $stmtUnassigned->fetchAll();
+            // Auto-assign newly added codes to unassigned pending allocations matching ALL imported amounts
+            $amountsToProcess = !empty($insertedAmounts) ? array_keys($insertedAmounts) : [100, 150, 250, 500, 2000];
+            $assignedCount = 0;
 
-            foreach ($unassignedList as $un) {
-                $stmtAvail = $db->prepare("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' AND amount = ? ORDER BY id ASC LIMIT 1");
-                $stmtAvail->execute([$amount]);
-                $availCode = $stmtAvail->fetch();
+            foreach ($amountsToProcess as $amt) {
+                $stmtUnassigned = $db->prepare("SELECT * FROM rakhi_voucher_allocations WHERE voucher_code IS NULL AND allocated_amount = ? ORDER BY id ASC");
+                $stmtUnassigned->execute([$amt]);
+                $unassignedList = $stmtUnassigned->fetchAll();
 
-                if ($availCode) {
-                    $db->prepare("UPDATE rakhi_vouchers_vault SET status = 'assigned', assigned_order_id = ?, assigned_at = NOW() WHERE id = ?")->execute([$un['order_id'], $availCode['id']]);
-                    $db->prepare("UPDATE rakhi_voucher_allocations SET voucher_code = ? WHERE id = ?")->execute([$availCode['voucher_code'], $un['id']]);
+                foreach ($unassignedList as $un) {
+                    $stmtAvail = $db->prepare("SELECT * FROM rakhi_vouchers_vault WHERE status = 'available' AND amount = ? ORDER BY id ASC LIMIT 1");
+                    $stmtAvail->execute([$amt]);
+                    $availCode = $stmtAvail->fetch();
+
+                    if ($availCode) {
+                        $db->prepare("UPDATE rakhi_vouchers_vault SET status = 'assigned', assigned_order_id = ?, assigned_at = NOW() WHERE id = ?")->execute([$un['order_id'], $availCode['id']]);
+                        $db->prepare("UPDATE rakhi_voucher_allocations SET voucher_code = ? WHERE id = ?")->execute([$availCode['voucher_code'], $un['id']]);
+                        $assignedCount++;
+                    }
                 }
             }
 
-            $msg = "✅ Successfully imported {$addedCount} Amazon Vouchers (₹{$amount}) into vault and auto-assigned pending orders!";
+            $msg = "✅ Successfully imported {$addedCount} Amazon Vouchers into vault and auto-assigned {$assignedCount} pending orders!";
             $msgType = 'success';
         } else {
             $msg = "❌ Please upload a valid CSV file or paste voucher codes.";
