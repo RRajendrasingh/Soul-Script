@@ -714,6 +714,14 @@ if (!empty($initialLockData['page_id'])) {
         container.innerHTML = data.html_content;
         lucide.createIcons();
 
+        // Re-execute scripts inside injected HTML so template functions execute
+        Array.from(container.querySelectorAll('script')).forEach(oldScript => {
+          const newScript = document.createElement('script');
+          Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+          newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+          oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
+
         // Initialize Global Keepsake Data Variables
         window.__giftMedia = (media || []).map(m => ({
           url: normalizeMediaUrlJs(m.file_path || m.url),
