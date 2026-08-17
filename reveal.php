@@ -359,16 +359,15 @@ if (!empty($initialLockData['page_id'])) {
       const mobileMiniBtn = document.getElementById('mobileMusicMiniBtn');
       if (window.innerWidth < 640) {
         if (mobileMiniBtn) {
-          mobileMiniBtn.classList.remove('hidden');
+          mobileMiniBtn.className = mobileMiniBtn.className.replace(/\bhidden\b/g, '').trim();
           mobileMiniBtn.style.display = 'flex';
         }
         if (musicBox) {
-          musicBox.classList.add('hidden');
           musicBox.style.display = 'none';
         }
       } else {
         if (musicBox) {
-          musicBox.classList.remove('hidden');
+          musicBox.className = musicBox.className.replace(/\bhidden\b/g, '').trim();
           musicBox.style.display = 'flex';
         }
       }
@@ -431,10 +430,13 @@ if (!empty($initialLockData['page_id'])) {
       const box = document.getElementById('desktopMusicBox');
       const miniBtn = document.getElementById('mobileMusicMiniBtn');
       if (!box) return;
-      if (box.classList.contains('hidden') || box.style.display === 'none') {
-        box.classList.remove('hidden');
+      const isHidden = box.style.display === 'none' || box.classList.contains('hidden') || getComputedStyle(box).display === 'none';
+      if (isHidden) {
+        box.className = box.className.replace(/\bhidden\b/g, '').trim();
         box.style.display = 'flex';
-        if (miniBtn) miniBtn.style.display = 'none';
+        if (miniBtn) {
+          miniBtn.style.display = 'none';
+        }
       } else {
         collapseMobileMusicDrawer();
       }
@@ -444,12 +446,9 @@ if (!empty($initialLockData['page_id'])) {
       const box = document.getElementById('desktopMusicBox');
       const miniBtn = document.getElementById('mobileMusicMiniBtn');
       if (!box) return;
-      box.classList.add('hidden');
       box.style.display = 'none';
       if (miniBtn && window.innerWidth < 640) {
-        while (miniBtn.classList.contains('hidden')) {
-          miniBtn.classList.remove('hidden');
-        }
+        miniBtn.className = miniBtn.className.replace(/\bhidden\b/g, '').trim();
         miniBtn.style.display = 'flex';
       }
     }
@@ -725,20 +724,6 @@ if (!empty($initialLockData['page_id'])) {
         if (content.favorite_singers && !content.favorite_singers.includes('Tony!')) {
           finalArtist = content.favorite_singers;
         } else {
-          finalArtist = 'Romantic Track';
-        }
-      }
-
-      // Auto-show Floating Music Player Widget on theme unlock!
-      const musicBox = document.getElementById('desktopMusicBox');
-      if (musicBox) {
-        musicBox.classList.remove('hidden');
-        musicBox.classList.add('flex');
-      }
-
-      if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
-      if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').innerText = finalArtist;
-
       const pName = content.partner_name || 'Partner';
       const pInitial = pName.charAt(0).toUpperCase();
       const cleanReceiverPhoto = content.receiver_photo ? normalizeMediaUrlJs(content.receiver_photo) : '';
