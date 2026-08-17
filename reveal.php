@@ -114,9 +114,13 @@ if (!empty($initialLockData['page_id'])) {
     </div>
   </div>
 </header>
+<!-- Mobile Compact Floating Music Pill (Shown only on Mobile < 640px when unlocked) -->
+<button id="mobileMusicMiniBtn" onclick="toggleMobileMusicDrawer()" aria-label="Open Music Player" class="hidden sm:hidden fixed bottom-4 right-4 z-40 w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.6)] flex items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-95">
+  <span id="mobileMiniMusicIcon" class="text-lg">🎵</span>
+</button>
 
-<!-- Floating Music Player Widget Box (Hidden on Lock Screen, shown only after unlock) -->
-<div id="desktopMusicBox" class="hidden fixed bottom-6 right-6 z-50 bg-[#221f21]/95 backdrop-blur-xl border border-[#eac34a]/40 rounded-2xl p-3 items-center gap-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.85)] max-w-xs sm:max-w-sm">
+<!-- Floating Music Player Widget Box (Responsive Collapsible Drawer for Mobile / Permanent Widget on Desktop) -->
+<div id="desktopMusicBox" class="hidden fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-50 bg-[#221f21]/95 backdrop-blur-xl border border-[#eac34a]/40 rounded-2xl p-3 items-center gap-3.5 shadow-[0_10px_35px_rgba(0,0,0,0.9)] max-w-none sm:max-w-sm transition-all duration-300">
   <audio id="bgAudio" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3" loop preload="none"></audio>
   
   <!-- Left: Partner Thumbnail Photo -->
@@ -144,10 +148,15 @@ if (!empty($initialLockData['page_id'])) {
     </div>
   </div>
 
-  <!-- Right: Circular Play/Pause Button -->
-  <button id="audioPlayBtn" onclick="toggleAudioPlay()" aria-label="Play Pause Music" class="w-10 h-10 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] flex items-center justify-center shadow-lg transition-all shrink-0 cursor-pointer">
-    <svg class="w-4 h-4 fill-[#241a00] ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-  </button>
+  <!-- Right Actions: Play/Pause Button & Mobile Minimize Arrow -->
+  <div class="flex items-center gap-2 shrink-0">
+    <button id="audioPlayBtn" onclick="toggleAudioPlay()" aria-label="Play Pause Music" class="w-10 h-10 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] flex items-center justify-center shadow-lg transition-all shrink-0 cursor-pointer">
+      <svg class="w-4 h-4 fill-[#241a00] ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+    </button>
+    <button onclick="collapseMobileMusicDrawer()" class="sm:hidden p-1.5 text-[#d0c3cb] hover:text-[#eac34a] transition cursor-pointer" title="Minimize Music Player">
+      <svg class="w-4 h-4 stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
 </div>
 
   <!-- STEP 7: LOCK SCREEN (Exact LockScreen.tsx DOM Layout) -->
@@ -345,12 +354,26 @@ if (!empty($initialLockData['page_id'])) {
         badgeInner.classList.add('border-[#eac34a]/80');
       }
 
-      // Show floating music box
+      // Auto-show Floating Music Controls on theme unlock: Mini Pill on Mobile (< 640px), Full Widget on Desktop (>= 640px)
       const musicBox = document.getElementById('desktopMusicBox');
-      if (musicBox) {
-        musicBox.classList.remove('hidden');
-        musicBox.classList.add('flex');
+      const mobileMiniBtn = document.getElementById('mobileMusicMiniBtn');
+      if (window.innerWidth < 640) {
+        if (mobileMiniBtn) {
+          mobileMiniBtn.classList.remove('hidden');
+          mobileMiniBtn.style.display = 'flex';
+        }
+        if (musicBox) {
+          musicBox.classList.add('hidden');
+          musicBox.style.display = 'none';
+        }
+      } else {
+        if (musicBox) {
+          musicBox.classList.remove('hidden');
+          musicBox.style.display = 'flex';
+        }
       }
+
+      if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = songTitle;
 
       // Update mobile top bar button
       isPlaying = true;
@@ -401,6 +424,33 @@ if (!empty($initialLockData['page_id'])) {
       const audio = document.getElementById('bgAudio');
       if (audio) {
         audio.volume = parseFloat(val);
+      }
+    }
+
+    function toggleMobileMusicDrawer() {
+      const box = document.getElementById('desktopMusicBox');
+      const miniBtn = document.getElementById('mobileMusicMiniBtn');
+      if (!box) return;
+      if (box.classList.contains('hidden') || box.style.display === 'none') {
+        box.classList.remove('hidden');
+        box.style.display = 'flex';
+        if (miniBtn) miniBtn.style.display = 'none';
+      } else {
+        collapseMobileMusicDrawer();
+      }
+    }
+
+    function collapseMobileMusicDrawer() {
+      const box = document.getElementById('desktopMusicBox');
+      const miniBtn = document.getElementById('mobileMusicMiniBtn');
+      if (!box) return;
+      if (window.innerWidth < 640) {
+        box.classList.add('hidden');
+        box.style.display = 'none';
+        if (miniBtn) {
+          miniBtn.classList.remove('hidden');
+          miniBtn.style.display = 'flex';
+        }
       }
     }
 
