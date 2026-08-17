@@ -105,7 +105,7 @@ test.describe('SoulScript Deep E2E Automated Verification Suite', () => {
     if (await answerInput.isVisible()) {
       await answerInput.fill('RAKHI');
       await page.click('#unlockBtn');
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator('#resultPageView')).toBeVisible({ timeout: 25000 });
     }
 
     // Locate 3D Virtual Album Launcher Button
