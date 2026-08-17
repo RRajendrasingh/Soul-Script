@@ -68,24 +68,33 @@ class SoulScriptFlipbook {
     }
 
     const isMobile = window.innerWidth < 768;
-    const bookWidth = isMobile ? Math.min(window.innerWidth - 32, 380) : 480;
-    const bookHeight = isMobile ? Math.round(bookWidth * 1.42) : 640;
+    // Calculate dynamic available dimensions to fit 100% inside viewport without vertical scrollbars
+    const availHeight = Math.max(window.innerHeight - 130, 360);
+    const maxDesktopHalfWidth = Math.floor((window.innerWidth - 120) / 2);
+    
+    let bookWidth = isMobile ? Math.min(window.innerWidth - 32, 380) : Math.min(maxDesktopHalfWidth, 480);
+    let bookHeight = Math.min(availHeight, Math.round(bookWidth * 1.38));
+    
+    // Recalculate width if height constrained
+    if (bookHeight < availHeight * 0.85 && !isMobile) {
+      bookWidth = Math.round(bookHeight / 1.38);
+    }
 
     this.pageFlip = new St.PageFlip(el, {
-      width: bookWidth,
-      height: bookHeight,
+      width: Math.max(bookWidth, 260),
+      height: Math.max(bookHeight, 380),
       size: 'stretch',
-      minWidth: 280,
-      maxWidth: 600,
-      minHeight: 400,
-      maxHeight: 800,
-      maxShadowOpacity: 0.55,
+      minWidth: 240,
+      maxWidth: 550,
+      minHeight: 350,
+      maxHeight: 780,
+      maxShadowOpacity: 0.5,
       showCover: true,
-      mobileScrollSupport: true,
-      swipeDistance: 30,
-      usePortrait: true,
+      mobileScrollSupport: false, // Prevent page drag from scrolling main window
+      swipeDistance: 25,
+      usePortrait: isMobile,
       startPage: 0,
-      flippingTime: 700,
+      flippingTime: 600,
       drawShadow: true,
       autoSize: true
     });
@@ -102,7 +111,31 @@ class SoulScriptFlipbook {
     });
 
     this.updateCounter();
+    this.attachWheelListener();
     return this.pageFlip;
+  }
+
+  // Mouse Wheel Scroll Page Flipping (Scroll Wheel -> Flip Pages)
+  attachWheelListener() {
+    const modal = document.getElementById(this.modalId);
+    if (!modal || modal.__wheelAttached) return;
+    modal.__wheelAttached = true;
+
+    let isThrottled = false;
+    modal.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (isThrottled || !this.pageFlip) return;
+
+      if (e.deltaY > 20) {
+        this.flipNext();
+        isThrottled = true;
+        setTimeout(() => { isThrottled = false; }, 450);
+      } else if (e.deltaY < -20) {
+        this.flipPrev();
+        isThrottled = true;
+        setTimeout(() => { isThrottled = false; }, 450);
+      }
+    }, { passive: false });
   }
 
   updateCounter() {
@@ -126,9 +159,8 @@ class SoulScriptFlipbook {
     const soundBtn = document.getElementById('fbSoundToggleBtn');
     if (soundBtn) {
       soundBtn.innerHTML = this.soundEnabled 
-        ? '<i data-lucide="volume-2" class="w-4 h-4 text-[#eac34a]"></i>' 
-        : '<i data-lucide="volume-x" class="w-4 h-4 text-gray-400"></i>';
-      if (typeof lucide !== 'undefined') lucide.createIcons();
+        ? '<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/></svg>' 
+        : '<svg class="w-4 h-4 fill-current opacity-40" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/></svg>';
     }
   }
 
@@ -136,6 +168,8 @@ class SoulScriptFlipbook {
     const modal = document.getElementById(this.modalId);
     if (!modal) return;
     modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+    document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
     setTimeout(() => {
@@ -148,6 +182,8 @@ class SoulScriptFlipbook {
     const modal = document.getElementById(this.modalId);
     if (!modal) return;
     modal.classList.add('hidden');
+    modal.style.display = 'none';
+    document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
   }
 }

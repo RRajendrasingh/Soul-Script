@@ -826,10 +826,10 @@ if ($cleanReceiverPhoto) {
 <!-- ======================================================= -->
 <!-- 3D INTERACTIVE VIRTUAL FLIPBOOK MODAL & STAGE -->
 <!-- ======================================================= -->
-<div id="soulscriptFlipbookModal" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-2xl flex-col items-center justify-between p-2 sm:p-6 overflow-hidden">
+<div id="soulscriptFlipbookModal" class="fixed inset-0 z-[999999] hidden bg-[#0d0a0d]/95 backdrop-blur-2xl flex-col items-center justify-between p-2 sm:p-4 overflow-hidden h-screen max-h-screen w-screen max-w-screen">
   
   <!-- Top Control Bar -->
-  <div class="w-full max-w-5xl flex items-center justify-between gap-4 py-2 px-4 bg-[#221f21]/80 border border-[#eac34a]/30 rounded-2xl backdrop-blur-md shadow-lg shrink-0">
+  <div class="w-full max-w-4xl flex items-center justify-between gap-4 py-2.5 px-4 bg-[#221f21]/95 border border-[#eac34a]/40 rounded-2xl backdrop-blur-md shadow-2xl shrink-0 z-50 mt-1">
     <div class="flex items-center gap-2">
       <span class="w-2.5 h-2.5 rounded-full bg-[#eac34a] animate-pulse"></span>
       <span class="font-serif font-bold text-xs sm:text-sm text-[#fceabb] truncate">
