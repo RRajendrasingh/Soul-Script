@@ -115,7 +115,7 @@ if (!empty($initialLockData['page_id'])) {
   </div>
 </header>
 <!-- Mobile Compact Floating Music Pill (Native CSS: Shown on Mobile < 640px, Hidden on Desktop >= 640px) -->
-<button id="mobileMusicMiniBtn" onclick="toggleMobileMusicDrawer()" aria-label="Open Music Player" class="flex sm:hidden fixed bottom-4 right-4 z-[60] w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.6)] items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-95">
+<button id="mobileMusicMiniBtn" onclick="toggleMobileMusicDrawer()" aria-label="Open Music Player" class="flex sm:hidden fixed bottom-4 right-4 z-[90] w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.6)] items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-95">
   <span id="mobileMiniMusicIcon" class="text-lg">🎵</span>
 </button>
 
@@ -444,13 +444,13 @@ if (!empty($initialLockData['page_id'])) {
       const box = document.getElementById('desktopMusicBox');
       const miniBtn = document.getElementById('mobileMusicMiniBtn');
       if (!box) return;
-      if (window.innerWidth < 640) {
-        box.classList.add('hidden');
-        box.style.display = 'none';
-        if (miniBtn) {
+      box.classList.add('hidden');
+      box.style.display = 'none';
+      if (miniBtn && window.innerWidth < 640) {
+        while (miniBtn.classList.contains('hidden')) {
           miniBtn.classList.remove('hidden');
-          miniBtn.style.display = 'flex';
         }
+        miniBtn.style.display = 'flex';
       }
     }
 
