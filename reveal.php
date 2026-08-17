@@ -114,13 +114,13 @@ if (!empty($initialLockData['page_id'])) {
     </div>
   </div>
 </header>
-<!-- Mobile Compact Floating Music Pill (Shown only on Mobile < 640px when unlocked) -->
-<button id="mobileMusicMiniBtn" onclick="toggleMobileMusicDrawer()" aria-label="Open Music Player" class="hidden sm:hidden fixed bottom-4 right-4 z-40 w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.6)] flex items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-95">
+<!-- Mobile Compact Floating Music Pill (Native CSS: Shown on Mobile < 640px, Hidden on Desktop >= 640px) -->
+<button id="mobileMusicMiniBtn" onclick="toggleMobileMusicDrawer()" aria-label="Open Music Player" class="flex sm:hidden fixed bottom-4 right-4 z-40 w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.6)] items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-95">
   <span id="mobileMiniMusicIcon" class="text-lg">🎵</span>
 </button>
 
-<!-- Floating Music Player Widget Box (Responsive Collapsible Drawer for Mobile / Permanent Widget on Desktop) -->
-<div id="desktopMusicBox" class="hidden fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-50 bg-[#221f21]/95 backdrop-blur-xl border border-[#eac34a]/40 rounded-2xl p-3 items-center gap-3.5 shadow-[0_10px_35px_rgba(0,0,0,0.9)] max-w-none sm:max-w-sm transition-all duration-300">
+<!-- Floating Music Player Widget Box (Native CSS: Hidden on Mobile < 640px until tapped, Flex on Desktop >= 640px) -->
+<div id="desktopMusicBox" class="hidden sm:flex fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-50 bg-[#221f21]/95 backdrop-blur-xl border border-[#eac34a]/40 rounded-2xl p-3 items-center gap-3.5 shadow-[0_10px_35px_rgba(0,0,0,0.9)] max-w-none sm:max-w-sm transition-all duration-300">
   <audio id="bgAudio" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3" loop preload="none"></audio>
   
   <!-- Left: Partner Thumbnail Photo -->
