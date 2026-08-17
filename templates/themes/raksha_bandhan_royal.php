@@ -398,10 +398,18 @@ if ($cleanReceiverPhoto) {
 </style>
 
 <section class="rb-farman-section max-w-5xl mx-auto px-4 py-12 space-y-8">
-  <div class="text-center space-y-2 mb-8">
+  <div class="text-center space-y-3 mb-8">
     <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ROYAL MEMORY SCROLL</span>
     <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#fceabb] drop-shadow-md">Our Cherished Moments ✨</h2>
     <p class="text-xs text-[#d0c3cb]">Every memory photo uploaded by <?= $buyerName ?> framed inside the unrolling antique parchment scroll.</p>
+    
+    <!-- 3D VIRTUAL FLIPBOOK LAUNCHER BUTTON -->
+    <div class="flex justify-center pt-2">
+      <button type="button" onclick="openRakhiFlipbook()" class="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-full bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-bold text-xs sm:text-sm uppercase tracking-wider shadow-[0_0_25px_rgba(234,195,74,0.45)] hover:scale-105 hover:shadow-[0_0_35px_rgba(234,195,74,0.7)] transition-all cursor-pointer">
+        <svg class="w-4 h-4 text-[#241a00] stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span>📖 Open 3D Virtual Album (Realistic Page Flip)</span>
+      </button>
+    </div>
   </div>
 
   <div class="rb-farman-parchment p-5 sm:p-10 relative">
@@ -811,6 +819,170 @@ if ($cleanReceiverPhoto) {
     if (modal) {
       modal.classList.add('hidden');
       modal.classList.remove('flex');
+    }
+  }
+</script>
+
+<!-- ======================================================= -->
+<!-- 3D INTERACTIVE VIRTUAL FLIPBOOK MODAL & STAGE -->
+<!-- ======================================================= -->
+<div id="soulscriptFlipbookModal" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-2xl flex-col items-center justify-between p-2 sm:p-6 overflow-hidden">
+  
+  <!-- Top Control Bar -->
+  <div class="w-full max-w-5xl flex items-center justify-between gap-4 py-2 px-4 bg-[#221f21]/80 border border-[#eac34a]/30 rounded-2xl backdrop-blur-md shadow-lg shrink-0">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-[#eac34a] animate-pulse"></span>
+      <span class="font-serif font-bold text-xs sm:text-sm text-[#fceabb] truncate">
+        📖 <?= $partnerName ?> &amp; <?= $buyerName ?>'s 3D Virtual Album
+      </span>
+    </div>
+
+    <!-- Page Controls & Counter -->
+    <div class="flex items-center gap-2 sm:gap-4">
+      <span id="fbPageCounter" class="font-mono text-[11px] font-bold text-[#eac34a] bg-[#151215] px-3 py-1 rounded-full border border-[#eac34a]/30">
+        1 / 1
+      </span>
+
+      <!-- Sound Toggle -->
+      <button id="fbSoundToggleBtn" onclick="window.__rakhiFlipbookInstance &amp;&amp; window.__rakhiFlipbookInstance.toggleSound()" class="p-2 rounded-xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition cursor-pointer" title="Toggle Sound FX">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/></svg>
+      </button>
+
+      <!-- Close Modal -->
+      <button onclick="closeRakhiFlipbook()" class="p-2 rounded-xl bg-red-950/80 text-red-300 border border-red-500/40 hover:bg-red-900 transition cursor-pointer" title="Close Flipbook">
+        <svg class="w-4 h-4 stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Central 3D Flipbook Canvas Area -->
+  <div class="flex-1 w-full max-w-5xl flex items-center justify-center relative my-2 overflow-hidden">
+    
+    <!-- Floating Previous Arrow -->
+    <button onclick="window.__rakhiFlipbookInstance &amp;&amp; window.__rakhiFlipbookInstance.flipPrev()" class="absolute left-2 sm:left-4 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#eac34a]/90 text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.5)] flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer">
+      <svg class="w-6 h-6 stroke-current stroke-3 fill-none" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+
+    <!-- The 3D Book Element Container -->
+    <div id="rakhiFlipbookContainer" class="shadow-[0_25px_60px_rgba(0,0,0,0.9)] rounded-xl overflow-hidden">
+      
+      <!-- COVER PAGE -->
+      <div class="fb-page bg-gradient-to-br from-[#3b1e3b] via-[#221f21] to-[#151215] p-6 text-center border-4 border-[#eac34a] flex flex-col justify-between select-none relative">
+        <div class="absolute inset-2 border border-[#eac34a]/40 pointer-events-none"></div>
+        <div class="pt-6 space-y-2">
+          <span class="text-[10px] font-bold tracking-[0.3em] uppercase text-[#eac34a]">ROYAL KEEPSAKE ALBUM</span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-serif text-[#fceabb]"><?= $partnerName ?> &amp; <?= $buyerName ?></h2>
+          <p class="text-xs text-[#e4b9df] italic"><?= $taglineQuote ?></p>
+        </div>
+        <div class="my-auto py-6">
+          <div class="w-24 h-24 sm:w-32 sm:h-32 mx-auto rounded-full border-4 border-[#eac34a] p-1 bg-[#151215] shadow-[0_0_30px_rgba(234,195,74,0.4)] overflow-hidden">
+            <?= $photoAvatarHtml ?>
+          </div>
+        </div>
+        <div class="pb-4 space-y-1">
+          <span class="text-[11px] font-mono text-[#eac34a]">Swipe or Drag Corner to Flip ➔</span>
+          <p class="text-[9px] text-[#d0c3cb]/60">Sealed with Royal Rakhi Mandalas</p>
+        </div>
+      </div>
+
+      <!-- PAGE 2: VOWS & PROMISES -->
+      <div class="fb-page bg-[#fdf9ee] text-[#3b2b1b] p-6 border-2 border-[#d4af37] flex flex-col justify-between select-none relative">
+        <div class="space-y-4">
+          <div class="border-b border-[#d4af37]/40 pb-3 text-center">
+            <span class="text-[9px] font-bold tracking-widest text-[#a87c1c] uppercase block">ACT OF PROTECTION</span>
+            <h3 class="text-lg font-bold font-serif text-[#5c3a0d]">5 Royal Sibling Promises 👑</h3>
+          </div>
+          <ul class="space-y-3 text-xs">
+            <?php foreach ($promisesList as $idx => $promise): ?>
+              <li class="flex items-start gap-2 bg-[#f4ecd8] p-2.5 rounded-xl border border-[#e8dcb8]">
+                <span class="font-bold text-[#a87c1c] font-mono"><?= $idx + 1 ?>.</span>
+                <span><?= htmlspecialchars($promise) ?></span>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+        <div class="text-center text-[10px] text-[#a87c1c] pt-2 border-t border-[#d4af37]/40">
+          Lifelong Bond of Love &amp; Protection
+        </div>
+      </div>
+
+      <!-- PAGES 3+: MEMORY PHOTOS -->
+      <?php foreach ($media as $mIdx => $m): 
+        $mUrl = htmlspecialchars(resolveMediaUrl($m['file_path'] ?? ''));
+        $mCap = htmlspecialchars($m['caption'] ?? 'Cherished Memory #' . ($mIdx + 1));
+      ?>
+        <div class="fb-page bg-[#f7f3eb] text-[#3b2b1b] p-4 sm:p-6 border-2 border-[#ebd9b5] flex flex-col justify-between select-none relative">
+          <div class="space-y-3 flex-1 flex flex-col justify-center">
+            <div class="bg-white p-2 rounded-xl border border-[#d8cbb5] shadow-md aspect-4/3 overflow-hidden">
+              <img src="<?= $mUrl ?>" onerror="this.onerror=null; this.src='<?= htmlspecialchars(APP_URL) ?>/assets/default_gallery/sample_fa6955df.webp';" class="w-full h-full object-cover rounded-lg">
+            </div>
+            <div class="text-center px-2 py-1 bg-[#ede4d3] rounded-lg border border-[#dbcfae]">
+              <p class="font-serif text-xs font-bold text-[#4a341b] italic"><?= $mCap ?></p>
+            </div>
+          </div>
+          <div class="text-center text-[9px] font-mono text-[#a87c1c] pt-2 border-t border-[#ebd9b5]">
+            Memory #<?= $mIdx + 1 ?> of <?= count($media) ?>
+          </div>
+        </div>
+      <?php endforeach; ?>
+
+      <!-- BACK COVER -->
+      <div class="fb-page bg-gradient-to-tl from-[#3b1e3b] via-[#221f21] to-[#151215] p-6 text-center border-4 border-[#eac34a] flex flex-col justify-between select-none relative">
+        <div class="absolute inset-2 border border-[#eac34a]/40 pointer-events-none"></div>
+        <div class="pt-8 space-y-2">
+          <span class="text-3xl">🪔</span>
+          <h3 class="text-xl font-bold font-serif text-[#fceabb]">Happy Raksha Bandhan</h3>
+          <p class="text-xs text-[#e4b9df]">Forever Bond of Brother &amp; Sister</p>
+        </div>
+        <div class="my-auto space-y-2">
+          <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-tr from-amber-600 to-yellow-400 border-2 border-[#eac34a] flex items-center justify-center text-2xl shadow-[0_0_20px_#f59e0b]">
+            👑
+          </div>
+          <p class="text-[11px] text-[#eac34a] font-serif italic">"Miles or Years, Love Stays Eternal"</p>
+        </div>
+        <div class="pb-4">
+          <span class="text-[10px] font-mono text-[#d0c3cb]/70">Created with <?= htmlspecialchars(APP_NAME) ?></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Floating Next Arrow -->
+    <button onclick="window.__rakhiFlipbookInstance &amp;&amp; window.__rakhiFlipbookInstance.flipNext()" class="absolute right-2 sm:right-4 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#eac34a]/90 text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.5)] flex items-center justify-center hover:scale-110 active:scale-95 transition cursor-pointer">
+      <svg class="w-6 h-6 stroke-current stroke-3 fill-none" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+
+  <!-- Bottom Tip -->
+  <div class="py-1 text-center shrink-0">
+    <p class="text-[10px] font-mono text-[#d0c3cb]/70">Tip: Drag corner or use Left/Right arrows to flip pages with sound</p>
+  </div>
+</div>
+
+<!-- Load StPageFlip Browser Engine & SoulScript Flipbook Controller -->
+<script src="<?= htmlspecialchars(APP_URL) ?>/assets/js/page-flip.browser.js"></script>
+<script src="<?= htmlspecialchars(APP_URL) ?>/assets/js/flipbook_engine.js"></script>
+
+<script>
+  window.__rakhiFlipbookInstance = null;
+
+  function openRakhiFlipbook() {
+    if (typeof SoulScriptFlipbook === 'undefined') {
+      alert('Flipbook engine loading... Please try in a moment.');
+      return;
+    }
+    if (!window.__rakhiFlipbookInstance) {
+      window.__rakhiFlipbookInstance = new SoulScriptFlipbook({
+        containerId: 'rakhiFlipbookContainer',
+        modalId: 'soulscriptFlipbookModal'
+      });
+    }
+    window.__rakhiFlipbookInstance.openModal();
+  }
+
+  function closeRakhiFlipbook() {
+    if (window.__rakhiFlipbookInstance) {
+      window.__rakhiFlipbookInstance.closeModal();
     }
   }
 </script>

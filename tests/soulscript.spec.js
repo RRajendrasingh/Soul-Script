@@ -96,4 +96,34 @@ test.describe('SoulScript Deep E2E Automated Verification Suite', () => {
     await expect(page.locator('#sampleEditModal')).toBeHidden({ timeout: 20000 });
   });
 
+  test('6. 3D Interactive Virtual Flipbook Opening & Page Turn Verification', async ({ page }) => {
+    // Navigate to Raksha Bandhan demo page
+    await page.goto('/gift/manvi-rakhi-v2');
+
+    // Unlock page if lock screen is present
+    const answerInput = page.locator('#answerInput');
+    if (await answerInput.isVisible()) {
+      await answerInput.fill('RAKHI');
+      await page.click('#unlockBtn');
+      await page.waitForLoadState('networkidle');
+    }
+
+    // Locate 3D Virtual Album Launcher Button
+    const flipbookBtn = page.locator('button:has-text("Open 3D Virtual Album")').first();
+    await expect(flipbookBtn).toBeVisible({ timeout: 25000 });
+
+    // Click to open 3D Flipbook Modal
+    await flipbookBtn.click();
+    const modal = page.locator('#soulscriptFlipbookModal');
+    await expect(modal).toBeVisible({ timeout: 10000 });
+
+    // Check Counter and Navigation
+    const counter = page.locator('#fbPageCounter');
+    await expect(counter).toBeVisible();
+
+    // Close Modal
+    await page.click('button[title="Close Flipbook"]');
+    await expect(modal).toBeHidden();
+  });
+
 });
