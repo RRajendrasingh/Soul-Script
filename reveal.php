@@ -697,7 +697,7 @@ if (!empty($initialLockData['page_id'])) {
       const safeTitle = String(finalSongTitle || tf.song_title || '').toLowerCase();
       const safeArtist = String(finalArtist || tf.song_artist || '').toLowerCase();
       if (safeTitle.includes('phoolon') || safeArtist.includes('kishore') || templateId === 'raksha_bandhan_royal') {
-        finalAudioUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+        finalAudioUrl = '<?php echo APP_URL; ?>/assets/audio/rakhi_theme.mp3';
         finalSongTitle = 'Phoolon Ka Taaron Ka';
         finalArtist = 'Kishore Kumar';
         rawAudioUrl = finalAudioUrl;
