@@ -598,11 +598,11 @@ Today, I want to ask you the most important question of my life. Will you take m
         </div>
       <?php endif; ?>
 
-      <!-- 3. Couple Photos Section (Matches 4th SS Exact DOM Layout) -->
+      <!-- 3. Photos Section (Matches 4th SS Exact DOM Layout) -->
       <div class="space-y-4 pt-4 border-t border-[#4d444b]/40">
         <div class="flex items-center justify-between">
           <div>
-            <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">COUPLE PHOTOS (SELECT 1-25 PHOTOS) *</label>
+            <label class="block font-bold text-[#eac34a] text-xs uppercase tracking-wider">PHOTOS (SELECT 1-25 PHOTOS) *</label>
             <span class="text-[11px] text-[#d0c3cb]" id="selectedPhotoCount">Selected: 3/25 photos</span>
           </div>
           <button type="button" onclick="triggerFileInput()" class="px-4 py-2 rounded-xl bg-[#3b1e3b] text-[#eac34a] font-bold text-xs border border-[#eac34a]/40 hover:bg-[#eac34a] hover:text-[#241a00] transition-all flex items-center gap-1.5">
@@ -1970,7 +1970,7 @@ Today, I want to ask you the most important question of my life. Will you take m
         <button type="button" onclick="filterSampleCategory('anniversary')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="anniversary">Anniversary 🌹</button>
         <button type="button" onclick="filterSampleCategory('birthday')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="birthday">Birthday 🎂</button>
         <button type="button" onclick="filterSampleCategory('proposal')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="proposal">Proposal 💍</button>
-        <button type="button" onclick="filterSampleCategory('raksha_bandhan')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="raksha_bandhan">Rakhi 🪔</button>
+        <button type="button" onclick="filterSampleCategory('raksha_bandhan')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="raksha_bandhan">Rakhi</button>
         <button type="button" onclick="filterSampleCategory('long_distance')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="long_distance">Long Distance ✈️</button>
       </div>
 

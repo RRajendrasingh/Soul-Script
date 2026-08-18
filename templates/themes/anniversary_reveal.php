@@ -140,7 +140,7 @@ if ($cleanReceiverPhoto) {
 <section class="max-w-4xl mx-auto px-4 py-12 relative z-10 space-y-8">
   <div class="text-center space-y-2 mb-8">
     <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">ENCHANTED LETTER JAR</span>
-    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Wax-Sealed Love Letters 💌</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Wax-Sealed Love Letters</h2>
     <p class="text-xs text-[#d0c3cb]">Tap any envelope below to break the wax seal and open the letter.</p>
   </div>
 
@@ -180,7 +180,7 @@ if ($cleanReceiverPhoto) {
 <section class="max-w-4xl mx-auto px-4 py-12 relative z-10 space-y-8">
   <div class="text-center space-y-2 mb-8">
     <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">REDEEMABLE COUPONS</span>
-    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Romantic Love Tokens 🎟️</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Romantic Love Tokens</h2>
     <p class="text-xs text-[#d0c3cb]">Tap any coupon below anytime to redeem it with <?= $buyerName ?>.</p>
   </div>
 
@@ -212,7 +212,7 @@ if ($cleanReceiverPhoto) {
   <div class="flex items-center justify-center gap-3">
     <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
       <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-      <span>Lock Gift Page 🔒</span>
+      <span>Lock Gift Page</span>
     </button>
   </div>
 </footer>

@@ -179,7 +179,7 @@ if ($cleanReceiverPhoto) {
   <div class="flex items-center justify-center gap-3">
     <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
       <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-      <span>Lock Gift Page 🔒</span>
+      <span>Lock Gift Page</span>
     </button>
   </div>
 </footer>

@@ -592,7 +592,7 @@ $showLogin = !$showDashboard && !$showHub;
         <button type="button" onclick="filterSampleCategory('anniversary')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="anniversary">Anniversary 🌹</button>
         <button type="button" onclick="filterSampleCategory('birthday')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="birthday">Birthday 🎂</button>
         <button type="button" onclick="filterSampleCategory('proposal')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="proposal">Proposal 💍</button>
-        <button type="button" onclick="filterSampleCategory('raksha_bandhan')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="raksha_bandhan">Rakhi 🪔</button>
+        <button type="button" onclick="filterSampleCategory('raksha_bandhan')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="raksha_bandhan">Rakhi</button>
         <button type="button" onclick="filterSampleCategory('long_distance')" class="sample-cat-pill px-3.5 py-1.5 rounded-full font-medium text-[11px] transition-all bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:border-[#eac34a]/60 hover:text-white cursor-pointer shrink-0" data-cat="long_distance">Long Distance ✈️</button>
       </div>
 
@@ -657,7 +657,7 @@ $showLogin = !$showDashboard && !$showHub;
       },
       'raksha_bandhan_royal': {
         hasLetters: false, hasTokens: false,
-        dashTitleSuffix: "'s Rakhi Dashboard 🪔",
+        dashTitleSuffix: "'s Rakhi Dashboard",
         labels: {
           name: "Brother / Sister's First Name *",
           tagline: "Sibling Motto / Tagline Banner *",
@@ -1371,7 +1371,7 @@ $showLogin = !$showDashboard && !$showHub;
         themeContainer.innerHTML = `
           <div class="space-y-4">
             <div class="border-b border-[#4d444b]/40 pb-3">
-              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">🪔 Sibling Promises &amp; Protection Vows</h3>
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">Sibling Promises &amp; Protection Vows</h3>
             </div>
             <div class="flex items-center justify-between pt-1">
               <label class="block font-semibold text-[#d0c3cb]">Promises &amp; Protection Vows for Sibling (Dynamic List)</label>

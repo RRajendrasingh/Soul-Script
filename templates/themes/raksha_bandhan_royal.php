@@ -545,7 +545,7 @@ if ($cleanReceiverPhoto) {
 <section id="siblingVowsSection" class="max-w-5xl mx-auto px-4 py-10 relative z-10 space-y-8">
   <div class="text-center space-y-2">
     <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">BROTHER &amp; SISTER VOWS</span>
-    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]"><?= count($promisesList) ?> Sacred Sibling Vows 🛡️</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]"><?= count($promisesList) ?> Sacred Sibling Vows</h2>
     <div class="w-16 h-[2.5px] bg-[#eac34a] mx-auto mt-2 rounded-full shadow-[0_0_10px_#eac34a]"></div>
   </div>
 
@@ -575,7 +575,7 @@ if ($cleanReceiverPhoto) {
 <section class="max-w-3xl mx-auto px-4 py-10 relative z-10">
   <div class="text-center space-y-2 mb-8">
     <span class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#eac34a] block">SPECIAL GIFT &amp; BLESSINGS</span>
-    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Digital Shagun Envelope 🧧</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold font-serif text-[#e8e0e3]">Digital Shagun Envelope</h2>
     <p class="text-xs text-[#d0c3cb]">Tap the wax-sealed lifafa to reveal your gift voucher and personal letter!</p>
   </div>
 
@@ -586,7 +586,7 @@ if ($cleanReceiverPhoto) {
     </div>
     <div class="space-y-2">
       <span class="text-xs font-extrabold uppercase tracking-widest text-[#eac34a] bg-[#151215]/80 px-4 py-1 rounded-full border border-[#eac34a]/40 inline-block">ROYAL SHAGUN LIFAFA</span>
-      <h3 class="text-2xl font-bold font-serif text-white">Tap to Open Envelope 🧧</h3>
+      <h3 class="text-2xl font-bold font-serif text-white">Tap to Open Envelope</h3>
       <p class="text-xs text-[#f5d77f]">Contains personal note &amp; gift voucher code</p>
     </div>
   </div>
@@ -611,7 +611,7 @@ if ($cleanReceiverPhoto) {
         <?php if (empty($rakhiVoucherStatus['unlocked'])): ?>
           <div class="p-5 bg-gradient-to-br from-[#3b2a1a] via-[#281d12] to-[#1a140d] border-2 border-[#eac34a] rounded-2xl text-center space-y-3 shadow-xl relative overflow-hidden">
             <span class="text-[10px] uppercase font-extrabold tracking-widest text-[#eac34a] bg-[#100d10] px-3 py-1 rounded-full border border-[#eac34a]/30 inline-block">
-              🎁 Surprise Amazon Cash Voucher
+              Surprise Amazon Cash Voucher
             </span>
             <h4 class="text-lg font-bold font-serif text-white">Your Secret Rakhi Cash Voucher Unlocks Soon! ⏳</h4>
             <p class="text-xs text-[#d0c3cb] leading-relaxed">
@@ -628,14 +628,14 @@ if ($cleanReceiverPhoto) {
         ?>
           <div class="p-5 bg-gradient-to-br from-[#1e3b20] via-[#152821] to-[#101b17] border-2 border-[#a4e4b9] rounded-2xl text-center space-y-3.5 shadow-2xl relative overflow-hidden">
             <span class="text-[10px] uppercase font-extrabold tracking-widest text-[#a4e4b9] bg-[#100d10] px-3 py-1 rounded-full border border-[#a4e4b9]/30 inline-block">
-              🎉 Amazon Cash Voucher Unlocked!
+              Amazon Cash Voucher Unlocked!
             </span>
             <h4 class="text-2xl font-black font-serif text-[#a4e4b9]">₹<?= $vAmt ?> Amazon Gift Voucher</h4>
             <p class="text-xs text-[#d0c3cb]">Copy your gift code below and redeem directly on Amazon India!</p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-1">
               <strong class="text-base font-mono text-white bg-[#100d10] px-5 py-2.5 rounded-xl border border-[#a4e4b9]/40 tracking-widest shadow-inner"><?= $vCode ?></strong>
               <button type="button" onclick="navigator.clipboard.writeText('<?= $vCode ?>'); alert('Voucher code copied to clipboard!'); confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-[#a4e4b9] to-[#6ee7b7] text-[#100d10] font-extrabold text-xs uppercase tracking-wider rounded-xl hover:brightness-110 transition-all cursor-pointer shadow-lg">
-                Copy Code &amp; Redeem 📋
+                Copy Code &amp; Redeem
               </button>
             </div>
           </div>
@@ -646,7 +646,7 @@ if ($cleanReceiverPhoto) {
       <?php if (!empty($rakhiAffiliateProducts)): ?>
         <div class="pt-6 border-t border-[#4d444b]/40 space-y-3">
           <span class="text-[10px] uppercase font-extrabold tracking-widest text-[#eac34a] block text-center">
-            🛍️ Recommended Rakhi Gifts on Amazon (Redeem Voucher Directly Below)
+            Recommended Rakhi Gifts on Amazon (Redeem Voucher Directly Below)
           </span>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <?php foreach ($rakhiAffiliateProducts as $prod): ?>
@@ -739,7 +739,7 @@ if ($cleanReceiverPhoto) {
   <div class="flex items-center justify-center gap-3">
     <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
       <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-      <span>Lock Gift Page 🔒</span>
+      <span>Lock Gift Page</span>
     </button>
   </div>
 </footer>

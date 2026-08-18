@@ -48,7 +48,7 @@ require_once __DIR__ . '/includes/media_helper.php';
         <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#3b1e3b]/60 border border-[#e4b9df]/20 backdrop-blur-md shadow-sm">
           <i data-lucide="sparkles" class="w-4 h-4 text-[#eac34a] animate-pulse"></i>
           <span class="font-sans text-xs font-semibold text-[#eac34a] tracking-[0.2em] uppercase">
-            🪔 Rakhi 2026 Special — August 28
+            Rakhi 2026 Special — August 28
           </span>
         </div>
 
@@ -67,7 +67,7 @@ require_once __DIR__ . '/includes/media_helper.php';
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto pt-2">
           <a href="#gallery" class="group relative px-6 sm:px-8 py-3.5 sm:py-4 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] rounded-full font-sans text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-[0_0_25px_rgba(234,195,74,0.3)] hover:shadow-[0_0_35px_rgba(234,195,74,0.6)] transition-all duration-500 flex items-center justify-center gap-2.5 cursor-pointer">
             <i data-lucide="gift" class="w-4 h-4 shrink-0"></i>
-            <span class="font-bold tracking-wider">🪔 SEND RAKHI SURPRISE</span>
+            <span class="font-bold tracking-wider">SEND RAKHI SURPRISE</span>
             <i data-lucide="arrow-right" class="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform"></i>
           </a>
 
@@ -146,7 +146,7 @@ require_once __DIR__ . '/includes/media_helper.php';
       <div class="space-y-2 text-center md:text-left">
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3b1e3b] text-[#e4b9df] text-xs font-semibold uppercase tracking-wider">
           <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-          <span>✨ Why 500+ Brothers Chose SoulScript</span>
+          <span>Why 500+ Brothers Chose SoulScript</span>
         </div>
         <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">
           Not Just a Link — A Full Rakhi Surprise Experience
@@ -204,7 +204,7 @@ require_once __DIR__ . '/includes/media_helper.php';
           <div class="w-12 h-12 rounded-xl bg-[#3b1e3b] text-[#ffe088] font-serif font-bold text-xl flex items-center justify-center border border-[#ffe088]/30 group-hover:scale-110 transition-transform">
             3
           </div>
-          <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Share on WhatsApp 🎁</h3>
+          <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Share on WhatsApp</h3>
           <p class="text-xs text-[#d0c3cb] leading-relaxed">
             You get a private link instantly. Send to Behen via WhatsApp — she clicks, enters the childhood answer, and your entire Rakhi surprise unlocks with confetti!
           </p>
@@ -219,7 +219,7 @@ require_once __DIR__ . '/includes/media_helper.php';
     <div class="text-center space-y-4 max-w-3xl mx-auto mb-14">
       <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#e4b9df]/20 text-xs font-semibold uppercase tracking-widest">
         <i data-lucide="gift" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-        <span>🎁 Rakhi 2026 + Year-Round Occasions</span>
+        <span>Rakhi 2026 + Year-Round Occasions</span>
       </div>
       <h2 class="text-3xl sm:text-5xl font-bold font-serif text-[#e8e0e3] tracking-tight">
         Surprise Gift Templates &amp; Pricing
@@ -553,7 +553,7 @@ require_once __DIR__ . '/includes/media_helper.php';
   <!-- FAQ Section -->
   <section class="py-20 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <div class="text-center space-y-3 mb-12">
-      <span class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#eac34a]">💬 Common Questions</span>
+      <span class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#eac34a]">Common Questions</span>
       <h2 class="text-3xl font-bold font-serif text-[#e8e0e3]">Everything You Need to Know</h2>
       <p class="text-sm text-[#d0c3cb]">Quick answers before you create your surprise.</p>
     </div>
@@ -615,7 +615,7 @@ require_once __DIR__ . '/includes/media_helper.php';
   <section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-12 z-10 relative">
     <div class="bg-gradient-to-r from-[#3b1e3b] via-[#221f21] to-[#3b1e3b] p-8 rounded-3xl border border-[#eac34a]/40 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6">
       <div class="space-y-2 text-center sm:text-left">
-        <span class="text-[10px] uppercase tracking-[0.2em] font-bold text-[#eac34a] bg-[#151215] px-3 py-1 rounded-full border border-[#eac34a]/30">🔑 Already Bought A Gift Website?</span>
+        <span class="text-[10px] uppercase tracking-[0.2em] font-bold text-[#eac34a] bg-[#151215] px-3 py-1 rounded-full border border-[#eac34a]/30">Already Bought A Gift Website?</span>
         <h3 class="text-2xl font-bold font-serif text-[#e8e0e3]">Log In To Edit &amp; Update Your Surprise Page</h3>
         <p class="text-xs text-[#d0c3cb]">Update your Amazon voucher code, background music, photos, sibling promises, or any details anytime using your Email &amp; Secret Password.</p>
       </div>
@@ -654,7 +654,7 @@ require_once __DIR__ . '/includes/media_helper.php';
         <div class="space-y-3">
           <h4 class="text-xs font-semibold text-[#e8e0e3] uppercase tracking-widest font-mono">Templates</h4>
           <ul class="space-y-2 text-xs text-[#d0c3cb]/80">
-            <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">🪔 Raksha Bandhan Royal (₹499)</a></li>
+            <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Raksha Bandhan Royal (₹499)</a></li>
             <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Anniversary Reveal (₹499)</a></li>
             <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Birthday Magic (₹399)</a></li>
             <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Perfect Proposal (₹599)</a></li>
