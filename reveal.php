@@ -694,15 +694,13 @@ if (!empty($initialLockData['page_id'])) {
       let finalArtist = content.song_artist || tf.song_artist || '';
 
       // Auto-resolve authentic audio stream for "Phoolon Ka Taaron Ka" & Kishore Kumar
-      const safeTitle = String(finalSongTitle || '').toLowerCase();
-      const safeArtist = String(finalArtist || '').toLowerCase();
+      const safeTitle = String(finalSongTitle || tf.song_title || '').toLowerCase();
+      const safeArtist = String(finalArtist || tf.song_artist || '').toLowerCase();
       if (safeTitle.includes('phoolon') || safeArtist.includes('kishore') || templateId === 'raksha_bandhan_royal') {
-        if (!rawAudioUrl || rawAudioUrl.includes('acoustic-guitars-ambient') || rawAudioUrl.includes('pixabay')) {
-          rawAudioUrl = 'https://www.youtube.com/watch?v=0e3dYx_wS_0';
-          finalAudioUrl = 'https://www.youtube.com/watch?v=0e3dYx_wS_0';
-          finalSongTitle = 'Phoolon Ka Taaron Ka';
-          finalArtist = 'Kishore Kumar';
-        }
+        finalAudioUrl = '<?php echo APP_URL; ?>/assets/audio/phoolon_ka_taaron_ka.mp3';
+        finalSongTitle = 'Phoolon Ka Taaron Ka';
+        finalArtist = 'Kishore Kumar';
+        rawAudioUrl = finalAudioUrl;
       }
 
       if (rawAudioUrl === 'random_singer' || !rawAudioUrl) {
