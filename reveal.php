@@ -697,7 +697,7 @@ if (!empty($initialLockData['page_id'])) {
       const safeTitle = String(finalSongTitle || tf.song_title || '').toLowerCase();
       const safeArtist = String(finalArtist || tf.song_artist || '').toLowerCase();
       if (safeTitle.includes('phoolon') || safeArtist.includes('kishore') || templateId === 'raksha_bandhan_royal') {
-        finalAudioUrl = '<?php echo APP_URL; ?>/assets/audio/phoolon_ka_taaron_ka.mp3';
+        finalAudioUrl = 'https://cdn.pixabay.com/download/audio/2022/11/06/audio_c35f79116e.mp3?filename=sweet-indian-flute-love-126241.mp3';
         finalSongTitle = 'Phoolon Ka Taaron Ka';
         finalArtist = 'Kishore Kumar';
         rawAudioUrl = finalAudioUrl;
