@@ -733,6 +733,27 @@ if (!empty($initialLockData['page_id'])) {
         }
       }
 
+      // Auto-show Floating Music Controls on theme unlock: Mini Pill on Mobile (< 640px), Full Widget on Desktop (>= 640px)
+      const musicBox = document.getElementById('desktopMusicBox');
+      const mobileMiniBtn = document.getElementById('mobileMusicMiniBtn');
+      if (window.innerWidth < 640) {
+        if (mobileMiniBtn) {
+          mobileMiniBtn.className = mobileMiniBtn.className.replace(/\bhidden\b/g, '').trim();
+          mobileMiniBtn.style.display = 'flex';
+        }
+        if (musicBox) {
+          musicBox.style.display = 'none';
+        }
+      } else {
+        if (musicBox) {
+          musicBox.className = musicBox.className.replace(/\bhidden\b/g, '').trim();
+          musicBox.style.display = 'flex';
+        }
+      }
+
+      if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
+      if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').innerText = finalArtist;
+
       const pName = content.partner_name || 'Partner';
       const pInitial = pName.charAt(0).toUpperCase();
       const cleanReceiverPhoto = content.receiver_photo ? normalizeMediaUrlJs(content.receiver_photo) : '';
