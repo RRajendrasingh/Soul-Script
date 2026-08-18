@@ -729,6 +729,10 @@ if (!empty($initialLockData['page_id'])) {
         if (content.favorite_singers && !content.favorite_singers.includes('Tony!')) {
           finalArtist = content.favorite_singers;
         } else {
+          finalArtist = 'Romantic Track';
+        }
+      }
+
       const pName = content.partner_name || 'Partner';
       const pInitial = pName.charAt(0).toUpperCase();
       const cleanReceiverPhoto = content.receiver_photo ? normalizeMediaUrlJs(content.receiver_photo) : '';
