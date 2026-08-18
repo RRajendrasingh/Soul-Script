@@ -7,7 +7,7 @@ require_once __DIR__ . '/includes/media_helper.php';
 <html lang="en">
 <head>
   <?php 
-  $pageTitle = APP_NAME . ' — Romantic Surprise Websites';
+  $pageTitle = APP_NAME . ' — Rakhi Gift 2026 | Personalized Digital Surprise with Amazon Voucher';
   require_once __DIR__ . '/includes/head.php'; 
   ?>
 </head>
@@ -48,26 +48,26 @@ require_once __DIR__ . '/includes/media_helper.php';
         <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#3b1e3b]/60 border border-[#e4b9df]/20 backdrop-blur-md shadow-sm">
           <i data-lucide="sparkles" class="w-4 h-4 text-[#eac34a] animate-pulse"></i>
           <span class="font-sans text-xs font-semibold text-[#eac34a] tracking-[0.2em] uppercase">
-            The Ultimate Reveal
+            🪔 Rakhi 2026 Special — August 28
           </span>
         </div>
 
         <h1 class="font-serif text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#e8e0e3] leading-[1.15] tracking-tight">
-          Turn Your Memories Into a 
+          Send Behen a Rakhi Gift
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#eac34a] via-[#ffd700] to-[#e4b9df]">
-            Digital Surprise.
+            She'll Never Forget.
           </span>
         </h1>
 
         <p class="font-sans text-xs sm:text-base text-[#d0c3cb] max-w-lg leading-relaxed font-normal">
-          Craft breathtaking, personalized website experiences that build anticipation and deliver unforgettable romantic moments. Perfect for anniversaries, birthdays, proposals, or long-distance love.
+          A personalized surprise website — unlocked only by Behen with a childhood secret — packed with your photos, messages, and an Amazon Gift Voucher. Delivered instantly on WhatsApp. ₹499 onwards.
         </p>
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto pt-2">
           <a href="#gallery" class="group relative px-6 sm:px-8 py-3.5 sm:py-4 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] rounded-full font-sans text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-[0_0_25px_rgba(234,195,74,0.3)] hover:shadow-[0_0_35px_rgba(234,195,74,0.6)] transition-all duration-500 flex items-center justify-center gap-2.5 cursor-pointer">
             <i data-lucide="gift" class="w-4 h-4 shrink-0"></i>
-            <span class="font-bold tracking-wider">CHOOSE YOUR SURPRISE</span>
+            <span class="font-bold tracking-wider">🪔 SEND RAKHI SURPRISE</span>
             <i data-lucide="arrow-right" class="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform"></i>
           </a>
 
@@ -82,16 +82,16 @@ require_once __DIR__ . '/includes/media_helper.php';
         <!-- Trust Highlights -->
         <div class="pt-6 flex flex-wrap items-center gap-6 text-xs text-[#d0c3cb]/80 border-t border-[#4d444b]/30 w-full">
           <div class="flex items-center gap-2">
-            <i data-lucide="lock" class="w-4 h-4 text-[#eac34a]"></i>
-            <span>Hint Password Gate</span>
+            <i data-lucide="gift" class="w-4 h-4 text-[#eac34a]"></i>
+            <span>Amazon Voucher Included</span>
           </div>
           <div class="flex items-center gap-2">
             <i data-lucide="shield-check" class="w-4 h-4 text-[#e4b9df]"></i>
-            <span>Razorpay Secured</span>
+            <span>Razorpay Secured Payments</span>
           </div>
           <div class="flex items-center gap-2">
-            <i data-lucide="clock" class="w-4 h-4 text-[#eac34a]"></i>
-            <span>12 Months Live</span>
+            <i data-lucide="send" class="w-4 h-4 text-[#eac34a]"></i>
+            <span>WhatsApp Instant Delivery</span>
           </div>
         </div>
       </div>
@@ -146,13 +146,13 @@ require_once __DIR__ . '/includes/media_helper.php';
       <div class="space-y-2 text-center md:text-left">
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3b1e3b] text-[#e4b9df] text-xs font-semibold uppercase tracking-wider">
           <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-          <span>Experience The Magic</span>
+          <span>✨ Why 500+ Brothers Chose SoulScript</span>
         </div>
         <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">
-          Every Gift Includes Interactive Soundtracks, Hint Locks &amp; Memories
+          Not Just a Link — A Full Rakhi Surprise Experience
         </h3>
         <p class="text-xs sm:text-sm text-[#d0c3cb]">
-          Explore all our interactive occasion templates below. Each card features its own real live demo with zero-knowledge password protection!
+          Photos, music, Amazon voucher, and a secret only Behen can unlock. Explore all templates below — each has a real live demo!
         </p>
       </div>
 
@@ -169,10 +169,10 @@ require_once __DIR__ . '/includes/media_helper.php';
   <section class="py-20 bg-[#1e1b1d] border-y border-[#4d444b]/30 relative z-10">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center space-y-3 mb-16">
-        <span class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#eac34a]">Simple 3-Step Creation</span>
+        <span class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#eac34a]">Simple 3-Step Rakhi Gift Creation</span>
         <h2 class="text-3xl font-bold font-serif text-[#e8e0e3]">How SoulScript Works</h2>
         <p class="text-sm text-[#d0c3cb] max-w-xl mx-auto">
-          Build a personalized, password-protected digital gift in under 5 minutes from your phone or laptop.
+          Build a personalized Rakhi surprise in under 5 minutes from your phone or laptop — and share on WhatsApp instantly.
         </p>
       </div>
 
@@ -195,7 +195,7 @@ require_once __DIR__ . '/includes/media_helper.php';
           </div>
           <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Add Memories &amp; Hint Key</h3>
           <p class="text-xs text-[#d0c3cb] leading-relaxed">
-            Upload your favorite photos, milestone dates, love letters, and a soundtrack. Create a secret hint question that only your partner knows how to answer!
+            Upload childhood photos, write sibling promises, add an Amazon Gift Voucher code, and set a secret hint question only Behen can answer!
           </p>
         </div>
 
@@ -204,9 +204,9 @@ require_once __DIR__ . '/includes/media_helper.php';
           <div class="w-12 h-12 rounded-xl bg-[#3b1e3b] text-[#ffe088] font-serif font-bold text-xl flex items-center justify-center border border-[#ffe088]/30 group-hover:scale-110 transition-transform">
             3
           </div>
-          <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Share Private Link</h3>
+          <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Share on WhatsApp 🎁</h3>
           <p class="text-xs text-[#d0c3cb] leading-relaxed">
-            Receive your custom link (`soulscript.in/gift/your-surprise-link`). Send it via WhatsApp or Instagram. Your partner unlocks it to reveal the surprise!
+            You get a private link instantly. Send to Behen via WhatsApp — she clicks, enters the childhood answer, and your entire Rakhi surprise unlocks with confetti!
           </p>
         </div>
       </div>
@@ -219,13 +219,13 @@ require_once __DIR__ . '/includes/media_helper.php';
     <div class="text-center space-y-4 max-w-3xl mx-auto mb-14">
       <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#e4b9df]/20 text-xs font-semibold uppercase tracking-widest">
         <i data-lucide="gift" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-        <span>Select Your Occasion</span>
+        <span>🎁 Rakhi 2026 + Year-Round Occasions</span>
       </div>
       <h2 class="text-3xl sm:text-5xl font-bold font-serif text-[#e8e0e3] tracking-tight">
         Surprise Gift Templates &amp; Pricing
       </h2>
       <p class="text-xs sm:text-sm text-[#d0c3cb] leading-relaxed">
-        Every template is engineered with custom per-occasion logic, interactive countdowns, tailored forms, and responsive visual layouts.
+        Each template is a complete personalized experience — with photos, music, Amazon vouchers, countdown timers, and a secret unlock only the recipient can open.
       </p>
       <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-3"></div>
     </div>
@@ -239,8 +239,8 @@ require_once __DIR__ . '/includes/media_helper.php';
 
     $templateSpecs = [
         'raksha_bandhan_royal' => [
-            'collected' => ['Brother/Sister Name & Motto', '3-Step Ritual (Tilak, Diya, Rakhi)', '5 Sibling Promises / Vows', 'Shahi Farman Photos & Shagun Code'],
-            'features'  => ['3-Step Tilak & Diya Ceremony', 'Sibling Fight Meter & TV Remote Rules', '3D Glassmorphism Vow Cards', 'Shahi Farman Antique Scroll & Shagun Lifafa']
+            'collected' => ['Brother/Sister Name & Motto', '3-Step Ritual (Tilak, Diya, Rakhi)', '5 Sibling Promises / Vows', 'Amazon Gift Voucher Code & Shagun Photos'],
+            'features'  => ['3-Step Tilak & Diya Ceremony', 'Amazon Voucher Gift Card Display', '3D Glassmorphism Vow Cards', 'Shahi Farman Antique Scroll & Sibling Promises']
         ],
         'anniversary_reveal' => [
             'collected' => ['Relationship Start Date', '3-6 Timeline Milestones', 'Personalized Love Note', '5-10 Photo Gallery'],
@@ -455,12 +455,12 @@ require_once __DIR__ . '/includes/media_helper.php';
   <!-- Testimonials Section -->
   <section class="py-20 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <div class="text-center space-y-3 mb-16">
-      <span class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#eac34a]">Loved By Couples</span>
-      <h2 class="text-3xl font-bold font-serif text-[#e8e0e3]">Real Romantic Moments</h2>
-      <p class="text-sm text-[#d0c3cb]">Surprising partners across Mumbai, Delhi, Bangalore, Jaipur, and worldwide.</p>
+      <span class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#eac34a]">Loved By Couples & Siblings</span>
+      <h2 class="text-3xl font-bold font-serif text-[#e8e0e3]">Real Stories. Real Surprises.</h2>
+      <p class="text-sm text-[#d0c3cb]">Surprising siblings & partners across Mumbai, Delhi, Bangalore, Jaipur, and NRI cities worldwide.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-[#221f21] p-6 rounded-2xl border border-[#4d444b]/50 shadow-xl space-y-4">
         <div class="flex items-center gap-1 text-[#eac34a]">
           <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
@@ -511,6 +511,103 @@ require_once __DIR__ . '/includes/media_helper.php';
           <span class="text-[#eac34a] text-[11px]">Long Distance Love</span>
         </div>
       </div>
+
+      <!-- Rakhi Testimonial 4 -->
+      <div class="bg-[#221f21] p-6 rounded-2xl border border-[#4d444b]/50 shadow-xl space-y-4">
+        <div class="flex items-center gap-1 text-[#eac34a]">
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+        </div>
+        <p class="text-xs text-[#d0c3cb] leading-relaxed italic">
+          "Didi rone lagi jab usne link unlock kiya! Usne kaha yeh toh ab tak ka sabse best Rakhi gift hai. The Amazon voucher was the cherry on top — she could shop whatever she wanted!"
+        </p>
+        <div class="pt-3 border-t border-[#4d444b]/30 flex items-center justify-between text-xs">
+          <span class="font-bold text-[#e8e0e3]">Aryan S.</span>
+          <span class="text-[#eac34a] text-[11px]">Raksha Bandhan Royal</span>
+        </div>
+      </div>
+
+      <!-- Rakhi Testimonial 5 — NRI -->
+      <div class="bg-[#221f21] p-6 rounded-2xl border border-[#4d444b]/50 shadow-xl space-y-4">
+        <div class="flex items-center gap-1 text-[#eac34a]">
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
+        </div>
+        <p class="text-xs text-[#d0c3cb] leading-relaxed italic">
+          "Meri behen Dubai mein rehti hai. Maine SoulScript link WhatsApp pe bheja. Usne raat ko unlock kiya aur call karke rona shuru kar diya. Distance khatam ho gaya uss moment mein!"
+        </p>
+        <div class="pt-3 border-t border-[#4d444b]/30 flex items-center justify-between text-xs">
+          <span class="font-bold text-[#e8e0e3]">Sahil K.</span>
+          <span class="text-[#eac34a] text-[11px]">Raksha Bandhan Royal · NRI</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-20 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center space-y-3 mb-12">
+      <span class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#eac34a]">💬 Common Questions</span>
+      <h2 class="text-3xl font-bold font-serif text-[#e8e0e3]">Everything You Need to Know</h2>
+      <p class="text-sm text-[#d0c3cb]">Quick answers before you create your surprise.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+
+      <div class="bg-[#221f21] p-6 rounded-2xl border border-[#4d444b]/50 space-y-2">
+        <h4 class="font-bold text-[#e8e0e3] text-sm flex items-center gap-2">
+          <i data-lucide="gift" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
+          Amazon Voucher kaise add karte hain?
+        </h4>
+        <p class="text-xs text-[#d0c3cb] leading-relaxed">Gift create karne ke baad, apne Buyer Portal mein login karein aur Amazon Gift Card code paste karein. Behen ko link unlock karne par code dikhega.</p>
+      </div>
+
+      <div class="bg-[#221f21] p-6 rounded-2xl border border-[#4d444b]/50 space-y-2">
+        <h4 class="font-bold text-[#e8e0e3] text-sm flex items-center gap-2">
+          <i data-lucide="send" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
+          Kya Behen ka WhatsApp number chahiye?
+        </h4>
+        <p class="text-xs text-[#d0c3cb] leading-relaxed">Nahi. Aapko sirf ek private link milta hai — use WhatsApp, Instagram DM, ya Email — kisi bhi platform se bhej sakte hain.</p>
+      </div>
+
+      <div class="bg-[#221f21] p-6 rounded-2xl border border-[#4d444b]/50 space-y-2">
+        <h4 class="font-bold text-[#e8e0e3] text-sm flex items-center gap-2">
+          <i data-lucide="lock" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
+          Kya koi bhi link dekh sakta hai?
+        </h4>
+        <p class="text-xs text-[#d0c3cb] leading-relaxed">Nahi. Hamare hint lock se sirf wahi open kar sakta hai jo secret childhood question ka answer jaanta ho. Complete privacy guaranteed.</p>
+      </div>
+
+      <div class="bg-[#221f21] p-6 rounded-2xl border border-[#4d444b]/50 space-y-2">
+        <h4 class="font-bold text-[#e8e0e3] text-sm flex items-center gap-2">
+          <i data-lucide="clock" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
+          Kitne time mein ready ho jaata hai?
+        </h4>
+        <p class="text-xs text-[#d0c3cb] leading-relaxed">5–10 minutes mein aapka gift link ready ho jaata hai. Payment ke turant baad form milta hai — fill karo aur instantly share karo.</p>
+      </div>
+
+      <div class="bg-[#221f21] p-6 rounded-2xl border border-[#4d444b]/50 space-y-2">
+        <h4 class="font-bold text-[#e8e0e3] text-sm flex items-center gap-2">
+          <i data-lucide="pencil" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
+          Kya baad mein edit kar sakte hain?
+        </h4>
+        <p class="text-xs text-[#d0c3cb] leading-relaxed">Haan! Buyer Portal se kabhi bhi content update kar sakte hain — Amazon code, photos, music, messages — sabkuch. Page 12 mahine tak live rehta hai.</p>
+      </div>
+
+      <div class="bg-[#221f21] p-6 rounded-2xl border border-[#4d444b]/50 space-y-2">
+        <h4 class="font-bold text-[#e8e0e3] text-sm flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
+          Payment safe hai?
+        </h4>
+        <p class="text-xs text-[#d0c3cb] leading-relaxed">100% safe — Razorpay se payment hoti hai (India ka #1 payment gateway). UPI, Card, NetBanking — sab options available hain.</p>
+      </div>
+
     </div>
   </section>
 
@@ -520,7 +617,7 @@ require_once __DIR__ . '/includes/media_helper.php';
       <div class="space-y-2 text-center sm:text-left">
         <span class="text-[10px] uppercase tracking-[0.2em] font-bold text-[#eac34a] bg-[#151215] px-3 py-1 rounded-full border border-[#eac34a]/30">🔑 Already Bought A Gift Website?</span>
         <h3 class="text-2xl font-bold font-serif text-[#e8e0e3]">Log In To Edit &amp; Update Your Surprise Page</h3>
-        <p class="text-xs text-[#d0c3cb]">Update your quote, background music, favorite singers, photo scrapbook, or milestone dates anytime using your Email &amp; Secret Password.</p>
+        <p class="text-xs text-[#d0c3cb]">Update your Amazon voucher code, background music, photos, sibling promises, or any details anytime using your Email &amp; Secret Password.</p>
       </div>
       <a href="<?php echo APP_URL; ?>/edit.php" class="px-8 py-3.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-full shadow-xl transition-all shrink-0 flex items-center gap-2">
         <i data-lucide="key-round" class="w-4 h-4"></i>
@@ -545,7 +642,7 @@ require_once __DIR__ . '/includes/media_helper.php';
             <span class="text-xl font-bold font-serif text-[#e8e0e3] tracking-tight">SoulScript</span>
           </div>
           <p class="text-xs text-[#d0c3cb]/80 leading-relaxed font-light">
-            Crafting personalized, private digital surprise pages for life's most meaningful romantic moments.
+            Crafting personalized digital surprises for Rakhi, anniversaries, birthdays, proposals & long-distance love.
           </p>
           <div class="flex items-center gap-2 text-[11px] text-[#eac34a] bg-[#3b1e3b] border border-[#e4b9df]/20 px-3 py-1.5 rounded-full w-fit">
             <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
@@ -557,6 +654,7 @@ require_once __DIR__ . '/includes/media_helper.php';
         <div class="space-y-3">
           <h4 class="text-xs font-semibold text-[#e8e0e3] uppercase tracking-widest font-mono">Templates</h4>
           <ul class="space-y-2 text-xs text-[#d0c3cb]/80">
+            <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">🪔 Raksha Bandhan Royal (₹499)</a></li>
             <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Anniversary Reveal (₹499)</a></li>
             <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Birthday Magic (₹399)</a></li>
             <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Perfect Proposal (₹599)</a></li>
