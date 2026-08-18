@@ -687,20 +687,26 @@ if (!empty($initialLockData['page_id'])) {
         ]
       };
 
-      // Resolve Music Track & Titles (check both content and content.template_fields)
+      // 1. Resolve Music Track & Titles directly from Database (buyer selected song)
       let rawAudioUrl = content.bg_music_url || tf.bg_music_url || tf.song_url || tf.youtube_url || '';
-      let finalAudioUrl = rawAudioUrl || 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3';
+      let finalAudioUrl = rawAudioUrl;
       let finalSongTitle = content.song_title || tf.song_title || '';
       let finalArtist = content.song_artist || tf.song_artist || '';
 
-      // Auto-resolve authentic audio stream for "Phoolon Ka Taaron Ka" & Kishore Kumar
-      const safeTitle = String(finalSongTitle || tf.song_title || '').toLowerCase();
-      const safeArtist = String(finalArtist || tf.song_artist || '').toLowerCase();
-      if (safeTitle.includes('phoolon') || safeArtist.includes('kishore') || templateId === 'raksha_bandhan_royal') {
-        finalAudioUrl = '<?php echo APP_URL; ?>/assets/audio/rakhi_theme.mp3';
-        finalSongTitle = 'Phoolon Ka Taaron Ka';
-        finalArtist = 'Kishore Kumar';
-        rawAudioUrl = finalAudioUrl;
+      // 2. Only fallback to default theme track if buyer has NOT set any custom song
+      if (!rawAudioUrl || rawAudioUrl.trim() === '' || rawAudioUrl.includes('acoustic-guitars-ambient') || rawAudioUrl.includes('pixabay')) {
+        if (!finalSongTitle || finalSongTitle.trim() === '' || finalSongTitle === 'Acoustic Sunset Love') {
+          if (templateId && templateId.includes('raksha_bandhan')) {
+            finalAudioUrl = '<?php echo APP_URL; ?>/assets/audio/rakhi_theme.mp3';
+            finalSongTitle = 'Phoolon Ka Taaron Ka';
+            finalArtist = 'Kishore Kumar';
+          } else {
+            finalAudioUrl = '<?php echo APP_URL; ?>/assets/audio/romantic_theme.mp3';
+            finalSongTitle = 'Tum Hi Ho';
+            finalArtist = 'Arijit Singh';
+          }
+          rawAudioUrl = finalAudioUrl;
+        }
       }
 
       if (rawAudioUrl === 'random_singer' || !rawAudioUrl) {
