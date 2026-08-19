@@ -91,8 +91,12 @@ if (!empty($initialLockData['page_id'])) {
   }
 </style>
 
+<?php
+$isFestiveTheme = (!empty($_GET['theme']) && $_GET['theme'] === 'raksha_bandhan_festive_light') || (!empty($initialLockData['template_id']) && $initialLockData['template_id'] === 'raksha_bandhan_festive_light');
+$headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b border-[#4a232f]/10' : 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
+?>
 <!-- Navbar Header -->
-<header id="revealHeader" class="fixed top-0 left-0 right-0 w-full z-40 bg-[#151215]/95 backdrop-blur-xl border-b border-[#4d444b]/30 shadow-md">
+<header id="revealHeader" class="fixed top-0 left-0 right-0 w-full z-40 backdrop-blur-xl shadow-md <?php echo $headerBgClass; ?>">
   <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
     <a href="<?php echo APP_URL; ?>" class="flex items-center gap-1.5 text-xs font-bold text-[#e8e0e3] hover:text-[#eac34a] transition-colors shrink-0">
       <svg class="w-4 h-4 text-[#eac34a] stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
