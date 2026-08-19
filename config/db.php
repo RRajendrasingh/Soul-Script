@@ -113,13 +113,20 @@ function getDB() {
                 } catch (Exception $exTplCol) {}
             }
 
-            // Sync Raksha Bandhan Royal template into DB safely if missing
+            // Sync Raksha Bandhan Royal & Festive Light templates into DB safely if missing
             try {
                 $chkRoyal = $pdo->prepare("SELECT COUNT(*) FROM templates WHERE template_id = 'raksha_bandhan_royal'");
                 $chkRoyal->execute();
                 if ($chkRoyal->fetchColumn() == 0) {
                     $pdo->exec("INSERT INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
                     ('raksha_bandhan_royal', 'Raksha Bandhan Royal 👑', 'Shahi Farman Scroll & 3-Step Rakhi Ritual', 'Interactive 3-Step Tilak & Diya ceremony, Sibling Fight Meter, 3D Glass Vows, Shahi Farman Parchment Photo Scroll, and Wax-Sealed Shagun Envelope.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Royal Special 👑', 'Personalize Royal Gift 🎁', 'https://digitalyogi24.com/gift/manvi-rakhi-v2', 'rakhi', 1, 2)");
+                }
+
+                $chkFestive = $pdo->prepare("SELECT COUNT(*) FROM templates WHERE template_id = 'raksha_bandhan_festive_light'");
+                $chkFestive->execute();
+                if ($chkFestive->fetchColumn() == 0) {
+                    $pdo->exec("INSERT INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
+                    ('raksha_bandhan_festive_light', 'Raksha Bandhan Festive Light 🌸', 'Interactive Scratch Card & 3D Album', 'Real-Time Touch/Mouse Scratch Card, 5-Step Virtual Ceremony, 3D Memory Photobook, Amazon Gift Voucher Reveal, and 300 DPI Physical Keepsakes.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Festive Special 🌸', 'Personalize Light Gift 🎁', 'https://digitalyogi24.com/gift/ananya-rohan?edit_token=token_demo_edit_01&theme=raksha_bandhan_festive_light', 'rakhi', 1, 1)");
                 }
             } catch (Exception $exTpl) {}
 

@@ -17,6 +17,7 @@ $valid_templates = [
     'perfect_proposal'      => ['name' => 'Perfect Proposal',      'price' => 599],
     'long_distance_love'    => ['name' => 'Long Distance Love',    'price' => 449],
     'raksha_bandhan_royal'  => ['name' => 'Raksha Bandhan Royal', 'price' => 599],
+    'raksha_bandhan_festive_light' => ['name' => 'Raksha Bandhan Festive Light', 'price' => 449],
 ];
 
 try {

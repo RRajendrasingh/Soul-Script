@@ -238,6 +238,10 @@ require_once __DIR__ . '/includes/media_helper.php';
     } catch (Exception $exT) {}
 
     $templateSpecs = [
+        'raksha_bandhan_festive_light' => [
+            'collected' => ['Brother/Sister Name & Motto', '5-Step Virtual Ceremony (Thali, Rakhi, Voucher)', '5 Sacred Sibling Vows', 'Childhood Photos & Amazon Voucher'],
+            'features'  => ['Interactive HTML5 Scratch Card', '5-Step Virtual Ceremony Modal', '3D Interactive Memory Photobook', '300 DPI Physical Keepsake Poster']
+        ],
         'raksha_bandhan_royal' => [
             'collected' => ['Brother/Sister Name & Motto', '3-Step Ritual (Tilak, Diya, Rakhi)', '5 Sibling Promises / Vows', 'Amazon Gift Voucher Code & Shagun Photos'],
             'features'  => ['3-Step Tilak & Diya Ceremony', 'Amazon Voucher Gift Card Display', '3D Glassmorphism Vow Cards', 'Shahi Farman Antique Scroll & Sibling Promises']

@@ -1,46 +1,15 @@
 <?php
 require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/includes/media_helper.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="googlebot" content="noindex, nofollow">
-  <title><?php echo APP_NAME; ?> — Romantic Surprise Websites</title>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"Bodoni Moda"', 'serif'],
-            sans: ['Montserrat', 'sans-serif'],
-            handwriting: ['Caveat', 'cursive'],
-          }
-        }
-      }
-    }
-  </script>
-  
-  <!-- Lucide Icons & Razorpay -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    html, body {
-      overflow-x: hidden !important;
-      width: 100% !important;
-      max-width: 100vw !important;
-      position: relative;
-    }
-  </style>
+  <?php 
+  $pageTitle = APP_NAME . ' — Romantic Surprise Websites';
+  require_once __DIR__ . '/includes/head.php'; 
+  ?>
 </head>
 <body class="bg-[#151215] text-[#e8e0e3] font-sans relative overflow-x-hidden min-h-screen">
 
@@ -54,6 +23,20 @@ require_once __DIR__ . '/config/config.php';
   <?php 
   $current_page = 'home';
   require_once __DIR__ . '/includes/header.php'; 
+
+  // Fetch primary featured template for dynamic hero mockup (Position #1)
+  $primaryTemplate = null;
+  try {
+      $dbHero = getDB();
+      $stmtHero = $dbHero->query("SELECT * FROM templates WHERE active = 1 ORDER BY sort_order ASC, template_id ASC LIMIT 1");
+      $primaryTemplate = $stmtHero->fetch();
+  } catch (Exception $exH) {}
+
+  $heroDemoUrl = !empty($primaryTemplate['demo_url']) ? $primaryTemplate['demo_url'] : (APP_URL . '/#gallery');
+  $heroCoverImg = !empty($primaryTemplate['preview_image_url']) ? resolveMediaUrl($primaryTemplate['preview_image_url']) : 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=800';
+  $heroTemplateName = !empty($primaryTemplate['name']) ? htmlspecialchars($primaryTemplate['name']) : 'Romantic Special 👑';
+  $heroTagline = !empty($primaryTemplate['tagline']) ? htmlspecialchars($primaryTemplate['tagline']) : 'A Night To Remember';
+  $heroPassword = !empty($primaryTemplate['demo_password']) ? htmlspecialchars($primaryTemplate['demo_password']) : '';
   ?>
 
   <!-- Hero Section -->
@@ -88,11 +71,11 @@ require_once __DIR__ . '/config/config.php';
             <i data-lucide="arrow-right" class="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform"></i>
           </a>
 
-          <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="group flex items-center justify-center gap-3 px-6 py-3.5 sm:py-4 rounded-full border border-[#4d444b] hover:border-[#eac34a]/60 text-[#d0c3cb] hover:text-[#e8e0e3] transition-all duration-300 font-sans text-xs uppercase tracking-wider font-semibold cursor-pointer whitespace-nowrap">
+          <a href="#gallery" class="group flex items-center justify-center gap-3 px-6 py-3.5 sm:py-4 rounded-full border border-[#4d444b] hover:border-[#eac34a]/60 text-[#d0c3cb] hover:text-[#e8e0e3] transition-all duration-300 font-sans text-xs uppercase tracking-wider font-semibold cursor-pointer whitespace-nowrap">
             <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#eac34a]/40 flex items-center justify-center group-hover:border-[#eac34a] group-hover:bg-[#eac34a]/10 transition-all shrink-0">
               <i data-lucide="play" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#eac34a] fill-[#eac34a]"></i>
             </div>
-            <span class="whitespace-nowrap font-bold tracking-wider">TRY LIVE DEMO</span>
+            <span class="whitespace-nowrap font-bold tracking-wider">EXPLORE LIVE SAMPLES</span>
           </a>
         </div>
 
@@ -113,7 +96,7 @@ require_once __DIR__ . '/config/config.php';
         </div>
       </div>
 
-      <!-- Right Column: Phone Mockup Frame & Background Spinning Circles -->
+      <!-- Right Column: Dynamic Phone Mockup Frame (Position #1 Sync) -->
       <div class="w-full lg:w-1/2 flex justify-center lg:justify-end relative overflow-hidden py-4">
         <!-- Spinning Background Outline Circles -->
         <div class="absolute top-1/4 left-4 sm:-left-8 w-64 h-64 rounded-full border border-[#eac34a]/20 animate-spin z-10 pointer-events-none" style="animation-duration: 20s;"></div>
@@ -128,26 +111,27 @@ require_once __DIR__ . '/config/config.php';
 
             <div class="pt-8 flex flex-col items-center gap-4">
               <div class="w-14 h-14 rounded-full bg-[#3b1e3b] border border-[#eac34a]/40 flex items-center justify-center text-[#eac34a] shadow-[0_0_20px_rgba(234,195,74,0.2)]">
-                <i data-lucide="heart" class="w-7 h-7 fill-[#eac34a]/30"></i>
+                <i data-lucide="gift" class="w-7 h-7 text-[#eac34a]"></i>
               </div>
-              <div>
-                <span class="font-serif text-2xl text-[#e8e0e3] font-bold block">For Sarah</span>
-                <span class="font-sans text-xs text-[#eac34a] tracking-widest uppercase mt-1 block">A Night To Remember</span>
+              <div class="px-2 space-y-1">
+                <span class="font-serif text-xl font-bold text-[#e8e0e3] block truncate leading-tight"><?php echo $heroTemplateName; ?></span>
+                <span class="font-sans text-[11px] text-[#eac34a] font-semibold tracking-wider uppercase block truncate"><?php echo $heroTagline; ?></span>
               </div>
             </div>
 
-            <div class="relative aspect-4/3 rounded-2xl overflow-hidden border border-[#eac34a]/20 shadow-md">
-              <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=800" alt="Preview" class="w-full h-full object-cover opacity-80">
+            <div class="relative aspect-4/3 rounded-2xl overflow-hidden border border-[#eac34a]/30 shadow-md bg-[#100d10]">
+              <img src="<?php echo $heroCoverImg; ?>" alt="<?php echo $heroTemplateName; ?>" class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500">
               <div class="absolute inset-0 bg-gradient-to-t from-[#151215] via-transparent to-transparent"></div>
             </div>
 
             <div class="space-y-3 pb-4">
-              <div class="w-full bg-[#221f21] border border-[#4d444b] rounded-xl py-3 px-4 text-xs font-mono text-[#d0c3cb]/60">
-                Enter the memory...
+              <div class="w-full bg-[#221f21] border border-[#4d444b] rounded-xl py-3 px-4 text-xs font-mono text-[#d0c3cb]/80 flex items-center justify-center gap-1.5 shadow-inner">
+                <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
+                <span><?php echo !empty($heroPassword) ? ('Hint Key: ' . $heroPassword) : 'Enter secret hint...'; ?></span>
               </div>
-              <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="w-full bg-[#eac34a] text-[#241a00] font-sans text-xs font-bold uppercase tracking-wider py-3 rounded-xl shadow-md flex items-center justify-center gap-2 hover:bg-[#ffe088] transition-all">
-                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                <span>Unlock Memory</span>
+              <a href="<?php echo $heroDemoUrl; ?>" <?php echo (strpos($heroDemoUrl, 'http') === 0) ? 'target="_blank"' : ''; ?> class="w-full bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-sans text-xs font-bold uppercase tracking-wider py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all cursor-pointer">
+                <i data-lucide="eye" class="w-3.5 h-3.5 text-[#241a00]"></i>
+                <span>Explore Live Sample ↗</span>
               </a>
             </div>
           </div>
@@ -156,31 +140,26 @@ require_once __DIR__ . '/config/config.php';
     </div>
   </section>
 
-  <!-- Interactive Sample Demos Banner -->
+  <!-- Interactive Features & Trust Highlights Banner -->
   <section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-20">
     <div class="bg-[#221f21] border border-[#eac34a]/30 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
       <div class="space-y-2 text-center md:text-left">
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3b1e3b] text-[#e4b9df] text-xs font-semibold uppercase tracking-wider">
           <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-          <span>Interactive Sample Demos Ready</span>
+          <span>Experience The Magic</span>
         </div>
         <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">
-          Experience how your partner will unlock their surprise
+          Every Gift Includes Interactive Soundtracks, Hint Locks &amp; Memories
         </h3>
         <p class="text-xs sm:text-sm text-[#d0c3cb]">
-          Test our live password hint gate! Try the sample pages for Anniversary Reveal and Perfect Proposal right now.
+          Explore all our interactive occasion templates below. Each card features its own real live demo with zero-knowledge password protection!
         </p>
       </div>
 
       <div class="flex flex-wrap items-center gap-3 shrink-0">
-        <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="px-5 py-2.5 rounded-full bg-[#151215] text-[#eac34a] hover:bg-[#3b1e3b] font-semibold text-xs border border-[#eac34a]/40 shadow-sm transition-all flex items-center gap-1.5">
-          <i data-lucide="heart" class="w-4 h-4 fill-[#eac34a]"></i>
-          <span>Anniversary Demo (Hint: shimla)</span>
-        </a>
-
-        <a href="<?php echo APP_URL; ?>/gift/priya-aman" target="_blank" class="px-5 py-2.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs shadow-md transition-all flex items-center gap-1.5">
-          <i data-lucide="sparkles" class="w-4 h-4"></i>
-          <span>Proposal Demo (Hint: paris)</span>
+        <a href="#gallery" class="px-6 py-3 rounded-full bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+          <i data-lucide="layout-grid" class="w-4 h-4 text-[#241a00]"></i>
+          <span>Explore All 5 Templates ↗</span>
         </a>
       </div>
     </div>
@@ -205,7 +184,7 @@ require_once __DIR__ . '/config/config.php';
           </div>
           <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Choose Occasion Template</h3>
           <p class="text-xs text-[#d0c3cb] leading-relaxed">
-            Pick from Anniversary Reveal (₹499), Birthday Magic (₹399), Perfect Proposal (₹599), or Long Distance Love (₹449). Pay securely via Razorpay.
+            Pick from Raksha Bandhan Royal, Anniversary Reveal, Birthday Magic, Perfect Proposal, or Long Distance Love. Pay securely via Razorpay.
           </p>
         </div>
 
@@ -227,14 +206,15 @@ require_once __DIR__ . '/config/config.php';
           </div>
           <h3 class="text-lg font-bold font-serif text-[#e8e0e3]">Share Private Link</h3>
           <p class="text-xs text-[#d0c3cb] leading-relaxed">
-            Receive your custom link (`soulscript.in/gift/ananya-rohan`). Send it via WhatsApp or Instagram. Your partner unlocks it to reveal the surprise!
+            Receive your custom link (`soulscript.in/gift/your-surprise-link`). Send it via WhatsApp or Instagram. Your partner unlocks it to reveal the surprise!
           </p>
         </div>
       </div>
     </div>
   </section>
+  </section>
 
-  <!-- Templates & Pricing Section (Exact TemplateGallery.tsx DOM Layout) -->
+  <!-- Templates & Pricing Section -->
   <section id="gallery" class="py-24 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     <div class="text-center space-y-4 max-w-3xl mx-auto mb-14">
       <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#e4b9df]/20 text-xs font-semibold uppercase tracking-widest">
@@ -249,268 +229,148 @@ require_once __DIR__ . '/config/config.php';
       </p>
       <div class="w-12 h-[2px] bg-[#eac34a]/80 mx-auto mt-3"></div>
     </div>
+      <?php
+    $activeTemplates = [];
+    try {
+        $dbTpl = getDB();
+        $stmtTpl = $dbTpl->query("SELECT * FROM templates WHERE active = 1 ORDER BY sort_order ASC, template_id ASC");
+        $activeTemplates = $stmtTpl->fetchAll();
+    } catch (Exception $exT) {}
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      
-      <!-- Card 1: Anniversary Reveal -->
-      <div class="bg-[#221f21] rounded-3xl border border-[#4d444b]/50 hover:border-[#eac34a]/40 shadow-2xl transition-all duration-300 flex flex-col overflow-hidden group">
+    $templateSpecs = [
+        'raksha_bandhan_festive_light' => [
+            'collected' => ['Brother/Sister Name & Motto', '5-Step Virtual Ceremony (Thali, Rakhi, Voucher)', '5 Sacred Sibling Vows', 'Childhood Photos & Amazon Voucher'],
+            'features'  => ['Interactive HTML5 Scratch Card', '5-Step Virtual Ceremony Modal', '3D Interactive Memory Photobook', '300 DPI Physical Keepsake Poster']
+        ],
+        'raksha_bandhan_royal' => [
+            'collected' => ['Brother/Sister Name & Motto', '3-Step Ritual (Tilak, Diya, Rakhi)', '5 Sibling Promises / Vows', 'Amazon Gift Voucher Code & Shagun Photos'],
+            'features'  => ['3-Step Tilak & Diya Ceremony', 'Amazon Voucher Gift Card Display', '3D Glassmorphism Vow Cards', 'Shahi Farman Antique Scroll & Sibling Promises']
+        ],
+        'anniversary_reveal' => [
+            'collected' => ['Relationship Start Date', '3-6 Timeline Milestones', 'Personalized Love Note', '5-10 Photo Gallery'],
+            'features'  => ['Live Time Counter', 'Vertical Story Timeline', 'Captured Moments Gallery', 'Signed Love Note Card']
+        ],
+        'birthday_magic' => [
+            'collected' => ['Partner Date of Birth', '3-5 Reasons to Celebrate', 'Personalized Note', '5-10 Photo Gallery'],
+            'features'  => ['Next Birthday Countdown', 'Confetti Animations', 'Interactive Reasons List', 'Festive Header Banner']
+        ],
+        'perfect_proposal' => [
+            'collected' => ['Heartfelt Proposal Letter', 'Proposal Location & Date', 'Custom Yes Response Message', '5-10 Photo Gallery'],
+            'features'  => ['Interactive Proposal Buttons', 'Instant Response Email Alert', 'Floating Heart Animations', 'Grand Proposal Card']
+        ],
+        'long_distance_love' => [
+            'collected' => ['Buyer & Partner Cities', 'Next Reunion Date & Time', 'Shared Playlist URL', '5-10 Photo Gallery'],
+            'features'  => ['Dual City Clocks', 'Live Reunion Countdown', 'Music Player Widget', 'Our Journey Gallery']
+        ]
+    ];
+    ?>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+      <?php foreach ($activeTemplates as $tIdx => $t): 
+        $tid = $t['template_id'];
+        $tName = htmlspecialchars($t['name']);
+        $tTagline = htmlspecialchars($t['tagline']);
+        $tDesc = htmlspecialchars($t['description']);
+        $tPrice = (float)$t['price_inr'];
+        $tBadge = htmlspecialchars($t['badge'] ?? '');
+        $tCover = resolveMediaUrl($t['preview_image_url']);
+        $tCreateUrl = APP_URL . '/create.php?template=' . urlencode($tid);
+
+        $tDemoUrl = !empty($t['demo_url']) ? $t['demo_url'] : '';
+        $tDemoPass = !empty($t['demo_password']) ? $t['demo_password'] : '';
+
+        // Determine concise single-line button text exactly matching Screenshot 1
+        $tBtnLabel = 'CUSTOMIZE (₹' . number_format($tPrice, 0) . ')';
+
+        $spec = $templateSpecs[$tid] ?? [
+            'collected' => ['Personalized Names & Motto', 'Custom Occasion Details', 'Personalized Note / Envelope', '5-10 Photo Memory Gallery'],
+            'features'  => ['Interactive Lock Gate & Confetti', 'Customized Countdown Timer', '3D Gift Envelope / Letter', 'Background Soundtrack & Photos']
+        ];
+
+        $isFeatured = ($tIdx === 0);
+      ?>
+      <div class="bg-[#221f21] rounded-3xl border <?php echo $isFeatured ? 'border-2 border-[#eac34a] shadow-[0_0_35px_rgba(234,195,74,0.3)]' : 'border-[#4d444b]/50 hover:border-[#eac34a]/40 shadow-2xl'; ?> transition-all duration-300 flex flex-col overflow-hidden group">
+        
+        <!-- Header Image Box (h-64 Height with Gradient & Badges) -->
         <div class="relative h-64 bg-[#100d10] overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80" alt="Anniversary Reveal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
+          <img src="<?php echo $tCover; ?>" alt="<?php echo $tName; ?>" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-95">
           <div class="absolute inset-0 bg-gradient-to-t from-[#221f21] via-transparent to-transparent"></div>
-          <div class="absolute top-4 left-4 bg-[#151215]/80 backdrop-blur-md text-[#e4b9df] border border-[#e4b9df]/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-            Most Popular
+          
+          <?php if (!empty($tBadge)): ?>
+            <div class="absolute top-4 left-4 bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] text-[#241a00] text-xs font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-lg flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#241a00]"></i>
+              <span><?php echo $tBadge; ?></span>
+            </div>
+          <?php endif; ?>
+
+          <div class="absolute top-4 right-4 bg-[#eac34a] text-[#241a00] font-extrabold text-sm sm:text-base px-3.5 py-1 rounded-xl shadow-md">
+            ₹<?php echo number_format($tPrice, 0); ?>
           </div>
-          <div class="absolute top-4 right-4 bg-[#eac34a] text-[#241a00] font-extrabold text-base px-4 py-1 rounded-xl shadow-md">
-            ₹499
-          </div>
-          <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-1">
-            <h3 class="text-2xl font-bold font-serif">Anniversary Reveal</h3>
-            <p class="text-xs text-[#eac34a] font-medium">Celebrate Your Journey Together</p>
+
+          <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-0.5">
+            <h3 class="text-2xl font-bold font-serif leading-snug"><?php echo $tName; ?></h3>
+            <p class="text-xs text-[#eac34a] font-medium"><?php echo $tTagline; ?></p>
           </div>
         </div>
+
+        <!-- Body Area -->
         <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
           <p class="text-xs text-[#d0c3cb] leading-relaxed font-normal">
-            A timeless, elegant narrative celebrating your relationship milestone. Features a chronological memory timeline, live "together for" time counter, and signed love note.
+            <?php echo $tDesc; ?>
           </p>
+
+          <!-- Inner 2-Column Info Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#151215] p-5 rounded-2xl border border-[#4d444b]">
             <div>
               <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-                <span>Collected Fields:</span>
+                <span>COLLECTED FIELDS:</span>
               </h4>
               <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Relationship Start Date</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>3-6 Timeline Milestones</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Personalized Love Note</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>5-10 Photo Gallery</span></li>
+                <?php foreach ($spec['collected'] as $cItem): ?>
+                  <li class="flex items-start gap-1.5"><span class="text-[#eac34a">•</span><span><?php echo htmlspecialchars($cItem); ?></span></li>
+                <?php endforeach; ?>
               </ul>
             </div>
             <div>
               <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#e4b9df]"></i>
-                <span>Result Features:</span>
+                <span>RESULT FEATURES:</span>
               </h4>
               <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Live Time Counter</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Vertical Story Timeline</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Captured Moments Gallery</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Signed Love Note Card</span></li>
+                <?php foreach ($spec['features'] as $fItem): ?>
+                  <li class="flex items-start gap-1.5"><span class="text-[#e4b9df">•</span><span><?php echo htmlspecialchars($fItem); ?></span></li>
+                <?php endforeach; ?>
               </ul>
             </div>
           </div>
-          <div class="pt-2 flex flex-col gap-2">
+
+          <!-- Action Buttons Area -->
+          <div class="space-y-3 pt-1">
             <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button onclick="openCheckout('anniversary_reveal', 'Anniversary Reveal', 499)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-                <i data-lucide="gift" class="w-4 h-4"></i>
-                <span>Customize (₹499)</span>
-              </button>
-              <a href="<?php echo APP_URL; ?>/gift/ananya-rohan" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
-                <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
-                <span>Live Sample</span>
+              <a href="<?php echo $tCreateUrl; ?>" class="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#eac34a] via-[#e4b9df] to-[#cca830] hover:brightness-110 text-[#241a00] font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 no-underline text-center shrink-0 whitespace-nowrap">
+                <i data-lucide="gift" class="w-4 h-4 shrink-0"></i>
+                <span class="whitespace-nowrap"><?php echo $tBtnLabel; ?></span>
               </a>
+
+              <?php if (!empty($tDemoUrl)): ?>
+                <a href="<?php echo $tDemoUrl; ?>" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] hover:border-[#eac34a]/60 transition-all flex items-center justify-center gap-1.5 shrink-0 no-underline whitespace-nowrap">
+                  <i data-lucide="eye" class="w-4 h-4 text-[#eac34a] shrink-0"></i>
+                  <span class="whitespace-nowrap">Live Sample</span>
+                </a>
+              <?php endif; ?>
             </div>
-            <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
-              <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-              <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider">SHIMLA</strong></span>
-            </div>
+
+            <?php if (!empty($tDemoPass)): ?>
+              <div class="w-full text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-2 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
+                <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a] shrink-0"></i>
+                <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider"><?php echo htmlspecialchars($tDemoPass); ?></strong></span>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
       </div>
-
-      <!-- Card 2: Birthday Magic -->
-      <div class="bg-[#221f21] rounded-3xl border border-[#4d444b]/50 hover:border-[#eac34a]/40 shadow-2xl transition-all duration-300 flex flex-col overflow-hidden group">
-        <div class="relative h-64 bg-[#100d10] overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80" alt="Birthday Magic" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
-          <div class="absolute inset-0 bg-gradient-to-t from-[#221f21] via-transparent to-transparent"></div>
-          <div class="absolute top-4 left-4 bg-[#151215]/80 backdrop-blur-md text-[#e4b9df] border border-[#e4b9df]/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-            Festive Joy
-          </div>
-          <div class="absolute top-4 right-4 bg-[#eac34a] text-[#241a00] font-extrabold text-base px-4 py-1 rounded-xl shadow-md">
-            ₹399
-          </div>
-          <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-1">
-            <h3 class="text-2xl font-bold font-serif">Birthday Magic</h3>
-            <p class="text-xs text-[#eac34a] font-medium">Celebrate Their Special Day</p>
-          </div>
-        </div>
-        <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
-          <p class="text-xs text-[#d0c3cb] leading-relaxed font-normal">
-            Vibrant and joyous celebration page. Unveil reasons why you love them, celebratory confetti animations, auto-calculated next birthday countdown, and photo memories.
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#151215] p-5 rounded-2xl border border-[#4d444b]">
-            <div>
-              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
-                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-                <span>Collected Fields:</span>
-              </h4>
-              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Partner Date of Birth</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>3-5 Reasons to Celebrate</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Personalized Note</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>5-10 Photo Gallery</span></li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#e4b9df]"></i>
-                <span>Result Features:</span>
-              </h4>
-              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Next Birthday Countdown</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Confetti Animations</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Interactive Reasons List</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Festive Header Banner</span></li>
-              </ul>
-            </div>
-          </div>
-          <div class="pt-2 flex flex-col gap-2">
-            <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button onclick="openCheckout('birthday_magic', 'Birthday Magic', 399)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-                <i data-lucide="gift" class="w-4 h-4"></i>
-                <span>Customize (₹399)</span>
-              </button>
-              <a href="<?php echo APP_URL; ?>/gift/kavya-aarav" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
-                <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
-                <span>Live Sample</span>
-              </a>
-            </div>
-            <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
-              <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-              <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider">JULY</strong></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3: Perfect Proposal -->
-      <div class="bg-[#221f21] rounded-3xl border border-[#4d444b]/50 hover:border-[#eac34a]/40 shadow-2xl transition-all duration-300 flex flex-col overflow-hidden group">
-        <div class="relative h-64 bg-[#100d10] overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80" alt="Perfect Proposal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
-          <div class="absolute inset-0 bg-gradient-to-t from-[#221f21] via-transparent to-transparent"></div>
-          <div class="absolute top-4 left-4 bg-[#3b2d12]/90 backdrop-blur-md text-[#eac34a] border border-[#eac34a]/60 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-            Premium
-          </div>
-          <div class="absolute top-4 right-4 bg-[#eac34a] text-[#241a00] font-extrabold text-base px-4 py-1 rounded-xl shadow-md">
-            ₹599
-          </div>
-          <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-1">
-            <h3 class="text-2xl font-bold font-serif">Perfect Proposal</h3>
-            <p class="text-xs text-[#eac34a] font-medium">Build Suspense To The Ultimate Question</p>
-          </div>
-        </div>
-        <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
-          <p class="text-xs text-[#d0c3cb] leading-relaxed font-normal">
-            Build suspense to the ultimate question. Includes full emotional love letter centerpiece, captured memories gallery, and interactive response capture (YES 💍 or Let's Talk 💬).
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#151215] p-5 rounded-2xl border border-[#4d444b]">
-            <div>
-              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
-                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-                <span>Collected Fields:</span>
-              </h4>
-              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Full Emotional Love Letter</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Secret Password Q&amp;A</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>5-10 Photo Gallery</span></li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#e4b9df]"></i>
-                <span>Result Features:</span>
-              </h4>
-              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>"Will You Marry Me?" Header</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Love Letter Centerpiece</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Interactive YES! 💍 Response</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Real-Time Buyer Notification</span></li>
-              </ul>
-            </div>
-          </div>
-          <div class="pt-2 flex flex-col gap-2">
-            <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button onclick="openCheckout('perfect_proposal', 'Perfect Proposal', 599)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-                <i data-lucide="gift" class="w-4 h-4"></i>
-                <span>Customize (₹599)</span>
-              </button>
-              <a href="<?php echo APP_URL; ?>/gift/priya-aman" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
-                <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
-                <span>Live Sample</span>
-              </a>
-            </div>
-            <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
-              <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-              <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider">PARIS</strong></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4: Long Distance Love -->
-      <div class="bg-[#221f21] rounded-3xl border border-[#4d444b]/50 hover:border-[#eac34a]/40 shadow-2xl transition-all duration-300 flex flex-col overflow-hidden group">
-        <div class="relative h-64 bg-[#100d10] overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80" alt="Long Distance Love" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
-          <div class="absolute inset-0 bg-gradient-to-t from-[#221f21] via-transparent to-transparent"></div>
-          <div class="absolute top-4 left-4 bg-[#151215]/80 backdrop-blur-md text-[#e4b9df] border border-[#e4b9df]/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-            Across Distance
-          </div>
-          <div class="absolute top-4 right-4 bg-[#eac34a] text-[#241a00] font-extrabold text-base px-4 py-1 rounded-xl shadow-md">
-            ₹449
-          </div>
-          <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-1">
-            <h3 class="text-2xl font-bold font-serif">Long Distance Love</h3>
-            <p class="text-xs text-[#eac34a] font-medium">Bridge Miles With Shared Memories</p>
-          </div>
-        </div>
-        <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
-          <p class="text-xs text-[#d0c3cb] leading-relaxed font-normal">
-            Bridge miles with shared memories. Features side-by-side dual city clocks, live reunion countdown timer, shared soundtrack link, and memory gallery.
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#151215] p-5 rounded-2xl border border-[#4d444b]">
-            <div>
-              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
-                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-                <span>Collected Fields:</span>
-              </h4>
-              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Buyer &amp; Partner Cities</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Next Reunion Date &amp; Time</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>Shared Playlist URL</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#eac34a">•</span><span>5-10 Photo Gallery</span></li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-bold text-[#e8e0e3] text-xs mb-2 flex items-center gap-1.5 uppercase tracking-wider">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#e4b9df]"></i>
-                <span>Result Features:</span>
-              </h4>
-              <ul class="space-y-1.5 text-[11px] text-[#d0c3cb]">
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Dual City Clocks</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Live Reunion Countdown</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Music Player Widget</span></li>
-                <li class="flex items-start gap-1"><span class="text-[#e4b9df">•</span><span>Our Journey Gallery</span></li>
-              </ul>
-            </div>
-          </div>
-          <div class="pt-2 flex flex-col gap-2">
-            <div class="flex flex-col sm:flex-row items-center gap-3">
-              <button onclick="openCheckout('long_distance_love', 'Long Distance Love', 449)" class="w-full sm:flex-1 py-3.5 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-xs uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-                <i data-lucide="gift" class="w-4 h-4"></i>
-                <span>Customize (₹449)</span>
-              </button>
-              <a href="<?php echo APP_URL; ?>/gift/aanya-kabir" target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-full bg-[#151215] hover:bg-[#3b1e3b] text-[#e8e0e3] font-semibold text-xs border border-[#4d444b] transition-all flex items-center justify-center gap-1.5 shrink-0">
-                <i data-lucide="eye" class="w-4 h-4 text-[#eac34a]"></i>
-                <span>Live Sample</span>
-              </a>
-            </div>
-            <div class="text-center text-[11px] text-[#e4b9df] font-medium bg-[#151215] py-1.5 px-3 rounded-xl border border-[#4d444b]/60 flex items-center justify-center gap-1.5">
-              <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-              <span>Demo Password: <strong class="text-[#eac34a] font-mono tracking-wider">MUMBAI</strong></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <?php endforeach; ?>
     </div>
   </section>
 
@@ -570,7 +430,7 @@ require_once __DIR__ . '/config/config.php';
           <div class="flex items-center justify-between pb-4 border-b border-[#4d444b]/50">
             <div class="flex items-center gap-2 text-xs font-mono text-[#d0c3cb]">
               <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-              <span>soulscript.in/gift/ananya-rohan</span>
+              <span>soulscript.in/gift/your-private-link</span>
             </div>
             <span class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] border border-[#e4b9df]/30 px-2 py-0.5 rounded font-mono">Protected</span>
           </div>
@@ -759,10 +619,11 @@ require_once __DIR__ . '/config/config.php';
       <h2 class="font-serif text-2xl text-[#e8e0e3] font-bold mb-0.5 pr-6" id="modalTemplateTitle">Checkout</h2>
       <p class="text-xs text-[#d0c3cb] mb-6">Enter your details to unlock your partner personalization form.</p>
       
-      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
+      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event); return false;">
         <input type="hidden" id="selectedTemplateId" value="">
         
         <div id="checkoutErrorMsg" class="hidden mb-4 p-3 bg-[#3b1e3b] border border-[#e4b9df]/40 text-[#e4b9df] rounded-xl text-xs font-semibold text-center"></div>
+        <div id="loggedInNotice" class="hidden mb-4 p-3 bg-[#1e3b20] border border-[#a4e4b9]/40 text-[#a4e4b9] rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-2"></div>
 
         <!-- 2-Column Responsive Grid on Desktop -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -792,7 +653,7 @@ require_once __DIR__ . '/config/config.php';
           </div>
 
           <!-- Column 2: Secret Edit Password -->
-          <div class="form-group">
+          <div class="form-group" id="buyerPasswordGroup">
             <div class="flex items-center justify-between mb-1">
               <label class="form-label text-xs font-semibold text-[#d0c3cb]">Secret Edit Password *</label>
               <span class="text-[10px] text-[#eac34a] font-bold" id="passStrengthBadge">Min 6 chars</span>
@@ -860,6 +721,40 @@ require_once __DIR__ . '/config/config.php';
       lucide.createIcons();
     }
 
+    let isLoggedInBuyerSession = false;
+
+    async function checkActiveBuyerSession() {
+      try {
+        const res = await fetch('<?php echo APP_URL; ?>/api/buyer_session.php', { credentials: 'same-origin' });
+        const data = await res.json();
+        const passGroup = document.getElementById('buyerPasswordGroup');
+        const passInput = document.getElementById('buyerPassword');
+        const noticeBox = document.getElementById('loggedInNotice');
+
+        if (data.logged_in && data.buyer_email) {
+          isLoggedInBuyerSession = true;
+          if (data.buyer_name) document.getElementById('buyerName').value = data.buyer_name;
+          if (data.buyer_phone) document.getElementById('buyerPhone').value = data.buyer_phone;
+          if (data.buyer_email) document.getElementById('buyerEmail').value = data.buyer_email;
+
+          passGroup.classList.add('hidden');
+          passInput.removeAttribute('required');
+          passInput.value = 'LOGGED_IN_SESSION';
+
+          noticeBox.innerHTML = `<i data-lucide="user-check" class="w-4 h-4"></i> <span>Logged in as <strong>${escapeHtml(data.buyer_email)}</strong> (Buying a New Gift)</span>`;
+          noticeBox.classList.remove('hidden');
+          if (typeof lucide === 'object') lucide.createIcons();
+        } else {
+          isLoggedInBuyerSession = false;
+          passGroup.classList.remove('hidden');
+          passInput.setAttribute('required', 'true');
+          noticeBox.classList.add('hidden');
+        }
+      } catch (err) {
+        console.log('Session check error:', err);
+      }
+    }
+
     function openCheckout(templateId, name, price) {
       currentTemplateId = templateId;
       currentPrice = price;
@@ -869,6 +764,11 @@ require_once __DIR__ . '/config/config.php';
       const modal = document.getElementById('checkoutModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+      checkActiveBuyerSession();
+    }
+
+    function selectTemplate(templateId, name, price) {
+      openCheckout(templateId, name, price);
     }
 
     function closeCheckout() {
@@ -892,7 +792,7 @@ require_once __DIR__ . '/config/config.php';
       }
 
       const buyerPassword = document.getElementById('buyerPassword').value;
-      if (buyerPassword.length < 6) {
+      if (!isLoggedInBuyerSession && buyerPassword.length < 6) {
         errBox.innerText = 'Please create a Secret Edit Password with at least 6 characters.';
         errBox.classList.remove('hidden');
         return;
