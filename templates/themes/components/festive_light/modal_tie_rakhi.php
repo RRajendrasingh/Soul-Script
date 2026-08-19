@@ -1,19 +1,21 @@
 <?php
 /**
- * Component: 5-Step Interactive "Tap to Tie Rakhi" Modal Dialog (100% Stitch Design Matching)
+ * Component: 5-Step Interactive "Tap to Tie Rakhi" Modal Dialog (100% Stitch Screen Inventory Matching)
  */
 ?>
 
-<div id="festiveRakhiModalContainer" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm transition-opacity duration-300">
-  <div id="festiveRakhiModal" class="relative w-full max-w-[460px] bg-[#fcf6f0] border-2 border-[#d4af37]/50 rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+<div id="festiveRakhiModalContainer" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md transition-opacity duration-300">
+  <div id="festiveRakhiModal" class="relative w-full max-w-[520px] bg-[#fcf6f0] border-2 border-[#d4af37]/60 rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
     
     <!-- Modal Header -->
-    <div class="px-6 py-4 bg-[#f4e5d8]/60 border-b border-[#e8d5c4] flex items-center justify-between shrink-0">
-      <div class="flex items-center gap-2.5">
-        <span class="text-2xl">🪔</span>
+    <div class="px-6 py-4 bg-[#f4e5d8]/70 border-b border-[#e8d5c4] flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-[#d32f2f] text-white flex items-center justify-center shadow-sm">
+          <span class="material-symbols-outlined text-lg">celebration</span>
+        </div>
         <div>
           <h3 class="text-base font-bold font-serif text-[#4a232f]">Virtual Rakhi Ceremony</h3>
-          <span id="festiveModalStepBadge" class="text-[10px] font-bold text-[#e5534b] uppercase tracking-wider block">Step 1 of 5</span>
+          <span id="festiveModalStepBadge" class="text-[11px] font-bold text-[#e5534b] uppercase tracking-wider block">Step 1 of 5</span>
         </div>
       </div>
 
@@ -26,14 +28,14 @@
     <!-- Modal Content Stage (Steps 1 to 5 Container) -->
     <div class="p-6 overflow-y-auto flex-1 space-y-5">
 
-      <!-- STEP 1: CHOOSE RAKHI ON THALI -->
+      <!-- STEP 1: CHOOSE RAKHI THREAD ON THALI -->
       <div id="rakhiStep1" class="space-y-5 text-center">
-        <div class="w-48 h-48 mx-auto rounded-full bg-white border-4 border-[#d4af37]/50 p-2 shadow-xl relative overflow-hidden flex items-center justify-center">
+        <div class="w-48 h-48 mx-auto rounded-full bg-white border-4 border-[#d4af37]/60 p-2 shadow-xl relative overflow-hidden flex items-center justify-center">
           <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZfsICxK34oixmN1AZRizpBM2bZC5BAB_XYhQLhxKaZRKgNxEv8X9v3Z4lzEedQVni4JuXg6LECezawWUPThbfyUKDAnCX14tBlz_SHV5Z0nHTlrYpNX81aS2JbA1-fREPTFZBGfA4Oin9IzGHb5PZxUinsPuL6pU81_ZnpEIrbooze4l1aomWnjr8FWAmwYUcQR92cij0amxmT3sNwf3Uq4XO2ot9yJ_JaQvk6cQiDvzzRP2Mvcj0" alt="Puja Thali" class="w-full h-full object-cover rounded-full">
         </div>
         <div class="space-y-1">
           <h4 class="text-xl font-bold font-serif text-[#4a232f]">Prepare Sacred Thali</h4>
-          <p class="text-xs text-[#7a5c68]">Select a special Rakhi thread for your brother to begin.</p>
+          <p class="text-xs text-[#7a5c68]">Select your chosen Rakhi thread to begin the virtual ceremony.</p>
         </div>
 
         <!-- 3 Rakhi Options Grid -->
@@ -56,36 +58,45 @@
       <!-- STEP 2: DRAG & DROP RAKHI TO WRIST -->
       <div id="rakhiStep2" class="hidden space-y-4 text-center">
         <div class="space-y-1">
-          <h4 class="text-xl font-bold font-serif text-[#4a232f]">Tie Rakhi on Wrist</h4>
-          <p class="text-xs text-[#7a5c68]">Drag the Rakhi thread upwards onto brother's wrist or tap below!</p>
+          <h4 class="text-xl font-bold font-serif text-[#4a232f]">Tie the Rakhi</h4>
+          <p class="text-xs text-[#7a5c68]">Drag the Rakhi thread upwards onto brother's wrist or tap below to perform ceremony.</p>
         </div>
 
-        <div id="rakhiInteractionArea" class="relative w-full aspect-square max-w-[280px] mx-auto rounded-3xl bg-white border-2 border-[#d4af37]/40 overflow-hidden shadow-xl touch-none">
+        <div id="rakhiInteractionArea" class="relative w-full aspect-[4/3] max-w-[340px] mx-auto rounded-3xl bg-white border-2 border-[#d4af37]/40 overflow-hidden shadow-xl touch-none">
           <!-- Wrist Background Image -->
-          <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeUqO2t1o0sPZLFq_QHL05QMQiy-hGG27aSMXTMcJgF9UtH9PydzEAcoQvjVf7j6EQ8qN0baAB3AXk-wCpKqT_rnYHR4QgQUZOoxUYqf1nNsrNt5FXSFyBjmkgXyHm5ee7FqIKvYsY2bt4tb8y3OjjRIj82i5qQgn_17oeC7dZVvSlckOUFoW_wNPtbKmov8ta0VlxxyeJeIB507DxsErD7CVlz90EvF3xdO06rwHv_9dFeiwAFE8i" alt="Wrist" class="w-full h-full object-cover select-none pointer-events-none">
+          <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKYFnHspSrA78KEP0ZJ0CfONICgStIewBATK-1s_Uv0bSQ4TGBRtnRmBqPjpRZEHyhL8DN2jT_w62j8AYTayJBAxDFp7l5IbijUlPSvRfGaVbNnDVavZt8T-S1EnKSYWoBrSe4O5hG9-INJnnJ0lMYLPCpURb8SYwvI1A7RXv6_fpw1mG8-VkfqUX9zvBJBGqCWEWp25saoTu-QGg4fSGXHiQRpXbb6gZr3UDzxF7ZEvaIZvECkwfL" alt="Wrist" class="w-full h-full object-cover select-none pointer-events-none">
           
-          <!-- Target Zone -->
-          <div id="rakhiTargetZone" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-16 border-2 border-dashed border-[#e5534b]/60 rounded-full opacity-60 pointer-events-none animate-pulse"></div>
+          <!-- Target Zone Overlay -->
+          <div id="rakhiTargetZone" class="absolute inset-x-6 top-1/3 bottom-8 border-2 border-dashed border-[#d32f2f]/80 bg-[#d32f2f]/10 rounded-2xl flex flex-col items-center justify-center backdrop-blur-xs transition-all pointer-events-none animate-pulse">
+            <span class="material-symbols-outlined text-[#d32f2f] text-2xl">drag_click</span>
+            <span class="text-[10px] font-bold text-white uppercase tracking-widest drop-shadow-md">Drag Rakhi Here</span>
+          </div>
 
           <!-- Draggable Rakhi -->
-          <div id="draggableRakhi" class="absolute bottom-4 left-1/2 -translate-x-1/2 w-20 h-20 cursor-grab active:cursor-grabbing z-20 touch-none" style="touch-action: none;">
+          <div id="draggableRakhi" class="absolute bottom-3 left-1/2 -translate-x-1/2 w-20 h-20 cursor-grab active:cursor-grabbing z-20 touch-none" style="touch-action: none;">
             <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrBgMcQPiJpH7ajGLFwJGVwRa8i1Cni6zU2PfdkIGO1Z52qnUapLQhEUB8IKS0u8LsO0x805E_mFTMaNxfNXiQGF5D9iEMg5ZFASInorsWjA8pMK8Lnt0I8jabUevnMHQAovnjP55h75mbDpmHRXuv5Mop7xu2TuWvXI-USFO8NdpfjFRy1d44pA0WFRFxbFRpYMqN_FHoNxjNn32vmJcW31a_RWHGrmth_-XXvYRw6uGgK-SS_5sT" alt="Rakhi" class="w-full h-full object-contain filter drop-shadow-lg select-none pointer-events-none">
           </div>
         </div>
 
-        <button type="button" onclick="triggerRakhiTiedSuccess()" class="text-xs font-bold text-[#e5534b] hover:underline cursor-pointer">
+        <button type="button" onclick="triggerRakhiTiedSuccess()" class="text-xs font-bold text-[#e5534b] hover:underline cursor-pointer pt-1">
           👉 Tap here to instantly tie Rakhi
         </button>
       </div>
 
       <!-- STEP 3: SUCCESS & CONFETTI CELEBRATION -->
-      <div id="rakhiStep3" class="hidden space-y-4 text-center py-4">
-        <div class="w-20 h-20 rounded-full bg-emerald-50 border-2 border-emerald-500 text-emerald-600 mx-auto flex items-center justify-center text-4xl shadow-xl animate-bounce">
-          ✓
+      <div id="rakhiStep3" class="hidden space-y-5 text-center py-4">
+        <div class="w-20 h-20 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-black mx-auto flex items-center justify-center text-4xl shadow-xl animate-bounce">
+          ✨
         </div>
-        <div class="space-y-1">
+        <div class="space-y-2">
           <h4 class="text-2xl font-bold font-serif text-[#4a232f]">Rakhi Tied Successfully! 🎉</h4>
-          <p class="text-xs text-[#7a5c68]">The bond of eternal love and protection is sealed forever.</p>
+          <p class="text-xs text-[#7a5c68] max-w-xs mx-auto leading-relaxed">
+            The bond of protection has been renewed. A beautiful tradition continues.
+          </p>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 italic space-y-1">
+          <b>The Vow of Protection</b>
+          <p class="text-[11px]">By tying this sacred thread, you invoke the timeless promise of love, duty, and lifelong protection.</p>
         </div>
       </div>
 
@@ -127,7 +138,7 @@
     </div>
 
     <!-- Modal Footer Controls -->
-    <div class="px-6 py-4 bg-[#f4e5d8]/60 border-t border-[#e8d5c4] flex items-center justify-between shrink-0">
+    <div class="px-6 py-4 bg-[#f4e5d8]/70 border-t border-[#e8d5c4] flex items-center justify-between shrink-0">
       <button type="button" id="festiveModalBackBtn" onclick="navigateFestiveStep(-1)" class="px-5 py-2.5 bg-white text-[#4a232f] font-bold text-xs rounded-full hover:bg-gray-100 transition-all cursor-pointer invisible shadow-sm">
         ← Back
       </button>
@@ -181,6 +192,9 @@ function navigateFestiveStep(dir) {
     if (currentFestiveStep === 5) {
       nextBtn.innerText = 'FINISH ✓';
       nextBtn.onclick = function() { closeFestiveRakhiModal(); };
+    } else if (currentFestiveStep === 3) {
+      nextBtn.innerText = 'SEE YOUR SHAGUN 🎁';
+      nextBtn.onclick = function() { navigateFestiveStep(1); };
     } else {
       nextBtn.innerText = 'NEXT ➔';
       nextBtn.onclick = function() { navigateFestiveStep(1); };
