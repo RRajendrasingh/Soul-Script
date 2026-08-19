@@ -239,6 +239,26 @@ if (!empty($initialLockData['page_id'])) {
 
     let isPlaying = false;
     let isMuted = false;
+    let activeYtVideoId = null;
+    let ytPlayer = null;
+    let isYtFallbackTriggered = false;
+    let currentFallbackAudioUrl = '<?php echo APP_URL; ?>/assets/audio/romantic_theme.mp3';
+    let currentSongTitle = 'Romantic Track';
+    let currentArtist = 'SoulScript';
+
+    // Load official YouTube Iframe API asynchronously
+    (function loadYTIframeAPI() {
+      if (!window.YT) {
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        if (firstScriptTag && firstScriptTag.parentNode) {
+          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        } else {
+          document.head.appendChild(tag);
+        }
+      }
+    })();
 
     function normalizeMediaUrlJs(url) {
       if (!url) return '';
@@ -267,7 +287,7 @@ if (!empty($initialLockData['page_id'])) {
     function extractYouTubeId(url) {
       if (!url || typeof url !== 'string') return null;
       const cleanUrl = url.trim();
-      let match = cleanUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+      let match = cleanUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|music\.youtube\.com\/watch\?v=))([\w-]{11})/);
       if (match && match[1]) return match[1];
       const fallbackMatch = cleanUrl.match(/([a-zA-Z0-9_-]{11})/);
       return (fallbackMatch && cleanUrl.includes('youtu')) ? fallbackMatch[1] : null;
@@ -281,12 +301,109 @@ if (!empty($initialLockData['page_id'])) {
       if (lbl) lbl.textContent = isPlaying ? '⏸ Pause' : '▶ Music';
     }
 
+    function initYouTubePlayer(videoId) {
+      if (!videoId) return;
+      activeYtVideoId = videoId;
+      isYtFallbackTriggered = false;
+
+      let ytContainer = document.getElementById('ytAudioIframeContainer');
+      if (!ytContainer) {
+        ytContainer = document.createElement('div');
+        ytContainer.id = 'ytAudioIframeContainer';
+        // Offscreen with visibility:visible so Chromium/WebKit background policies do NOT block audio
+        ytContainer.style.cssText = 'position:fixed; bottom:-500px; left:-500px; width:200px; height:200px; visibility:visible; pointer-events:none; z-index:-1;';
+        ytContainer.innerHTML = '<div id="ytAudioPlayerHost"></div>';
+        document.body.appendChild(ytContainer);
+      }
+
+      function createPlayer() {
+        if (window.YT && window.YT.Player) {
+          try {
+            ytPlayer = new YT.Player('ytAudioPlayerHost', {
+              width: '200',
+              height: '200',
+              videoId: videoId,
+              playerVars: {
+                autoplay: 0,
+                controls: 0,
+                disablekb: 1,
+                fs: 0,
+                loop: 1,
+                playlist: videoId,
+                playsinline: 1,
+                enablejsapi: 1,
+                origin: window.location.origin
+              },
+              events: {
+                onReady: function(e) {
+                  try { e.target.setVolume(50); } catch (err) {}
+                },
+                onError: function(e) {
+                  console.warn('YouTube playback restricted (code ' + e.data + '), auto-activating high quality audio fallback');
+                  triggerAudioFallback();
+                },
+                onStateChange: function(e) {
+                  if (e.data === YT.PlayerState.PLAYING) {
+                    isPlaying = true;
+                    updateAudioUIState(true);
+                  } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+                    isPlaying = false;
+                    updateAudioUIState(false);
+                  }
+                }
+              }
+            });
+          } catch (err) {
+            console.warn('YT.Player init failed, rendering fallback iframe', err);
+            renderFallbackYtIframe(videoId);
+          }
+        } else {
+          setTimeout(createPlayer, 300);
+        }
+      }
+
+      createPlayer();
+    }
+
+    function renderFallbackYtIframe(videoId) {
+      const host = document.getElementById('ytAudioPlayerHost');
+      if (host) {
+        host.innerHTML = `<iframe id="ytAudioIframe" width="200" height="200" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=0&loop=1&playlist=${videoId}&origin=${encodeURIComponent(window.location.origin)}" allow="autoplay"></iframe>`;
+      }
+    }
+
+    function triggerAudioFallback() {
+      if (isYtFallbackTriggered) return;
+      isYtFallbackTriggered = true;
+      activeYtVideoId = null;
+
+      const audio = document.getElementById('bgAudio');
+      if (audio && currentFallbackAudioUrl) {
+        audio.src = currentFallbackAudioUrl;
+        audio.volume = 0.5;
+        audio.load();
+        audio.play().then(() => {
+          isPlaying = true;
+          updateAudioUIState(true);
+        }).catch(e => console.log('Fallback audio play error:', e));
+      }
+    }
+
+    function updateAudioUIState(playing) {
+      const btn = document.getElementById('audioPlayBtn');
+      const badgeIcon = document.getElementById('songBadgeIcon');
+      const tapHint = document.getElementById('songBadgeTapHint');
+
+      if (btn) btn.innerHTML = playing ? PAUSE_SVG : PLAY_SVG;
+      if (badgeIcon) badgeIcon.innerHTML = playing ? '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>' : '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+      if (tapHint) tapHint.innerHTML = playing ? 'Now<br>Playing ♪' : 'Tap to<br>Play ▶';
+      syncMusicBtnLabel();
+    }
+
     function showSongBadge(songTitle, artist, audioUrl, ytVideoId) {
-      // Find the result content container and inject the badge at top
       const container = document.getElementById('resultContentContainer');
       if (!container) return;
 
-      // Remove existing badge if any
       const old = document.getElementById('songForYouBadge');
       if (old) old.remove();
 
@@ -312,49 +429,11 @@ if (!empty($initialLockData['page_id'])) {
           </div>
         </div>
       `;
-      // Insert at the very beginning of result content
       container.insertBefore(badge, container.firstChild);
     }
 
     function playSongFromBadge(audioUrl, ytVideoId, songTitle, artist) {
-      // Update badge to playing state
-      const tapHint = document.getElementById('songBadgeTapHint');
-      const badgeIcon = document.getElementById('songBadgeIcon');
-      const badgeInner = document.getElementById('songBadgeInner');
-
-      if (ytVideoId) {
-        // YouTube audio
-        let ytContainer = document.getElementById('ytAudioIframeContainer');
-        if (!ytContainer) {
-          ytContainer = document.createElement('div');
-          ytContainer.id = 'ytAudioIframeContainer';
-          ytContainer.className = 'fixed top-0 left-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden';
-          document.body.appendChild(ytContainer);
-        }
-        ytContainer.innerHTML = `<iframe id="ytAudioIframe" width="100" height="100" src="https://www.youtube.com/embed/${ytVideoId}?enablejsapi=1&autoplay=1&loop=1&playlist=${ytVideoId}" allow="autoplay"></iframe>`;
-        isPlaying = true;
-      } else {
-        // Regular audio
-        const audio = document.getElementById('bgAudio');
-        if (audio) {
-          audio.play().then(() => {
-            isPlaying = true;
-            const btn = document.getElementById('audioPlayBtn');
-            if (btn) btn.innerHTML = PAUSE_SVG;
-            syncMusicBtnLabel();
-          }).catch(e => console.log('Play error:', e));
-        }
-      }
-
-      // Update badge UI to show playing state
-      if (badgeIcon) badgeIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
-      if (tapHint) tapHint.innerHTML = 'Now<br>Playing ♪';
-      if (badgeInner) {
-        badgeInner.onclick = () => toggleAudioPlay();
-        badgeInner.classList.add('border-[#eac34a]/80');
-      }
-
-      // Auto-show Floating Music Controls on theme unlock: Mini Pill on Mobile (< 640px), Full Widget on Desktop (>= 640px)
+      // Auto-show Floating Music Controls
       const musicBox = document.getElementById('desktopMusicBox');
       const mobileMiniBtn = document.getElementById('mobileMusicMiniBtn');
       if (window.innerWidth < 640) {
@@ -362,9 +441,7 @@ if (!empty($initialLockData['page_id'])) {
           mobileMiniBtn.className = mobileMiniBtn.className.replace(/\bhidden\b/g, '').trim();
           mobileMiniBtn.style.display = 'flex';
         }
-        if (musicBox) {
-          musicBox.style.display = 'none';
-        }
+        if (musicBox) musicBox.style.display = 'none';
       } else {
         if (musicBox) {
           musicBox.className = musicBox.className.replace(/\bhidden\b/g, '').trim();
@@ -372,57 +449,64 @@ if (!empty($initialLockData['page_id'])) {
         }
       }
 
-      if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = songTitle;
+      if (document.getElementById('musicBoxTitle')) {
+        document.getElementById('musicBoxTitle').innerText = songTitle || currentSongTitle;
+      }
 
-      // Update mobile top bar button
-      isPlaying = true;
-      syncMusicBtnLabel();
+      toggleAudioPlay();
     }
 
     function toggleAudioPlay() {
-      const audio = document.getElementById('bgAudio');
-      const btn = document.getElementById('audioPlayBtn');
-      const ytIframe = document.getElementById('ytAudioIframe');
-      const badgeIcon = document.getElementById('songBadgeIcon');
-      const tapHint = document.getElementById('songBadgeTapHint');
-
-      if (ytIframe) {
-        if (isPlaying) {
-          ytIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-          isPlaying = false;
-          if (btn) btn.innerHTML = PLAY_SVG;
-          if (badgeIcon) badgeIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
-          if (tapHint) tapHint.innerHTML = 'Tap to<br>Play ▶';
-        } else {
-          ytIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-          isPlaying = true;
-          if (btn) btn.innerHTML = PAUSE_SVG;
-          if (badgeIcon) badgeIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
-          if (tapHint) tapHint.innerHTML = 'Now<br>Playing ♪';
+      if (activeYtVideoId && !isYtFallbackTriggered) {
+        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+          if (isPlaying) {
+            try { ytPlayer.pauseVideo(); } catch(e) {}
+            isPlaying = false;
+            updateAudioUIState(false);
+          } else {
+            try { ytPlayer.playVideo(); } catch(e) { triggerAudioFallback(); }
+            isPlaying = true;
+            updateAudioUIState(true);
+          }
+          return;
         }
-      } else if (audio) {
+
+        const ytIframe = document.getElementById('ytAudioIframe');
+        if (ytIframe && ytIframe.contentWindow) {
+          const cmd = isPlaying ? 'pauseVideo' : 'playVideo';
+          ytIframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: cmd, args: [] }), '*');
+          isPlaying = !isPlaying;
+          updateAudioUIState(isPlaying);
+          return;
+        }
+      }
+
+      // Native HTML5 Audio
+      const audio = document.getElementById('bgAudio');
+      if (audio) {
         if (isPlaying) {
           audio.pause();
           isPlaying = false;
-          if (btn) btn.innerHTML = PLAY_SVG;
-          if (badgeIcon) badgeIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
-          if (tapHint) tapHint.innerHTML = 'Tap to<br>Play ▶';
+          updateAudioUIState(false);
         } else {
           audio.play().then(() => {
             isPlaying = true;
-            if (btn) btn.innerHTML = PAUSE_SVG;
-            if (badgeIcon) badgeIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
-            if (tapHint) tapHint.innerHTML = 'Now<br>Playing ♪';
-          }).catch(err => console.log('Audio playback allowed on interaction:', err));
+            updateAudioUIState(true);
+          }).catch(err => {
+            console.log('Audio playback interaction needed:', err);
+          });
         }
       }
-      syncMusicBtnLabel();
     }
 
     function changeAudioVolume(val) {
+      const num = parseFloat(val);
       const audio = document.getElementById('bgAudio');
       if (audio) {
-        audio.volume = parseFloat(val);
+        audio.volume = num;
+      }
+      if (ytPlayer && typeof ytPlayer.setVolume === 'function') {
+        try { ytPlayer.setVolume(Math.round(num * 100)); } catch (e) {}
       }
     }
 
@@ -725,15 +809,22 @@ if (!empty($initialLockData['page_id'])) {
       // Check if audio URL is a YouTube Video or Shorts URL
       const ytVideoId = extractYouTubeId(rawAudioUrl || finalAudioUrl);
       if (ytVideoId && (!finalSongTitle || finalSongTitle === 'Acoustic Sunset Love' || finalSongTitle === 'YouTube Music Video')) {
-        finalSongTitle = 'Phoolon Ka Taaron Ka';
-        finalArtist = 'Kishore Kumar';
+        finalSongTitle = 'Special YouTube Track';
+        finalArtist = 'YouTube';
       }
 
-      if (!finalSongTitle) finalSongTitle = 'Acoustic Sunset Love';
-      if (!finalArtist) finalArtist = 'Romantic Track';
+      if (!finalSongTitle) finalSongTitle = 'Romantic Track';
+      if (!finalArtist) finalArtist = 'SoulScript';
 
-      // Preload audio silently — no autoplay (blocked on mobile)
-      if (!ytVideoId) {
+      currentSongTitle = finalSongTitle;
+      currentArtist = finalArtist;
+      currentFallbackAudioUrl = (templateId && templateId.includes('raksha_bandhan')) 
+          ? '<?php echo APP_URL; ?>/assets/audio/rakhi_theme.mp3' 
+          : '<?php echo APP_URL; ?>/assets/audio/romantic_theme.mp3';
+
+      if (ytVideoId) {
+        initYouTubePlayer(ytVideoId);
+      } else {
         const audioElem = document.getElementById('bgAudio');
         if (audioElem) {
           audioElem.volume = 0.5;
@@ -747,13 +838,8 @@ if (!empty($initialLockData['page_id'])) {
       // Show the Song-For-You tap badge
       showSongBadge(finalSongTitle, finalArtist, finalAudioUrl, ytVideoId);
 
-      if (!finalArtist) {
-        if (content.favorite_singers && !content.favorite_singers.includes('Tony!')) {
-          finalArtist = content.favorite_singers;
-        } else {
-          finalArtist = 'Romantic Track';
-        }
-      }
+      if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
+      if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').innerText = finalArtist;
 
       // Auto-show Floating Music Controls on theme unlock: Mini Pill on Mobile (< 640px), Full Widget on Desktop (>= 640px)
       const musicBox = document.getElementById('desktopMusicBox');

@@ -862,6 +862,7 @@ $showLogin = !$showDashboard && !$showHub;
           dashCurrentMusicUrl = musicUrl;
 
           const isYt = musicUrl.includes('youtube.com') || musicUrl.includes('youtu.be');
+          if (document.getElementById('bgMusicUrl')) document.getElementById('bgMusicUrl').value = musicUrl;
           if (isYt) {
             toggleDashMusicMode('youtube_link');
             const ytRadio = document.querySelector('input[name="dash_music_mode"][value="youtube_link"]');
