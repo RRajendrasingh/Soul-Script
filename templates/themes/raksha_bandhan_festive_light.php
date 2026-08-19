@@ -402,15 +402,21 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
       <p class="text-sm text-gray-400">Designed with ❤️ for the Best Sister</p>
     </section>
 
-    <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 pb-16">
+    <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 pb-8">
       <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-[32px] sm:rounded-[40px] p-8 sm:p-12 text-center space-y-6 card-shadow">
-        <div class="space-y-3">
+        <div class="space-y-4">
           <h2 class="text-xl sm:text-3xl md:text-4xl font-serif font-bold text-black uppercase tracking-widest leading-tight">
             MADE WITH ENDLESS LOVE BY <?= htmlspecialchars(strtoupper($buyerName)) ?> FOR <?= htmlspecialchars(strtoupper($partnerName)) ?>
           </h2>
           <p class="text-black/80 font-medium text-sm sm:text-lg">
-            This page is a digital keepsake of our bond.
+            This page is a digital keepsake of our bond. Lock it to preserve these memories forever.
           </p>
+          <div class="pt-2">
+            <button onclick="relockGiftSession()" type="button" class="px-6 py-3 rounded-full bg-black text-white hover:bg-gray-900 text-sm font-bold inline-flex items-center gap-2 transition-all cursor-pointer shadow-lg hover:scale-105">
+              <span class="material-symbols-outlined text-sm text-yellow-400">lock</span>
+              <span>Lock Gift Page 🔒</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -418,7 +424,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
   </main>
 
   <!-- FOOTER -->
-  <footer class="w-full bg-[#fcf6f0] border-t border-maroon/10 py-8 sm:py-12">
+  <footer class="w-full bg-[#fcf6f0] border-t border-maroon/10 py-6">
     <div class="max-w-[1280px] mx-auto px-6 lg:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
       <p class="text-sm text-gray-500">© 2026 SoulScript Raksha Bandhan. Celebrating Bonds of Love.</p>
       <nav class="flex gap-6 text-sm text-gray-500 uppercase tracking-wider font-medium">
