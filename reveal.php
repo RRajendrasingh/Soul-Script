@@ -887,6 +887,17 @@ if (!empty($initialLockData['page_id'])) {
         container.innerHTML = data.html_content;
         lucide.createIcons();
 
+        if (templateId === 'raksha_bandhan_festive_light' || data.template_id === 'raksha_bandhan_festive_light') {
+          document.body.style.backgroundColor = '#fcf6f0';
+          document.body.style.color = '#4a232f';
+          const header = document.getElementById('revealHeader');
+          if (header) header.style.display = 'none';
+          const musicBox = document.getElementById('desktopMusicBox');
+          if (musicBox) musicBox.style.display = 'none';
+          const mobileMusicBtn = document.getElementById('mobileMusicMiniBtn');
+          if (mobileMusicBtn) mobileMusicBtn.style.display = 'none';
+        }
+
         // Re-execute scripts inside injected HTML so template functions execute
         Array.from(container.querySelectorAll('script')).forEach(oldScript => {
           const newScript = document.createElement('script');
