@@ -80,55 +80,38 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
 }
 </style>
 
-<div class="festive-stitch-body antialiased min-h-screen relative overflow-x-hidden pt-16">
+<div class="festive-stitch-body antialiased min-h-screen relative w-full max-w-full overflow-x-hidden pt-4 sm:pt-6">
 
-  <!-- HEADER -->
-  <header class="fixed top-0 w-full z-50 bg-[#fcf6f0]/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-[#4a232f]/10">
-    <div class="h-16 max-w-[1280px] mx-auto px-6 lg:px-12 flex items-center justify-between">
-      <div class="flex items-center gap-2 text-maroon font-serif font-bold text-xl sm:text-2xl">
-        <svg class="text-red-500" fill="none" height="28" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="28"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-        <span>With Love, <?= htmlspecialchars($partnerName) ?></span>
-      </div>
-
-      <div class="flex items-center gap-4">
-        <button type="button" onclick="toggleFestiveAudio()" class="px-4 py-1.5 rounded-full border border-red-500 text-red-500 text-sm font-semibold bg-red-50/50 hover:bg-red-50 transition-colors flex items-center gap-1.5 cursor-pointer">
-          <span class="material-symbols-outlined text-base">music_note</span>
-          <span id="festiveAudioLabel">Play Music</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main class="w-full pt-8 pb-24 space-y-16 sm:space-y-24">
+  <main class="w-full space-y-12 sm:space-y-20">
 
     <!-- 1. HERO SECTION -->
-    <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12">
+    <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 pt-2">
       <div class="bg-red-50/30 p-6 sm:p-12 lg:p-16 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-        <div class="space-y-6 text-center md:text-left">
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif font-extrabold text-maroon leading-tight tracking-tight">
+        <div class="space-y-4 sm:space-y-6 text-center md:text-left">
+          <h1 class="text-3xl sm:text-5xl md:text-6xl font-serif font-extrabold text-maroon leading-tight tracking-tight break-words">
             Happy Raksha Bandhan<br>
             <span style="color: rgb(229, 83, 75);"><?= htmlspecialchars($partnerName) ?></span>
           </h1>
-          <p class="text-gray-600 text-base sm:text-lg leading-relaxed">
+          <p class="text-gray-600 text-sm sm:text-lg leading-relaxed">
             <?= htmlspecialchars($taglineQuote) ?>
           </p>
         </div>
 
         <div class="relative flex justify-center md:justify-end">
           <div class="relative inline-block">
-            <div class="w-56 h-56 sm:w-64 sm:h-64 md:w-[380px] md:h-[380px] rounded-full border-8 border-white shadow-xl overflow-hidden relative z-10">
+            <div class="w-48 h-48 sm:w-64 sm:h-64 md:w-[380px] md:h-[380px] rounded-full border-8 border-white shadow-xl overflow-hidden relative z-10">
               <img src="<?= htmlspecialchars($cleanReceiverPhoto) ?>" alt="<?= htmlspecialchars($partnerName) ?>" class="w-full h-full object-cover">
             </div>
-            <div class="absolute inset-0 -m-4 md:-m-6 rounded-full border-4 border-red-200 opacity-50 animate-pulse"></div>
+            <div class="absolute inset-0 -m-3 sm:-m-6 rounded-full border-4 border-red-200 opacity-50 animate-pulse"></div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- 2. SIBLING PROMISE 3D CARDS -->
-    <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 space-y-8 sm:space-y-10">
-      <h2 class="text-2xl sm:text-3xl font-serif font-bold text-maroon flex items-center justify-center gap-3">
-        <svg class="text-red-500" fill="none" height="28" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="28"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+    <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 space-y-8">
+      <h2 class="text-2xl sm:text-3xl font-serif font-bold text-maroon flex items-center justify-center gap-3 text-center">
+        <svg class="text-red-500 shrink-0" fill="none" height="28" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="28"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
         <span>Sibling Promise 3D Cards</span>
       </h2>
 
@@ -154,23 +137,23 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
 
     <!-- 3. VIRTUAL RAKHI CEREMONY SECTION -->
     <section class="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-12">
-      <div class="bg-red-50/30 rounded-[32px] sm:rounded-[40px] border border-red-200 p-8 sm:p-12 text-center space-y-8 sm:space-y-10 card-shadow relative">
+      <div class="bg-red-50/30 rounded-[32px] sm:rounded-[40px] border border-red-200 p-6 sm:p-12 text-center space-y-8 card-shadow relative">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-maroon flex items-center justify-center gap-3">
           ✨ Tie a Virtual Rakhi ✨
         </h2>
 
-        <div class="flex justify-center items-center gap-6 sm:gap-10 md:gap-16">
-          <div class="flex flex-col items-center gap-2 sm:gap-3 opacity-60">
-            <svg class="text-red-500" fill="none" height="32" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="32"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+        <div class="flex justify-center items-center gap-4 sm:gap-10 md:gap-16">
+          <div class="flex flex-col items-center gap-2 opacity-60">
+            <svg class="text-red-500" fill="none" height="28" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="28"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
             <span class="text-xs sm:text-sm font-medium text-gray-600">Diya</span>
           </div>
 
-          <div class="rounded-full border-4 sm:border-8 border-white shadow-xl relative z-10 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 flex items-center justify-center bg-gray-100 overflow-hidden">
+          <div class="rounded-full border-4 sm:border-8 border-white shadow-xl relative z-10 w-28 h-28 sm:w-40 sm:h-40 md:w-48 md:h-48 flex items-center justify-center bg-gray-100 overflow-hidden shrink-0">
             <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZfsICxK34oixmN1AZRizpBM2bZC5BAB_XYhQLhxKaZRKgNxEv8X9v3Z4lzEedQVni4JuXg6LECezawWUPThbfyUKDAnCX14tBlz_SHV5Z0nHTlrYpNX81aS2JbA1-fREPTFZBGfA4Oin9IzGHb5PZxUinsPuL6pU81_ZnpEIrbooze4l1aomWnjr8FWAmwYUcQR92cij0amxmT3sNwf3Uq4XO2ot9yJ_JaQvk6cQiDvzzRP2Mvcj0" alt="Rakhi Thali" class="w-full h-full object-cover">
           </div>
 
-          <div class="flex flex-col items-center gap-2 sm:gap-3 opacity-60">
-            <svg class="text-red-500" fill="none" height="32" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="32"><rect height="4" rx="1" width="20" x="2" y="16"></rect><rect height="4" rx="1" width="16" x="4" y="12"></rect><path d="M12 12v-4"></path><path d="M8 12v-2"></path><path d="M16 12v-2"></path><path d="M12 4v4"></path></svg>
+          <div class="flex flex-col items-center gap-2 opacity-60">
+            <svg class="text-red-500" fill="none" height="28" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="28"><rect height="4" rx="1" width="20" x="2" y="16"></rect><rect height="4" rx="1" width="16" x="4" y="12"></rect><path d="M12 12v-4"></path><path d="M8 12v-2"></path><path d="M16 12v-2"></path><path d="M12 4v4"></path></svg>
             <span class="text-xs sm:text-sm font-medium text-gray-600">Mithai</span>
           </div>
         </div>
@@ -187,15 +170,15 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
       <!-- LEFT: SHAGUN ENVELOPE & REVEAL CARD -->
       <div class="space-y-6 sm:space-y-8">
         <h2 class="text-2xl sm:text-3xl font-serif font-bold text-maroon flex items-center gap-3">
-          <svg class="text-red-500" fill="none" height="28" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="28"><rect height="10" rx="2" width="18" x="3" y="11"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" x2="8" y1="16" y2="16"></line><line x1="16" x2="16" y1="16"></line></svg>
+          <svg class="text-red-500 shrink-0" fill="none" height="28" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="28"><rect height="10" rx="2" width="18" x="3" y="11"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" x2="8" y1="16" y2="16"></line><line x1="16" x2="16" y1="16"></line></svg>
           <span>Shagun Envelope ✉️</span>
         </h2>
 
-        <div class="relative rounded-[32px] sm:rounded-[40px] overflow-hidden card-shadow min-h-[480px] bg-red-50/10 border-2 border-red-custom p-4 flex flex-col justify-center">
+        <div class="relative rounded-[32px] sm:rounded-[40px] overflow-hidden card-shadow min-h-[460px] bg-red-50/10 border-2 border-red-custom p-4 flex flex-col justify-center">
           
           <?php if (!$isUnlocked): ?>
             <!-- STATE 1 & 2: SCRATCH CARD OVERLAY & LOCKED TIMER -->
-            <div class="relative w-full h-full min-h-[420px] rounded-3xl overflow-hidden bg-[#fefce8] p-6 space-y-6 shadow-sm border border-[#fef08a] flex flex-col justify-between">
+            <div class="relative w-full h-full min-h-[400px] rounded-3xl overflow-hidden bg-[#fefce8] p-6 space-y-6 shadow-sm border border-[#fef08a] flex flex-col justify-between">
               
               <!-- Scratch Canvas Engine Container -->
               <div id="stitchScratchContainer" class="absolute inset-0 z-20 flex flex-col items-center justify-center cursor-crosshair">
@@ -266,7 +249,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
       </div>
 
       <!-- RIGHT: ROYAL DECREE CERTIFICATE -->
-      <div class="space-y-8 bg-red-50/30 rounded-[32px] sm:rounded-[40px] p-6 sm:p-8 lg:p-12 relative overflow-hidden h-full border border-red-200 card-shadow flex flex-col justify-between text-center">
+      <div class="space-y-6 sm:space-y-8 bg-red-50/30 rounded-[32px] sm:rounded-[40px] p-6 sm:p-8 lg:p-12 relative overflow-hidden h-full border border-red-200 card-shadow flex flex-col justify-between text-center">
         <div class="space-y-3">
           <p class="text-xs font-sans font-bold tracking-widest text-red-500 uppercase">Royal Decree &amp; Seal</p>
           <h2 class="text-3xl sm:text-4xl font-serif font-bold text-maroon flex items-center justify-center gap-3">
@@ -282,9 +265,9 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
         </div>
 
         <div class="flex flex-col sm:flex-row justify-center gap-4 w-full max-w-md mx-auto">
-          <button type="button" onclick="downloadWallKeepsakePoster()" class="btn-gradient text-white font-bold py-3 px-8 rounded-full shadow-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 flex-1 cursor-pointer">
+          <button type="button" onclick="downloadTamrapatraCertificate()" class="btn-gradient text-white font-bold py-3 px-8 rounded-full shadow-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 flex-1 cursor-pointer">
             <span class="material-symbols-outlined text-base">download</span>
-            <span>Download</span>
+            <span>Download Certificate</span>
           </button>
           <button type="button" onclick="shareStitchWhatsApp()" class="border-2 border-red-500 text-red-500 bg-white font-bold py-3 px-8 rounded-full shadow-sm hover:bg-red-50 transition-colors flex items-center justify-center gap-2 flex-1 cursor-pointer">
             <span class="material-symbols-outlined text-base">share</span>
@@ -295,15 +278,15 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
     </section>
 
     <!-- 5. KEEPSAKES & 3D ALBUM SCROLL SECTION -->
-    <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <section id="keepsakes" class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
       
       <!-- PRINTABLE KEEPSAKES -->
-      <div class="space-y-8">
+      <div class="space-y-6 sm:space-y-8">
         <div class="space-y-3">
-          <div class="inline-block px-5 py-1.5 rounded-full border border-red-200 text-red-500 text-xs font-bold tracking-widest uppercase bg-red-50/50">
+          <div class="inline-block px-4 sm:px-5 py-1.5 rounded-full border border-red-200 text-red-500 text-[11px] sm:text-xs font-bold tracking-widest uppercase bg-red-50/50">
             👑 PHYSICAL • PRINTABLE KEEPSAKES
           </div>
-          <h2 class="text-3xl sm:text-4xl font-serif font-bold text-maroon leading-tight">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-maroon leading-tight break-words">
             Printable Memory Keepsakes 🖼️ 📖
           </h2>
           <p class="text-gray-600 text-sm sm:text-base leading-relaxed max-w-lg">
@@ -325,7 +308,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
                 A luxury 300 DPI wall-frame keepsake featuring <?= htmlspecialchars($partnerName) ?>'s portrait in a 24K gold locket, surrounded by an uncropped memory mosaic.
               </p>
             </div>
-            <button type="button" onclick="downloadWallKeepsakePoster()" class="w-full sm:w-auto py-3 px-8 rounded-full btn-gradient text-white font-bold shadow-lg hover:opacity-90 flex items-center justify-center gap-2 cursor-pointer">
+            <button type="button" onclick="downloadWallKeepsakePoster()" class="w-full sm:w-auto py-3 px-8 rounded-full btn-gradient text-white font-bold shadow-lg hover:opacity-90 flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm">
               <span class="material-symbols-outlined text-sm">download</span>
               <span>DOWNLOAD WALL POSTER (300 DPI)</span>
             </button>
@@ -344,7 +327,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
                 A luxury 7-page printable storybook album with Royal Cover, Shahi Tamrapatra Certificate, chapter stories, and a dynamic QR code to re-live this website anytime!
               </p>
             </div>
-            <button type="button" onclick="downloadSiblingPhotobookPDF()" class="w-full sm:w-auto py-3 px-8 rounded-full bg-emerald-500 text-white font-bold shadow-lg hover:opacity-90 flex items-center justify-center gap-2 cursor-pointer">
+            <button type="button" onclick="downloadSiblingPhotobookPDF()" class="w-full sm:w-auto py-3 px-8 rounded-full bg-emerald-500 text-white font-bold shadow-lg hover:opacity-90 flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm">
               <span class="material-symbols-outlined text-sm">menu_book</span>
               <span>DOWNLOAD KEEPSAKE BOOK (PDF)</span>
             </button>
@@ -353,10 +336,10 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
       </div>
 
       <!-- ROYAL MEMORY SCROLL / 3D VIRTUAL ALBUM LAUNCHER -->
-      <div class="bg-red-50/30 rounded-[32px] sm:rounded-[40px] p-8 sm:p-12 lg:p-16 text-center space-y-8 card-shadow relative overflow-hidden border border-red-200 h-full flex flex-col justify-center">
+      <div class="bg-red-50/30 rounded-[32px] sm:rounded-[40px] p-6 sm:p-12 lg:p-16 text-center space-y-8 card-shadow relative overflow-hidden border border-red-200 h-full flex flex-col justify-center">
         <div class="relative z-10 space-y-4">
           <p class="text-xs font-bold tracking-[0.2em] text-yellow-600 uppercase">Royal Memory Scroll</p>
-          <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold flex items-center justify-center gap-3 text-maroon">
+          <h2 class="text-2xl sm:text-4xl md:text-5xl font-serif font-bold flex items-center justify-center gap-3 text-maroon">
             <span>Our Cherished Moments</span>
             <span class="text-yellow-500 text-3xl">✨</span>
           </h2>
@@ -373,10 +356,10 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
     </section>
 
     <!-- 6. CHILDHOOD SCRAPBOOK MOSAIC -->
-    <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 space-y-10 sm:space-y-12">
+    <section id="scrapbook" class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 space-y-8 sm:space-y-12">
       <div class="text-center space-y-4">
-        <h2 class="text-3xl sm:text-4xl font-serif font-bold text-maroon flex items-center justify-center gap-3">
-          <svg class="text-red-500" fill="none" height="32" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="32"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        <h2 class="text-2xl sm:text-4xl font-serif font-bold text-maroon flex items-center justify-center gap-3">
+          <svg class="text-red-500 shrink-0" fill="none" height="32" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="32"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
           <span>Our Childhood Scrapbook</span>
         </h2>
         <p class="text-gray-600 max-w-2xl mx-auto leading-relaxed text-sm sm:text-base">
@@ -387,35 +370,25 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <?php 
         $defaultCaptions = ['Giggles & Mud Pies', 'Always By My Side', 'Little Hands, Big Bond', 'Growing Up Together', 'First Rakhi Memories', 'Partners in Crime'];
-        if (!empty($galleryMedia)):
-          foreach ($galleryMedia as $mIdx => $mObj):
-            $imgSrc = is_array($mObj) ? resolveMediaUrl($mObj['file_path'] ?? '') : resolveMediaUrl($mObj);
-            $caption = is_array($mObj) ? ($mObj['caption'] ?? $defaultCaptions[$mIdx % 6]) : $defaultCaptions[$mIdx % 6];
-            if (!$imgSrc) continue;
+        $stitchDefaultImgs = [
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuCNOrtcvsfdswgVbFaQS_7cryDev0cl9Ms28q69BN-fYTJtrIKW-duaIiRqkhZeNgFLwPjArYOA9IyJH-20R3E6CiW5eJ8LySG0-5YC6ZfBXDtGtlno0imtOhMn_cAtUnjBeijQjWzu8JCP1KSQITYmi06m4mOy_4_smVTQKVSwOV6X2qG7yH-00YtfrKS9kfmFSj6eivLno1QSmAuXM3FoKoACiX-4ImvGIjO5kupb_GNkALFv-_Bx',
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuB1W4cvzWixPF82Kr200o6tTq57eeSTvqsYQwGo0xV84XECz2DX2VGlSMzOoqobrtS2N35WIxSLvDIBZwOV7sJDy-Lj8FDwsitpCd6uUDSgGoLBMhV4Xgx385JZ2E-byxe1Y6XGX2iOoXPNhBWSlyAHrCEGGdYp21_z3_vxYjHEeHmw-4uOxpp-S1iY3JtrN9flbmXlVvdsY02hdwZDrsH9jfSlFW5ctcNzKsczrByXWHE3LCX4n8sv',
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuA-rxUuandJ-yKh0-NBSCcMQevrXjQdVNPHJ3Tvisal85dWtEIZj2TGWKUJjZW53DNMOzz2Eak4SDdFwZklDkd5zRAsNpqtUCp2CD5vmTWw1jofN7korPpJKNuwVTRkZhWcDed_fQn5gJRwQ4NHKvGvYPOo6TSva33ZtWkQpICoBlYl7Q7_IJlR5PALgpVJPlXgXnUPp7BqhZubH7hNphTv3gsgTmu8TBC4Ewr1teO3iftmu2b-jz1x',
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuCybPClPeAzCOSpUDcwR1y3MV-AFU70lwhIuE6X5EO8blYXoi8UECBQgFQRQed_Uj7XyBRF9Ns042vS1a2mplXYGwbkRam4lIjXkoLAGD5nYjA8d70kdmNQiTezC_4lrVvWZ5nE6VzGzKURzRMyNTbCMH_fq9xA7oi4amTSrHK7QkgmUqSa6SftV6PcrMBkd1FheoypWSYqNV29_4hzkpeQmUEdoCoiFqzD5cegOx2a8-bbdPf2e6Aw',
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuCNOrtcvsfdswgVbFaQS_7cryDev0cl9Ms28q69BN-fYTJtrIKW-duaIiRqkhZeNgFLwPjArYOA9IyJH-20R3E6CiW5eJ8LySG0-5YC6ZfBXDtGtlno0imtOhMn_cAtUnjBeijQjWzu8JCP1KSQITYmi06m4mOy_4_smVTQKVSwOV6X2qG7yH-00YtfrKS9kfmFSj6eivLno1QSmAuXM3FoKoACiX-4ImvGIjO5kupb_GNkALFv-_Bx',
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuCybPClPeAzCOSpUDcwR1y3MV-AFU70lwhIuE6X5EO8blYXoi8UECBQgFQRQed_Uj7XyBRF9Ns042vS1a2mplXYGwbkRam4lIjXkoLAGD5nYjA8d70kdmNQiTezC_4lrVvWZ5nE6VzGzKURzRMyNTbCMH_fq9xA7oi4amTSrHK7QkgmUqSa6SftV6PcrMBkd1FheoypWSYqNV29_4hzkpeQmUEdoCoiFqzD5cegOx2a8-bbdPf2e6Aw'
+        ];
+        for ($i = 0; $i < 6; $i++):
+          $imgSrc = !empty($galleryMedia[$i]) ? (is_array($galleryMedia[$i]) ? resolveMediaUrl($galleryMedia[$i]['file_path'] ?? '') : resolveMediaUrl($galleryMedia[$i])) : $stitchDefaultImgs[$i];
+          $caption = !empty($galleryMedia[$i]) && is_array($galleryMedia[$i]) && !empty($galleryMedia[$i]['caption']) ? $galleryMedia[$i]['caption'] : $defaultCaptions[$i];
         ?>
-            <div class="space-y-3 group cursor-pointer" onclick="openPhotoLightbox('<?= htmlspecialchars($imgSrc) ?>')">
-              <div class="rounded-2xl overflow-hidden border-8 border-white shadow-md transform group-hover:scale-[1.02] transition-transform duration-300">
-                <img src="<?= htmlspecialchars($imgSrc) ?>" alt="Memory <?= $mIdx+1 ?>" class="w-full h-64 object-cover">
-              </div>
-              <p class="text-sm text-gray-500 text-center font-medium italic"><?= htmlspecialchars($caption) ?></p>
+          <div class="space-y-3 group cursor-pointer" onclick="openPhotoLightbox('<?= htmlspecialchars($imgSrc) ?>')">
+            <div class="rounded-2xl overflow-hidden border-8 border-white shadow-md transform group-hover:scale-[1.02] transition-transform duration-300">
+              <img src="<?= htmlspecialchars($imgSrc) ?>" alt="Childhood Memory <?= $i+1 ?>" class="w-full h-64 object-cover">
             </div>
-        <?php endforeach; else: ?>
-          <!-- Placeholder Scrapbook Photos matching Stitch Design -->
-          <?php 
-          $stitchDefaultImgs = [
-            'https://lh3.googleusercontent.com/aida-public/AB6AXuCNOrtcvsfdswgVbFaQS_7cryDev0cl9Ms28q69BN-fYTJtrIKW-duaIiRqkhZeNgFLwPjArYOA9IyJH-20R3E6CiW5eJ8LySG0-5YC6ZfBXDtGtlno0imtOhMn_cAtUnjBeijQjWzu8JCP1KSQITYmi06m4mOy_4_smVTQKVSwOV6X2qG7yH-00YtfrKS9kfmFSj6eivLno1QSmAuXM3FoKoACiX-4ImvGIjO5kupb_GNkALFv-_Bx',
-            'https://lh3.googleusercontent.com/aida-public/AB6AXuB1W4cvzWixPF82Kr200o6tTq57eeSTvqsYQwGo0xV84XECz2DX2VGlSMzOoqobrtS2N35WIxSLvDIBZwOV7sJDy-Lj8FDwsitpCd6uUDSgGoLBMhV4Xgx385JZ2E-byxe1Y6XGX2iOoXPNhBWSlyAHrCEGGdYp21_z3_vxYjHEeHmw-4uOxpp-S1iY3JtrN9flbmXlVvdsY02hdwZDrsH9jfSlFW5ctcNzKsczrByXWHE3LCX4n8sv',
-            'https://lh3.googleusercontent.com/aida-public/AB6AXuA-rxUuandJ-yKh0-NBSCcMQevrXjQdVNPHJ3Tvisal85dWtEIZj2TGWKUJjZW53DNMOzz2Eak4SDdFwZklDkd5zRAsNpqtUCp2CD5vmTWw1jofN7korPpJKNuwVTRkZhWcDed_fQn5gJRwQ4NHKvGvYPOo6TSva33ZtWkQpICoBlYl7Q7_IJlR5PALgpVJPlXgXnUPp7BqhZubH7hNphTv3gsgTmu8TBC4Ewr1teO3iftmu2b-jz1x'
-          ];
-          foreach ($stitchDefaultImgs as $dIdx => $dUrl):
-          ?>
-            <div class="space-y-3 group cursor-pointer">
-              <div class="rounded-2xl overflow-hidden border-8 border-white shadow-md transform group-hover:scale-[1.02] transition-transform duration-300">
-                <img src="<?= $dUrl ?>" alt="Childhood Memory <?= $dIdx+1 ?>" class="w-full h-64 object-cover">
-              </div>
-              <p class="text-sm text-gray-500 text-center font-medium italic"><?= $defaultCaptions[$dIdx] ?></p>
-            </div>
-          <?php endforeach; endif; ?>
+            <p class="text-sm text-gray-500 text-center font-medium italic"><?= htmlspecialchars($caption) ?></p>
+          </div>
+        <?php endfor; ?>
       </div>
     </section>
 
@@ -431,11 +404,11 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
     <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 pb-16">
       <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-[32px] sm:rounded-[40px] p-8 sm:p-12 text-center space-y-6 card-shadow">
         <div class="space-y-3">
-          <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-black uppercase tracking-widest leading-tight">
+          <h2 class="text-xl sm:text-3xl md:text-4xl font-serif font-bold text-black uppercase tracking-widest leading-tight">
             MADE WITH ENDLESS LOVE BY <?= htmlspecialchars(strtoupper($buyerName)) ?> FOR <?= htmlspecialchars(strtoupper($partnerName)) ?>
           </h2>
-          <p class="text-black/80 font-medium text-base sm:text-lg">
-            This page is a digital keepsake of our bond.
+          <p class="text-black/80 font-medium text-sm sm:text-lg">
+            This page is a digital keepsake of our bond. Lock it to preserve these memories forever.
           </p>
         </div>
       </div>
@@ -467,7 +440,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
 
 </div>
 
-<!-- JAVASCRIPT ENGINE MATCHING STITCH REAL-TIME CANVAS SCRATCH CARD -->
+<!-- JAVASCRIPT ENGINE WITH FULL INTERACTIVITY FIXES -->
 <script>
 let stitchAudioPlaying = false;
 
@@ -490,12 +463,51 @@ function toggleFestiveAudio() {
 
 function openStitchRakhiModal() {
   const container = document.getElementById('festiveRakhiModalContainer');
-  if (container) container.classList.remove('hidden');
+  if (container) {
+    container.classList.remove('hidden');
+    container.style.display = 'flex';
+  }
+}
+
+function closeStitchRakhiModal() {
+  const container = document.getElementById('festiveRakhiModalContainer');
+  if (container) {
+    container.classList.add('hidden');
+    container.style.display = 'none';
+  }
+}
+function closeFestiveRakhiModal() {
+  closeStitchRakhiModal();
 }
 
 function openStitchVirtualAlbumModal() {
   const container = document.getElementById('festive3DAlbumModalContainer');
-  if (container) container.classList.remove('hidden');
+  if (container) {
+    container.classList.remove('hidden');
+    container.style.display = 'flex';
+  }
+}
+
+function closeStitchVirtualAlbumModal() {
+  const container = document.getElementById('festive3DAlbumModalContainer');
+  if (container) {
+    container.classList.add('hidden');
+    container.style.display = 'none';
+  }
+}
+function closeFestiveVirtualAlbumModal() {
+  closeStitchVirtualAlbumModal();
+}
+
+function downloadTamrapatraCertificate() {
+  const certUrl = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCXx9bPTk2ROO2lmeE736Caolpu-RJSi9lBODWkPogwGZjVCi1nvpsItfKzbUH-8DqK4MC_U2KHjT8JZ-jDhVun3ZJHCNW7_DeCLt8d-tRtGjpMbJzUqQqSlPQmP1ReMhxXCLna-A442FRqLgxGQkYAv18AtF2UXXjUfZs97LciRAqAKI3anS5UlA36z8F0YilwnQXNAlsyY4e-FcmnGwkJhEWFWdceTJ70H6T6YeKm9yYybbPGzTRMYO8ZfaoqTbUddQ';
+  const a = document.createElement('a');
+  a.href = certUrl;
+  a.download = `Shahi_Tamrapatra_Certificate_<?= preg_replace('/[^a-zA-Z0-9]/', '_', $partnerName) ?>.png`;
+  a.target = '_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 function shareStitchWhatsApp() {
@@ -520,8 +532,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let isDrawing = false;
 
     function initScratch() {
-      canvas.width = container.offsetWidth || 360;
-      canvas.height = container.offsetHeight || 420;
+      canvas.width = container.offsetWidth || 340;
+      canvas.height = container.offsetHeight || 400;
 
       const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
       grad.addColorStop(0, '#eab308');
@@ -531,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
       for (let i = 0; i < 150; i++) {
         ctx.beginPath();
         ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 4, 0, Math.PI * 2);
@@ -544,11 +556,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function scratch(e) {
       if (!isDrawing) return;
       const rect = canvas.getBoundingClientRect();
-      const x = (e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0)) - rect.left;
-      const y = (e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0)) - rect.top;
+      const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
 
       ctx.beginPath();
-      ctx.arc(x, y, 36, 0, Math.PI * 2);
+      ctx.arc(x, y, 40, 0, Math.PI * 2);
       ctx.fill();
 
       checkReveal();
@@ -561,7 +575,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (imageData.data[i] === 0) transparent++;
       }
       const percent = (transparent / (canvas.width * canvas.height)) * 100;
-      if (percent > 40) {
+      if (percent > 35) {
         container.style.transition = 'opacity 0.5s ease';
         container.style.opacity = '0';
         setTimeout(() => container.remove(), 500);
