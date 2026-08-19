@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/media_helper.php';
+require_once __DIR__ . '/../includes/voucher_helper.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 
