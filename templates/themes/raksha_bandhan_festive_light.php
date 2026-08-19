@@ -174,18 +174,18 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
           <span>Shagun Envelope ✉️</span>
         </h2>
 
-        <div class="relative rounded-[32px] sm:rounded-[40px] overflow-hidden card-shadow min-h-[460px] bg-red-50/10 border-2 border-red-custom p-4 flex flex-col justify-center">
+        <div class="relative rounded-[32px] sm:rounded-[40px] overflow-hidden card-shadow min-h-[480px] bg-red-50/10 border-2 border-red-custom p-4 flex flex-col justify-center">
           
           <?php if (!$isUnlocked): ?>
             <!-- STATE 1 & 2: SCRATCH CARD OVERLAY & LOCKED TIMER -->
-            <div class="relative w-full h-full min-h-[400px] rounded-3xl overflow-hidden bg-[#fefce8] p-6 space-y-6 shadow-sm border border-[#fef08a] flex flex-col justify-between">
+            <div class="relative w-full h-full min-h-[420px] rounded-3xl overflow-hidden bg-[#fefce8] p-6 space-y-6 shadow-sm border border-[#fef08a] flex flex-col justify-between">
               
               <!-- Scratch Canvas Engine Container -->
               <div id="stitchScratchContainer" class="absolute inset-0 z-20 flex flex-col items-center justify-center cursor-crosshair">
                 <canvas id="stitchScratchCanvas" class="absolute inset-0 w-full h-full"></canvas>
                 <div id="stitchScratchPrompt" class="relative z-30 flex flex-col items-center gap-3 pointer-events-none text-center p-4">
-                  <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
-                    <span class="material-symbols-outlined text-white text-4xl">card_giftcard</span>
+                  <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
+                    <span class="material-symbols-outlined text-white text-5xl">card_giftcard</span>
                   </div>
                   <p class="text-white font-bold text-xl sm:text-2xl tracking-wide drop-shadow-md">Scratch to reveal Shagun 🎁</p>
                 </div>
@@ -441,7 +441,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
 
 </div>
 
-<!-- JAVASCRIPT ENGINE WITH FULL REAL-TIME SCRATCH ERASE FIX -->
+<!-- JAVASCRIPT ENGINE WITH FULL IMMEDIATE INITIALIZATION FOR AJAX REVEAL -->
 <script>
 let stitchAudioPlaying = false;
 
@@ -522,34 +522,35 @@ function copyStitchVoucher() {
   alert('Voucher Code Copied to Clipboard! 🎉');
 }
 
-// Scratch Card & Countdown Engine initialization
-document.addEventListener('DOMContentLoaded', function() {
-  const canvas = document.getElementById('stitchScratchCanvas');
-  const container = document.getElementById('stitchScratchContainer');
-  const prompt = document.getElementById('stitchScratchPrompt');
+// Immediate Self-Executing Scratch Card Canvas Engine
+(function initStitchScratchEngine() {
+  function setupCanvas() {
+    const canvas = document.getElementById('stitchScratchCanvas');
+    const container = document.getElementById('stitchScratchContainer');
+    const prompt = document.getElementById('stitchScratchPrompt');
 
-  if (canvas && container) {
+    if (!canvas || !container) return;
+
     const ctx = canvas.getContext('2d');
     let isDrawing = false;
 
-    function initScratch() {
-      canvas.width = container.offsetWidth || 340;
-      canvas.height = container.offsetHeight || 400;
+    canvas.width = container.offsetWidth || 360;
+    canvas.height = container.offsetHeight || 440;
 
-      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      grad.addColorStop(0, '#eab308');
-      grad.addColorStop(0.5, '#facc15');
-      grad.addColorStop(1, '#ca8a04');
+    // Create Gold Gradient
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    grad.addColorStop(0, '#eab308');
+    grad.addColorStop(0.5, '#facc15');
+    grad.addColorStop(1, '#ca8a04');
 
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-      for (let i = 0; i < 150; i++) {
-        ctx.beginPath();
-        ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 4, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+    for (let i = 0; i < 200; i++) {
+      ctx.beginPath();
+      ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 4, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     function scratch(e) {
@@ -591,11 +592,13 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('touchend', () => isDrawing = false);
     canvas.addEventListener('mousemove', scratch);
     canvas.addEventListener('touchmove', scratch, {passive: true});
-
-    initScratch();
   }
 
-  // Countdown Timer Engine
+  setTimeout(setupCanvas, 100);
+})();
+
+// Countdown Timer Engine
+(function initStitchTimer() {
   let remainingSecs = <?= $secondsRemaining ?>;
   const timerEl = document.getElementById('stitchTimerDisplay');
   if (timerEl && remainingSecs > 0) {
@@ -615,5 +618,5 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTimer();
     setInterval(updateTimer, 1000);
   }
-});
+})();
 </script>
