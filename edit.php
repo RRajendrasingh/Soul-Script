@@ -953,7 +953,8 @@ $showLogin = !$showDashboard && !$showHub;
         'birthday_magic': { name: 'Birthday Magic', icon: 'sparkles', color: 'from-[#1e3b30] via-[#152821] to-[#101b17]' },
         'perfect_proposal': { name: 'Perfect Proposal', icon: 'heart-handshake', color: 'from-[#3b2d1e] via-[#271d14] to-[#17130e]' },
         'long_distance_love': { name: 'Long Distance Love', icon: 'globe', color: 'from-[#1e2a3b] via-[#141b27] to-[#0e121b]' },
-        'raksha_bandhan_royal': { name: 'Raksha Bandhan Royal', icon: 'crown', color: 'from-[#3b2a1a] via-[#281c12] to-[#18110b]' }
+        'raksha_bandhan_royal': { name: 'Raksha Bandhan Royal', icon: 'crown', color: 'from-[#3b2a1a] via-[#281c12] to-[#18110b]' },
+        'raksha_bandhan_festive_light': { name: 'Raksha Bandhan Festive Light (Stitch)', icon: 'sun', color: 'from-[#fcf6f0] via-[#f4e5d8] to-[#e8d5c4]' }
       };
 
       let pendingHtml = allPendingOrders.map(po => {

@@ -107,7 +107,11 @@ if ($slug && ($bypass_edit_token || $preview_mode === '1')) {
             ];
 
             $html_content = '';
-            $theme_file = __DIR__ . '/../templates/themes/' . $page['template_id'] . '.php';
+            $requestedTheme = trim($input['override_theme'] ?? $_GET['theme'] ?? '');
+            $selectedTemplateId = (!empty($requestedTheme) && file_exists(__DIR__ . '/../templates/themes/' . preg_replace('/[^a-zA-Z0-9_-]/', '', $requestedTheme) . '.php')) 
+                ? preg_replace('/[^a-zA-Z0-9_-]/', '', $requestedTheme) 
+                : $page['template_id'];
+            $theme_file = __DIR__ . '/../templates/themes/' . $selectedTemplateId . '.php';
             if (file_exists($theme_file)) {
                 $content = $contentData;
                 $isEditMode = true;
@@ -302,7 +306,11 @@ try {
     ];
 
     $html_content = '';
-    $theme_file = __DIR__ . '/../templates/themes/' . $page['template_id'] . '.php';
+    $requestedTheme = trim($input['override_theme'] ?? $_GET['theme'] ?? '');
+    $selectedTemplateId = (!empty($requestedTheme) && file_exists(__DIR__ . '/../templates/themes/' . preg_replace('/[^a-zA-Z0-9_-]/', '', $requestedTheme) . '.php')) 
+        ? preg_replace('/[^a-zA-Z0-9_-]/', '', $requestedTheme) 
+        : $page['template_id'];
+    $theme_file = __DIR__ . '/../templates/themes/' . $selectedTemplateId . '.php';
     if (file_exists($theme_file)) {
         $content = $contentData;
         $isEditMode = false;

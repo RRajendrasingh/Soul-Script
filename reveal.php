@@ -696,7 +696,7 @@ if (!empty($initialLockData['page_id'])) {
         const res = await fetch('<?php echo APP_URL; ?>/api/verify_hint.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug: currentSlug, answer: input.value.trim(), preview_mode: (urlParams.get('theme') ? '1' : '0') })
+          body: JSON.stringify({ slug: currentSlug, answer: input.value.trim(), preview_mode: (urlParams.get('theme') ? '1' : '0'), override_theme: urlParams.get('theme') || '' })
         });
         const data = await res.json();
 

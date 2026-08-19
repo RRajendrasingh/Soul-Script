@@ -612,7 +612,7 @@ if (!empty($initialLockData['page_id'])) {
         const res = await fetch('<?php echo APP_URL; ?>/api/verify_hint.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug: currentSlug, answer: input.value.trim(), preview_mode: (urlParams.get('theme') ? '1' : '0') })
+          body: JSON.stringify({ slug: currentSlug, answer: input.value.trim(), preview_mode: (urlParams.get('theme') ? '1' : '0'), override_theme: urlParams.get('theme') || '' })
         });
         const data = await res.json();
 
@@ -661,6 +661,12 @@ if (!empty($initialLockData['page_id'])) {
 
       // SINGER HIT PLAYLIST REGISTRY
       const SINGER_PLAYLISTS = {
+        'kishore kumar': [
+          { title: 'Phoolon Ka Taaron Ka', url: 'https://www.youtube.com/watch?v=0e3dYx_wS_0' }
+        ],
+        'phoolon ka taaron ka': [
+          { title: 'Phoolon Ka Taaron Ka', url: 'https://www.youtube.com/watch?v=0e3dYx_wS_0' }
+        ],
         'arijit singh': [
           { title: 'Tum Hi Ho', url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3' },
           { title: 'Kesariya', url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a88390.mp3?filename=romantic-piano-10708.mp3' },
@@ -681,11 +687,27 @@ if (!empty($initialLockData['page_id'])) {
         ]
       };
 
-      // Resolve Music Track & Titles (check both content and content.template_fields)
+      // 1. Resolve Music Track & Titles directly from Database (buyer selected song)
       let rawAudioUrl = content.bg_music_url || tf.bg_music_url || tf.song_url || tf.youtube_url || '';
-      let finalAudioUrl = rawAudioUrl || 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3';
+      let finalAudioUrl = rawAudioUrl;
       let finalSongTitle = content.song_title || tf.song_title || '';
       let finalArtist = content.song_artist || tf.song_artist || '';
+
+      // 2. Only fallback to default theme track if buyer has NOT set any custom song
+      if (!rawAudioUrl || rawAudioUrl.trim() === '' || rawAudioUrl.includes('acoustic-guitars-ambient') || rawAudioUrl.includes('pixabay')) {
+        if (!finalSongTitle || finalSongTitle.trim() === '' || finalSongTitle === 'Acoustic Sunset Love') {
+          if (templateId && templateId.includes('raksha_bandhan')) {
+            finalAudioUrl = '<?php echo APP_URL; ?>/assets/audio/rakhi_theme.mp3';
+            finalSongTitle = 'Phoolon Ka Taaron Ka';
+            finalArtist = 'Kishore Kumar';
+          } else {
+            finalAudioUrl = '<?php echo APP_URL; ?>/assets/audio/romantic_theme.mp3';
+            finalSongTitle = 'Tum Hi Ho';
+            finalArtist = 'Arijit Singh';
+          }
+          rawAudioUrl = finalAudioUrl;
+        }
+      }
 
       if (rawAudioUrl === 'random_singer' || !rawAudioUrl) {
         const singerKey = (content.favorite_singers || tf.favorite_singers || 'arijit singh').toLowerCase();
@@ -702,9 +724,9 @@ if (!empty($initialLockData['page_id'])) {
 
       // Check if audio URL is a YouTube Video or Shorts URL
       const ytVideoId = extractYouTubeId(rawAudioUrl || finalAudioUrl);
-      if (ytVideoId && (!finalSongTitle || finalSongTitle === 'Acoustic Sunset Love')) {
-        finalSongTitle = 'YouTube Music Video';
-        finalArtist = 'YouTube Audio';
+      if (ytVideoId && (!finalSongTitle || finalSongTitle === 'Acoustic Sunset Love' || finalSongTitle === 'YouTube Music Video')) {
+        finalSongTitle = 'Phoolon Ka Taaron Ka';
+        finalArtist = 'Kishore Kumar';
       }
 
       if (!finalSongTitle) finalSongTitle = 'Acoustic Sunset Love';
@@ -729,6 +751,31 @@ if (!empty($initialLockData['page_id'])) {
         if (content.favorite_singers && !content.favorite_singers.includes('Tony!')) {
           finalArtist = content.favorite_singers;
         } else {
+          finalArtist = 'Romantic Track';
+        }
+      }
+
+      // Auto-show Floating Music Controls on theme unlock: Mini Pill on Mobile (< 640px), Full Widget on Desktop (>= 640px)
+      const musicBox = document.getElementById('desktopMusicBox');
+      const mobileMiniBtn = document.getElementById('mobileMusicMiniBtn');
+      if (window.innerWidth < 640) {
+        if (mobileMiniBtn) {
+          mobileMiniBtn.className = mobileMiniBtn.className.replace(/\bhidden\b/g, '').trim();
+          mobileMiniBtn.style.display = 'flex';
+        }
+        if (musicBox) {
+          musicBox.style.display = 'none';
+        }
+      } else {
+        if (musicBox) {
+          musicBox.className = musicBox.className.replace(/\bhidden\b/g, '').trim();
+          musicBox.style.display = 'flex';
+        }
+      }
+
+      if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
+      if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').innerText = finalArtist;
+
       const pName = content.partner_name || 'Partner';
       const pInitial = pName.charAt(0).toUpperCase();
       const cleanReceiverPhoto = content.receiver_photo ? normalizeMediaUrlJs(content.receiver_photo) : '';
