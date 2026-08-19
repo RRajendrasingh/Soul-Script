@@ -355,7 +355,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
 
     </section>
 
-    <!-- 6. CHILDHOOD SCRAPBOOK MOSAIC -->
+    <!-- 6. CHILDHOOD SCRAPBOOK MOSAIC WITH EXACT STAGGERED STITCH LAYOUT -->
     <section id="scrapbook" class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 space-y-8 sm:space-y-12">
       <div class="text-center space-y-4">
         <h2 class="text-2xl sm:text-4xl font-serif font-bold text-maroon flex items-center justify-center gap-3">
@@ -370,6 +370,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <?php 
         $defaultCaptions = ['Giggles & Mud Pies', 'Always By My Side', 'Little Hands, Big Bond', 'Growing Up Together', 'First Rakhi Memories', 'Partners in Crime'];
+        $staggerClasses = ['', 'lg:mt-12', '', 'lg:-mt-10', '', 'lg:mt-12'];
         $stitchDefaultImgs = [
           'https://lh3.googleusercontent.com/aida-public/AB6AXuCNOrtcvsfdswgVbFaQS_7cryDev0cl9Ms28q69BN-fYTJtrIKW-duaIiRqkhZeNgFLwPjArYOA9IyJH-20R3E6CiW5eJ8LySG0-5YC6ZfBXDtGtlno0imtOhMn_cAtUnjBeijQjWzu8JCP1KSQITYmi06m4mOy_4_smVTQKVSwOV6X2qG7yH-00YtfrKS9kfmFSj6eivLno1QSmAuXM3FoKoACiX-4ImvGIjO5kupb_GNkALFv-_Bx',
           'https://lh3.googleusercontent.com/aida-public/AB6AXuB1W4cvzWixPF82Kr200o6tTq57eeSTvqsYQwGo0xV84XECz2DX2VGlSMzOoqobrtS2N35WIxSLvDIBZwOV7sJDy-Lj8FDwsitpCd6uUDSgGoLBMhV4Xgx385JZ2E-byxe1Y6XGX2iOoXPNhBWSlyAHrCEGGdYp21_z3_vxYjHEeHmw-4uOxpp-S1iY3JtrN9flbmXlVvdsY02hdwZDrsH9jfSlFW5ctcNzKsczrByXWHE3LCX4n8sv',
@@ -382,7 +383,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
           $imgSrc = !empty($galleryMedia[$i]) ? (is_array($galleryMedia[$i]) ? resolveMediaUrl($galleryMedia[$i]['file_path'] ?? '') : resolveMediaUrl($galleryMedia[$i])) : $stitchDefaultImgs[$i];
           $caption = !empty($galleryMedia[$i]) && is_array($galleryMedia[$i]) && !empty($galleryMedia[$i]['caption']) ? $galleryMedia[$i]['caption'] : $defaultCaptions[$i];
         ?>
-          <div class="space-y-3 group cursor-pointer" onclick="openPhotoLightbox('<?= htmlspecialchars($imgSrc) ?>')">
+          <div class="space-y-3 group cursor-pointer <?= $staggerClasses[$i] ?>" onclick="openPhotoLightbox('<?= htmlspecialchars($imgSrc) ?>')">
             <div class="rounded-2xl overflow-hidden border-8 border-white shadow-md transform group-hover:scale-[1.02] transition-transform duration-300">
               <img src="<?= htmlspecialchars($imgSrc) ?>" alt="Childhood Memory <?= $i+1 ?>" class="w-full h-64 object-cover">
             </div>
@@ -408,7 +409,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
             MADE WITH ENDLESS LOVE BY <?= htmlspecialchars(strtoupper($buyerName)) ?> FOR <?= htmlspecialchars(strtoupper($partnerName)) ?>
           </h2>
           <p class="text-black/80 font-medium text-sm sm:text-lg">
-            This page is a digital keepsake of our bond. Lock it to preserve these memories forever.
+            This page is a digital keepsake of our bond.
           </p>
         </div>
       </div>
@@ -440,7 +441,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
 
 </div>
 
-<!-- JAVASCRIPT ENGINE WITH FULL INTERACTIVITY FIXES -->
+<!-- JAVASCRIPT ENGINE WITH FULL REAL-TIME SCRATCH ERASE FIX -->
 <script>
 let stitchAudioPlaying = false;
 
@@ -549,8 +550,6 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 4, 0, Math.PI * 2);
         ctx.fill();
       }
-
-      ctx.globalCompositeOperation = 'destination-out';
     }
 
     function scratch(e) {
@@ -561,6 +560,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const x = clientX - rect.left;
       const y = clientY - rect.top;
 
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 1)';
       ctx.beginPath();
       ctx.arc(x, y, 40, 0, Math.PI * 2);
       ctx.fill();
