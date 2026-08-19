@@ -379,11 +379,12 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
           'https://lh3.googleusercontent.com/aida-public/AB6AXuCNOrtcvsfdswgVbFaQS_7cryDev0cl9Ms28q69BN-fYTJtrIKW-duaIiRqkhZeNgFLwPjArYOA9IyJH-20R3E6CiW5eJ8LySG0-5YC6ZfBXDtGtlno0imtOhMn_cAtUnjBeijQjWzu8JCP1KSQITYmi06m4mOy_4_smVTQKVSwOV6X2qG7yH-00YtfrKS9kfmFSj6eivLno1QSmAuXM3FoKoACiX-4ImvGIjO5kupb_GNkALFv-_Bx',
           'https://lh3.googleusercontent.com/aida-public/AB6AXuCybPClPeAzCOSpUDcwR1y3MV-AFU70lwhIuE6X5EO8blYXoi8UECBQgFQRQed_Uj7XyBRF9Ns042vS1a2mplXYGwbkRam4lIjXkoLAGD5nYjA8d70kdmNQiTezC_4lrVvWZ5nE6VzGzKURzRMyNTbCMH_fq9xA7oi4amTSrHK7QkgmUqSa6SftV6PcrMBkd1FheoypWSYqNV29_4hzkpeQmUEdoCoiFqzD5cegOx2a8-bbdPf2e6Aw'
         ];
-        for ($i = 0; $i < 6; $i++):
-          $imgSrc = !empty($galleryMedia[$i]) ? (is_array($galleryMedia[$i]) ? resolveMediaUrl($galleryMedia[$i]['file_path'] ?? '') : resolveMediaUrl($galleryMedia[$i])) : $stitchDefaultImgs[$i];
-          $caption = !empty($galleryMedia[$i]) && is_array($galleryMedia[$i]) && !empty($galleryMedia[$i]['caption']) ? $galleryMedia[$i]['caption'] : $defaultCaptions[$i];
+        $totalPhotos = !empty($galleryMedia) ? max(6, count($galleryMedia)) : 6;
+        for ($i = 0; $i < $totalPhotos; $i++):
+          $imgSrc = !empty($galleryMedia[$i]) ? (is_array($galleryMedia[$i]) ? resolveMediaUrl($galleryMedia[$i]['file_path'] ?? '') : resolveMediaUrl($galleryMedia[$i])) : $stitchDefaultImgs[$i % 6];
+          $caption = !empty($galleryMedia[$i]) && is_array($galleryMedia[$i]) && !empty($galleryMedia[$i]['caption']) ? $galleryMedia[$i]['caption'] : ($defaultCaptions[$i % 6]);
         ?>
-          <div class="space-y-3 group cursor-pointer <?= $staggerClasses[$i] ?>" onclick="openPhotoLightbox('<?= htmlspecialchars($imgSrc) ?>')">
+          <div class="space-y-3 group cursor-pointer <?= $staggerClasses[$i % 6] ?>" onclick="openPhotoLightbox('<?= htmlspecialchars($imgSrc) ?>')">
             <div class="rounded-2xl overflow-hidden border-8 border-white shadow-md transform group-hover:scale-[1.02] transition-transform duration-300">
               <img src="<?= htmlspecialchars($imgSrc) ?>" alt="Childhood Memory <?= $i+1 ?>" class="w-full h-64 object-cover">
             </div>

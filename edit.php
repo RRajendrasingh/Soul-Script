@@ -664,6 +664,16 @@ $showLogin = !$showDashboard && !$showHub;
           note: "Shagun Envelope Message / Slogan *",
           photo: "Brother / Sister's Profile Photo 🖼️"
         }
+      },
+      'raksha_bandhan_festive_light': {
+        hasLetters: false, hasTokens: false,
+        dashTitleSuffix: "'s Rakhi Dashboard",
+        labels: {
+          name: "Brother / Sister's First Name *",
+          tagline: "Sibling Motto / Tagline Banner *",
+          note: "Shagun Envelope Message / Slogan *",
+          photo: "Brother / Sister's Profile Photo 🖼️"
+        }
       }
     };
 
@@ -1966,7 +1976,7 @@ $showLogin = !$showDashboard && !$showHub;
       const templateId = document.getElementById('activeTemplateId').value;
       const templateFields = {};
 
-      if (templateId === 'birthday_magic' || templateId === 'raksha_bandhan_special' || templateId === 'raksha_bandhan_royal') {
+      if (templateId === 'birthday_magic' || templateId === 'raksha_bandhan_special' || templateId === 'raksha_bandhan_royal' || templateId === 'raksha_bandhan_festive_light') {
         const pDob = document.getElementById('partnerDob')?.value;
         const reasons = [];
         document.querySelectorAll('#editReasonsList .edit-reason-item').forEach(inp => {

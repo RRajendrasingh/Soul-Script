@@ -356,6 +356,25 @@ if ($order_id) {
               'music' => [
                   'title' => 'Phoolon Ka Taaron Ka', 'artist' => 'Kishore Kumar'
               ]
+          ],
+          'raksha_bandhan_festive_light' => [
+              'recipientLabel' => "Brother / Sister's First Name *",
+              'recipientPlaceholder' => "e.g. Mona",
+              'recipientDefaultVal' => "Mona",
+              'taglineLabel' => "Custom Sibling Motto / Tagline Banner *",
+              'taglineDefault' => "World's Best Sister 🌸",
+              'messageLabel' => "Shagun Envelope Message / Slogan *",
+              'messagePlaceholder' => "e.g. Happy Raksha Bandhan Mona Di! 🎁",
+              'messageDefaultVal' => "Choti / Didi, mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🎁",
+              'photoLabel' => "Brother / Sister's Profile Photo 🖼️ (Optional)",
+              'hints' => [
+                  ['label' => '"Favorite Cartoon?"', 'q' => 'What was our favorite cartoon show in childhood?', 'a' => 'Tom and Jerry'],
+                  ['label' => '"Childhood Nickname?"', 'q' => 'What funny nickname did I call you in childhood?', 'a' => 'Chutki'],
+                  ['label' => '"Biggest Fight?"', 'q' => 'What did we have our biggest childhood fight over?', 'a' => 'TV Remote']
+              ],
+              'music' => [
+                  'title' => 'Phoolon Ka Taaron Ka', 'artist' => 'Kishore Kumar'
+              ]
           ]
       ];
 
@@ -639,6 +658,7 @@ Today, I want to ask you the most important question of my life. Will you take m
           'birthday_magic' => ['letters' => true, 'tokens' => false],
           'perfect_proposal' => ['letters' => true, 'tokens' => false],
           'raksha_bandhan_royal' => ['letters' => false, 'tokens' => false],
+          'raksha_bandhan_festive_light' => ['letters' => false, 'tokens' => false],
       ];
       $currentFeatures = $themeFeatures[$order['template_id'] ?? ''] ?? ['letters' => true, 'tokens' => true];
       ?>
