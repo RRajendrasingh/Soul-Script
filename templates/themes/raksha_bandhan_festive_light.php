@@ -540,65 +540,89 @@ function copyStitchVoucher() {
 
     const ctx = canvas.getContext('2d');
     let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
 
     canvas.width = container.offsetWidth || 360;
     canvas.height = container.offsetHeight || 440;
 
-    // Create Gold Gradient
+    // Create Gold Foil Gradient
     const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     grad.addColorStop(0, '#eab308');
-    grad.addColorStop(0.5, '#facc15');
+    grad.addColorStop(0.3, '#fde047');
+    grad.addColorStop(0.6, '#facc15');
     grad.addColorStop(1, '#ca8a04');
 
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-    for (let i = 0; i < 200; i++) {
+    // Realistic Foil Sparkles / Texture
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+    for (let i = 0; i < 180; i++) {
       ctx.beginPath();
-      ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 4, 0, Math.PI * 2);
+      ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 3 + 1, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    function scratch(e) {
-      if (!isDrawing) return;
+    function getCoords(e) {
       const rect = canvas.getBoundingClientRect();
-      const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-      const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
-
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-      ctx.beginPath();
-      ctx.arc(x, y, 40, 0, Math.PI * 2);
-      ctx.fill();
-
-      checkReveal();
+      const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
     }
 
-    function checkReveal() {
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      let transparent = 0;
-      for (let i = 3; i < imageData.data.length; i += 4) {
-        if (imageData.data[i] === 0) transparent++;
-      }
-      const percent = (transparent / (canvas.width * canvas.height)) * 100;
-      if (percent > 35) {
-        container.style.transition = 'opacity 0.5s ease';
-        container.style.opacity = '0';
-        setTimeout(() => container.remove(), 500);
-      } else if (percent > 5 && prompt) {
+    function startScratch(e) {
+      isDrawing = true;
+      const coords = getCoords(e);
+      lastX = coords.x;
+      lastY = coords.y;
+
+      // Realistic Coin-sized Scratch Point (Radius ~16px, Width 32px)
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(coords.x, coords.y, 16, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Fade out the floating helper text on first scratch so underlying content is visible
+      if (prompt) {
+        prompt.style.transition = 'opacity 0.4s ease';
         prompt.style.opacity = '0';
       }
     }
 
-    canvas.addEventListener('mousedown', () => isDrawing = true);
-    canvas.addEventListener('touchstart', () => isDrawing = true, {passive: true});
-    window.addEventListener('mouseup', () => isDrawing = false);
-    window.addEventListener('touchend', () => isDrawing = false);
+    function scratch(e) {
+      if (!isDrawing) return;
+      if (e.cancelable && e.type === 'touchmove') e.preventDefault();
+
+      const coords = getCoords(e);
+
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = 32;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(coords.x, coords.y);
+      ctx.stroke();
+
+      lastX = coords.x;
+      lastY = coords.y;
+    }
+
+    function stopScratch() {
+      isDrawing = false;
+    }
+
+    canvas.addEventListener('mousedown', startScratch);
+    canvas.addEventListener('touchstart', startScratch, {passive: false});
+    window.addEventListener('mouseup', stopScratch);
+    window.addEventListener('touchend', stopScratch);
     canvas.addEventListener('mousemove', scratch);
-    canvas.addEventListener('touchmove', scratch, {passive: true});
+    canvas.addEventListener('touchmove', scratch, {passive: false});
   }
 
   setTimeout(setupCanvas, 100);
