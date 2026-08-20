@@ -21,6 +21,10 @@ $currentAdminScript = basename($_SERVER['PHP_SELF']);
         <i data-lucide="gift" class="w-4 h-4"></i>
         <span>Rakhi Amazon Vouchers 🎁</span>
       </a>
+      <a href="messages.php" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 <?php echo $currentAdminScript === 'messages.php' ? 'bg-[#eac34a] text-[#241a00] shadow-md' : 'bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:bg-[#3b1e3b] hover:text-[#eac34a]'; ?>">
+        <i data-lucide="mail" class="w-4 h-4"></i>
+        <span>Customer Inquiries 📬</span>
+      </a>
       <a href="affiliate_settings.php" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 <?php echo $currentAdminScript === 'affiliate_settings.php' ? 'bg-[#eac34a] text-[#241a00] shadow-md' : 'bg-[#151215] text-[#d0c3cb] border border-[#4d444b] hover:bg-[#3b1e3b] hover:text-[#eac34a]'; ?>">
         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
         <span>Amazon Affiliate Store 🛒</span>

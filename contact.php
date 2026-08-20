@@ -3,6 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/config/db.php';
 
 $messageSent = false;
 $error = '';
@@ -10,7 +11,7 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name    = trim($_POST['name'] ?? '');
     $email   = trim($_POST['email'] ?? '');
-    $subject = trim($_POST['subject'] ?? '');
+    $subject = trim($_POST['subject'] ?? 'General Inquiry');
     $msg     = trim($_POST['message'] ?? '');
 
     if (empty($name) || empty($email) || empty($msg)) {
@@ -18,8 +19,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Please provide a valid email address.';
     } else {
-        // Log contact message or send email notification
-        $messageSent = true;
+        try {
+            $db = getDbConnection();
+            // Ensure table exists
+            $db->exec("CREATE TABLE IF NOT EXISTS contact_messages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                subject VARCHAR(255) NULL,
+                message TEXT NOT NULL,
+                status VARCHAR(50) DEFAULT 'new',
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+            $stmt = $db->prepare("INSERT INTO contact_messages (name, email, subject, message) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$name, $email, $subject, $msg]);
+
+            // Attempt email dispatch
+            $adminEmail = 'support@giftreveal.in';
+            $appName = defined('APP_NAME') ? APP_NAME : 'GiftReveal';
+            $mailSubject = "📬 New Customer Inquiry from " . $name . " - " . $appName;
+            $mailBody = "New message received from website contact form:\n\nName: $name\nEmail: $email\nSubject: $subject\n\nMessage:\n$msg\n\nTime: " . date('Y-m-d H:i:s');
+            $headers = "From: " . $appName . " <no-reply@giftreveal.in>\r\nReply-To: $email";
+            @mail($adminEmail, $mailSubject, $mailBody, $headers);
+
+            $messageSent = true;
+        } catch (Exception $e) {
+            $error = 'Unable to save your message right now. Please email us directly at support@giftreveal.in';
+        }
     }
 }
 ?>
