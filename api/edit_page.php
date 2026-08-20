@@ -49,13 +49,13 @@ try {
         $stmtMedia->execute([$page_id]);
         $media = $stmtMedia->fetchAll();
 
-        // Normalize receiver photo & media file paths
+        // Normalize receiver photo & media file paths with persistent auto-healing
         if (!empty($page['receiver_photo'])) {
-            $page['receiver_photo'] = normalizeMediaUrl($page['receiver_photo']);
+            $page['receiver_photo'] = resolveMediaUrl($page['receiver_photo']);
         }
         foreach ($media as &$m) {
             if (!empty($m['file_path'])) {
-                $m['file_path'] = normalizeMediaUrl($m['file_path']);
+                $m['file_path'] = resolveMediaUrl($m['file_path']);
             }
         }
         unset($m);

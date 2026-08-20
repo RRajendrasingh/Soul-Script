@@ -65,6 +65,9 @@ define('HASH_SALT', 'soulscript_secure_salt_2026');
  * are always rewritten to the current APP_URL on any server environment.
  */
 function normalizeMediaUrl($url) {
+    if (function_exists('resolveMediaUrl')) {
+        return resolveMediaUrl($url);
+    }
     if (empty($url)) return '';
     $url = trim($url);
 

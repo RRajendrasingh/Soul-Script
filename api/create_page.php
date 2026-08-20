@@ -75,12 +75,6 @@ try {
     }
 
     // 2. Generate Path-based Slug
-    function sanitizeSlug($str) {
-        $str = strtolower(trim($str));
-        $str = preg_replace('/[^a-z0-9\-]+/', '-', $str);
-        return trim(preg_replace('/-+/', '-', $str), '-');
-    }
-
     $rawSlug = $custom_slug ?: ($partner_name . '-' . $order['buyer_name']);
     $baseSlug = sanitizeSlug($rawSlug) ?: ('gift-' . rand(100, 999));
     $slug = $baseSlug;

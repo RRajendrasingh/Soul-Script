@@ -30,3 +30,11 @@ if (!function_exists('sendJsonError')) {
         exit;
     }
 }
+
+if (!function_exists('sanitizeSlug')) {
+    function sanitizeSlug($str) {
+        $str = strtolower(trim($str));
+        $str = preg_replace('/[^a-z0-9\-]+/', '-', $str);
+        return trim(preg_replace('/-+/', '-', $str), '-');
+    }
+}
