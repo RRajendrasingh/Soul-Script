@@ -1,14 +1,19 @@
 <?php
 /**
  * Component: 100% Google Stitch Design Matching Full-Stage "Virtual Rakhi Ceremony" Modal
- * Based on Google Stitch Screen Files: FINAL_TIE_RAKHI_DESKTOP - 1 to 5 & FINAL_TIE_RAKHI_MOBILE - 1 to 5
+ * Exactly matches original Stitch files:
+ * FINAL_TIE_RAKHI_DESKTOP - 1 (Prepare Thali / Wrist Drag Stage)
+ * FINAL_TIE_RAKHI_DESKTOP - 2 (Rakhi Tied Successfully & See Your Shagun)
+ * FINAL_TIE_RAKHI_DESKTOP - 3 (Royal Shagun Lifafa - Tap to Open Envelope)
+ * FINAL_TIE_RAKHI_DESKTOP - 4 (Two-Column Letter Quote & Amazon Cash Voucher Countdown)
+ * FINAL_TIE_RAKHI_DESKTOP - 5 (There's More to Celebrate / Downloads & Gift Gallery)
  */
 ?>
 
 <div id="festiveRakhiModalContainer" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md transition-opacity duration-300">
-  <div id="festiveRakhiModal" class="relative w-full max-w-5xl bg-[#fcf6f0] border-2 border-[#d4af37]/60 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+  <div id="festiveRakhiModal" class="relative w-full max-w-4xl bg-[#fcf6f0] border-2 border-[#d4af37]/60 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
     
-    <!-- Modal Header -->
+    <!-- Modal Header Bar -->
     <div class="px-6 py-4 bg-[#f4e5d8]/80 border-b border-[#e8d5c4] flex items-center justify-between shrink-0">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-full bg-[#d32f2f] text-white flex items-center justify-center shadow-md">
@@ -59,7 +64,6 @@
 
       <!-- STEP 2: STITCH TWO-COLUMN WRIST CEREMONY (FINAL_TIE_RAKHI_DESKTOP - 1) -->
       <div id="rakhiStep2" class="hidden flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
-        
         <!-- Left: Bare Wrist Interactive Canvas (55% Width) -->
         <div class="w-full lg:w-[55%] flex flex-col gap-4">
           <div id="rakhiInteractionArea" class="relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden shadow-xl border-2 border-[#d4af37]/40 bg-white touch-none">
@@ -110,57 +114,99 @@
             </p>
           </div>
         </div>
-
       </div>
 
-      <!-- STEP 3: STITCH CELEBRATION (FINAL_TIE_RAKHI_DESKTOP - 2) -->
-      <div id="rakhiStep3" class="hidden space-y-6 text-center py-6 max-w-xl mx-auto">
-        <div class="w-24 h-24 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-black mx-auto flex items-center justify-center text-5xl shadow-2xl animate-bounce">
-          ✨
+      <!-- STEP 3: STITCH ROYAL SHAGUN LIFAFA - TAP TO OPEN ENVELOPE (FINAL_TIE_RAKHI_DESKTOP - 3) -->
+      <div id="rakhiStep3" class="hidden space-y-6 text-center py-4 max-w-md mx-auto">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#f4e5d8] border border-[#d4af37]/40 text-[#934b00] shadow-sm">
+          <span class="material-symbols-outlined text-base">redeem</span>
+          <span class="text-xs font-bold uppercase tracking-widest">Royal Shagun Lifafa</span>
         </div>
+
+        <!-- Envelope Icon Container -->
+        <div class="relative w-40 h-40 mx-auto flex items-center justify-center cursor-pointer group" onclick="navigateFestiveStep(1)">
+          <div class="absolute inset-0 bg-[#e57800]/20 rounded-full blur-2xl group-hover:bg-[#e57800]/40 transition-colors"></div>
+          <svg class="w-32 h-32 text-[#d32f2f] relative z-10 transform transition-transform group-hover:scale-105 drop-shadow-xl" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6ZM20 6L12 11L4 6H20ZM20 18H4V8L12 13L20 8V18Z"></path>
+            <path class="text-[#d4af37]" d="M12 15C11.8 15 11.6 14.9 11.4 14.8C9.5 13.1 8 11.8 8 10.2C8 9 9 8 10.2 8C10.9 8 11.5 8.3 12 8.8C12.5 8.3 13.1 8 13.8 8C15 8 16 9 16 10.2C16 11.8 14.5 13.1 12.6 14.8C12.4 14.9 12.2 15 12 15Z"></path>
+          </svg>
+        </div>
+
         <div class="space-y-2">
-          <h4 class="text-3xl font-bold font-serif text-[#4a232f]">Rakhi Tied Successfully! 🎉</h4>
-          <p class="text-sm text-gray-600 max-w-sm mx-auto leading-relaxed">
-            The bond of protection has been renewed. A beautiful tradition continues.
-          </p>
+          <h4 class="text-3xl font-bold font-serif text-[#4a232f]">Tap to Open Envelope</h4>
+          <p class="text-xs text-[#7a5c68]">Contains personal note &amp; gift voucher code</p>
         </div>
-        <button type="button" onclick="navigateFestiveStep(1)" class="py-3.5 px-10 bg-gradient-to-r from-[#d32f2f] to-[#f57c00] text-white font-bold text-sm uppercase tracking-wider rounded-full shadow-xl hover:scale-105 transition-all cursor-pointer">
-          See Your Shagun 🎁
+
+        <button type="button" onclick="navigateFestiveStep(1)" class="w-full py-3.5 px-8 bg-gradient-to-r from-[#934b00] to-[#e57800] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-lg hover:shadow-xl transition-all cursor-pointer">
+          OPEN NOW ➔
         </button>
       </div>
 
-      <!-- STEP 4: SHAGUN ENVELOPE (FINAL_TIE_RAKHI_DESKTOP - 4) -->
-      <div id="rakhiStep4" class="hidden space-y-5 text-center max-w-xl mx-auto">
-        <div class="bg-white border border-[#e8d5c4] rounded-3xl p-6 space-y-4 shadow-lg">
-          <span class="text-4xl block">✉️</span>
-          <h4 class="text-xl font-bold font-serif text-[#4a232f]">Shagun Message &amp; Voucher</h4>
-          <p class="text-sm text-[#5c3844] italic leading-relaxed">
-            "<?= htmlspecialchars(mb_strimwidth($loveNoteText ?: "Wishing you a Happy Raksha Bandhan full of joy!", 0, 150, "...")) ?>"
+      <!-- STEP 4: STITCH TWO-COLUMN LETTER & AMZON CASH VOUCHER (FINAL_TIE_RAKHI_DESKTOP - 4) -->
+      <div id="rakhiStep4" class="hidden flex flex-col md:flex-row bg-white rounded-3xl overflow-hidden shadow-xl border border-[#e8d5c4] max-w-3xl mx-auto">
+        <!-- Left Column: Shagun Letter Quote -->
+        <div class="flex-1 p-6 sm:p-8 bg-white border-b md:border-b-0 md:border-r border-[#e8d5c4] flex flex-col justify-center relative">
+          <span class="material-symbols-outlined text-4xl text-[#d4af37] mb-3 opacity-60">format_quote</span>
+          <p class="text-lg sm:text-xl text-[#4a232f] italic font-serif leading-relaxed">
+            "<?= htmlspecialchars($loveNoteText ?: "mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧") ?>"
           </p>
-          <div class="p-4 bg-[#232f3e] text-white rounded-2xl text-xs space-y-2 shadow-inner">
-            <span class="text-[#febd69] font-bold block text-sm">Amazon Gift Voucher Allocated</span>
-            <span class="font-mono text-base text-[#febd69] font-black block">
-              <?= $isUnlocked ? htmlspecialchars($voucherCode ?: 'AMZN-RAKHI-2026-X9Y') : '🔒 Code Unlocks on Rakhi Day' ?>
-            </span>
+          <div class="mt-4 flex justify-end">
+            <span class="text-xs font-bold text-[#934b00] uppercase tracking-wider">— From <?= htmlspecialchars($senderName ?: 'Brother') ?></span>
+          </div>
+        </div>
+
+        <!-- Right Column: Surprise Amazon Cash Voucher Countdown -->
+        <div class="flex-1 p-6 sm:p-8 bg-[#fcf6f0] flex flex-col items-center text-center justify-center space-y-4">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffdcc5] text-[#934b00] text-[11px] font-bold uppercase tracking-wider">
+            <span>🎁</span>
+            <span>Surprise Amazon Cash Voucher</span>
+          </div>
+
+          <h4 class="text-xl sm:text-2xl font-bold font-serif text-[#4a232f] leading-tight">
+            Your Secret Rakhi Cash Voucher Unlocks Soon! ⏳
+          </h4>
+
+          <p class="text-xs text-[#7a5c68]">
+            Your Brother has hidden a surprise Amazon Gift Voucher inside this card! It unlocks automatically on the auspicious day.
+          </p>
+
+          <div class="w-full bg-white rounded-2xl border border-[#e8d5c4] p-4 flex items-center justify-center gap-3 shadow-sm">
+            <div class="w-10 h-10 rounded-full bg-[#ffdcc5] text-[#934b00] flex items-center justify-center font-bold">
+              ⏰
+            </div>
+            <div class="text-left">
+              <span class="text-[10px] font-bold text-gray-500 uppercase block tracking-wider">Unlocks on</span>
+              <span class="text-sm font-bold text-[#934b00] block">28 August 2026</span>
+              <span class="text-[11px] text-gray-600 block">12:00 PM IST</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- STEP 5: CERTIFICATE DOWNLOAD (FINAL_TIE_RAKHI_DESKTOP - 5) -->
-      <div id="rakhiStep5" class="hidden space-y-5 text-center max-w-xl mx-auto">
-        <div class="bg-white border-2 border-[#d4af37] rounded-3xl p-6 space-y-4 shadow-lg">
-          <span class="text-4xl block">📜</span>
-          <h4 class="text-xl font-bold font-serif text-[#4a232f]">There's more to celebrate!</h4>
-          <p class="text-xs text-[#7a5c68]">Your official certificate &amp; keepsake storybook are ready to download!</p>
-          
-          <div class="flex flex-col sm:flex-row gap-3 pt-2">
-            <button type="button" onclick="downloadWallKeepsakePoster()" class="flex-1 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-bold text-xs uppercase rounded-full shadow cursor-pointer hover:scale-105 transition-all">
-              🖼️ Wall Poster (300 DPI)
-            </button>
-            <button type="button" onclick="downloadSiblingPhotobookPDF()" class="flex-1 py-3 bg-emerald-500 text-white font-bold text-xs uppercase rounded-full shadow cursor-pointer hover:scale-105 transition-all">
-              📖 Keepsake Book (PDF)
-            </button>
-          </div>
+      <!-- STEP 5: STITCH THERE'S MORE TO CELEBRATE (FINAL_TIE_RAKHI_DESKTOP - 5) -->
+      <div id="rakhiStep5" class="hidden space-y-6 text-center max-w-2xl mx-auto py-4">
+        <div class="w-24 h-24 mx-auto rounded-full bg-[#ffdcc5] text-[#934b00] flex items-center justify-center text-4xl shadow-xl relative">
+          🎁
+          <div class="absolute -top-1 -right-1 w-8 h-8 bg-[#0061a5] text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md">★</div>
+        </div>
+
+        <div class="space-y-2">
+          <h4 class="text-3xl font-bold font-serif text-[#4a232f]">There's more to celebrate!</h4>
+          <p class="text-sm text-[#7a5c68] max-w-md mx-auto leading-relaxed">
+            The festivities continue. Download your official 300 DPI Certificate &amp; Keepsake Photobook or discover our curated gift gallery!
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+          <button type="button" onclick="downloadWallKeepsakePoster()" class="py-3 px-6 bg-[#d4af37] text-[#241a00] font-bold text-xs uppercase rounded-full shadow cursor-pointer hover:scale-105 transition-all">
+            🖼️ Wall Poster (300 DPI)
+          </button>
+          <button type="button" onclick="downloadSiblingPhotobookPDF()" class="py-3 px-6 bg-[#10b981] text-white font-bold text-xs uppercase rounded-full shadow cursor-pointer hover:scale-105 transition-all">
+            📖 Keepsake Book (PDF)
+          </button>
+          <button type="button" onclick="closeFestiveRakhiModal()" class="py-3 px-6 bg-[#934b00] text-white font-bold text-xs uppercase rounded-full shadow cursor-pointer hover:scale-105 transition-all">
+            Explore Gift Gallery ➔
+          </button>
         </div>
       </div>
 
@@ -203,7 +249,7 @@ function navigateFestiveStep(dir) {
   const currentEl = document.getElementById(`rakhiStep${currentFestiveStep}`);
   if (currentEl) {
     currentEl.classList.add('hidden');
-    if (currentFestiveStep === 2) {
+    if (currentFestiveStep === 2 || currentFestiveStep === 4) {
       currentEl.classList.remove('flex');
     }
   }
@@ -213,7 +259,7 @@ function navigateFestiveStep(dir) {
   const nextEl = document.getElementById(`rakhiStep${currentFestiveStep}`);
   if (nextEl) {
     nextEl.classList.remove('hidden');
-    if (currentFestiveStep === 2) {
+    if (currentFestiveStep === 2 || currentFestiveStep === 4) {
       nextEl.classList.add('flex');
     }
   }
@@ -236,7 +282,7 @@ function navigateFestiveStep(dir) {
       nextBtn.innerText = 'FINISH ✓';
       nextBtn.onclick = function() { closeFestiveRakhiModal(); };
     } else if (currentFestiveStep === 3) {
-      nextBtn.innerText = 'SEE YOUR SHAGUN 🎁';
+      nextBtn.innerText = 'OPEN NOW ➔';
       nextBtn.onclick = function() { navigateFestiveStep(1); };
     } else {
       nextBtn.innerText = 'NEXT ➔';
