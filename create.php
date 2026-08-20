@@ -730,51 +730,8 @@ Today, I want to ask you the most important question of my life. Will you take m
 
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-[#100d10] text-[#d0c3cb] border-t border-[#4d444b]/30 relative z-10">
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-        <div class="space-y-4 md:col-span-1">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px]">
-              <div class="w-full h-full bg-[#151215] rounded-full flex items-center justify-center">
-                <i data-lucide="heart" class="w-3.5 h-3.5 text-[#eac34a] fill-[#eac34a]/30"></i>
-              </div>
-            </div>
-            <span class="text-xl font-bold font-serif text-[#e8e0e3]">SoulScript</span>
-          </div>
-          <p class="text-xs text-[#d0c3cb]/80 leading-relaxed font-light">
-            Crafting personalized, private digital surprise pages for life's most meaningful romantic moments.
-          </p>
-        </div>
-
-        <div class="space-y-3">
-          <h4 class="text-xs font-semibold text-[#e8e0e3] uppercase tracking-widest font-mono">Templates</h4>
-          <ul class="space-y-2 text-xs text-[#d0c3cb]/80">
-            <li><a href="<?php echo APP_URL; ?>/#gallery" class="hover:text-[#eac34a]">Anniversary Reveal (₹499)</a></li>
-            <li><a href="<?php echo APP_URL; ?>/#gallery" class="hover:text-[#eac34a]">Birthday Magic (₹399)</a></li>
-            <li><a href="<?php echo APP_URL; ?>/#gallery" class="hover:text-[#eac34a]">Perfect Proposal (₹599)</a></li>
-            <li><a href="<?php echo APP_URL; ?>/#gallery" class="hover:text-[#eac34a]">Long Distance Love (₹449)</a></li>
-          </ul>
-        </div>
-
-        <div class="space-y-3">
-          <h4 class="text-xs font-semibold text-[#e8e0e3] uppercase tracking-widest font-mono">Privacy &amp; Guarantee</h4>
-          <ul class="space-y-2 text-xs text-[#d0c3cb]/80">
-            <li class="flex items-center gap-2"><i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i><span>Hint Password Security Gate</span></li>
-            <li class="flex items-center gap-2"><i data-lucide="eye-off" class="w-3.5 h-3.5 text-[#e4b9df]"></i><span>Search Engine Excluded</span></li>
-            <li class="flex items-center gap-2"><i data-lucide="shield" class="w-3.5 h-3.5 text-[#eac34a]"></i><span>Razorpay Secured Payments</span></li>
-          </ul>
-        </div>
-
-        <div class="space-y-3">
-          <h4 class="text-xs font-semibold text-[#e8e0e3] uppercase tracking-widest font-mono">Need Support?</h4>
-          <p class="text-xs text-[#d0c3cb]/80 leading-relaxed">support@soulscript.in</p>
-          <p class="text-[11px] text-[#d0c3cb]/50">Includes 12-Month validity guarantee for all generated pages.</p>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <!-- Unified Global Footer -->
+  <?php require_once __DIR__ . '/includes/footer.php'; ?>
 
   <script>
     lucide.createIcons();

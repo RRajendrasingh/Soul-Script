@@ -630,85 +630,8 @@ require_once __DIR__ . '/includes/media_helper.php';
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-[#100d10] border-t border-[#4d444b]/30 pt-12 pb-8 relative z-10">
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-        
-        <!-- Brand Column -->
-        <div class="space-y-4 md:col-span-1">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] shadow-[0_0_15px_rgba(234,195,74,0.3)]">
-              <div class="w-full h-full bg-[#151215] rounded-full flex items-center justify-center">
-                <i data-lucide="heart" class="w-3.5 h-3.5 text-[#eac34a] fill-[#eac34a]/30"></i>
-              </div>
-            </div>
-            <span class="text-xl font-bold font-serif text-[#e8e0e3] tracking-tight">SoulScript</span>
-          </div>
-          <p class="text-xs text-[#d0c3cb]/80 leading-relaxed font-light">
-            Crafting personalized digital surprises for Rakhi, anniversaries, birthdays, proposals & long-distance love.
-          </p>
-          <div class="flex items-center gap-2 text-[11px] text-[#eac34a] bg-[#3b1e3b] border border-[#e4b9df]/20 px-3 py-1.5 rounded-full w-fit">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-            <span>100% Private Link-Only Pages</span>
-          </div>
-        </div>
-
-        <!-- Quick Links -->
-        <div class="space-y-3">
-          <h4 class="text-xs font-semibold text-[#e8e0e3] uppercase tracking-widest font-mono">Templates</h4>
-          <ul class="space-y-2 text-xs text-[#d0c3cb]/80">
-            <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Raksha Bandhan Royal (₹499)</a></li>
-            <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Anniversary Reveal (₹499)</a></li>
-            <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Birthday Magic (₹399)</a></li>
-            <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Perfect Proposal (₹599)</a></li>
-            <li><a href="#gallery" class="hover:text-[#eac34a] transition-colors">Long Distance Love (₹449)</a></li>
-          </ul>
-        </div>
-
-        <!-- Security & Privacy -->
-        <div class="space-y-3">
-          <h4 class="text-xs font-semibold text-[#e8e0e3] uppercase tracking-widest font-mono">Privacy &amp; Guarantee</h4>
-          <ul class="space-y-2 text-xs text-[#d0c3cb]/80">
-            <li class="flex items-center gap-2">
-              <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-              <span>Hint Password Security Gate</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <i data-lucide="eye-off" class="w-3.5 h-3.5 text-[#e4b9df]"></i>
-              <span>Search Engine Excluded</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <i data-lucide="shield" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-              <span>Razorpay Secured Payments</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Support -->
-        <div class="space-y-3">
-          <h4 class="text-xs font-semibold text-[#e8e0e3] uppercase tracking-widest font-mono">Need Support?</h4>
-          <p class="text-xs text-[#d0c3cb]/80 leading-relaxed">
-            Questions about creating or delivering your surprise link?
-          </p>
-          <p class="text-xs text-[#eac34a] font-medium font-mono">support@soulscript.in</p>
-          <p class="text-[11px] text-[#d0c3cb]/50">Includes 12-Month validity guarantee for all generated pages.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Full-Width Dedicated Bottom Footer Bar Strip -->
-    <div class="mt-12 py-6 border-t border-[#4d444b]/40 bg-[#0d0a0d]">
-      <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#d0c3cb]/70 gap-4">
-        <span>© 2026 SoulScript. All rights reserved. Made with ❤️ for couples everywhere.</span>
-        <a href="<?php echo APP_URL; ?>/admin/index.php" class="text-[11px] text-[#d0c3cb]/50 hover:text-[#eac34a] transition-colors flex items-center gap-1 font-mono">
-          <span>Admin Portal</span>
-          <i data-lucide="lock" class="w-3 h-3 text-[#eac34a]/70"></i>
-        </a>
-      </div>
-    </div>
-  </footer>
+  <!-- Unified Global Footer -->
+  <?php require_once __DIR__ . '/includes/footer.php'; ?>
 
   <!-- Checkout Modal -->
   <div id="checkoutModal" class="modal-overlay fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden items-center justify-center p-4 sm:p-6">

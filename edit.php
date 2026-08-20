@@ -539,6 +539,9 @@ $showLogin = !$showDashboard && !$showHub;
 
   </main>
 
+  <!-- Unified Global Footer -->
+  <?php require_once __DIR__ . '/includes/footer.php'; ?>
+
   <!-- Interactive Circle Crop Modal -->
   <div id="circleCropModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 hidden">
     <div class="bg-[#221f21] border border-[#eac34a]/40 rounded-3xl p-6 max-w-md w-full text-center space-y-4 shadow-2xl relative">
