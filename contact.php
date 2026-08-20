@@ -9,6 +9,15 @@ $messageSent = false;
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if JSON payload
+    $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
+    if (stripos($contentType, 'application/json') !== false) {
+        $input = json_decode(file_get_contents('php://input'), true);
+        if (is_array($input)) {
+            $_POST = $input;
+        }
+    }
+
     $name    = trim($_POST['name'] ?? '');
     $email   = trim($_POST['email'] ?? '');
     $subject = trim($_POST['subject'] ?? 'General Inquiry');
@@ -44,8 +53,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             @mail($adminEmail, $mailSubject, $mailBody, $headers);
 
             $messageSent = true;
+
+            if (stripos($contentType, 'application/json') !== false) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Thank you! Your message has been received.']);
+                exit;
+            }
         } catch (Exception $e) {
             $error = 'Unable to save your message right now. Please email us directly at support@giftreveal.in';
+            if (stripos($contentType, 'application/json') !== false) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => $error]);
+                exit;
+            }
         }
     }
 }
@@ -148,51 +168,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="bg-[#221f21]/90 rounded-3xl border border-[#4d444b]/40 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
           <h2 class="text-xl font-serif font-bold text-[#e8e0e3] mb-6">Send Us a Message</h2>
 
-          <?php if ($messageSent): ?>
-            <div class="p-6 rounded-2xl bg-[#3b1e3b]/80 border border-[#eac34a] text-center space-y-3">
-              <div class="w-12 h-12 rounded-full bg-[#eac34a] text-[#241a00] flex items-center justify-center mx-auto shadow-lg">
-                <i data-lucide="check" class="w-6 h-6"></i>
-              </div>
-              <h3 class="text-lg font-serif font-bold text-[#ffe088]">Thank You!</h3>
-              <p class="text-xs sm:text-sm text-[#d0c3cb]">
-                Your message has been received. Our support team will get back to you shortly at your email.
-              </p>
+          <!-- Success Message Container -->
+          <div id="contactSuccessMsg" class="<?php echo $messageSent ? '' : 'hidden'; ?> p-6 rounded-2xl bg-[#3b1e3b]/80 border border-[#eac34a] text-center space-y-3">
+            <div class="w-12 h-12 rounded-full bg-[#eac34a] text-[#241a00] flex items-center justify-center mx-auto shadow-lg">
+              <i data-lucide="check" class="w-6 h-6"></i>
             </div>
-          <?php else: ?>
-            <?php if ($error): ?>
-              <div class="mb-4 p-3 rounded-xl bg-red-950/60 border border-red-500/50 text-xs text-red-200">
-                <?php echo htmlspecialchars($error); ?>
-              </div>
-            <?php endif; ?>
+            <h3 class="text-lg font-serif font-bold text-[#ffe088]">Thank You!</h3>
+            <p class="text-xs sm:text-sm text-[#d0c3cb]">
+              Your message has been received. Our support team will get back to you shortly at your email.
+            </p>
+            <button type="button" onclick="resetContactForm()" class="mt-2 px-4 py-1.5 rounded-full bg-[#151215] border border-[#4d444b] text-xs text-[#eac34a] hover:bg-[#3b1e3b] transition-all">
+              Send Another Message
+            </button>
+          </div>
 
-            <form method="POST" action="" class="space-y-4">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs font-semibold text-[#d0c3cb] mb-1.5 uppercase tracking-wider">Your Name *</label>
-                  <input type="text" name="name" required class="w-full px-4 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b]/60 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] outline-none transition-all placeholder-[#d0c3cb]/30" placeholder="e.g. Rahul Sharma">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-[#d0c3cb] mb-1.5 uppercase tracking-wider">Email Address *</label>
-                  <input type="email" name="email" required class="w-full px-4 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b]/60 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] outline-none transition-all placeholder-[#d0c3cb]/30" placeholder="rahul@example.com">
-                </div>
-              </div>
+          <!-- Error Alert -->
+          <div id="contactErrorMsg" class="<?php echo $error ? '' : 'hidden'; ?> mb-4 p-3 rounded-xl bg-red-950/60 border border-red-500/50 text-xs text-red-200">
+            <?php echo htmlspecialchars($error); ?>
+          </div>
 
+          <form id="contactForm" method="POST" action="" class="<?php echo $messageSent ? 'hidden' : ''; ?> space-y-4" onsubmit="handleContactSubmit(event)">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-[#d0c3cb] mb-1.5 uppercase tracking-wider">Subject</label>
-                <input type="text" name="subject" class="w-full px-4 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b]/60 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] outline-none transition-all placeholder-[#d0c3cb]/30" placeholder="Order inquiry, Customization, or Feedback">
+                <label class="block text-xs font-semibold text-[#d0c3cb] mb-1.5 uppercase tracking-wider">Your Name *</label>
+                <input type="text" id="contactName" name="name" required class="w-full px-4 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b]/60 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] outline-none transition-all placeholder-[#d0c3cb]/30" placeholder="e.g. Rahul Sharma">
               </div>
-
               <div>
-                <label class="block text-xs font-semibold text-[#d0c3cb] mb-1.5 uppercase tracking-wider">Your Message *</label>
-                <textarea name="message" rows="4" required class="w-full px-4 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b]/60 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] outline-none transition-all placeholder-[#d0c3cb]/30 resize-none" placeholder="Tell us how we can help you..."></textarea>
+                <label class="block text-xs font-semibold text-[#d0c3cb] mb-1.5 uppercase tracking-wider">Email Address *</label>
+                <input type="email" id="contactEmail" name="email" required class="w-full px-4 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b]/60 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] outline-none transition-all placeholder-[#d0c3cb]/30" placeholder="rahul@example.com">
               </div>
+            </div>
 
-              <button type="submit" class="w-full py-3 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] text-xs sm:text-sm font-bold uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] hover:shadow-[0_0_30px_rgba(234,195,74,0.5)] transition-all flex items-center justify-center gap-2">
-                <i data-lucide="send" class="w-4 h-4"></i>
-                <span>Send Message</span>
-              </button>
-            </form>
-          <?php endif; ?>
+            <div>
+              <label class="block text-xs font-semibold text-[#d0c3cb] mb-1.5 uppercase tracking-wider">Subject</label>
+              <input type="text" id="contactSubject" name="subject" class="w-full px-4 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b]/60 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] outline-none transition-all placeholder-[#d0c3cb]/30" placeholder="Order inquiry, Customization, or Feedback">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-[#d0c3cb] mb-1.5 uppercase tracking-wider">Your Message *</label>
+              <textarea id="contactText" name="message" rows="4" required class="w-full px-4 py-2.5 rounded-xl bg-[#151215] border border-[#4d444b]/60 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:ring-1 focus:ring-[#eac34a] outline-none transition-all placeholder-[#d0c3cb]/30 resize-none" placeholder="Tell us how we can help you..."></textarea>
+            </div>
+
+            <button type="submit" id="contactSubmitBtn" class="w-full py-3 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] text-xs sm:text-sm font-bold uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] hover:shadow-[0_0_30px_rgba(234,195,74,0.5)] transition-all flex items-center justify-center gap-2">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span id="contactBtnText">Send Message</span>
+            </button>
+          </form>
         </div>
       </div>
 
@@ -206,6 +227,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script>
     if (typeof lucide !== 'undefined') {
       lucide.createIcons();
+    }
+
+    async function handleContactSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('contactSubmitBtn');
+      const btnText = document.getElementById('contactBtnText');
+      const errorDiv = document.getElementById('contactErrorMsg');
+      const successDiv = document.getElementById('contactSuccessMsg');
+      const form = document.getElementById('contactForm');
+
+      const payload = {
+        name: document.getElementById('contactName').value.trim(),
+        email: document.getElementById('contactEmail').value.trim(),
+        subject: document.getElementById('contactSubject').value.trim() || 'General Inquiry',
+        message: document.getElementById('contactText').value.trim()
+      };
+
+      if (!payload.name || !payload.email || !payload.message) {
+        errorDiv.innerText = 'Please fill in all required fields.';
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btnText.innerText = 'Sending...';
+      errorDiv.classList.add('hidden');
+
+      try {
+        const res = await fetch('contact.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          form.classList.add('hidden');
+          successDiv.classList.remove('hidden');
+          form.reset();
+        } else {
+          errorDiv.innerText = data.message || 'Something went wrong. Please try again.';
+          errorDiv.classList.remove('hidden');
+        }
+      } catch (err) {
+        // Fallback to classic form submit
+        form.submit();
+      } finally {
+        btn.disabled = false;
+        btnText.innerText = 'Send Message';
+      }
+    }
+
+    function resetContactForm() {
+      document.getElementById('contactSuccessMsg').classList.add('hidden');
+      document.getElementById('contactForm').classList.remove('hidden');
     }
   </script>
 </body>
