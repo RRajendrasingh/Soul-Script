@@ -700,10 +700,6 @@ require_once __DIR__ . '/includes/media_helper.php';
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </div>
-
-        <button type="button" onclick="simulateDevPayment()" class="w-full bg-transparent text-[#eac34a] border border-[#eac34a]/40 font-sans text-[11px] font-semibold py-2.5 rounded-xl hover:border-[#eac34a] transition-all cursor-pointer">
-          ⚡ Test Mode: Instant Skip Payment &amp; Personalize
-        </button>
       </form>
     </div>
   </div>
@@ -884,42 +880,6 @@ require_once __DIR__ . '/includes/media_helper.php';
       } finally {
         btn.innerText = 'Proceed to Pay & Personalize →';
         btn.disabled = false;
-      }
-    }
-
-    async function simulateDevPayment() {
-      const rawPhone = document.getElementById('buyerPhone').value.trim() || '9876543210';
-      const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
-      const fullPhone = '+91' + (cleanPhone.length === 10 ? cleanPhone : '9876543210');
-
-      const buyerPass = document.getElementById('buyerPassword').value.trim() || '123456';
-      const payload = {
-        buyer_name: document.getElementById('buyerName').value || 'Test Buyer',
-        buyer_phone: fullPhone,
-        buyer_email: document.getElementById('buyerEmail').value || 'test@example.com',
-        buyer_password: buyerPass,
-        template_id: currentTemplateId || 'anniversary_reveal'
-      };
-
-      const res = await fetch('<?php echo APP_URL; ?>/api/create_order.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        await fetch('<?php echo APP_URL; ?>/api/webhook_razorpay.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            order_id: data.order.order_id,
-            razorpay_payment_id: 'sim_pay_' + Date.now(),
-            status: 'paid'
-          })
-        });
-
-        window.location.href = '<?php echo APP_URL; ?>/create.php?order_id=' + data.order.order_id;
       }
     }
 
