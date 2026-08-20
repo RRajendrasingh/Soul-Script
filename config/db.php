@@ -20,24 +20,7 @@ function getDB() {
             ];
             $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
 
-            // Auto-Migration check for production database schema synchronization
-            $autoMigrateCols = [
-                'receiver_photo'  => 'LONGTEXT DEFAULT NULL',
-                'tagline_quote'   => 'VARCHAR(500) DEFAULT NULL',
-                'favorite_singers'=> 'VARCHAR(255) DEFAULT NULL',
-                'song_title'      => 'VARCHAR(255) DEFAULT NULL',
-                'song_artist'     => 'VARCHAR(255) DEFAULT NULL',
-                'letters_json'    => 'LONGTEXT DEFAULT NULL',
-                'tokens_json'     => 'LONGTEXT DEFAULT NULL',
-                'reunion_date'    => 'DATE DEFAULT NULL'
-            ];
-            foreach ($autoMigrateCols as $colName => $colDef) {
-                try {
-                    $pdo->exec("ALTER TABLE page_content ADD COLUMN {$colName} {$colDef}");
-                } catch (Exception $ex) {
-                    // Column already exists — safe to ignore
-                }
-            }
+            // Core schema synchronization (tables created IF NOT EXISTS)
             // Auto-migrate reasons_list table if missing
             try {
                 $pdo->exec("CREATE TABLE IF NOT EXISTS reasons_list (
