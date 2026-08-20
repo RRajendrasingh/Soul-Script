@@ -94,13 +94,13 @@ require_once __DIR__ . '/config/config.php';
       <section class="space-y-3">
         <h2 class="text-lg font-serif font-bold text-[#eac34a]">6. Data Retention &amp; User Deletion Requests</h2>
         <p>
-          Your customized surprise websites are preserved indefinitely so you and your partner can revisit them on future anniversaries. However, if you wish to delete your customized page, uploaded photos, or account data permanently, you may email us at <a href="mailto:support@digitalyogi24.com" class="text-[#eac34a] underline">support@digitalyogi24.com</a> and we will erase your media within 48 hours.
+          Your customized surprise websites are preserved indefinitely so you and your partner can revisit them on future anniversaries. However, if you wish to delete your customized page, uploaded photos, or account data permanently, you may email us at <a href="mailto:support@giftreveal.in" class="text-[#eac34a] underline">support@giftreveal.in</a> and we will erase your media within 48 hours.
         </p>
       </section>
 
       <section class="space-y-2 pt-4 border-t border-[#4d444b]/40 text-xs">
         <p>
-          For any privacy inquiries or grievance redressal, please write to our Privacy Officer at <a href="mailto:support@digitalyogi24.com" class="text-[#eac34a] underline">support@digitalyogi24.com</a>.
+          For any privacy inquiries or grievance redressal, please write to our Privacy Officer at <a href="mailto:support@giftreveal.in" class="text-[#eac34a] underline">support@giftreveal.in</a>.
         </p>
       </section>
 

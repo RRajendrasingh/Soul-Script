@@ -146,7 +146,7 @@ require_once __DIR__ . '/includes/media_helper.php';
       <div class="space-y-2 text-center md:text-left">
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3b1e3b] text-[#e4b9df] text-xs font-semibold uppercase tracking-wider">
           <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-          <span>Why 500+ Brothers Chose SoulScript</span>
+          <span>Why 500+ Brothers Chose <?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?></span>
         </div>
         <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#e8e0e3]">
           Not Just a Link — A Full Rakhi Surprise Experience
@@ -170,7 +170,7 @@ require_once __DIR__ . '/includes/media_helper.php';
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center space-y-3 mb-16">
         <span class="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#eac34a]">Simple 3-Step Rakhi Gift Creation</span>
-        <h2 class="text-3xl font-bold font-serif text-[#e8e0e3]">How SoulScript Works</h2>
+        <h2 class="text-3xl font-bold font-serif text-[#e8e0e3]">How <?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?> Works</h2>
         <p class="text-sm text-[#d0c3cb] max-w-xl mx-auto">
           Build a personalized Rakhi surprise in under 5 minutes from your phone or laptop — and share on WhatsApp instantly.
         </p>
@@ -544,7 +544,7 @@ require_once __DIR__ . '/includes/media_helper.php';
           <i data-lucide="star" class="w-4 h-4 fill-[#eac34a]"></i>
         </div>
         <p class="text-xs text-[#d0c3cb] leading-relaxed italic">
-          "Meri behen Dubai mein rehti hai. Maine SoulScript link WhatsApp pe bheja. Usne raat ko unlock kiya aur call karke rona shuru kar diya. Distance khatam ho gaya uss moment mein!"
+          "Meri behen Dubai mein rehti hai. Maine <?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?> link WhatsApp pe bheja. Usne raat ko unlock kiya aur call karke rona shuru kar diya. Distance khatam ho gaya uss moment mein!"
         </p>
         <div class="pt-3 border-t border-[#4d444b]/30 flex items-center justify-between text-xs">
           <span class="font-bold text-[#e8e0e3]">Sahil K.</span>
@@ -847,7 +847,7 @@ require_once __DIR__ . '/includes/media_helper.php';
             key: data.razorpay_key_id,
             amount: currentPrice * 100,
             currency: 'INR',
-            name: 'SoulScript',
+            name: '<?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?>',
             description: 'Surprise Reveal Page Order',
             order_id: data.order.razorpay_order_id,
             handler: async function (response) {

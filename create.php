@@ -1874,7 +1874,7 @@ Today, I want to ask you the most important question of my life. Will you take m
             key: data.razorpay_key_id,
             amount: currentPrice * 100,
             currency: 'INR',
-            name: 'SoulScript',
+            name: '<?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?>',
             description: 'Surprise Reveal Page Order',
             order_id: data.order.razorpay_order_id,
             handler: async function(response) {

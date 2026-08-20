@@ -91,13 +91,13 @@ require_once __DIR__ . '/config/config.php';
         <ul class="list-disc list-inside space-y-1 pl-2 text-[#d0c3cb]/90">
           <li>Check your spam/junk folder for confirmation emails.</li>
           <li>Log into the <a href="<?php echo APP_URL; ?>/edit.php" class="text-[#eac34a] underline">Buyer Portal</a> using your checkout email to see all active orders.</li>
-          <li>If you still require assistance, email our 24/7 technical team at <a href="mailto:support@digitalyogi24.com" class="text-[#eac34a] underline">support@digitalyogi24.com</a> with your transaction reference number. We will manually resolve access within 2 hours.</li>
+          <li>If you still require assistance, email our 24/7 technical team at <a href="mailto:support@giftreveal.in" class="text-[#eac34a] underline">support@giftreveal.in</a> with your transaction reference number. We will manually resolve access within 2 hours.</li>
         </ul>
       </section>
 
       <section class="space-y-2 pt-4 border-t border-[#4d444b]/40 text-xs">
         <p>
-          For more details, please visit our <a href="<?php echo APP_URL; ?>/contact.php" class="text-[#eac34a] underline">Contact Us</a> page or email <a href="mailto:support@digitalyogi24.com" class="text-[#eac34a] underline">support@digitalyogi24.com</a>.
+          For more details, please visit our <a href="<?php echo APP_URL; ?>/contact.php" class="text-[#eac34a] underline">Contact Us</a> page or email <a href="mailto:support@giftreveal.in" class="text-[#eac34a] underline">support@giftreveal.in</a>.
         </p>
       </section>
 

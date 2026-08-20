@@ -387,7 +387,7 @@ $showLogin = !$showDashboard && !$showHub;
                 <i data-lucide="shield-check" class="w-5 h-5 text-[#eac34a]"></i>
                 <span>Account Security &amp; Password Management</span>
               </h3>
-              <p class="text-[11px] text-[#d0c3cb] mt-0.5">Manage your SoulScript buyer portal login password safely.</p>
+              <p class="text-[11px] text-[#d0c3cb] mt-0.5">Manage your <?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?> buyer portal login password safely.</p>
             </div>
             <span class="px-3 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 font-bold text-[10px] uppercase tracking-wider hidden sm:inline-block">
               🔐 Encrypted Storage

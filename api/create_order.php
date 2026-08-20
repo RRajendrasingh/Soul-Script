@@ -53,7 +53,7 @@ try {
         } else {
             // Unauthenticated guest: Verify that provided password matches existing account password
             if (empty($buyer_password) || hashHintAnswer($buyer_password) !== $existingAccount['buyer_password_hash']) {
-                sendJsonError('An account already exists with this email address! Please enter your correct existing account password, or log in at digitalyogi24.com/edit.php', 400);
+                sendJsonError('An account already exists with this email address! Please enter your correct existing account password, or log in at ' . (parse_url(APP_URL, PHP_URL_HOST) ?? 'giftreveal.in') . '/edit.php', 400);
             }
             $buyer_password_hash = $existingAccount['buyer_password_hash'];
         }

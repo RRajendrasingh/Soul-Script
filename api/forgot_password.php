@@ -36,8 +36,8 @@ try {
         $buyer = $stmt->fetch();
 
         if (!$buyer) {
-            http_response_code(44);
-            echo json_encode(['success' => false, 'message' => 'No SoulScript account found with this email address.']);
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'No ' . (defined('APP_NAME') ? APP_NAME : 'GiftReveal') . ' account found with this email address.']);
             exit;
         }
 
@@ -50,14 +50,15 @@ try {
            ->execute([$reset_token, $expires_at, strtolower($email)]);
 
         $reset_link = APP_URL . '/edit.php?reset_token=' . $reset_token;
+        $appName = defined('APP_NAME') ? APP_NAME : 'GiftReveal';
 
         // Send Email Reset Notice if mail is available
-        $subject = "🔑 Reset Your SoulScript Account Password";
+        $subject = "🔑 Reset Your " . $appName . " Account Password";
         $htmlBody = "
             <div style='font-family: Arial, sans-serif; background: #151215; color: #e8e0e3; padding: 25px; border-radius: 15px; border: 1px solid #4d444b;'>
-              <h2 style='color: #eac34a;'>SoulScript Password Reset</h2>
+              <h2 style='color: #eac34a;'>" . $appName . " Password Reset</h2>
               <p>Hi " . htmlspecialchars($buyer['buyer_name']) . ",</p>
-              <p>We received a request to reset your password for your SoulScript buyer portal account.</p>
+              <p>We received a request to reset your password for your " . $appName . " buyer portal account.</p>
               <p style='text-align: center; margin: 25px 0;'>
                 <a href='{$reset_link}' style='background: #eac34a; color: #241a00; font-weight: bold; text-decoration: none; padding: 12px 24px; border-radius: 10px; text-transform: uppercase;'>Reset Password Now</a>
               </p>
@@ -67,7 +68,7 @@ try {
         $headers = [
             'MIME-Version: 1.0',
             'Content-type: text/html; charset=UTF-8',
-            'From: SoulScript <no-reply@digitalyogi24.com>'
+            'From: ' . $appName . ' <no-reply@giftreveal.in>'
         ];
         @mail($email, $subject, $htmlBody, implode("\r\n", $headers));
 

@@ -55,7 +55,7 @@ require_once __DIR__ . '/config/config.php';
       <section class="space-y-3">
         <h2 class="text-lg font-serif font-bold text-[#eac34a]">2. Nature of Service (Digital Products)</h2>
         <p>
-          SoulScript provides interactive, custom digital web experiences (surprise reveal websites for anniversaries, birthdays, proposals, Raksha Bandhan, and romantic milestones).
+          <?php echo APP_NAME; ?> provides interactive, custom digital web experiences (surprise reveal websites for anniversaries, birthdays, proposals, Raksha Bandhan, and romantic milestones).
         </p>
         <ul class="list-disc list-inside space-y-1 pl-2 text-[#d0c3cb]/90">
           <li>All products sold on this platform are <strong>strictly digital web pages and services</strong>.</li>
@@ -67,7 +67,7 @@ require_once __DIR__ . '/config/config.php';
       <section class="space-y-3">
         <h2 class="text-lg font-serif font-bold text-[#eac34a]">3. Account, Passwords &amp; Security</h2>
         <p>
-          When personalizing a surprise page, you may set private hint answers or buyer portal passwords. You are entirely responsible for maintaining the confidentiality of your account credentials and links. SoulScript is not liable for unauthorized access resulting from the user sharing links, passwords, or secret hints.
+          When personalizing a surprise page, you may set private hint answers or buyer portal passwords. You are entirely responsible for maintaining the confidentiality of your account credentials and links. <?php echo APP_NAME; ?> is not liable for unauthorized access resulting from the user sharing links, passwords, or secret hints.
         </p>
       </section>
 
@@ -81,28 +81,28 @@ require_once __DIR__ . '/config/config.php';
           <li>Malicious software, corrupted payloads, or attempts to disrupt service functionality.</li>
         </ul>
         <p>
-          SoulScript reserves the right to remove any content or deactivate links that violate these safety standards.
+          <?php echo APP_NAME; ?> reserves the right to remove any content or deactivate links that violate these safety standards.
         </p>
       </section>
 
       <section class="space-y-3">
         <h2 class="text-lg font-serif font-bold text-[#eac34a]">5. Pricing, Payments &amp; Currency</h2>
         <p>
-          All prices for templates and addons are clearly displayed in <strong>Indian Rupees (INR / ₹)</strong>. Payments are processed securely via verified third-party payment gateways (such as Razorpay). SoulScript does not store raw credit/debit card numbers or UPI PINs on its servers.
+          All prices for templates and addons are clearly displayed in <strong>Indian Rupees (INR / ₹)</strong>. Payments are processed securely via verified third-party payment gateways (such as Razorpay). <?php echo APP_NAME; ?> does not store raw credit/debit card numbers or UPI PINs on its servers.
         </p>
       </section>
 
       <section class="space-y-3">
         <h2 class="text-lg font-serif font-bold text-[#eac34a]">6. Hosting &amp; Service Availability</h2>
         <p>
-          While we strive for 99.9% uptime and persistent dual-storage backups of your customized surprises, SoulScript shall not be held liable for temporary downtimes caused by internet infrastructure outages, third-party hosting maintenance, or force majeure events.
+          While we strive for 99.9% uptime and persistent dual-storage backups of your customized surprises, <?php echo APP_NAME; ?> shall not be held liable for temporary downtimes caused by internet infrastructure outages, third-party hosting maintenance, or force majeure events.
         </p>
       </section>
 
       <section class="space-y-3">
         <h2 class="text-lg font-serif font-bold text-[#eac34a]">7. Modifications to Terms</h2>
         <p>
-          SoulScript reserves the right to modify these Terms at any time. Any changes will be posted on this page with an updated timestamp. Continued use of the platform constitutes acceptance of revised terms.
+          <?php echo APP_NAME; ?> reserves the right to modify these Terms at any time. Any changes will be posted on this page with an updated timestamp. Continued use of the platform constitutes acceptance of revised terms.
         </p>
       </section>
 
@@ -115,7 +115,7 @@ require_once __DIR__ . '/config/config.php';
 
       <section class="space-y-2 pt-4 border-t border-[#4d444b]/40 text-xs">
         <p>
-          If you have any questions regarding these Terms, please contact our support team at <a href="mailto:support@digitalyogi24.com" class="text-[#eac34a] underline">support@digitalyogi24.com</a> or via our <a href="<?php echo APP_URL; ?>/contact.php" class="text-[#eac34a] underline">Contact Us</a> page.
+          If you have any questions regarding these Terms, please contact our support team at <a href="mailto:support@giftreveal.in" class="text-[#eac34a] underline">support@giftreveal.in</a> or via our <a href="<?php echo APP_URL; ?>/contact.php" class="text-[#eac34a] underline">Contact Us</a> page.
         </p>
       </section>
 

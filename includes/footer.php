@@ -71,9 +71,9 @@
             </a>
           </li>
           <li>
-            <a href="mailto:support@digitalyogi24.com" class="hover:text-[#eac34a] transition-colors flex items-center gap-1.5 text-[#d0c3cb]/70">
+            <a href="mailto:support@giftreveal.in" class="hover:text-[#eac34a] transition-colors flex items-center gap-1.5 text-[#d0c3cb]/70">
               <i data-lucide="mail" class="w-3 h-3 text-[#eac34a]"></i>
-              <span>support@digitalyogi24.com</span>
+              <span>support@giftreveal.in</span>
             </a>
           </li>
           <li class="text-[11px] text-[#d0c3cb]/60">
@@ -114,7 +114,7 @@
     <!-- Bottom Bar -->
     <div class="pt-8 border-t border-[#4d444b]/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#d0c3cb]/70">
       <p class="text-[11px]">
-        &copy; <?php echo date('Y'); ?> <span class="text-[#e8e0e3] font-semibold">SoulScript</span>. All rights reserved.
+        &copy; <?php echo date('Y'); ?> <span class="text-[#e8e0e3] font-semibold"><?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?></span>. All rights reserved.
       </p>
       
       <div class="flex items-center gap-4 text-[10px] uppercase tracking-wider text-[#d0c3cb]/50">

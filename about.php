@@ -38,7 +38,7 @@ require_once __DIR__ . '/config/config.php';
         Turning Memories Into <span class="bg-gradient-to-r from-[#eac34a] via-[#ffe088] to-[#e4b9df] bg-clip-text text-transparent">Digital Keepsakes</span>
       </h1>
       <p class="text-sm sm:text-base text-[#d0c3cb] max-w-2xl mx-auto leading-relaxed">
-        SoulScript empowers you to create deeply personal, password-locked, interactive surprise reveal websites for anniversaries, birthdays, proposals, and festive celebrations.
+        <?php echo APP_NAME; ?> empowers you to create deeply personal, password-locked, interactive surprise reveal websites for anniversaries, birthdays, proposals, and festive celebrations.
       </p>
     </div>
 
@@ -47,13 +47,13 @@ require_once __DIR__ . '/config/config.php';
       <div class="space-y-4">
         <h2 class="text-2xl font-serif font-bold text-[#eac34a] flex items-center gap-3">
           <i data-lucide="heart" class="w-6 h-6 text-[#eac34a]"></i>
-          <span>The SoulScript Story</span>
+          <span>The <?php echo APP_NAME; ?> Story</span>
         </h2>
         <p class="text-sm sm:text-base text-[#d0c3cb]/90 leading-relaxed">
-          In a world dominated by fleeting text messages and disposable greeting cards, genuine personal expressions often get lost. We created SoulScript to give relationships a permanent, breathtaking digital home.
+          In a world dominated by fleeting text messages and disposable greeting cards, genuine personal expressions often get lost. We created <?php echo APP_NAME; ?> to give relationships a permanent, breathtaking digital home.
         </p>
         <p class="text-sm sm:text-base text-[#d0c3cb]/90 leading-relaxed">
-          Whether you are celebrating years of companionship, asking the most important question of your life, or sending love across long distances, SoulScript blends cinematic storytelling, interactive touchpoints, personalized music, and interactive photo scrapbooks into a timeless digital reveal experience.
+          Whether you are celebrating years of companionship, asking the most important question of your life, or sending love across long distances, <?php echo APP_NAME; ?> blends cinematic storytelling, interactive touchpoints, personalized music, and interactive photo scrapbooks into a timeless digital reveal experience.
         </p>
       </div>
 

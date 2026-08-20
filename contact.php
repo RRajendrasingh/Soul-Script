@@ -78,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </div>
               <div>
                 <span class="block text-[11px] text-[#d0c3cb]/60 uppercase tracking-wider font-semibold">Email Us</span>
-                <a href="mailto:support@digitalyogi24.com" class="text-[#e8e0e3] font-medium hover:text-[#eac34a] transition-colors">
-                  support@digitalyogi24.com
+                <a href="mailto:support@giftreveal.in" class="text-[#e8e0e3] font-medium hover:text-[#eac34a] transition-colors">
+                  support@giftreveal.in
                 </a>
               </div>
             </div>
@@ -100,9 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <i data-lucide="map-pin" class="w-4 h-4"></i>
               </div>
               <div>
-                <span class="block text-[11px] text-[#d0c3cb]/60 uppercase tracking-wider font-semibold">Operating Address</span>
+                <span class="block text-[11px] text-[#d0c3cb]/60 uppercase tracking-wider font-semibold">Operating Brand</span>
                 <address class="not-italic text-[#d0c3cb]/90 leading-snug">
-                  SoulScript (DigitalYogi24)<br>
+                  <?php echo APP_NAME; ?> (giftreveal.in)<br>
                   India
                 </address>
               </div>

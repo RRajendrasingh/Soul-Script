@@ -92,7 +92,7 @@ require_once __DIR__ . '/config/config.php';
       <section class="space-y-3">
         <h2 class="text-lg font-serif font-bold text-[#eac34a]">6. How to Request a Refund</h2>
         <p>
-          To request a refund, please send an email to <a href="mailto:support@digitalyogi24.com" class="text-[#eac34a] underline">support@digitalyogi24.com</a> with:
+          To request a refund, please send an email to <a href="mailto:support@giftreveal.in" class="text-[#eac34a] underline">support@giftreveal.in</a> with:
         </p>
         <ol class="list-decimal list-inside space-y-1 pl-2 text-[#d0c3cb]/90">
           <li>Your <strong>Order ID</strong> (e.g. <code>ord_...</code>) or registered email address.</li>

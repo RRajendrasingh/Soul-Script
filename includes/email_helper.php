@@ -1,6 +1,6 @@
 <?php
 /**
- * SoulScript - Automated Email Receipt Helper
+ * GiftReveal - Automated Email Receipt Helper
  * Generates and sends branded HTML invoices & access receipts to buyers.
  */
 
@@ -15,6 +15,8 @@ if (!defined('APP_URL')) {
  * @return bool True if mail dispatch attempted
  */
 function sendOrderReceiptEmail($data) {
+    $appName       = defined('APP_NAME') ? APP_NAME : 'GiftReveal';
+    $domainHost    = parse_url(APP_URL, PHP_URL_HOST) ?? 'giftreveal.in';
     $buyer_name    = htmlspecialchars($data['buyer_name'] ?? 'Valued Customer');
     $buyer_email   = trim($data['buyer_email'] ?? '');
     $order_id      = htmlspecialchars($data['order_id'] ?? 'ORD-' . time());
@@ -29,7 +31,7 @@ function sendOrderReceiptEmail($data) {
         return false;
     }
 
-    $subject = "🎉 Payment Receipt & Access Link for your Surprise Website - SoulScript";
+    $subject = "🎉 Payment Receipt & Access Link for your Surprise Website - " . $appName;
 
     // Premium HTML Email Template
     $htmlMessage = '
@@ -38,7 +40,7 @@ function sendOrderReceiptEmail($data) {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Payment Receipt - SoulScript</title>
+      <title>Payment Receipt - ' . $appName . '</title>
       <style>
         body { margin: 0; padding: 0; background-color: #100d10; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #e8e0e3; }
         .container { max-width: 600px; margin: 0 auto; background-color: #221f21; border-radius: 20px; overflow: hidden; border: 1px solid #4d444b; }
@@ -67,8 +69,8 @@ function sendOrderReceiptEmail($data) {
         <div class="container">
           <!-- Header -->
           <div class="header">
-            <h1 class="logo-title">SoulScript</h1>
-            <div class="subtitle">Romantic Surprise Websites</div>
+            <h1 class="logo-title">' . $appName . '</h1>
+            <div class="subtitle">Personalized Surprise Websites</div>
           </div>
 
           <!-- Main Content -->
@@ -76,7 +78,7 @@ function sendOrderReceiptEmail($data) {
             <div class="badge">✅ Payment Confirmed & Receipt</div>
             <div class="greeting">Dear ' . $buyer_name . ',</div>
             <div class="intro">
-              Thank you for choosing <strong>SoulScript</strong>! Your payment of <strong>₹' . $amount_paid . '</strong> was successful, and your romantic surprise website has been generated.
+              Thank you for choosing <strong>' . $appName . '</strong>! Your payment of <strong>₹' . $amount_paid . '</strong> was successful, and your surprise website has been generated.
             </div>
 
             <!-- Receipt Details -->
@@ -114,14 +116,14 @@ function sendOrderReceiptEmail($data) {
             <!-- Buyer Account Notice -->
             <div class="info-box">
               🔑 <strong>How to manage your gift anytime:</strong><br>
-              Visit <a href="' . $edit_url . '" style="color: #eac34a; text-decoration: underline;">digitalyogi24.com/edit.php</a> and log in using your registered email (<code>' . $buyer_email . '</code>) and the account password you set during checkout.
+              Visit <a href="' . $edit_url . '" style="color: #eac34a; text-decoration: underline;">' . $domainHost . '/edit.php</a> and log in using your registered email (<code>' . $buyer_email . '</code>) and the account password you set during checkout.
             </div>
           </div>
 
           <!-- Footer -->
           <div class="footer">
-            <p>Made with Endless Love by SoulScript • <a href="' . APP_URL . '">digitalyogi24.com</a></p>
-            <p style="font-size: 11px; margin-top: 5px;">Need help? Reply directly to this email or contact support.</p>
+            <p>Made with Endless Love by ' . $appName . ' • <a href="' . APP_URL . '">' . $domainHost . '</a></p>
+            <p style="font-size: 11px; margin-top: 5px;">Need help? Reply directly to this email or contact support at support@' . $domainHost . '.</p>
           </div>
         </div>
       </div>
@@ -133,8 +135,8 @@ function sendOrderReceiptEmail($data) {
     $headers = [
         'MIME-Version: 1.0',
         'Content-type: text/html; charset=UTF-8',
-        'From: SoulScript <no-reply@digitalyogi24.com>',
-        'Reply-To: support@digitalyogi24.com',
+        'From: ' . $appName . ' <no-reply@' . $domainHost . '>',
+        'Reply-To: support@' . $domainHost,
         'X-Mailer: PHP/' . phpversion()
     ];
 
@@ -142,7 +144,7 @@ function sendOrderReceiptEmail($data) {
     try {
         return @mail($buyer_email, $subject, $htmlMessage, implode("\r\n", $headers));
     } catch (Exception $e) {
-        error_log("SoulScript Mail Error: " . $e->getMessage());
+        error_log("GiftReveal Mail Error: " . $e->getMessage());
         return false;
     }
 }
