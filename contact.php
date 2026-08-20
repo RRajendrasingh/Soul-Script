@@ -86,24 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="flex items-start gap-3">
               <div class="w-8 h-8 rounded-lg bg-[#3b1e3b] text-[#eac34a] flex items-center justify-center shrink-0 border border-[#eac34a]/30 mt-0.5">
-                <i data-lucide="phone-call" class="w-4 h-4"></i>
-              </div>
-              <div>
-                <span class="block text-[11px] text-[#d0c3cb]/60 uppercase tracking-wider font-semibold">Customer Care</span>
-                <span class="text-[#e8e0e3] font-medium">+91 98765 43210</span>
-                <span class="block text-[10px] text-[#d0c3cb]/50">Mon – Sat (10:00 AM – 7:00 PM IST)</span>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[#3b1e3b] text-[#eac34a] flex items-center justify-center shrink-0 border border-[#eac34a]/30 mt-0.5">
                 <i data-lucide="map-pin" class="w-4 h-4"></i>
               </div>
               <div>
-                <span class="block text-[11px] text-[#d0c3cb]/60 uppercase tracking-wider font-semibold">Operating Brand</span>
+                <span class="block text-[11px] text-[#d0c3cb]/60 uppercase tracking-wider font-semibold">Operating Address</span>
                 <address class="not-italic text-[#d0c3cb]/90 leading-snug">
-                  <?php echo APP_NAME; ?> (giftreveal.in)<br>
-                  India
+                  <?php echo APP_NAME; ?><br>
+                  Alwar, Rajasthan, India
                 </address>
               </div>
             </div>
