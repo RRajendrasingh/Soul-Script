@@ -408,6 +408,7 @@ $completionRate = $totalItems > 0 ? round(($builtCount / $totalItems) * 100) : 1
           </form>
         </div>
       </div>
+    <?php endif; ?>
 
     <!-- Universal Admin Footer -->
     <?php require_once __DIR__ . '/../includes/admin_footer.php'; ?>

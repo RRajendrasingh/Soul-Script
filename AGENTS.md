@@ -23,3 +23,12 @@
    - **Rule 1: Market Standard Benchmark First**: Always research and analyze top-tier market standards (Shopify, WordPress CMS, enterprise patterns) before building or altering any feature.
    - **Rule 2: Mandatory Chrome Browser Verification**: Never declare a task completed or ask the user to check live until I have run Chrome browser automated/manual testing myself, verified 100% of scenarios (Insert, Update, Delete, Toggle, Refresh), and ensured zero regression.
    - **Rule 3: Mandatory 360° View Impact Analysis**: Always evaluate the complete 360° lifecycle of a feature before coding — asking: *"If we Add, Update, Delete, or Toggle X, how does it affect existing features? Will anything break or regress?"* Anticipate all CRUD edge cases proactively.
+
+6. **CRITICAL: The Master 30 URLs & Endpoints Regression Registry**:
+   - On every optimization, feature addition, or code change, automatically run regression checks against the platform's 30 core endpoints:
+     - **Public Pages (7):** `/`, `/about.php`, `/contact.php`, `/privacy.php`, `/terms.php`, `/refund-policy.php`, `/shipping-policy.php`.
+     - **Personalization Flow (3):** `/create.php`, `/create.php?template=raksha_bandhan_royal`, `/edit.php`.
+     - **Live Reveals (2):** `/gift/{slug}`, `/gift/manvi-rakhi-v2`.
+     - **Admin Suite (8):** `/admin/index.php`, `/admin/templates.php`, `/admin/sample_gallery.php`, `/admin/rakhi_vouchers.php`, `/admin/messages.php`, `/admin/affiliate_settings.php`, `/admin/journey.php`, `/admin/system_reset.php`.
+     - **Backend APIs (10):** `/api/get_page_lock.php`, `/api/verify_hint.php`, `/api/create_order.php`, `/api/create_page.php`, `/api/edit_page.php`, `/api/webhook_razorpay.php`, `/api/admin.php`, `/api/admin_templates.php`, `/api/admin_sample_gallery.php`, `/api/claim_voucher.php`.
+

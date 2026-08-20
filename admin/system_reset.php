@@ -244,6 +244,7 @@ if ($isLoggedIn) {
           </button>
         </form>
       </div>
+    <?php endif; ?>
 
     <!-- Universal Admin Footer -->
     <?php require_once __DIR__ . '/../includes/admin_footer.php'; ?>
