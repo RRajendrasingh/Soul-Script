@@ -12,7 +12,7 @@ if (!$isAdminLoggedIn) {
     exit;
 }
 
-$db = getDbConnection();
+$db = getDB();
 
 // Ensure table exists
 $db->exec("CREATE TABLE IF NOT EXISTS contact_messages (

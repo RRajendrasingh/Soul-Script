@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Please provide a valid email address.';
     } else {
         try {
-            $db = getDbConnection();
+            $db = getDB();
             // Ensure table exists
             $db->exec("CREATE TABLE IF NOT EXISTS contact_messages (
                 id INT AUTO_INCREMENT PRIMARY KEY,
