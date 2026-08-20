@@ -695,7 +695,7 @@ require_once __DIR__ . '/includes/media_helper.php';
             <span class="text-[11px] uppercase font-extrabold text-[#d0c3cb]/70 tracking-wider block mb-0.5">Total Investment</span>
             <span class="font-serif text-3xl font-extrabold text-[#eac34a]" id="modalPrice">₹499</span>
           </div>
-          <button type="button" disabled class="px-6 py-3.5 bg-[#eac34a] text-[#241a00] font-sans text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-lg flex items-center justify-center gap-2 cursor-not-allowed opacity-80 shrink-0 whitespace-nowrap" id="checkoutBtn">
+          <button type="submit" class="px-6 py-3.5 bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-sans text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-lg flex items-center justify-center gap-2 cursor-pointer transition-all shrink-0 whitespace-nowrap" id="checkoutBtn">
             <span>Proceed to Pay &amp; Personalize</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
