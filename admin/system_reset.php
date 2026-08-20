@@ -105,7 +105,11 @@ if ($isLoggedIn) {
     <div class="absolute bottom-[-10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-[#cca830]/10 blur-[130px]"></div>
   </div>
 
-  <?php require_once __DIR__ . '/../includes/header.php'; ?>
+  <?php 
+  $current_page = 'admin';
+  $isAdminPage = true;
+  require_once __DIR__ . '/../includes/header.php'; 
+  ?>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-20 relative z-10 space-y-8">
 
@@ -142,12 +146,14 @@ if ($isLoggedIn) {
     <?php else: ?>
       <?php require_once __DIR__ . '/nav_header.php'; ?>
 
-      <!-- HEADER -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#4d444b]/40 pb-6">
+      <!-- Level 3: Standard Action Hero Card -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#221f21]/80 backdrop-blur-md p-6 rounded-3xl border border-[#4d444b] shadow-2xl">
         <div>
-          <span class="text-[10px] uppercase font-extrabold tracking-[0.2em] text-[#eac34a] block">Database Clean Slate</span>
-          <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]">⚙️ System Reset &amp; Maintenance</h1>
-          <p class="text-xs text-[#d0c3cb] mt-1">Purge test orders, test pages, and dummy vouchers before beta testing or public launch.</p>
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-rose-400 mb-1">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i> Danger Zone
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">⚙️ System Reset &amp; Maintenance</h1>
+          <p class="text-xs sm:text-sm text-[#d0c3cb] mt-1">Purge test orders, test pages, and dummy vouchers before beta testing or public launch.</p>
         </div>
       </div>
 
@@ -239,8 +245,8 @@ if ($isLoggedIn) {
         </form>
       </div>
 
-    <?php endif; ?>
-
+    <!-- Universal Admin Footer -->
+    <?php require_once __DIR__ . '/../includes/admin_footer.php'; ?>
   </main>
 </body>
 </html>

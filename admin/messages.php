@@ -52,46 +52,44 @@ $newCount = count(array_filter($messages, fn($m) => ($m['status'] ?? 'new') === 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Inquiries &amp; Messages — <?php echo APP_NAME; ?> Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; background-color: #120f12; color: #e8e0e3; }
-    .font-serif { font-family: 'Cinzel', serif; }
-  </style>
+  <?php 
+  $page_title = 'Customer Inquiries & Messages — ' . (defined('APP_NAME') ? APP_NAME : 'GiftReveal') . ' Admin';
+  require_once __DIR__ . '/../includes/head.php'; 
+  ?>
 </head>
-<body class="min-h-screen pb-16">
+<body class="bg-[#151215] text-[#e8e0e3] min-h-screen relative overflow-x-hidden font-sans selection:bg-[#eac34a] selection:text-[#151215]">
+  <!-- Ambient Luxury Background Glows -->
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-[#3b1e3b]/30 via-[#221f21]/20 to-transparent blur-[120px] pointer-events-none z-0"></div>
 
-  <!-- Header Banner -->
-  <header class="bg-[#1b171b]/95 border-b border-[#3b1e3b] sticky top-0 z-40 backdrop-blur-md">
-    <div class="max-w-6xl mx-auto px-4 py-3.5 sm:py-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
-      <div class="flex items-center gap-3">
-        <a href="index.php" class="p-2 rounded-xl bg-[#241c24] text-[#eac34a] hover:bg-[#3b1e3b] transition-all flex items-center justify-center border border-[#eac34a]/20 shrink-0">
-          <i data-lucide="arrow-left" class="w-5 h-5"></i>
-        </a>
-        <div class="min-w-0">
-          <h1 class="text-base sm:text-xl font-bold font-serif text-[#e8e0e3] flex items-center gap-2 truncate">
-            <i data-lucide="mail" class="w-4 h-4 sm:w-5 sm:h-5 text-[#eac34a] shrink-0"></i>
-            <span class="truncate">Customer Inquiries (<?php echo $totalCount; ?>)</span>
-          </h1>
-          <p class="text-[11px] text-[#d0c3cb] hidden sm:block">View and reply to messages sent via website contact form</p>
+  <?php 
+  $current_page = 'admin';
+  $isAdminPage = true;
+  require_once __DIR__ . '/../includes/header.php'; 
+  ?>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-20 relative z-10 space-y-8">
+    <?php require_once __DIR__ . '/nav_header.php'; ?>
+
+    <!-- Level 3: Standard Action Hero Card -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#221f21]/80 backdrop-blur-md p-6 rounded-3xl border border-[#4d444b] shadow-2xl">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#eac34a] mb-1">
+          <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel
         </div>
+        <h1 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3] flex items-center gap-2">
+          <span>Customer Inquiries</span>
+          <span class="text-sm font-sans px-2.5 py-0.5 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 font-bold"><?php echo $totalCount; ?></span>
+        </h1>
+        <p class="text-xs sm:text-sm text-[#d0c3cb] mt-1">View, track, and reply to messages submitted by users via the website contact form.</p>
       </div>
+
       <div class="flex items-center gap-2">
-        <span class="px-3 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/30 text-xs font-bold">
-          <?php echo $newCount; ?> New Messages
+        <span class="px-4 py-2 rounded-xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40 text-xs font-bold flex items-center gap-1.5 shadow-md">
+          <i data-lucide="bell" class="w-4 h-4 text-[#eac34a]"></i>
+          <span><?php echo $newCount; ?> Unread New</span>
         </span>
       </div>
     </div>
-  </header>
-
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-
-    <!-- Admin Navigation Bar -->
-    <?php require_once __DIR__ . '/nav_header.php'; ?>
 
     <?php if (empty($messages)): ?>
       <div class="p-12 text-center rounded-3xl bg-[#1b171b] border border-[#4d444b]/40 space-y-3">
@@ -110,33 +108,33 @@ $newCount = count(array_filter($messages, fn($m) => ($m['status'] ?? 'new') === 
                 <div class="flex items-center gap-2">
                   <span class="font-bold text-sm text-[#e8e0e3]"><?php echo htmlspecialchars($msg['name']); ?></span>
                   <?php if (($msg['status'] ?? 'new') === 'new'): ?>
-                    <span class="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase tracking-wider">New</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/40">NEW</span>
                   <?php else: ?>
-                    <span class="px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 text-[10px] font-semibold uppercase">Replied</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#1e3b20] text-[#a4e4b9] border border-[#a4e4b9]/30">REPLIED</span>
                   <?php endif; ?>
                 </div>
-                <div class="text-xs text-[#d0c3cb] flex flex-wrap items-center gap-3">
-                  <span class="text-[#eac34a] font-medium"><?php echo htmlspecialchars($msg['email']); ?></span>
+                <div class="text-xs text-[#b8a7b3] flex items-center gap-3">
+                  <a href="mailto:<?php echo htmlspecialchars($msg['email']); ?>" class="text-[#e4b9df] hover:underline flex items-center gap-1">
+                    <i data-lucide="mail" class="w-3.5 h-3.5"></i> <?php echo htmlspecialchars($msg['email']); ?>
+                  </a>
                   <span>•</span>
-                  <span><?php echo date('j M Y, h:i A', strtotime($msg['created_at'])); ?></span>
+                  <span><?php echo date('d M Y, h:i A', strtotime($msg['created_at'])); ?></span>
                 </div>
               </div>
 
               <div class="flex items-center gap-2">
-                <a href="mailto:<?php echo urlencode($msg['email']); ?>?subject=<?php echo urlencode('Re: ' . ($msg['subject'] ?? 'Inquiry on ' . APP_NAME)); ?>" class="px-3.5 py-1.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all flex items-center gap-1.5 shadow-md">
-                  <i data-lucide="reply" class="w-3.5 h-3.5"></i>
-                  <span>Reply Email</span>
+                <a href="mailto:<?php echo htmlspecialchars($msg['email']); ?>?subject=Re: <?php echo rawurlencode($msg['subject'] ?? 'Inquiry'); ?>" class="px-3 py-1.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition flex items-center gap-1">
+                  <i data-lucide="corner-up-left" class="w-3.5 h-3.5"></i> Reply Email
                 </a>
-                <a href="messages.php?action=toggle&id=<?php echo $msg['id']; ?>" class="px-3 py-1.5 rounded-xl bg-[#241c24] border border-[#4d444b] text-[#d0c3cb] hover:text-[#e8e0e3] text-xs font-semibold transition-all">
+                <a href="messages.php?action=toggle&id=<?php echo $msg['id']; ?>" class="px-3 py-1.5 rounded-xl bg-[#221f21] text-[#d0c3cb] border border-[#4d444b] font-semibold text-xs hover:bg-[#3b1e3b] hover:text-[#eac34a] transition">
                   <?php echo ($msg['status'] ?? 'new') === 'new' ? 'Mark Replied' : 'Mark New'; ?>
                 </a>
-                <a href="messages.php?action=delete&id=<?php echo $msg['id']; ?>" onclick="return confirm('Are you sure you want to delete this message?');" class="p-1.5 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 hover:bg-rose-900/60 text-xs transition-all" title="Delete">
+                <a href="messages.php?action=delete&id=<?php echo $msg['id']; ?>" onclick="return confirm('Are you sure you want to delete this message?');" class="p-1.5 rounded-xl bg-rose-950/40 text-rose-300 border border-rose-500/30 hover:bg-rose-900/60 transition">
                   <i data-lucide="trash-2" class="w-4 h-4"></i>
                 </a>
               </div>
             </div>
 
-            <!-- Message Subject & Body -->
             <div class="space-y-2">
               <div class="text-xs font-bold text-[#ffe088] uppercase tracking-wider">
                 Subject: <?php echo htmlspecialchars($msg['subject'] ?? 'General Inquiry'); ?>
@@ -150,6 +148,8 @@ $newCount = count(array_filter($messages, fn($m) => ($m['status'] ?? 'new') === 
       </div>
     <?php endif; ?>
 
+    <!-- Universal Admin Footer -->
+    <?php require_once __DIR__ . '/../includes/admin_footer.php'; ?>
   </main>
 
   <script>

@@ -97,6 +97,8 @@ if (empty($_SESSION['admin_logged_in'])) {
       </div>
     </div>
 
+    <!-- Universal Admin Footer -->
+    <?php require_once __DIR__ . '/../includes/admin_footer.php'; ?>
   </main>
 
   <!-- Admin Sample Upload / Edit Modal -->

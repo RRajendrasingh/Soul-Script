@@ -39,25 +39,7 @@ $isAdminPage = $isAdminPage ?? false;
 
     <!-- Right Action Controls (Desktop) -->
     <div class="hidden md:flex items-center gap-3 shrink-0">
-      <?php if ($isAdminPage): ?>
-        <?php if (!empty($_SESSION['admin_logged_in'])): ?>
-          <a href="<?php echo APP_URL; ?>/admin/index.php?logout=1" class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-[#3b1e3b] text-[#e4b9df] border border-[#e4b9df]/40 hover:border-[#e4b9df] transition-all">
-            Logout
-          </a>
-        <?php endif; ?>
-        <a href="<?php echo APP_URL; ?>" class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-[#221f21] border border-[#4d444b] text-[#d0c3cb] hover:text-white transition-all">
-          ← Back to App
-        </a>
-      <?php else: ?>
-        <a href="<?php echo APP_URL; ?>/edit.php" class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 border border-[#eac34a]/60 bg-[#3b1e3b] text-[#eac34a] hover:bg-[#eac34a] hover:text-[#241a00] shadow-[0_0_15px_rgba(234,195,74,0.2)] transition-all">
-          <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
-          <span>Buyer Login</span>
-        </a>
-        <a href="<?php echo APP_URL; ?>/#gallery" class="px-5 py-2 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] text-xs font-bold uppercase tracking-[0.15em] shadow-[0_0_20px_rgba(234,195,74,0.3)] hover:shadow-[0_0_30px_rgba(234,195,74,0.5)] hover:scale-105 transition-all duration-300 flex items-center gap-2">
-          <i data-lucide="gift" class="w-3.5 h-3.5"></i>
-          <span>Create Surprise</span>
-        </a>
-      <?php endif; ?>
+      <?php require __DIR__ . '/user_avatar_nav.php'; ?>
     </div>
 
     <!-- Mobile Controls (Hamburger Menu Button & Quick CTA) -->

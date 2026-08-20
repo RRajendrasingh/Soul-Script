@@ -14,50 +14,46 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gift Cards & Templates Manager — <?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?> Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; background-color: #120f12; color: #e8e0e3; }
-    .font-serif { font-family: 'Cinzel', serif; }
-  </style>
+  <?php 
+  $page_title = 'Gift Cards & Templates Manager — ' . (defined('APP_NAME') ? APP_NAME : 'GiftReveal') . ' Admin';
+  require_once __DIR__ . '/../includes/head.php'; 
+  ?>
 </head>
-<body class="min-h-screen pb-16">
+<body class="bg-[#151215] text-[#e8e0e3] min-h-screen relative overflow-x-hidden font-sans selection:bg-[#eac34a] selection:text-[#151215]">
+  <!-- Ambient Luxury Background Glows -->
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-[#3b1e3b]/30 via-[#221f21]/20 to-transparent blur-[120px] pointer-events-none z-0"></div>
 
-  <!-- Header Banner (Mobile Responsive) -->
-  <header class="bg-[#1b171b]/95 border-b border-[#3b1e3b] sticky top-0 z-40 backdrop-blur-md">
-    <div class="max-w-6xl mx-auto px-4 py-3.5 sm:py-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
-      <div class="flex items-center gap-3">
-        <a href="index.php" class="p-2 rounded-xl bg-[#241c24] text-[#eac34a] hover:bg-[#3b1e3b] transition-all flex items-center justify-center border border-[#eac34a]/20 shrink-0">
-          <i data-lucide="arrow-left" class="w-5 h-5"></i>
-        </a>
-        <div class="min-w-0">
-          <h1 class="text-base sm:text-xl font-bold font-serif text-[#e8e0e3] flex items-center gap-2 truncate">
-            <i data-lucide="layout-grid" class="w-4 h-4 sm:w-5 sm:h-5 text-[#eac34a] shrink-0"></i>
-            <span class="truncate">Gift Cards Manager</span>
-          </h1>
-          <p class="text-[11px] text-[#b8a7b3] leading-tight truncate sm:whitespace-normal">Manage gift templates, prices, cover photos &amp; live URLs</p>
+  <?php 
+  $current_page = 'admin';
+  $isAdminPage = true;
+  require_once __DIR__ . '/../includes/header.php'; 
+  ?>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-20 relative z-10 space-y-8">
+    <?php require_once __DIR__ . '/nav_header.php'; ?>
+
+    <!-- Level 3: Standard Action Hero Card -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#221f21]/80 backdrop-blur-md p-6 rounded-3xl border border-[#4d444b] shadow-2xl">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#eac34a] mb-1">
+          <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel
         </div>
+        <h1 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Gift Cards &amp; Templates Manager</h1>
+        <p class="text-xs sm:text-sm text-[#d0c3cb] mt-1">Manage gift templates, prices, cover photos, sequence order &amp; live preview URLs.</p>
       </div>
-      <div class="flex items-center gap-2 w-full sm:w-auto">
-        <button id="saveSequenceBtn" onclick="saveCardSequenceOrder()" type="button" disabled class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#241c24] text-gray-500 font-bold text-xs border border-gray-700 transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-not-allowed opacity-50">
+
+      <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+        <button id="saveSequenceBtn" onclick="saveCardSequenceOrder()" type="button" disabled class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#241c24] text-gray-500 font-bold text-xs border border-gray-700 transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-not-allowed opacity-50">
           <i data-lucide="save" class="w-4 h-4"></i>
           <span id="saveSeqBtnText">Save Card Sequence</span>
         </button>
 
-        <button onclick="openTemplateModal()" type="button" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
+        <button onclick="openTemplateModal()" type="button" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#eac34a] text-[#241a00] font-bold text-xs hover:bg-[#ffe088] transition-all shadow-lg flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
           <i data-lucide="plus-circle" class="w-4 h-4"></i>
           <span>Add New Gift Card</span>
         </button>
       </div>
     </div>
-  </header>
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-    <?php require_once __DIR__ . '/nav_header.php'; ?>
 
     <!-- Stats & Guidelines Alert -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -170,6 +166,8 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       </div>
     </div>
 
+    <!-- Universal Admin Footer -->
+    <?php require_once __DIR__ . '/../includes/admin_footer.php'; ?>
   </main>
 
   <!-- Add / Edit Template Modal -->

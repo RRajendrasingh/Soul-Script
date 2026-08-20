@@ -936,13 +936,22 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
             </div>
           </section>
 
-          <!-- Footer Bar -->
-          <footer class="mt-20 pt-8 pb-12 border-t border-[#4d444b]/40 text-center relative z-10 space-y-4">
-            <p class="text-xs text-[#d0c3cb]">Made with endless love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
-            <div class="flex items-center justify-center gap-3">
+          <!-- Viral Keepsake Footer Bar -->
+          <footer class="mt-20 pt-10 pb-16 border-t border-[#4d444b]/40 text-center relative z-10 space-y-5">
+            <div class="space-y-1">
+              <p class="text-xs text-[#d0c3cb]">Crafted with eternal love by <strong class="text-[#eac34a]">${content.buyer_name}</strong> for <strong class="text-[#eac34a]">${content.partner_name}</strong></p>
+              <p class="text-[11px] text-[#80707c]">A magical digital keepsake powered by <span class="text-[#eac34a] font-serif font-bold"><?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?></span></p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <a href="<?php echo APP_URL; ?>" target="_blank" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#eac34a] to-[#d4af37] text-[#241a00] text-xs font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(234,195,74,0.3)] hover:scale-105 transition-all flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>Create a Surprise Like This ✨</span>
+              </a>
+
               <button onclick="relockGiftSession()" type="button" class="px-4 py-2 rounded-full border border-[#4d444b] bg-[#151215] text-[#d0c3cb] hover:border-[#eac34a] text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
                 <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-                <span>Lock Gift Page 🔒</span>
+                <span>Lock Page 🔒</span>
               </button>
             </div>
           </footer>

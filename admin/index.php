@@ -78,11 +78,14 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
     <?php else: ?>
       <?php require_once __DIR__ . '/nav_header.php'; ?>
 
-      <!-- Header Title -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <!-- Level 3: Standard Action Hero Card -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#221f21]/80 backdrop-blur-md p-6 rounded-3xl border border-[#4d444b] shadow-2xl">
         <div>
-          <h1 class="text-3xl font-bold font-serif text-[#e8e0e3]">Orders &amp; Page Management</h1>
-          <p class="text-xs text-[#d0c3cb] mt-1">Real-time overview of all customer orders, generated surprise reveal links, and proposal responses.</p>
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#eac34a] mb-1">
+            <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold font-serif text-[#e8e0e3]">Orders &amp; Page Management</h1>
+          <p class="text-xs sm:text-sm text-[#d0c3cb] mt-1">Real-time overview of all customer orders, generated surprise reveal links, and proposal responses.</p>
         </div>
       </div>
 
@@ -206,6 +209,9 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
       </div>
     </div>
     <?php endif; ?>
+
+    <!-- Universal Admin Footer -->
+    <?php require_once __DIR__ . '/../includes/admin_footer.php'; ?>
   </main>
 
   <script>

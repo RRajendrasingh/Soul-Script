@@ -153,7 +153,11 @@ $completionRate = $totalItems > 0 ? round(($builtCount / $totalItems) * 100) : 1
     <div class="absolute bottom-[-10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-[#cca830]/10 blur-[130px]"></div>
   </div>
 
-  <?php require_once __DIR__ . '/../includes/header.php'; ?>
+  <?php 
+  $current_page = 'admin';
+  $isAdminPage = true;
+  require_once __DIR__ . '/../includes/header.php'; 
+  ?>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-20 relative z-10 space-y-8">
 
@@ -405,8 +409,8 @@ $completionRate = $totalItems > 0 ? round(($builtCount / $totalItems) * 100) : 1
         </div>
       </div>
 
-    <?php endif; ?>
-
+    <!-- Universal Admin Footer -->
+    <?php require_once __DIR__ . '/../includes/admin_footer.php'; ?>
   </main>
 </body>
 </html>
