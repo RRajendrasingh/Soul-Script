@@ -67,7 +67,7 @@
         <!-- Left: Bare Wrist Interactive Canvas (55% Width) -->
         <div class="w-full lg:w-[55%] flex flex-col gap-4">
           <div id="rakhiInteractionArea" class="relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden shadow-xl border-2 border-[#d4af37]/40 bg-white touch-none">
-            <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKYFnHspSrA78KEP0ZJ0CfONICgStIewBATK-1s_Uv0bSQ4TGBRtnRmBqPjpRZEHyhL8DN2jT_w62j8AYTayJBAxDFp7l5IbijUlPSvRfGaVbNnDVavZt8T-S1EnKSYWoBrSe4O5hG9-INJnnJ0lMYLPCpURb8SYwvI1A7RXv6_fpw1mG8-VkfqUX9zvBJBGqCWEWp25saoTu-QGg4fSGXHiQRpXbb6gZr3UDzxF7ZEvaIZvECkwfL" alt="Wrist" class="w-full h-full object-cover select-none pointer-events-none">
+            <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeUqO2t1o0sPZLFq_QHL05QMQiy-hGG27aSMXTMcJgF9UtH9PydzEAcoQvjVf7j6EQ8qN0baAB3AXk-wCpKqT_rnYHR4QgQUZOoxUYqf1nNsrNt5FXSFyBjmkgXyHm5ee7FqIKvYsY2bt4tb8y3OjjRIj82i5qQgn_17oeC7dZVvSlckOUFoW_wNPtbKmov8ta0VlxxyeJeIB507DxsErD7CVlz90EvF3xdO06rwHv_9dFeiwAFE8i" alt="Wrist" class="w-full h-full object-cover select-none pointer-events-none">
             
             <!-- Target Zone Overlay -->
             <div id="rakhiTargetZone" class="absolute inset-x-8 top-1/3 bottom-10 border-2 border-dashed border-[#d32f2f]/80 bg-[#d32f2f]/10 rounded-2xl flex flex-col items-center justify-center backdrop-blur-xs transition-all pointer-events-none animate-pulse">
