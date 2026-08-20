@@ -842,6 +842,11 @@ require_once __DIR__ . '/includes/media_helper.php';
         const data = await res.json();
 
         if (data.success) {
+          if (data.is_admin_order || (data.order && data.order.payment_status === 'paid')) {
+            window.location.href = '<?php echo APP_URL; ?>/create.php?order_id=' + data.order.order_id;
+            return;
+          }
+
           const options = {
             key: data.razorpay_key_id,
             amount: currentPrice * 100,

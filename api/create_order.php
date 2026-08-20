@@ -69,11 +69,47 @@ try {
     }
 
     $order_id = 'ord_' . time() . '_' . rand(1000, 9999);
-    $razorpay_order_id = 'order_rzp_' . base_convert(time(), 10, 36);
+    $razorpay_order_id = null;
 
     // ADMIN SUPER BYPASS: Logged in website owners get 100% FREE instantly active orders!
     $paymentStatus = $isAdmin ? 'paid' : 'pending';
     $amountPaid = $isAdmin ? 0 : (float)$template['price_inr'];
+
+    // Generate Official Razorpay Order ID via API
+    if (!$isAdmin && defined('RAZORPAY_KEY_ID') && defined('RAZORPAY_KEY_SECRET') && strpos(RAZORPAY_KEY_ID, 'rzp_') === 0) {
+        try {
+            $ch = curl_init('https://api.razorpay.com/v1/orders');
+            curl_setopt($ch, CURLOPT_USERPWD, RAZORPAY_KEY_ID . ':' . RAZORPAY_KEY_SECRET);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                'amount' => (int)round($amountPaid * 100),
+                'currency' => 'INR',
+                'receipt' => $order_id,
+                'notes' => [
+                    'order_id' => $order_id,
+                    'template_id' => $template_id,
+                    'buyer_email' => $buyer_email
+                ]
+            ]));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            $rzpResp = curl_exec($ch);
+            $rzpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($rzpCode === 200) {
+                $rzpData = json_decode($rzpResp, true);
+                if (!empty($rzpData['id'])) {
+                    $razorpay_order_id = $rzpData['id'];
+                }
+            }
+        } catch (Exception $exRzp) {}
+    }
+
+    if (empty($razorpay_order_id)) {
+        $razorpay_order_id = 'order_rzp_' . base_convert(time(), 10, 36);
+    }
 
     $stmt = $db->prepare("
         INSERT INTO orders (order_id, buyer_name, buyer_phone, buyer_email, buyer_password_hash, template_id, amount_paid, payment_status, razorpay_order_id, created_at)

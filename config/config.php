@@ -45,8 +45,8 @@ if (!defined('DB_PASS')) define('DB_PASS', $isLocalHost ? '' : 'Soulscript@#@32'
 
 // ── Razorpay ──────────────────────────────────────────────────────────────────
 // Currently test-mode keys. Update config.env.php to switch to live keys later.
-if (!defined('RAZORPAY_KEY_ID'))         define('RAZORPAY_KEY_ID', 'rzp_test_soulscript_key');
-if (!defined('RAZORPAY_KEY_SECRET'))     define('RAZORPAY_KEY_SECRET', 'rzp_test_secret_key');
+if (!defined('RAZORPAY_KEY_ID'))         define('RAZORPAY_KEY_ID', 'rzp_test_TRy0uKsxMEi8qc');
+if (!defined('RAZORPAY_KEY_SECRET'))     define('RAZORPAY_KEY_SECRET', 'vwPpfvspIVU2umCjUkqox947');
 if (!defined('RAZORPAY_WEBHOOK_SECRET')) define('RAZORPAY_WEBHOOK_SECRET', 'whsec_soulscript_secret');
 
 // ── Admin ─────────────────────────────────────────────────────────────────────
