@@ -15,7 +15,7 @@ $isAdminPage = $isAdminPage ?? false;
       </div>
       <div class="flex flex-col">
         <span class="text-xl sm:text-2xl font-bold tracking-wide text-[#e8e0e3] font-serif group-hover:text-[#eac34a] transition-colors leading-none">
-          SoulScript
+          <?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?>
         </span>
         <span class="hidden sm:block text-[9px] uppercase tracking-[0.2em] text-[#eac34a] font-semibold mt-0.5 font-sans">
           <?php echo $isAdminPage ? 'Admin Control Panel' : 'Romantic Surprise Websites'; ?>
