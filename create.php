@@ -1881,7 +1881,13 @@ Today, I want to ask you the most important question of my life. Will you take m
               await fetch('<?php echo APP_URL; ?>/api/webhook_razorpay.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order_id: data.order.order_id, razorpay_payment_id: response.razorpay_payment_id, status: 'paid' })
+                body: JSON.stringify({ 
+                  order_id: data.order.order_id, 
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
+                  status: 'paid' 
+                })
               });
               window.location.href = '<?php echo APP_URL; ?>/create.php?order_id=' + data.order.order_id;
             },

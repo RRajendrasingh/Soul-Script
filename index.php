@@ -857,6 +857,8 @@ require_once __DIR__ . '/includes/media_helper.php';
                 body: JSON.stringify({
                   order_id: data.order.order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
                   status: 'paid'
                 })
               });

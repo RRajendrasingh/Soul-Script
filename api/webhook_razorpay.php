@@ -2,15 +2,20 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
+session_start();
+$isAdminSession = !empty($_SESSION['admin_logged_in']);
+
 $rawBody = file_get_contents('php://input');
 $input = json_decode($rawBody, true) ?: $_POST;
 
 $order_id = $input['order_id'] ?? null;
 $razorpay_payment_id = $input['razorpay_payment_id'] ?? null;
+$razorpay_order_id = $input['razorpay_order_id'] ?? null;
+$razorpay_signature = $input['razorpay_signature'] ?? null;
 $status = $input['status'] ?? 'paid';
-$signature = $_SERVER['HTTP_X_RAZORPAY_SIGNATURE'] ?? null;
+$webhookSignature = $_SERVER['HTTP_X_RAZORPAY_SIGNATURE'] ?? null;
 
-// Handle real Razorpay Webhook event payload
+// 1. Handle Official Razorpay Server-to-Server Webhook Event
 if (isset($input['event']) && strpos($input['event'], 'payment.captured') !== false) {
     $payloadEntity = $input['payload']['payment']['entity'] ?? [];
     $razorpay_payment_id = $payloadEntity['id'] ?? null;
@@ -18,13 +23,23 @@ if (isset($input['event']) && strpos($input['event'], 'payment.captured') !== fa
     $order_id = $notes['order_id'] ?? null;
 
     // Verify webhook signature if configured
-    if ($signature && defined('RAZORPAY_WEBHOOK_SECRET') && RAZORPAY_WEBHOOK_SECRET !== 'whsec_soulscript_secret') {
+    if ($webhookSignature && defined('RAZORPAY_WEBHOOK_SECRET') && RAZORPAY_WEBHOOK_SECRET !== 'whsec_soulscript_secret') {
         $expectedSignature = hash_hmac('sha256', $rawBody, RAZORPAY_WEBHOOK_SECRET);
-        if (!hash_equals($expectedSignature, $signature)) {
+        if (!hash_equals($expectedSignature, $webhookSignature)) {
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Invalid Webhook Signature']);
             exit;
         }
+    }
+}
+
+// 2. Handle Frontend Razorpay Modal Client Verification
+if ($razorpay_signature && $razorpay_order_id && $razorpay_payment_id && defined('RAZORPAY_KEY_SECRET') && RAZORPAY_KEY_SECRET !== 'vwPpfvspIVU2umCjUkqox947') {
+    $expectedClientSig = hash_hmac('sha256', $razorpay_order_id . '|' . $razorpay_payment_id, RAZORPAY_KEY_SECRET);
+    if (!hash_equals($expectedClientSig, $razorpay_signature)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Invalid Payment Signature']);
+        exit;
     }
 }
 
