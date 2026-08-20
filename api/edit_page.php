@@ -165,15 +165,45 @@ try {
         $letters_json     = isset($input['letters']) ? json_encode($input['letters']) : (isset($template_fields['letters']) ? json_encode($template_fields['letters']) : $page['letters_json']);
         $tokens_json      = isset($input['tokens']) ? json_encode($input['tokens']) : (isset($template_fields['tokens']) ? json_encode($template_fields['tokens']) : $page['tokens_json']);
 
-        $relationship_start_date = $template_fields['relationship_start_date'] ?? $page['relationship_start_date'];
-        $partner_dob             = $template_fields['partner_dob'] ?? $page['partner_dob'];
-        $love_letter_text        = $template_fields['love_letter_text'] ?? $page['love_letter_text'];
-        $buyer_city              = $template_fields['buyer_city'] ?? $page['buyer_city'];
-        $buyer_timezone          = $template_fields['buyer_timezone'] ?? $page['buyer_timezone'];
-        $partner_city            = $template_fields['partner_city'] ?? $page['partner_city'];
-        $partner_timezone        = $template_fields['partner_timezone'] ?? $page['partner_timezone'];
-        $reunion_date            = $template_fields['reunion_date'] ?? $page['reunion_date'];
-        $playlist_url            = $template_fields['playlist_url'] ?? $page['playlist_url'];
+        // ── Template-Aware Column Guard ──────────────────────────────────────────
+        // Only update template-specific columns for the template that owns them.
+        // All other templates preserve the existing DB value (prevent cross-contamination).
+        $pageTemplate = $page['template_id'] ?? '';
+
+        // Anniversary-only field
+        $relationship_start_date = ($pageTemplate === 'anniversary_reveal')
+            ? ($template_fields['relationship_start_date'] ?? $page['relationship_start_date'])
+            : $page['relationship_start_date'];
+
+        // Birthday-only field
+        $partner_dob = ($pageTemplate === 'birthday_magic')
+            ? ($template_fields['partner_dob'] ?? $page['partner_dob'])
+            : $page['partner_dob'];
+
+        // Proposal-only field
+        $love_letter_text = ($pageTemplate === 'perfect_proposal')
+            ? ($template_fields['love_letter_text'] ?? $page['love_letter_text'])
+            : $page['love_letter_text'];
+
+        // Long-Distance-Love-only fields
+        $buyer_city     = ($pageTemplate === 'long_distance_love')
+            ? ($template_fields['buyer_city'] ?? $page['buyer_city'])
+            : $page['buyer_city'];
+        $buyer_timezone = ($pageTemplate === 'long_distance_love')
+            ? ($template_fields['buyer_timezone'] ?? $page['buyer_timezone'])
+            : $page['buyer_timezone'];
+        $partner_city   = ($pageTemplate === 'long_distance_love')
+            ? ($template_fields['partner_city'] ?? $page['partner_city'])
+            : $page['partner_city'];
+        $partner_timezone = ($pageTemplate === 'long_distance_love')
+            ? ($template_fields['partner_timezone'] ?? $page['partner_timezone'])
+            : $page['partner_timezone'];
+        $reunion_date   = ($pageTemplate === 'long_distance_love')
+            ? ($template_fields['reunion_date'] ?? $page['reunion_date'])
+            : $page['reunion_date'];
+        $playlist_url   = ($pageTemplate === 'long_distance_love')
+            ? ($template_fields['playlist_url'] ?? $page['playlist_url'])
+            : $page['playlist_url'];
         $song_title              = trim($input['song_title'] ?? ($template_fields['song_title'] ?? $page['song_title']));
         $song_artist             = trim($input['song_artist'] ?? ($template_fields['song_artist'] ?? $page['song_artist']));
 
@@ -196,8 +226,8 @@ try {
             $page_id
         ]);
 
-        // Update Milestones if provided
-        if (isset($template_fields['milestones'])) {
+        // Update Milestones — anniversary_reveal only
+        if ($pageTemplate === 'anniversary_reveal' && isset($template_fields['milestones'])) {
             $db->prepare("DELETE FROM story_milestones WHERE page_id = ?")->execute([$page_id]);
             $stmtM = $db->prepare("INSERT INTO story_milestones (page_id, entry_order, milestone_date, title, description) VALUES (?, ?, ?, ?, ?)");
             foreach ($template_fields['milestones'] as $idx => $m) {
@@ -207,8 +237,9 @@ try {
             }
         }
 
-        // Update Reasons if provided
-        if (isset($template_fields['reasons'])) {
+        // Update Reasons — rakhi + birthday templates only
+        $reasonsTemplates = ['raksha_bandhan_royal', 'raksha_bandhan_festive_light', 'birthday_magic'];
+        if (in_array($pageTemplate, $reasonsTemplates) && isset($template_fields['reasons'])) {
             $db->prepare("DELETE FROM reasons_list WHERE page_id = ?")->execute([$page_id]);
             $stmtR = $db->prepare("INSERT INTO reasons_list (page_id, entry_order, reason_text) VALUES (?, ?, ?)");
             foreach ($template_fields['reasons'] as $idx => $reason) {

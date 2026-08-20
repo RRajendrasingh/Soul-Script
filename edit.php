@@ -681,7 +681,8 @@ $showLogin = !$showDashboard && !$showHub;
     };
 
     function applyThemeVisibility(templateId) {
-      const config = THEME_FEATURES[templateId] || THEME_FEATURES['anniversary_reveal'];
+      // Use a safe fallback — never fall back to anniversary_reveal to avoid cross-contamination
+      const config = THEME_FEATURES[templateId] || { hasLetters: false, hasTokens: false };
       
       const tabLetters = document.getElementById('tabBtn-letters');
       const tabTokens = document.getElementById('tabBtn-tokens');
@@ -895,8 +896,8 @@ $showLogin = !$showDashboard && !$showHub;
           if (dashWaBtn) {
             dashWaBtn.href = generateWhatsAppShareUrl(p.template_id, p.partner_name, data.share_url);
           }
-          const schema = THEME_FEATURES[p.template_id] || THEME_FEATURES['anniversary_reveal'];
-          const defaultName = p.template_id.includes('raksha_bandhan') ? 'Sibling' : 'Partner';
+          const schema = THEME_FEATURES[p.template_id] || { dashTitleSuffix: "'s Gift Dashboard", labels: {} };
+          const defaultName = p.template_id && p.template_id.includes('raksha_bandhan') ? 'Sibling' : 'Partner';
           document.getElementById('dashPartnerTitle').innerText = (p.partner_name || defaultName) + schema.dashTitleSuffix;
 
           // Update Partner Photo Avatar Manager UI
@@ -1273,14 +1274,14 @@ $showLogin = !$showDashboard && !$showHub;
       const noteLabel = document.getElementById('loveNoteLabel');
       const taglineInput = document.getElementById('taglineQuote');
 
-      const config = THEME_FEATURES[templateId] || THEME_FEATURES['anniversary_reveal'];
+      const config = THEME_FEATURES[templateId] || { dashTitleSuffix: "'s Gift Dashboard", labels: {} };
       
-      if (nameLabel) nameLabel.innerText = config.labels.name;
-      if (taglineLabel) taglineLabel.innerText = config.labels.tagline;
-      if (noteLabel) noteLabel.innerText = config.labels.note;
+      if (nameLabel && config.labels.name) nameLabel.innerText = config.labels.name;
+      if (taglineLabel && config.labels.tagline) taglineLabel.innerText = config.labels.tagline;
+      if (noteLabel && config.labels.note) noteLabel.innerText = config.labels.note;
       
       const photoLabel = document.getElementById('partnerPhotoLabel');
-      if (photoLabel) photoLabel.innerText = config.labels.photo;
+      if (photoLabel && config.labels.photo) photoLabel.innerText = config.labels.photo;
 
       if (templateId === 'birthday_magic') {
         badge.innerText = '✨ Managing: Birthday Magic Plan (Active)';
@@ -1396,8 +1397,8 @@ $showLogin = !$showDashboard && !$showHub;
           </div>
         `;
         renderReasonsList(data.reasons || []);
-      } else {
-        // Default: anniversary_reveal
+      } else if (templateId === 'anniversary_reveal') {
+        // Explicit anniversary_reveal — Story Milestones + Relationship Date
         badge.innerText = '✨ Managing: Anniversary Reveal Plan (Active)';
         tabBtn.innerText = 'Story Milestones';
 
@@ -1415,6 +1416,15 @@ $showLogin = !$showDashboard && !$showHub;
           </div>
         `;
         renderMilestonesList(data.milestones || []);
+      } else {
+        // Safe fallback for any unknown/future template — show nothing harmful
+        badge.innerText = '✨ Managing: Gift Plan (Active)';
+        tabBtn.style.display = 'none'; // Hide theme tab if no specific fields apply
+        themeContainer.innerHTML = `
+          <div class="p-6 text-center text-xs text-[#d0c3cb]/60">
+            <p>No additional template-specific settings for this plan.</p>
+          </div>
+        `;
       }
     }
 
