@@ -430,7 +430,7 @@ require_once __DIR__ . '/includes/media_helper.php';
           <div class="flex items-center justify-between pb-4 border-b border-[#4d444b]/50">
             <div class="flex items-center gap-2 text-xs font-mono text-[#d0c3cb]">
               <i data-lucide="lock" class="w-3.5 h-3.5 text-[#eac34a]"></i>
-              <span>soulscript.in/gift/your-private-link</span>
+              <span><?php echo parse_url(APP_URL, PHP_URL_HOST) ?? 'giftreveal.in'; ?>/gift/your-private-link</span>
             </div>
             <span class="text-[10px] bg-[#3b1e3b] text-[#e4b9df] border border-[#e4b9df]/30 px-2 py-0.5 rounded font-mono">Protected</span>
           </div>

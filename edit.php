@@ -402,7 +402,7 @@ $showLogin = !$showDashboard && !$showHub;
               </div>
               <div class="space-y-0.5">
                 <h4 class="font-bold text-sm text-[#e8e0e3]">Update Buyer Account Password 🔑</h4>
-                <p class="text-[11px] text-[#d0c3cb] leading-relaxed">Change the secret password used to log in at <code>soulscript.in/edit</code>. Leave all fields blank if you don't wish to change your password.</p>
+                <p class="text-[11px] text-[#d0c3cb] leading-relaxed">Change the secret password used to log in at <code><?php echo parse_url(APP_URL, PHP_URL_HOST) ?? 'giftreveal.in'; ?>/edit.php</code>. Leave all fields blank if you don't wish to change your password.</p>
               </div>
             </div>
 

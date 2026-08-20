@@ -100,7 +100,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
   <div class="max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
     <a href="<?php echo APP_URL; ?>" class="flex items-center gap-1.5 text-xs font-bold text-[#e8e0e3] hover:text-[#eac34a] transition-colors shrink-0">
       <svg class="w-4 h-4 text-[#eac34a] stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-      <span class="hidden min-[360px]:inline">SoulScript Home</span>
+      <span class="hidden min-[360px]:inline"><?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?> Home</span>
       <span class="inline min-[360px]:hidden">Home</span>
     </a>
 
@@ -248,7 +248,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
     let isYtFallbackTriggered = false;
     let currentFallbackAudioUrl = '<?php echo APP_URL; ?>/assets/audio/romantic_theme.mp3';
     let currentSongTitle = 'Romantic Track';
-    let currentArtist = 'SoulScript';
+    let currentArtist = '<?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?>';
 
     // Load official YouTube Iframe API asynchronously
     (function loadYTIframeAPI() {
@@ -641,7 +641,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
               <i data-lucide="shield-alert" class="w-10 h-10 text-[#eac34a] mx-auto"></i>
               <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">Page Not Found or Expired</h3>
               <p class="text-xs text-[#d0c3cb]">${data.message || 'This surprise page URL is either incorrect or has expired.'}</p>
-              <a href="<?php echo APP_URL; ?>" class="inline-block px-6 py-3 rounded-full bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase">Go to SoulScript Home</a>
+              <a href="<?php echo APP_URL; ?>" class="inline-block px-6 py-3 rounded-full bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase">Go to <?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?> Home</a>
             </div>
           `;
           lucide.createIcons();
@@ -652,7 +652,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
             <i data-lucide="shield-alert" class="w-10 h-10 text-[#eac34a] mx-auto"></i>
             <h3 class="text-xl font-bold font-serif text-[#e8e0e3]">Page Not Found or Expired</h3>
             <p class="text-xs text-[#d0c3cb]">This surprise page link is either invalid or expired (${err.message}).</p>
-            <a href="<?php echo APP_URL; ?>" class="inline-block px-6 py-3 rounded-full bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase">Go to SoulScript Home</a>
+            <a href="<?php echo APP_URL; ?>" class="inline-block px-6 py-3 rounded-full bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase">Go to <?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?> Home</a>
           </div>
         `;
         lucide.createIcons();
