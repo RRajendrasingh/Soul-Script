@@ -12,8 +12,8 @@ if (!headers_sent()) {
 // Ensure Indian Standard Time (IST) globally across all timestamps
 date_default_timezone_set('Asia/Kolkata');
 
-define('APP_NAME', 'SoulScript');
-define('APP_TAGLINE', 'Personalized Surprise Reveal Websites');
+if (!defined('APP_NAME')) define('APP_NAME', 'GiftReveal');
+if (!defined('APP_TAGLINE')) define('APP_TAGLINE', 'Personalized Surprise Reveal Websites');
 
 // Load environment-specific credentials.
 // config.env.php must define: APP_URL, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS
