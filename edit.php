@@ -19,6 +19,21 @@ if (isset($_GET['logout'])) {
 }
 
 $urlToken = trim($_GET['token'] ?? '');
+$urlSlug = trim($_GET['slug'] ?? '');
+
+if (empty($urlToken) && !empty($urlSlug)) {
+    try {
+        $db = getDB();
+        $stmtSlug = $db->prepare("SELECT edit_token FROM pages WHERE LOWER(url_slug) = LOWER(?) LIMIT 1");
+        $stmtSlug->execute([$urlSlug]);
+        $foundToken = $stmtSlug->fetchColumn();
+        if ($foundToken) {
+            $urlToken = $foundToken;
+            $_SESSION['edit_token'] = $foundToken;
+        }
+    } catch (Exception $e) {}
+}
+
 if (!empty($urlToken)) {
     $_SESSION['edit_token'] = $urlToken;
 }
