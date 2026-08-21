@@ -134,14 +134,18 @@ function getDB() {
                 $pdo->exec("UPDATE pages SET template_id = 'raksha_bandhan_festive_light' WHERE url_slug IN ('ananya-rohan', 'ritu-rajendra')");
             } catch (Exception $exTpl) {}
 
-            // Auto-heal legacy digitalyogi24.com URLs in DB to giftreveal.in
+            // One-time auto-migration: Purge legacy digitalyogi24.com URLs in DB to giftreveal.in
             try {
-                $pdo->exec("UPDATE page_media SET file_path = REPLACE(file_path, 'digitalyogi24.com', 'giftreveal.in') WHERE file_path LIKE '%digitalyogi24.com%'");
-                $pdo->exec("UPDATE page_content SET receiver_photo = REPLACE(receiver_photo, 'digitalyogi24.com', 'giftreveal.in') WHERE receiver_photo LIKE '%digitalyogi24.com%'");
-                $pdo->exec("UPDATE page_content SET bg_music_url = REPLACE(bg_music_url, 'digitalyogi24.com', 'giftreveal.in') WHERE bg_music_url LIKE '%digitalyogi24.com%'");
-                $pdo->exec("UPDATE templates SET preview_image_url = REPLACE(preview_image_url, 'digitalyogi24.com', 'giftreveal.in') WHERE preview_image_url LIKE '%digitalyogi24.com%'");
-                $pdo->exec("UPDATE templates SET demo_url = REPLACE(demo_url, 'digitalyogi24.com', 'giftreveal.in') WHERE demo_url LIKE '%digitalyogi24.com%'");
-                $pdo->exec("UPDATE pages SET qr_code_url = REPLACE(qr_code_url, 'digitalyogi24.com', 'giftreveal.in') WHERE qr_code_url LIKE '%digitalyogi24.com%'");
+                $chkMig = $pdo->query("SELECT setting_value FROM system_settings WHERE setting_key = 'migration_digitalyogi_to_giftreveal' LIMIT 1");
+                if (!$chkMig || $chkMig->fetchColumn() !== 'done') {
+                    $pdo->exec("UPDATE page_media SET file_path = REPLACE(file_path, 'digitalyogi24.com', 'giftreveal.in') WHERE file_path LIKE '%digitalyogi24.com%'");
+                    $pdo->exec("UPDATE page_content SET receiver_photo = REPLACE(receiver_photo, 'digitalyogi24.com', 'giftreveal.in') WHERE receiver_photo LIKE '%digitalyogi24.com%'");
+                    $pdo->exec("UPDATE page_content SET bg_music_url = REPLACE(bg_music_url, 'digitalyogi24.com', 'giftreveal.in') WHERE bg_music_url LIKE '%digitalyogi24.com%'");
+                    $pdo->exec("UPDATE templates SET preview_image_url = REPLACE(preview_image_url, 'digitalyogi24.com', 'giftreveal.in') WHERE preview_image_url LIKE '%digitalyogi24.com%'");
+                    $pdo->exec("UPDATE templates SET demo_url = REPLACE(demo_url, 'digitalyogi24.com', 'giftreveal.in') WHERE demo_url LIKE '%digitalyogi24.com%'");
+                    $pdo->exec("UPDATE pages SET qr_code_url = REPLACE(qr_code_url, 'digitalyogi24.com', 'giftreveal.in') WHERE qr_code_url LIKE '%digitalyogi24.com%'");
+                    $pdo->exec("INSERT INTO system_settings (setting_key, setting_value) VALUES ('migration_digitalyogi_to_giftreveal', 'done') ON DUPLICATE KEY UPDATE setting_value = 'done'");
+                }
             } catch (Exception $exMigrate) {}
 
             // Auto-heal double HTML entity encoded hint questions in page_content table
