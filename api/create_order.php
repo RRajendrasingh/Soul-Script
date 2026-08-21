@@ -79,11 +79,12 @@ try {
         ? getEffectiveRazorpayCredentials() 
         : ['rzp_test_TSO6FpIhNqiwSy', 'E8uEAHS3yi7gi1Zlviiw0qMp'];
 
+    $rzpDebug = null;
     // Generate Official Razorpay Order ID via API
     if (!$isAdmin && strpos($rzpKeyId, 'rzp_') === 0) {
         try {
             $ch = curl_init('https://api.razorpay.com/v1/orders');
-            curl_setopt($ch, CURLOPT_USERPWD, $rzpKeyId . ':' . $rzpKeySecret);
+            curl_setopt($ch, CURLOPT_USERPWD, trim($rzpKeyId) . ':' . trim($rzpKeySecret));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
@@ -96,10 +97,15 @@ try {
                     'buyer_email' => $buyer_email
                 ]
             ]));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'User-Agent: GiftReveal/1.0'
+            ]);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             $rzpResp = curl_exec($ch);
             $rzpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $rzpErr = curl_error($ch);
             curl_close($ch);
 
             if ($rzpCode === 200) {
@@ -107,8 +113,12 @@ try {
                 if (!empty($rzpData['id'])) {
                     $razorpay_order_id = $rzpData['id'];
                 }
+            } else {
+                $rzpDebug = ['code' => $rzpCode, 'error' => $rzpErr, 'resp' => $rzpResp, 'key_used' => $rzpKeyId];
             }
-        } catch (Exception $exRzp) {}
+        } catch (Exception $exRzp) {
+            $rzpDebug = ['exception' => $exRzp->getMessage()];
+        }
     }
 
     if (empty($razorpay_order_id)) {
@@ -142,7 +152,8 @@ try {
             'razorpay_order_id' => $razorpay_order_id,
         ],
         'is_admin_order' => $isAdmin,
-        'razorpay_key_id' => $rzpKeyId
+        'razorpay_key_id' => $rzpKeyId,
+        'rzp_debug' => $rzpDebug
     ]);
 } catch (Exception $e) {
     sendJsonError('Order creation failed: ' . $e->getMessage(), 500);
