@@ -4,6 +4,20 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once __DIR__ . '/config/db.php';
 
+if (isset($_GET['logout'])) {
+    unset($_SESSION['buyer_email'], $_SESSION['buyer_name'], $_SESSION['buyer_token'], $_SESSION['edit_token'], $_SESSION['buyer_page_id'], $_SESSION['buyer_slug']);
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+    @session_destroy();
+    header("Location: " . APP_URL . "/edit.php");
+    exit;
+}
+
 $urlToken = trim($_GET['token'] ?? '');
 if (!empty($urlToken)) {
     $_SESSION['edit_token'] = $urlToken;
