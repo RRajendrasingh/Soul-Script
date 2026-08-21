@@ -92,8 +92,7 @@ if (!empty($initialLockData['page_id'])) {
 </style>
 
 <?php
-$isFestiveTheme = (!empty($_GET['theme']) && $_GET['theme'] === 'raksha_bandhan_festive_light') || (!empty($initialLockData['template_id']) && $initialLockData['template_id'] === 'raksha_bandhan_festive_light');
-$headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b border-[#4a232f]/10' : 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
+$headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
 ?>
 <!-- Navbar Header -->
 <header id="revealHeader" class="fixed top-0 left-0 right-0 w-full z-40 backdrop-blur-xl shadow-md <?php echo $headerBgClass; ?>">
@@ -105,8 +104,8 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
     </a>
 
     <div class="flex items-center gap-2 shrink-0">
-      <!-- Mobile Compact Music Pill -->
-      <button id="audioPlayBtnMobile" onclick="toggleAudioPlay()" class="px-2.5 py-1 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-[10px] uppercase flex items-center gap-1 shadow-md transition-all cursor-pointer">
+      <!-- Mobile Compact Music Pill (Hidden on lock screen by default) -->
+      <button id="audioPlayBtnMobile" onclick="toggleAudioPlay()" class="hidden px-2.5 py-1 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] font-bold text-[10px] uppercase flex items-center gap-1 shadow-md transition-all cursor-pointer">
         <svg class="w-3 h-3 text-[#241a00] stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
         <span id="musicBtnLabel">Music</span>
       </button>
@@ -162,6 +161,9 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
     </button>
   </div>
 </div>
+
+  <!-- Celebratory Ambient Confetti Canvas for Lock Screen -->
+  <canvas id="lockConfettiCanvas" class="fixed inset-0 pointer-events-none z-0 w-full h-full"></canvas>
 
   <!-- STEP 7: LOCK SCREEN (Exact LockScreen.tsx DOM Layout) -->
   <main id="lockScreenView" class="w-full flex flex-col items-center justify-center p-4 <?php echo $isEditMode ? 'pt-28' : 'pt-16'; ?> pb-16 relative z-10">
@@ -541,6 +543,93 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
       }
     }
 
+    let lockConfettiAnimId = null;
+    function initLockConfetti() {
+      const canvas = document.getElementById('lockConfettiCanvas');
+      if (!canvas) return;
+      canvas.classList.remove('hidden');
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      const handleResize = () => {
+        if (!canvas) return;
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      };
+      window.removeEventListener('resize', handleResize);
+      window.addEventListener('resize', handleResize);
+
+      const colors = ['#f43f5e', '#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#eac34a', '#f97316', '#a855f7', '#06b6d4'];
+      const confettiCount = 55;
+      const confettis = [];
+
+      for (let i = 0; i < confettiCount; i++) {
+        confettis.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 5 + 3,
+          d: Math.random() * confettiCount,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          tilt: Math.floor(Math.random() * 10) - 10,
+          tiltAngleIncremental: (Math.random() * 0.06) + 0.03,
+          tiltAngle: 0,
+          opacity: Math.random() * 0.55 + 0.25
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        for (let i = 0; i < confettis.length; i++) {
+          const c = confettis[i];
+          ctx.beginPath();
+          ctx.lineWidth = c.r;
+          ctx.strokeStyle = c.color;
+          ctx.globalAlpha = c.opacity;
+          ctx.moveTo(c.x + c.tilt + (c.r / 2), c.y);
+          ctx.lineTo(c.x + c.tilt, c.y + c.tilt + (c.r / 2));
+          ctx.stroke();
+        }
+        update();
+      }
+
+      function update() {
+        for (let i = 0; i < confettis.length; i++) {
+          const c = confettis[i];
+          c.tiltAngle += c.tiltAngleIncremental;
+          c.y += (Math.cos(c.d) + 1 + c.r / 2) * 0.35;
+          c.tilt = Math.sin(c.tiltAngle - (i / 3)) * 10;
+
+          if (c.y > height) {
+            c.x = Math.random() * width;
+            c.y = -15;
+            c.tilt = Math.floor(Math.random() * 10) - 10;
+          }
+        }
+      }
+
+      function loop() {
+        draw();
+        lockConfettiAnimId = requestAnimationFrame(loop);
+      }
+
+      if (lockConfettiAnimId) cancelAnimationFrame(lockConfettiAnimId);
+      loop();
+    }
+
+    function stopLockConfetti() {
+      if (lockConfettiAnimId) {
+        cancelAnimationFrame(lockConfettiAnimId);
+        lockConfettiAnimId = null;
+      }
+      const canvas = document.getElementById('lockConfettiCanvas');
+      if (canvas) {
+        canvas.classList.add('hidden');
+        const ctx = canvas.getContext('2d');
+        if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
     function relockGiftSession() {
       const audio = document.getElementById('bgAudio');
       if (audio) {
@@ -553,6 +642,10 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
       syncMusicBtnLabel();
       const musicBox = document.getElementById('desktopMusicBox');
       const mobileMiniBtn = document.getElementById('mobileMusicMiniBtn');
+      const headerMusicBtn = document.getElementById('audioPlayBtnMobile');
+      if (headerMusicBtn) {
+        headerMusicBtn.classList.add('hidden');
+      }
       if (musicBox) {
         musicBox.classList.add('hidden');
         musicBox.style.display = 'none';
@@ -573,6 +666,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
         unlockBtn.disabled = false;
         unlockBtn.innerText = 'Unlock Surprise Page';
       }
+      initLockConfetti();
       loadLockMetadata();
       window.scrollTo(0, 0);
     }
@@ -711,8 +805,10 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
 
         if (data.success) {
           lockData = data;
+          stopLockConfetti();
           document.getElementById('lockScreenView').classList.add('hidden');
           document.getElementById('resultPageView').classList.remove('hidden');
+          document.getElementById('audioPlayBtnMobile')?.classList.remove('hidden');
           renderResultPage(data);
           if (typeof confetti === 'function') {
             confetti({ particleCount: 150, spread: 120, origin: { y: 0.5 } });
@@ -736,6 +832,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      initLockConfetti();
       loadLockMetadata();
     });
 
