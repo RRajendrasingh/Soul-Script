@@ -284,7 +284,13 @@ try {
         'love_note_text' => $page['love_note_text'],
         'tagline_quote' => $page['tagline_quote'] ?? 'Safar Khubsurat h manjil se bhi 🌹',
         'favorite_singers' => $page['favorite_singers'] ?? 'Arijit Singh & KK',
-        'bg_music_url' => (!empty($page['bg_music_url']) && !str_contains($page['bg_music_url'], 'pixabay')) ? $page['bg_music_url'] : (APP_URL . '/assets/audio/rakhi_theme.mp3'),
+        'bg_music_url' => (function() use ($page) {
+            $templateId = $page['template_id'] ?? '';
+            $defaultMusicUrl = (strpos($templateId, 'raksha_bandhan') !== false)
+                ? APP_URL . '/assets/audio/rakhi_theme.mp3'
+                : APP_URL . '/assets/audio/romantic_theme.mp3';
+            return (!empty($page['bg_music_url']) && !str_contains($page['bg_music_url'], 'pixabay')) ? $page['bg_music_url'] : $defaultMusicUrl;
+        })(),
         'receiver_photo' => $page['receiver_photo'] ?? '',
         'letters' => $lettersData,
         'tokens' => $tokensData,

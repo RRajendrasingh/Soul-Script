@@ -818,7 +818,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
       }
 
       if (!finalSongTitle) finalSongTitle = 'Romantic Track';
-      if (!finalArtist) finalArtist = 'SoulScript';
+      if (!finalArtist) finalArtist = 'Artist';
 
       currentSongTitle = finalSongTitle;
       currentArtist = finalArtist;

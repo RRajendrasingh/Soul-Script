@@ -88,7 +88,7 @@ $isCurrentlyAdminPage = !empty($isAdminPage);
     <div id="userNavMenu" class="hidden absolute right-0 mt-2 w-64 rounded-2xl bg-[#1b171b] border border-[#4d444b] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl p-2 z-50 text-left divide-y divide-[#4d444b]/40 animate-in fade-in duration-150">
       <div class="p-2.5">
         <span class="text-[10px] uppercase font-bold tracking-widest text-[#eac34a] block">Authenticated SuperAdmin</span>
-        <span class="text-xs font-serif font-bold text-[#e8e0e3]">GiftReveal Suite</span>
+        <span class="text-xs font-serif font-bold text-[#e8e0e3]"><?php echo defined('APP_NAME') ? APP_NAME : 'Admin'; ?> Suite</span>
       </div>
 
       <div class="p-2 space-y-1">
