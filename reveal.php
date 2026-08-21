@@ -78,8 +78,7 @@ if (!empty($initialLockData['page_id'])) {
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-</head>
-<body class="bg-[#151215] text-[#e8e0e3] font-sans min-h-screen relative overflow-x-hidden">
+<body class="bg-[#fcf6f0] text-[#e8e0e3] font-sans min-h-screen relative overflow-x-hidden">
 
   <style>
   @keyframes spinVinyl {
@@ -560,21 +559,21 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
       window.removeEventListener('resize', handleResize);
       window.addEventListener('resize', handleResize);
 
-      const colors = ['#f43f5e', '#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#eac34a', '#f97316', '#a855f7', '#06b6d4'];
-      const confettiCount = 55;
+      const colors = ['#831843', '#be123c', '#991b1b', '#b45309', '#065f46', '#1e40af', '#581c87', '#701a75', '#d97706', '#c2410c', '#854d0e', '#047857', '#e11d48', '#4c1d95'];
+      const confettiCount = 60;
       const confettis = [];
 
       for (let i = 0; i < confettiCount; i++) {
         confettis.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          r: Math.random() * 5 + 3,
+          r: Math.random() * 5 + 3.5,
           d: Math.random() * confettiCount,
           color: colors[Math.floor(Math.random() * colors.length)],
           tilt: Math.floor(Math.random() * 10) - 10,
           tiltAngleIncremental: (Math.random() * 0.06) + 0.03,
           tiltAngle: 0,
-          opacity: Math.random() * 0.55 + 0.25
+          opacity: Math.random() * 0.35 + 0.65
         });
       }
 
@@ -655,9 +654,9 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
         mobileMiniBtn.style.display = 'none';
       }
 
-      // Reset body background and color to dark luxury theme
-      document.body.style.backgroundColor = '';
-      document.body.style.color = '';
+      // Reset body background to warm cream festive theme
+      document.body.style.backgroundColor = '#fcf6f0';
+      document.body.style.color = '#e8e0e3';
 
       // Reset and display top dark header
       const header = document.getElementById('revealHeader');
