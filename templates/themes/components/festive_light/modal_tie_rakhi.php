@@ -212,13 +212,13 @@
 
     </div>
 
-    <!-- Modal Footer Controls -->
-    <div class="px-6 py-4 bg-[#f4e5d8]/80 border-t border-[#e8d5c4] flex items-center justify-between shrink-0">
+    <!-- Modal Footer Controls (Sticky Bottom with Clean Elevation) -->
+    <div class="sticky bottom-0 z-20 px-4 sm:px-6 py-3.5 sm:py-4 bg-[#f4e5d8] border-t border-[#e8d5c4] flex items-center justify-between shrink-0 shadow-[0_-4px_15px_rgba(0,0,0,0.06)]">
       <button type="button" id="festiveModalBackBtn" onclick="navigateFestiveStep(-1)" class="px-5 py-2.5 bg-white text-[#4a232f] font-bold text-xs rounded-full hover:bg-gray-100 transition-all cursor-pointer invisible shadow-sm">
         ← Back
       </button>
 
-      <button type="button" id="festiveModalNextBtn" onclick="navigateFestiveStep(1)" class="px-8 py-2.5 bg-gradient-to-r from-[#d32f2f] to-[#f57c00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md hover:opacity-90 transition-all cursor-pointer">
+      <button type="button" id="festiveModalNextBtn" onclick="navigateFestiveStep(1)" class="px-8 py-2.5 bg-gradient-to-r from-[#d32f2f] to-[#f57c00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md hover:opacity-90 active:scale-95 transition-all cursor-pointer">
         NEXT ➔
       </button>
     </div>
@@ -364,5 +364,29 @@ function initRakhiDragLogic() {
   container.addEventListener("mousedown", dragStart, false);
   window.addEventListener("mouseup", dragEnd, false);
   container.addEventListener("mousemove", drag, false);
+}
+
+function openFestiveRakhiModal() {
+  const container = document.getElementById('festiveRakhiModalContainer');
+  const musicBox = document.getElementById('desktopMusicBox');
+  if (container) {
+    container.classList.remove('hidden');
+    container.style.display = 'flex';
+  }
+  if (musicBox) {
+    musicBox.style.display = 'none';
+  }
+}
+
+function closeFestiveRakhiModal() {
+  const container = document.getElementById('festiveRakhiModalContainer');
+  const musicBox = document.getElementById('desktopMusicBox');
+  if (container) {
+    container.classList.add('hidden');
+    container.style.display = 'none';
+  }
+  if (musicBox) {
+    musicBox.style.display = 'flex';
+  }
 }
 </script>

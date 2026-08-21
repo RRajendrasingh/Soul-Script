@@ -34,12 +34,13 @@ $voucherCode = !empty($rakhiVoucherStatus['voucher_code']) ? $rakhiVoucherStatus
 $unlockDateFormatted = !empty($rakhiVoucherStatus['unlock_date_formatted']) ? $rakhiVoucherStatus['unlock_date_formatted'] : '28 August 2026, 12:00 PM IST';
 $secondsRemaining = !empty($rakhiVoucherStatus['seconds_remaining']) ? intval($rakhiVoucherStatus['seconds_remaining']) : 0;
 
-// Default Vows
+// Default Vows / Sibling Promises (Full 5 Items)
 $defaultVows = [
   ['num' => '1', 'title' => 'Always Support', 'desc' => 'Rowing your support Heart & Hands forever.', 'icon' => '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>'],
   ['num' => '2', 'title' => 'Share Laughter', 'desc' => 'Sharing our endless sibling silly jokes.', 'icon' => '<circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" x2="9.01" y1="9" y2="9"></line><line x1="15" x2="15.01" y1="9" y2="9"></line>'],
   ['num' => '3', 'title' => 'Protect You', 'desc' => 'Standing strong to shield you from all worries.', 'icon' => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>'],
-  ['num' => '4', 'title' => 'Be There', 'desc' => 'Linked rings of sisterly protection.', 'icon' => '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>']
+  ['num' => '4', 'title' => 'Be There', 'desc' => 'Linked rings of sisterly protection.', 'icon' => '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>'],
+  ['num' => '5', 'title' => 'Crime Partner', 'desc' => 'Always by your side through every adventure.', 'icon' => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>']
 ];
 
 // Gallery Photos
@@ -115,7 +116,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
         <span>Sibling Promise 3D Cards</span>
       </h2>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
         <?php foreach ($defaultVows as $idx => $vow): 
           $customDesc = !empty($promisesList[$idx]) ? $promisesList[$idx] : $vow['desc'];
         ?>
