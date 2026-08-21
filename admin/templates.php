@@ -257,7 +257,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-semibold text-[#e8e0e3] mb-1">Demo Live URL</label>
-            <input type="url" id="formDemoUrl" placeholder="https://digitalyogi24.com/gift/manvi-testing" class="w-full bg-[#171317] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+            <input type="url" id="formDemoUrl" placeholder="https://giftreveal.in/gift/manvi-rakhi-v2" class="w-full bg-[#171317] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
           </div>
           <div>
             <label class="block text-xs font-semibold text-[#e8e0e3] mb-1">Demo Unlock Password</label>

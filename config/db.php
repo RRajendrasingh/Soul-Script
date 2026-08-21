@@ -122,17 +122,25 @@ function getDB() {
                 $chkRoyal->execute();
                 if ($chkRoyal->fetchColumn() == 0) {
                     $pdo->exec("INSERT INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
-                    ('raksha_bandhan_royal', 'Raksha Bandhan Royal 👑', 'Shahi Farman Scroll & 3-Step Rakhi Ritual', 'Interactive 3-Step Tilak & Diya ceremony, Sibling Fight Meter, 3D Glass Vows, Shahi Farman Parchment Photo Scroll, and Wax-Sealed Shagun Envelope.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Royal Special 👑', 'Personalize Royal Gift 🎁', 'https://digitalyogi24.com/gift/manvi-rakhi-v2', 'rakhi', 1, 2)");
+                    ('raksha_bandhan_royal', 'Raksha Bandhan Royal 👑', 'Shahi Farman Scroll & 3-Step Rakhi Ritual', 'Interactive 3-Step Tilak & Diya ceremony, Sibling Fight Meter, 3D Glass Vows, Shahi Farman Parchment Photo Scroll, and Wax-Sealed Shagun Envelope.', 449, 'https://giftreveal.in/assets/default_gallery/sample_fa6955df.webp', 'Royal Special 👑', 'Personalize Royal Gift 🎁', 'https://giftreveal.in/gift/manvi-rakhi-v2', 'rakhi', 1, 2)");
                 }
 
                 $chkFestive = $pdo->prepare("SELECT COUNT(*) FROM templates WHERE template_id = 'raksha_bandhan_festive_light'");
                 $chkFestive->execute();
                 if ($chkFestive->fetchColumn() == 0) {
                     $pdo->exec("INSERT INTO templates (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) VALUES 
-                    ('raksha_bandhan_festive_light', 'Raksha Bandhan Festive Light 🌸', 'Interactive Scratch Card & 3D Album', 'Real-Time Touch/Mouse Scratch Card, 5-Step Virtual Ceremony, 3D Memory Photobook, Amazon Gift Voucher Reveal, and 300 DPI Physical Keepsakes.', 449, 'https://digitalyogi24.com/assets/default_gallery/sample_fa6955df.webp', 'Festive Special 🌸', 'Personalize Light Gift 🎁', 'https://digitalyogi24.com/gift/ananya-rohan', 'rakhi', 1, 1)");
+                    ('raksha_bandhan_festive_light', 'Raksha Bandhan Festive Light 🌸', 'Interactive Scratch Card & 3D Album', 'Real-Time Touch/Mouse Scratch Card, 5-Step Virtual Ceremony, 3D Memory Photobook, Amazon Gift Voucher Reveal, and 300 DPI Physical Keepsakes.', 449, 'https://giftreveal.in/assets/default_gallery/sample_fa6955df.webp', 'Festive Special 🌸', 'Personalize Light Gift 🎁', 'https://giftreveal.in/gift/ananya-rohan', 'rakhi', 1, 1)");
                 }
                 $pdo->exec("UPDATE pages SET template_id = 'raksha_bandhan_festive_light' WHERE url_slug IN ('ananya-rohan', 'ritu-rajendra')");
             } catch (Exception $exTpl) {}
+
+            // Auto-heal legacy digitalyogi24.com URLs in DB to giftreveal.in
+            try {
+                $pdo->exec("UPDATE page_media SET media_url = REPLACE(media_url, 'digitalyogi24.com', 'giftreveal.in') WHERE media_url LIKE '%digitalyogi24.com%'");
+                $pdo->exec("UPDATE page_content SET receiver_photo = REPLACE(receiver_photo, 'digitalyogi24.com', 'giftreveal.in'), music_url = REPLACE(music_url, 'digitalyogi24.com', 'giftreveal.in') WHERE receiver_photo LIKE '%digitalyogi24.com%' OR music_url LIKE '%digitalyogi24.com%'");
+                $pdo->exec("UPDATE templates SET preview_image_url = REPLACE(preview_image_url, 'digitalyogi24.com', 'giftreveal.in'), demo_url = REPLACE(demo_url, 'digitalyogi24.com', 'giftreveal.in') WHERE preview_image_url LIKE '%digitalyogi24.com%' OR demo_url LIKE '%digitalyogi24.com%'");
+                $pdo->exec("UPDATE pages SET qr_code_url = REPLACE(qr_code_url, 'digitalyogi24.com', 'giftreveal.in') WHERE qr_code_url LIKE '%digitalyogi24.com%'");
+            } catch (Exception $exMigrate) {}
 
             // Auto-heal double HTML entity encoded hint questions in page_content table
             try {

@@ -236,7 +236,11 @@ try {
         }
 
         // Also sync persistent outside-webroot backup if directory exists or can be created
-        $persistentDir = '/home/u810420317/domains/digitalyogi24.com/config_persistent';
+        $domainRoot = dirname(__DIR__, 2);
+        $persistentDir = $domainRoot . '/config_persistent';
+        if (!is_dir($persistentDir)) {
+            $persistentDir = '/home/u810420317/domains/digitalyogi24.com/config_persistent';
+        }
         if (!is_dir($persistentDir)) @mkdir($persistentDir, 0777, true);
         if (is_dir($persistentDir)) {
             $envData = "<?php\n" .

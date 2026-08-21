@@ -45,6 +45,13 @@ function resolveMediaUrl($url, $fallback = '') {
     $url = trim($url);
     $baseUrl = rtrim(APP_URL, '/');
 
+    // 0. Auto-translate legacy domain (digitalyogi24.com) to current active domain (giftreveal.in)
+    if (strpos($url, 'digitalyogi24.com') !== false) {
+        $url = str_replace('https://digitalyogi24.com', $baseUrl, $url);
+        $url = str_replace('http://digitalyogi24.com', $baseUrl, $url);
+        $url = str_replace('digitalyogi24.com', parse_url($baseUrl, PHP_URL_HOST) ?: 'giftreveal.in', $url);
+    }
+
     // 1. Base64 Data Payload -> Return as-is
     if (strpos($url, 'data:image') === 0) {
         return $url;
@@ -94,6 +101,11 @@ function resolveMediaUrl($url, $fallback = '') {
         }
 
         if (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0) {
+            $currentHost = parse_url($baseUrl, PHP_URL_HOST);
+            $parsedHost = parse_url($url, PHP_URL_HOST);
+            if (!empty($parsedHost) && $parsedHost !== $currentHost && (strpos($url, '/uploads/') !== false || strpos($url, '/assets/default_gallery/') !== false)) {
+                return $baseUrl . ($parsed['path'] ?? '');
+            }
             return $url;
         }
         return $baseUrl . '/' . ltrim($url, '/');

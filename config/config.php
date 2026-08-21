@@ -64,7 +64,11 @@ function getEffectiveRazorpayCredentials() {
     }
 
     // 2. Check Persistent Storage Backup Outside public_html
-    $persistentEnvPath = '/home/u810420317/domains/digitalyogi24.com/config_persistent/config.env.php';
+    $domainRoot = dirname(__DIR__, 2);
+    $persistentEnvPath = $domainRoot . '/config_persistent/config.env.php';
+    if (!file_exists($persistentEnvPath)) {
+        $persistentEnvPath = '/home/u810420317/domains/digitalyogi24.com/config_persistent/config.env.php';
+    }
     if (file_exists($persistentEnvPath)) {
         $envContent = @file_get_contents($persistentEnvPath);
         if ($envContent) {
