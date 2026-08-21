@@ -18,8 +18,18 @@ $loveNoteText = $content['love_note_text'] ?? "No matter how much we argue, you 
 $receiverPhoto = $content['receiver_photo'] ?? $initialLockData['receiver_photo'] ?? '';
 $cleanReceiverPhoto = !empty($receiverPhoto) ? resolveMediaUrl($receiverPhoto) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAv7Va4cDP2vPfj8FhMEG9UVDS-tAXS0-jvBqMjw79z1dlQJDpqxtSKnTqUZ3Mu5TzmLveM4Biz3yfvPOZKuqDAXDa4W_bp-MFlLUx4mJ7Ha6_rpHDAh_02Lu4gJJYTMx9YsrRVXJMu9YIFcN6mJ3Ykq4IsHzwi2l61bA2FRCR-TEdD12suP0hb2kAOuch98Ddq2SLsPW6gfChDFzvU7jz0ySrNPDhWdcz9pE8uCxdfuKggh2Vmso7O';
 
-$promisesList = $tf['reasons'] ?? [];
+$tf = $content['template_fields'] ?? [];
+$promisesList = !empty($tf['reasons']) ? $tf['reasons'] : (!empty($content['reasons']) ? $content['reasons'] : (!empty($reasons) ? $reasons : []));
 $pageId = $initialLockData['page_id'] ?? $editPageData['page_id'] ?? 0;
+
+if (empty($promisesList) && !empty($pageId)) {
+    try {
+        $db = getDB();
+        $stmtR = $db->prepare("SELECT reason_text FROM reasons_list WHERE page_id = ? ORDER BY entry_order ASC");
+        $stmtR->execute([$pageId]);
+        $promisesList = $stmtR->fetchAll(PDO::FETCH_COLUMN) ?: [];
+    } catch (Exception $e) {}
+}
 
 // Resolve Audio Song
 $bgMusicUrl = $content['bg_music_url'] ?? APP_URL . '/assets/audio/rakhi_theme.mp3';
@@ -128,8 +138,8 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
               </div>
             </div>
             <div>
-              <h3 class="text-xl font-bold text-maroon mb-2"><?= htmlspecialchars($vow['title']) ?></h3>
-              <p class="text-gray-500 leading-relaxed text-sm">"<?= htmlspecialchars($customDesc) ?>"</p>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-[#e5534b] mb-1.5"><?= htmlspecialchars($vow['title']) ?></h3>
+              <p class="text-maroon font-serif font-bold text-base sm:text-lg leading-snug">"<?= htmlspecialchars($customDesc) ?>"</p>
             </div>
           </div>
         <?php endforeach; ?>
