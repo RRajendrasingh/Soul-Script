@@ -10,8 +10,8 @@
  */
 ?>
 
-<div id="festiveRakhiModalContainer" class="hidden fixed inset-0 z-[90] flex items-center justify-center pt-16 sm:pt-20 pb-4 px-3 sm:px-6 bg-black/75 backdrop-blur-md transition-opacity duration-300">
-  <div id="festiveRakhiModal" class="relative w-full max-w-4xl bg-[#fcf6f0] border-2 border-[#d4af37]/60 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[82vh] sm:max-h-[86vh]">
+<div id="festiveRakhiModalContainer" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-6 bg-black/85 backdrop-blur-md transition-opacity duration-300">
+  <div id="festiveRakhiModal" class="relative w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[92vh] bg-[#fcf6f0] border-0 sm:border-2 border-[#d4af37]/60 rounded-none sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col">
     
     <!-- Modal Header Bar -->
     <div class="px-6 py-4 bg-[#f4e5d8]/80 border-b border-[#e8d5c4] flex items-center justify-between shrink-0">

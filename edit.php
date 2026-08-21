@@ -1416,13 +1416,10 @@ $showLogin = !$showDashboard && !$showHub;
         themeContainer.innerHTML = `
           <div class="space-y-4">
             <div class="border-b border-[#4d444b]/40 pb-3">
-              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">Sibling Promises &amp; Protection Vows</h3>
+              <h3 class="text-base font-bold font-serif text-[#e8e0e3]">5 Sibling Promises &amp; Protection Vows</h3>
+              <p class="text-[11px] text-[#d0c3cb] mt-0.5">Customize your 5 personal sibling promises displayed on the gift cards.</p>
             </div>
-            <div class="flex items-center justify-between pt-1">
-              <label class="block font-semibold text-[#d0c3cb]">Promises &amp; Protection Vows for Sibling (Dynamic List)</label>
-              <button type="button" onclick="addReasonRow()" class="px-3 py-1 rounded-lg bg-[#3b1e3b] text-[#eac34a] font-bold text-[11px] border border-[#eac34a]/30 hover:bg-[#eac34a] hover:text-black transition-all">+ Add Promise</button>
-            </div>
-            <div id="editReasonsList" class="space-y-2"></div>
+            <div id="editReasonsList" class="space-y-3"></div>
           </div>
         `;
         renderReasonsList(data.reasons || []);
@@ -1457,17 +1454,44 @@ $showLogin = !$showDashboard && !$showHub;
       }
     }
 
+    const DEFAULT_RAKHI_PROMISES = [
+      'Always protect you and stand by your side 🛡️',
+      'Keep all your deepest secrets safe 🤫',
+      'Sponsor your favorite food and treat you 🍕',
+      'Never let you feel alone, no matter where I am 💖',
+      'Always be your forever crime partner 🕵️‍♂️'
+    ];
+
     function renderReasonsList(reasons) {
       const container = document.getElementById('editReasonsList');
       if (!container) return;
-      if (reasons.length === 0) {
-        reasons = ['Your contagious smile', 'The way you care for everyone', 'Our hilarious inside jokes'];
+      
+      const activeTpl = document.getElementById('activeTemplateId')?.value || '';
+      const isRakhi = activeTpl.includes('raksha_bandhan');
+
+      if (isRakhi) {
+        let list = Array.isArray(reasons) ? [...reasons] : [];
+        while (list.length < 5) {
+          list.push(DEFAULT_RAKHI_PROMISES[list.length]);
+        }
+        list = list.slice(0, 5);
+
+        container.innerHTML = list.map((r, i) => `
+          <div class="space-y-1">
+            <label class="block text-[11px] font-bold text-[#eac34a] uppercase tracking-wider">Promise #${i + 1}</label>
+            <input type="text" class="edit-reason-item w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-2.5 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" value="${r}" placeholder="Promise ${i + 1} e.g. ${DEFAULT_RAKHI_PROMISES[i]}">
+          </div>
+        `).join('');
+      } else {
+        if (!reasons || reasons.length === 0) {
+          reasons = ['Your contagious smile', 'The way you care for everyone', 'Our hilarious inside jokes'];
+        }
+        container.innerHTML = reasons.map((r, i) => `
+          <div class="flex items-center gap-2">
+            <input type="text" class="edit-reason-item w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2.5 text-xs text-[#e8e0e3]" value="${r}" placeholder="Reason ${i + 1}">
+          </div>
+        `).join('');
       }
-      container.innerHTML = reasons.map((r, i) => `
-        <div class="flex items-center gap-2">
-          <input type="text" class="edit-reason-item w-full bg-[#151215] border border-[#4d444b] rounded-xl px-3 py-2.5 text-xs text-[#e8e0e3]" value="${r}" placeholder="Reason ${i + 1}">
-        </div>
-      `).join('');
     }
 
     function addReasonRow() {
