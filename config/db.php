@@ -32,6 +32,25 @@ function getDB() {
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
             } catch (Exception $exRl) { /* ignore */ }
 
+            // Auto-migrate system_settings table if missing (Stores dynamic Razorpay keys, store settings etc.)
+            try {
+                $pdo->exec("CREATE TABLE IF NOT EXISTS system_settings (
+                    setting_key VARCHAR(100) PRIMARY KEY,
+                    setting_value LONGTEXT NOT NULL,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+                // Auto-seed Razorpay Live Key ID & Secret safely if not yet present in DB
+                $stmtCheckRzp = $pdo->prepare("SELECT COUNT(*) FROM system_settings WHERE setting_key = 'razorpay_key_id'");
+                $stmtCheckRzp->execute();
+                if ($stmtCheckRzp->fetchColumn() == 0) {
+                    $pdo->exec("INSERT INTO system_settings (setting_key, setting_value) VALUES 
+                    ('razorpay_mode', 'live'),
+                    ('razorpay_key_id', 'rzp_live_TSOjmYdb9XfC1N'),
+                    ('razorpay_key_secret', '2wzCZ0Xq6i95fX0FjIqX1x8p')");
+                }
+            } catch (Exception $exSys) { /* ignore */ }
+
             // Auto-migrate Raksha Bandhan Vouchers & Affiliate Store Tables if missing
             try {
                 $pdo->exec("CREATE TABLE IF NOT EXISTS rakhi_voucher_allocations (
@@ -143,5 +162,34 @@ function hashHintAnswer($answer) {
     $clean = strtolower(trim($answer));
     return hash('sha256', $clean . HASH_SALT);
 }
+
+/**
+ * Retrieve dynamic system setting value from MySQL database
+ */
+function getSystemSetting($key, $default = null) {
+    try {
+        $db = getDB();
+        $stmt = $db->prepare("SELECT setting_value FROM system_settings WHERE setting_key = ? LIMIT 1");
+        $stmt->execute([$key]);
+        $val = $stmt->fetchColumn();
+        return ($val !== false && $val !== null) ? $val : $default;
+    } catch (Exception $e) {
+        return $default;
+    }
+}
+
+/**
+ * Persist dynamic system setting into MySQL database
+ */
+function setSystemSetting($key, $value) {
+    try {
+        $db = getDB();
+        $stmt = $db->prepare("INSERT INTO system_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = CURRENT_TIMESTAMP");
+        return $stmt->execute([$key, $value]);
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
 
 

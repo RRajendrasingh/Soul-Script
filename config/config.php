@@ -50,12 +50,37 @@ if (!defined('RAZORPAY_KEY_SECRET'))     define('RAZORPAY_KEY_SECRET', 'E8uEAHS3
 if (!defined('RAZORPAY_WEBHOOK_SECRET')) define('RAZORPAY_WEBHOOK_SECRET', 'whsec_soulscript_secret');
 
 /**
- * Returns active Razorpay Key ID and Key Secret, safely overriding any obsolete/revoked server constants.
+ * Returns active Razorpay Key ID and Key Secret, safely prioritizing the MySQL Database
+ * settings table, persistent backups, and overriding any obsolete server constants.
  */
 function getEffectiveRazorpayCredentials() {
-    $keyId = defined('RAZORPAY_KEY_ID') && RAZORPAY_KEY_ID !== 'rzp_test_TRy0uKsxMEi8qc' ? RAZORPAY_KEY_ID : 'rzp_test_TSO6FpIhNqiwSy';
-    $keySecret = defined('RAZORPAY_KEY_SECRET') && RAZORPAY_KEY_SECRET !== 'vwPpfvspIVU2umCjUkqox947' ? RAZORPAY_KEY_SECRET : 'E8uEAHS3yi7gi1Zlviiw0qMp';
-    return [$keyId, $keySecret];
+    // 1. Check MySQL Database System Settings Table (Top Priority - Never wiped by Git)
+    if (function_exists('getSystemSetting')) {
+        $dbKeyId = getSystemSetting('razorpay_key_id');
+        $dbKeySecret = getSystemSetting('razorpay_key_secret');
+        if (!empty($dbKeyId) && !empty($dbKeySecret) && strpos($dbKeyId, 'rzp_') === 0) {
+            return [trim($dbKeyId), trim($dbKeySecret)];
+        }
+    }
+
+    // 2. Check Persistent Storage Backup Outside public_html
+    $persistentEnvPath = '/home/u810420317/domains/digitalyogi24.com/config_persistent/config.env.php';
+    if (file_exists($persistentEnvPath)) {
+        $envContent = @file_get_contents($persistentEnvPath);
+        if ($envContent) {
+            if (preg_match("/define\('RAZORPAY_KEY_ID',\s*'([^']+)'\)/", $envContent, $mKey) &&
+                preg_match("/define\('RAZORPAY_KEY_SECRET',\s*'([^']+)'\)/", $envContent, $mSec)) {
+                if (!empty($mKey[1]) && !empty($mSec[1]) && strpos($mKey[1], 'rzp_') === 0) {
+                    return [trim($mKey[1]), trim($mSec[1])];
+                }
+            }
+        }
+    }
+
+    // 3. Fallback to Active Constants
+    $keyId = defined('RAZORPAY_KEY_ID') && RAZORPAY_KEY_ID !== 'rzp_test_TRy0uKsxMEi8qc' ? RAZORPAY_KEY_ID : 'rzp_live_TSOjmYdb9XfC1N';
+    $keySecret = defined('RAZORPAY_KEY_SECRET') && RAZORPAY_KEY_SECRET !== 'vwPpfvspIVU2umCjUkqox947' ? RAZORPAY_KEY_SECRET : '2wzCZ0Xq6i95fX0FjIqX1x8p';
+    return [trim($keyId), trim($keySecret)];
 }
 
 // ── Admin ─────────────────────────────────────────────────────────────────────

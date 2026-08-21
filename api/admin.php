@@ -188,6 +188,72 @@ try {
         exit;
     }
 
+    if ($action === 'get_payment_settings') {
+        $mode = getSystemSetting('razorpay_mode', 'live');
+        [$effKeyId, $effKeySecret] = getEffectiveRazorpayCredentials();
+        $whSecret = getSystemSetting('razorpay_webhook_secret', defined('RAZORPAY_WEBHOOK_SECRET') ? RAZORPAY_WEBHOOK_SECRET : 'whsec_soulscript_secret');
+        
+        $stmtUpdated = $db->query("SELECT updated_at FROM system_settings WHERE setting_key = 'razorpay_key_id' LIMIT 1");
+        $lastUpdated = $stmtUpdated->fetchColumn() ?: date('Y-m-d H:i:s');
+
+        echo json_encode([
+            'success' => true,
+            'settings' => [
+                'razorpay_mode' => $mode,
+                'razorpay_key_id' => $effKeyId,
+                'razorpay_key_secret' => $effKeySecret,
+                'razorpay_webhook_secret' => $whSecret,
+                'last_updated' => $lastUpdated
+            ]
+        ]);
+        exit;
+    }
+
+    if ($action === 'save_payment_settings') {
+        $mode = trim($input['razorpay_mode'] ?? 'live');
+        $keyId = trim($input['razorpay_key_id'] ?? '');
+        $keySecret = trim($input['razorpay_key_secret'] ?? '');
+        $whSecret = trim($input['razorpay_webhook_secret'] ?? '');
+
+        if (empty($keyId) || empty($keySecret)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Both Razorpay Key ID and Key Secret are required']);
+            exit;
+        }
+
+        if (strpos($keyId, 'rzp_') !== 0) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Invalid Razorpay Key ID format. Must start with rzp_live_ or rzp_test_']);
+            exit;
+        }
+
+        // Persist to MySQL Database (Zero risk of Git wipe)
+        setSystemSetting('razorpay_mode', $mode);
+        setSystemSetting('razorpay_key_id', $keyId);
+        setSystemSetting('razorpay_key_secret', $keySecret);
+        if (!empty($whSecret)) {
+            setSystemSetting('razorpay_webhook_secret', $whSecret);
+        }
+
+        // Also sync persistent outside-webroot backup if directory exists or can be created
+        $persistentDir = '/home/u810420317/domains/digitalyogi24.com/config_persistent';
+        if (!is_dir($persistentDir)) @mkdir($persistentDir, 0777, true);
+        if (is_dir($persistentDir)) {
+            $envData = "<?php\n" .
+                "define('RAZORPAY_KEY_ID', '" . addslashes($keyId) . "');\n" .
+                "define('RAZORPAY_KEY_SECRET', '" . addslashes($keySecret) . "');\n" .
+                (!empty($whSecret) ? "define('RAZORPAY_WEBHOOK_SECRET', '" . addslashes($whSecret) . "');\n" : "");
+            @file_put_contents($persistentDir . '/config.env.php', $envData);
+            @chmod($persistentDir . '/config.env.php', 0666);
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Payment Gateway Settings successfully saved to Database & Persistent Storage!'
+        ]);
+        exit;
+    }
+
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Invalid action']);
 
