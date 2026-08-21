@@ -75,11 +75,15 @@ try {
     $paymentStatus = $isAdmin ? 'paid' : 'pending';
     $amountPaid = $isAdmin ? 0 : (float)$template['price_inr'];
 
+    [$rzpKeyId, $rzpKeySecret] = function_exists('getEffectiveRazorpayCredentials') 
+        ? getEffectiveRazorpayCredentials() 
+        : ['rzp_test_TSO6FpIhNqiwSy', 'E8uEAHS3yi7gi1Zlviiw0qMp'];
+
     // Generate Official Razorpay Order ID via API
-    if (!$isAdmin && defined('RAZORPAY_KEY_ID') && defined('RAZORPAY_KEY_SECRET') && strpos(RAZORPAY_KEY_ID, 'rzp_') === 0) {
+    if (!$isAdmin && strpos($rzpKeyId, 'rzp_') === 0) {
         try {
             $ch = curl_init('https://api.razorpay.com/v1/orders');
-            curl_setopt($ch, CURLOPT_USERPWD, RAZORPAY_KEY_ID . ':' . RAZORPAY_KEY_SECRET);
+            curl_setopt($ch, CURLOPT_USERPWD, $rzpKeyId . ':' . $rzpKeySecret);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
@@ -138,7 +142,7 @@ try {
             'razorpay_order_id' => $razorpay_order_id,
         ],
         'is_admin_order' => $isAdmin,
-        'razorpay_key_id' => RAZORPAY_KEY_ID
+        'razorpay_key_id' => $rzpKeyId
     ]);
 } catch (Exception $e) {
     sendJsonError('Order creation failed: ' . $e->getMessage(), 500);

@@ -34,8 +34,12 @@ if (isset($input['event']) && strpos($input['event'], 'payment.captured') !== fa
 }
 
 // 2. Handle Frontend Razorpay Modal Client Verification
-if ($razorpay_signature && $razorpay_order_id && $razorpay_payment_id && defined('RAZORPAY_KEY_SECRET') && !empty(RAZORPAY_KEY_SECRET)) {
-    $expectedClientSig = hash_hmac('sha256', $razorpay_order_id . '|' . $razorpay_payment_id, RAZORPAY_KEY_SECRET);
+[$rzpKeyId, $rzpKeySecret] = function_exists('getEffectiveRazorpayCredentials') 
+    ? getEffectiveRazorpayCredentials() 
+    : ['rzp_test_TSO6FpIhNqiwSy', 'E8uEAHS3yi7gi1Zlviiw0qMp'];
+
+if ($razorpay_signature && $razorpay_order_id && $razorpay_payment_id && !empty($rzpKeySecret)) {
+    $expectedClientSig = hash_hmac('sha256', $razorpay_order_id . '|' . $razorpay_payment_id, $rzpKeySecret);
     if (!hash_equals($expectedClientSig, $razorpay_signature)) {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Invalid Payment Signature']);

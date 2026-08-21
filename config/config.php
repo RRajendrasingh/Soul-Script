@@ -49,6 +49,15 @@ if (!defined('RAZORPAY_KEY_ID'))         define('RAZORPAY_KEY_ID', 'rzp_test_TSO
 if (!defined('RAZORPAY_KEY_SECRET'))     define('RAZORPAY_KEY_SECRET', 'E8uEAHS3yi7gi1Zlviiw0qMp');
 if (!defined('RAZORPAY_WEBHOOK_SECRET')) define('RAZORPAY_WEBHOOK_SECRET', 'whsec_soulscript_secret');
 
+/**
+ * Returns active Razorpay Key ID and Key Secret, safely overriding any obsolete/revoked server constants.
+ */
+function getEffectiveRazorpayCredentials() {
+    $keyId = defined('RAZORPAY_KEY_ID') && RAZORPAY_KEY_ID !== 'rzp_test_TRy0uKsxMEi8qc' ? RAZORPAY_KEY_ID : 'rzp_test_TSO6FpIhNqiwSy';
+    $keySecret = defined('RAZORPAY_KEY_SECRET') && RAZORPAY_KEY_SECRET !== 'vwPpfvspIVU2umCjUkqox947' ? RAZORPAY_KEY_SECRET : 'E8uEAHS3yi7gi1Zlviiw0qMp';
+    return [$keyId, $keySecret];
+}
+
 // ── Admin ─────────────────────────────────────────────────────────────────────
 if (!defined('ADMIN_USER')) define('ADMIN_USER', 'admin');
 if (!defined('ADMIN_PASS')) define('ADMIN_PASS', 'soulscript123');
