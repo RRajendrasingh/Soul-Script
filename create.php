@@ -1857,7 +1857,7 @@ Today, I want to ask you the most important question of my life. Will you take m
       };
 
       try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/create_order.php', {
+        const res = await fetch('/api/create_order.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -1866,7 +1866,7 @@ Today, I want to ask you the most important question of my life. Will you take m
         if (data.success) {
           // ADMIN SUPER BYPASS: Logged in Website Owner skips Razorpay completely & gets FREE 1-click access!
           if (data.is_admin_order || (data.order && data.order.payment_status === 'paid')) {
-            window.location.href = '<?php echo APP_URL; ?>/create.php?order_id=' + data.order.order_id;
+            window.location.href = '/create.php?order_id=' + data.order.order_id;
             return;
           }
 
@@ -1878,7 +1878,7 @@ Today, I want to ask you the most important question of my life. Will you take m
             description: 'Surprise Reveal Page Order',
             order_id: data.order.razorpay_order_id,
             handler: async function(response) {
-              await fetch('<?php echo APP_URL; ?>/api/webhook_razorpay.php', {
+              await fetch('/api/webhook_razorpay.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -1889,7 +1889,7 @@ Today, I want to ask you the most important question of my life. Will you take m
                   status: 'paid' 
                 })
               });
-              window.location.href = '<?php echo APP_URL; ?>/create.php?order_id=' + data.order.order_id;
+              window.location.href = '/create.php?order_id=' + data.order.order_id;
             },
             prefill: { name: payload.buyer_name, email: payload.buyer_email, contact: payload.buyer_phone },
             theme: { color: '#eac34a' }
