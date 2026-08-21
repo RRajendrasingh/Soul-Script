@@ -162,11 +162,11 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
 </div>
 
   <!-- STEP 7: LOCK SCREEN (Exact LockScreen.tsx DOM Layout) -->
-  <main id="lockScreenView" class="fixed inset-0 w-full h-full flex flex-col items-center justify-center p-4 bg-[#fcf6f0] overflow-y-auto z-10 <?php echo $isEditMode ? 'pt-28' : 'pt-16'; ?> pb-16">
+  <main id="lockScreenView" class="fixed inset-0 w-full h-full flex flex-col items-center p-4 bg-[#fcf6f0] overflow-y-auto z-10 pt-20 sm:pt-24 pb-12 sm:pb-16">
     <!-- Celebratory Ambient Confetti Canvas for Lock Screen -->
     <canvas id="lockConfettiCanvas" class="absolute inset-0 pointer-events-none z-0 w-full h-full"></canvas>
     
-    <div class="max-w-md w-full bg-[#221f21]/90 border border-[#eac34a]/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative z-10 my-8">
+    <div class="max-w-md w-full bg-[#221f21]/90 border border-[#eac34a]/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative z-10 my-auto">
       
       <!-- Header Icon / Receiver Avatar -->
       <div class="text-center space-y-3">
