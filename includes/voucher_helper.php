@@ -229,7 +229,7 @@ function getAffiliateProducts() {
             'category' => 'Chocolates 🍫',
             'price_text' => '₹349',
             'image_url' => 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=400&q=80',
-            'affiliate_url' => 'https://www.amazon.in/dp/B0757FG9X6?tag=soulscript-21'
+            'affiliate_url' => 'https://www.amazon.in/dp/B0757FG9X6?tag=giftreveal-21'
         ],
         [
             'id' => 2,
@@ -237,7 +237,7 @@ function getAffiliateProducts() {
             'category' => 'Watches ⌚',
             'price_text' => '₹1,495',
             'image_url' => 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80',
-            'affiliate_url' => 'https://www.amazon.in/dp/B00FLL4K90?tag=soulscript-21'
+            'affiliate_url' => 'https://www.amazon.in/dp/B00FLL4K90?tag=giftreveal-21'
         ],
         [
             'id' => 3,
@@ -245,7 +245,7 @@ function getAffiliateProducts() {
             'category' => 'Skincare 💄',
             'price_text' => '₹1,895',
             'image_url' => 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=400&q=80',
-            'affiliate_url' => 'https://www.amazon.in/dp/B01HME57CS?tag=soulscript-21'
+            'affiliate_url' => 'https://www.amazon.in/dp/B01HME57CS?tag=giftreveal-21'
         ],
         [
             'id' => 4,
@@ -253,7 +253,7 @@ function getAffiliateProducts() {
             'category' => 'Photo Keepsake 🖼️',
             'price_text' => '₹499',
             'image_url' => 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=400&q=80',
-            'affiliate_url' => 'https://www.amazon.in/dp/B08F7K9L2P?tag=soulscript-21'
+            'affiliate_url' => 'https://www.amazon.in/dp/B08F7K9L2P?tag=giftreveal-21'
         ]
     ];
 
@@ -266,3 +266,4 @@ function getAffiliateProducts() {
         return $defaultProducts;
     }
 }
+

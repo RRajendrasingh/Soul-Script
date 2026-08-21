@@ -1,5 +1,5 @@
 <?php
-// SoulScript — Unified Reusable Footer Component
+// GiftReveal — Unified Reusable Footer Component
 // Comprehensive multi-column footer meeting Razorpay merchant compliance standards
 ?>
 <footer class="mt-24 pt-12 pb-10 border-t border-[#4d444b]/40 bg-[#120f12]/80 backdrop-blur-md relative z-10 text-[#d0c3cb]">
@@ -17,7 +17,7 @@
             </div>
           </div>
           <span class="text-xl font-bold font-serif text-[#e8e0e3] tracking-wide">
-            <?php echo defined('APP_NAME') ? APP_NAME : 'SoulScript'; ?>
+            <?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?>
           </span>
         </div>
         <p class="text-xs text-[#d0c3cb]/80 leading-relaxed">

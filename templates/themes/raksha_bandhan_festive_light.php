@@ -427,7 +427,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
   <!-- FOOTER -->
   <footer class="w-full bg-[#fcf6f0] border-t border-maroon/10 py-6">
     <div class="max-w-[1280px] mx-auto px-6 lg:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
-      <p class="text-sm text-gray-500">© 2026 SoulScript Raksha Bandhan. Celebrating Bonds of Love.</p>
+      <p class="text-sm text-gray-500">© 2026 GiftReveal Raksha Bandhan. Celebrating Bonds of Love.</p>
       <nav class="flex gap-6 text-sm text-gray-500 uppercase tracking-wider font-medium">
         <a href="<?php echo APP_URL; ?>/terms.php" class="hover:text-red-500 transition-colors">Terms</a>
         <a href="<?php echo APP_URL; ?>/privacy.php" class="hover:text-red-500 transition-colors">Privacy</a>
@@ -519,7 +519,7 @@ function downloadTamrapatraCertificate() {
 }
 
 function shareStitchWhatsApp() {
-  const text = `📜 *Official Shahi Tamrapatra — Sibling Bond Certificate* 👑\n\nThis Royal decree certifies the eternal bond of love and protection between *<?= addslashes($buyerName) ?>* and *<?= addslashes($partnerName) ?>*!\n\nView our official certificate on SoulScript: ${window.location.href}`;
+  const text = `📜 *Official Shahi Tamrapatra — Sibling Bond Certificate* 👑\n\nThis Royal decree certifies the eternal bond of love and protection between *<?= addslashes($buyerName) ?>* and *<?= addslashes($partnerName) ?>*!\n\nView our official certificate on GiftReveal: ${window.location.href}`;
   window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }
 

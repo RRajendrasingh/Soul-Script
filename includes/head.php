@@ -1,9 +1,9 @@
 <?php
-// SoulScript — Unified Reusable Head Component
+// GiftReveal — Unified Reusable Head Component
 // Ensures consistent meta tags, high-performance font preloading (zero FOUT),
 // Tailwind CSS configuration, design system tokens, and Lucide icons.
 
-$pageTitle = $pageTitle ?? (defined('APP_NAME') ? APP_NAME . ' — Romantic Surprise Websites' : 'SoulScript');
+$pageTitle = $pageTitle ?? (defined('APP_NAME') ? APP_NAME . ' — Romantic Surprise Websites' : 'GiftReveal');
 ?>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -1505,19 +1505,11 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
       img.onerror = function(err) {
         console.error('SVG Render Error:', err);
         URL.revokeObjectURL(blobURL);
-        if (btn) {
-          btn.innerHTML = originalContent;
-          btn.disabled = false;
-        }
-        if (window.lucide) lucide.createIcons();
-        alert('Could not generate 4K image directly. Please try again.');
-      };
-
-      img.src = blobURL;
+});
     }
 
     function shareShahiTamrapatraWhatsApp() {
-      const text = `📜 *Official Shahi Tamrapatra — Sibling Bond Certificate* 👑\n\nThis Royal decree certifies the eternal bond of love and protection between *<?= addslashes($buyerName ?? '') ?>* and *<?= addslashes($partnerName ?? '') ?>*!\n\nView our official certificate on SoulScript: ${window.location.href}`;
+      const text = `📜 *Official Shahi Tamrapatra — Sibling Bond Certificate* 👑\n\nThis Royal decree certifies the eternal bond of love and protection between *<?= addslashes($buyerName ?? '') ?>* and *<?= addslashes($partnerName ?? '') ?>*!\n\nView our official certificate on GiftReveal: ${window.location.href}`;
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     }
 
@@ -1760,7 +1752,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
 
         ctx.fillStyle = '#7a5310';
         ctx.font = 'italic 20px "Playfair Display", Georgia, serif';
-        ctx.fillText(`Protected by SoulScript Royal Archive • Verification ID: ${window.__certId || 'SS-RB-2026'} • 300 DPI Museum Edition`, canvas.width / 2, plaqueY + 310);
+        ctx.fillText(`Protected by GiftReveal Royal Archive • Verification ID: ${window.__certId || 'GR-RB-2026'} • 300 DPI Museum Edition`, canvas.width / 2, plaqueY + 310);
 
         const link = document.createElement('a');
         link.download = `Wall_Collage_Poster_${buyerName}_${partnerName}.png`;
@@ -2170,7 +2162,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
         cEnd.fillText('SCAN TO RELIVE YOUR DIGITAL CELEBRATION', C_WIDTH / 2, 1340);
 
         cEnd.font = 'italic 24px "Playfair Display", Georgia, serif';
-        cEnd.fillText('Scan with any smartphone camera to play music & experience the interactive rituals anytime at SoulScript.', C_WIDTH / 2, 1400);
+        cEnd.fillText('Scan with any smartphone camera to play music & experience the interactive rituals anytime at GiftReveal.', C_WIDTH / 2, 1400);
 
         doc.addImage(lastPage.cvs.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 297, 210);
 

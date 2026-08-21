@@ -1,6 +1,6 @@
 <?php
 // ─────────────────────────────────────────────────────────────────────────────
-// SoulScript — Application Configuration
+// GiftReveal — Application Configuration
 // All environment-specific credentials (DB, APP_URL, Razorpay, Admin) are
 // defined in config/config.env.php which is NOT committed to Git.
 // ─────────────────────────────────────────────────────────────────────────────
