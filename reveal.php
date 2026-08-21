@@ -1505,7 +1505,15 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
       img.onerror = function(err) {
         console.error('SVG Render Error:', err);
         URL.revokeObjectURL(blobURL);
-});
+        if (btn) {
+          btn.innerHTML = originalContent;
+          btn.disabled = false;
+        }
+        if (window.lucide) lucide.createIcons();
+        alert('Could not generate 4K image directly. Please try again.');
+      };
+
+      img.src = blobURL;
     }
 
     function shareShahiTamrapatraWhatsApp() {
