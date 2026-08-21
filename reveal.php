@@ -654,6 +654,18 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
         mobileMiniBtn.classList.add('hidden');
         mobileMiniBtn.style.display = 'none';
       }
+
+      // Reset body background and color to dark luxury theme
+      document.body.style.backgroundColor = '';
+      document.body.style.color = '';
+
+      // Reset and display top dark header
+      const header = document.getElementById('revealHeader');
+      if (header) {
+        header.style.display = 'block';
+        header.className = 'fixed top-0 left-0 right-0 w-full z-40 backdrop-blur-xl shadow-md bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
+      }
+
       document.getElementById('resultPageView')?.classList.add('hidden');
       document.getElementById('lockScreenView')?.classList.remove('hidden');
       if (document.getElementById('answerInput')) {
