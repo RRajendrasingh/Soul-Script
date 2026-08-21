@@ -161,12 +161,12 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
   </div>
 </div>
 
-  <!-- Celebratory Ambient Confetti Canvas for Lock Screen -->
-  <canvas id="lockConfettiCanvas" class="fixed inset-0 pointer-events-none z-0 w-full h-full"></canvas>
-
   <!-- STEP 7: LOCK SCREEN (Exact LockScreen.tsx DOM Layout) -->
   <main id="lockScreenView" class="fixed inset-0 w-full h-full flex flex-col items-center justify-center p-4 bg-[#fcf6f0] overflow-y-auto z-10 <?php echo $isEditMode ? 'pt-28' : 'pt-16'; ?> pb-16">
-    <div class="max-w-md w-full bg-[#221f21]/90 border border-[#eac34a]/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative my-8">
+    <!-- Celebratory Ambient Confetti Canvas for Lock Screen -->
+    <canvas id="lockConfettiCanvas" class="absolute inset-0 pointer-events-none z-0 w-full h-full"></canvas>
+    
+    <div class="max-w-md w-full bg-[#221f21]/90 border border-[#eac34a]/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative z-10 my-8">
       
       <!-- Header Icon / Receiver Avatar -->
       <div class="text-center space-y-3">
@@ -559,21 +559,21 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
       window.removeEventListener('resize', handleResize);
       window.addEventListener('resize', handleResize);
 
-      const colors = ['#831843', '#be123c', '#991b1b', '#b45309', '#065f46', '#1e40af', '#581c87', '#701a75', '#d97706', '#c2410c', '#854d0e', '#047857', '#e11d48', '#4c1d95'];
-      const confettiCount = 60;
+      const colors = ['#831843', '#be123c', '#991b1b', '#b45309', '#065f46', '#1e40af', '#581c87', '#701a75', '#d97706', '#c2410c', '#854d0e', '#047857', '#e11d48', '#4c1d95', '#164e63', '#312e81'];
+      const confettiCount = 85;
       const confettis = [];
 
       for (let i = 0; i < confettiCount; i++) {
         confettis.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          r: Math.random() * 5 + 3.5,
+          r: Math.random() * 6 + 4,
           d: Math.random() * confettiCount,
           color: colors[Math.floor(Math.random() * colors.length)],
           tilt: Math.floor(Math.random() * 10) - 10,
-          tiltAngleIncremental: (Math.random() * 0.06) + 0.03,
+          tiltAngleIncremental: (Math.random() * 0.07) + 0.04,
           tiltAngle: 0,
-          opacity: Math.random() * 0.35 + 0.65
+          opacity: Math.random() * 0.2 + 0.8
         });
       }
 
