@@ -146,7 +146,12 @@ if ($order_id) {
           </div>
           <div id="buyerPasswordGroup" class="<?php echo !empty($loggedInBuyer) ? 'hidden' : ''; ?>">
             <label class="text-xs font-semibold text-[#d0c3cb] block mb-1">Secret Edit Password * <span class="text-[10px] text-[#eac34a]">(min 6 chars)</span></label>
-            <input type="password" id="buyerPassword" value="<?php echo !empty($loggedInBuyer) ? 'LOGGED_IN_SESSION' : ''; ?>" <?php echo empty($loggedInBuyer) ? 'minlength="6" required' : ''; ?> class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="••••••••">
+            <div class="relative">
+              <input type="password" id="buyerPassword" value="<?php echo !empty($loggedInBuyer) ? 'LOGGED_IN_SESSION' : ''; ?>" <?php echo empty($loggedInBuyer) ? 'minlength="6" required' : ''; ?> class="w-full bg-[#100d10] border border-[#4d444b] rounded-xl pl-3.5 pr-11 py-2.5 text-sm text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none font-mono" placeholder="••••••••">
+              <button type="button" onclick="togglePasswordVisibility('buyerPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#d0c3cb] hover:text-[#eac34a] p-1 cursor-pointer transition-colors" title="Toggle password visibility">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1829,6 +1834,19 @@ Today, I want to ask you the most important question of my life. Will you take m
       } catch (err) {
         console.log('Session check error:', err);
       }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = '<i data-lucide="eye-off" class="w-4 h-4 text-[#eac34a]"></i>';
+      } else {
+        input.type = 'password';
+        btn.innerHTML = '<i data-lucide="eye" class="w-4 h-4 text-[#d0c3cb]"></i>';
+      }
+      if (typeof lucide === 'object') lucide.createIcons();
     }
 
     if (document.readyState === 'loading') {

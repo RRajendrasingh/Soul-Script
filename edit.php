@@ -99,7 +99,12 @@ $showLogin = !$showDashboard && !$showHub;
               <label class="block text-xs font-bold text-[#d0c3cb]">Secret Edit Password</label>
               <button type="button" onclick="showForgotPasswordModal()" class="text-[11px] text-[#eac34a] hover:underline cursor-pointer">Forgot Password?</button>
             </div>
-            <input type="password" id="loginPassword" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="Enter your edit password" required>
+            <div class="relative">
+              <input type="password" id="loginPassword" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl pl-4 pr-11 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="Enter your edit password" required>
+              <button type="button" onclick="togglePasswordVisibility('loginPassword', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#d0c3cb] hover:text-[#eac34a] p-1 cursor-pointer" title="Toggle password visibility">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
           </div>
 
           <div id="loginMsg" class="hidden text-xs text-rose-400 font-semibold text-center"></div>
@@ -155,12 +160,22 @@ $showLogin = !$showDashboard && !$showHub;
           
           <div>
             <label class="block text-xs font-bold text-[#d0c3cb] mb-1">New Secret Password</label>
-            <input type="password" id="newPassInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="Min 4 characters" required>
+            <div class="relative">
+              <input type="password" id="newPassInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl pl-4 pr-11 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="Min 4 characters" required>
+              <button type="button" onclick="togglePasswordVisibility('newPassInput', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#d0c3cb] hover:text-[#eac34a] p-1 cursor-pointer" title="Toggle password visibility">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
           </div>
 
           <div>
             <label class="block text-xs font-bold text-[#d0c3cb] mb-1">Confirm New Password</label>
-            <input type="password" id="confirmNewPassInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="Re-type new password" required>
+            <div class="relative">
+              <input type="password" id="confirmNewPassInput" class="w-full bg-[#151215] border border-[#4d444b] rounded-xl pl-4 pr-11 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="Re-type new password" required>
+              <button type="button" onclick="togglePasswordVisibility('confirmNewPassInput', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#d0c3cb] hover:text-[#eac34a] p-1 cursor-pointer" title="Toggle password visibility">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
           </div>
 
           <div id="setNewPassMsg" class="hidden text-xs text-center p-3 rounded-xl"></div>

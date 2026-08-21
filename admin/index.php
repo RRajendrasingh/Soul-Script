@@ -68,12 +68,33 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']);
           </div>
           <div>
             <label class="block text-[10px] font-bold uppercase tracking-wider text-[#d0c3cb] mb-1.5">Password</label>
-            <input type="password" name="admin_pass" required class="w-full bg-[#151215] border border-[#4d444b] rounded-xl px-4 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="••••••••">
+            <div class="relative">
+              <input type="password" id="adminPassInput" name="admin_pass" required class="w-full bg-[#151215] border border-[#4d444b] rounded-xl pl-4 pr-11 py-3 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none" placeholder="••••••••">
+              <button type="button" onclick="togglePasswordVisibility('adminPassInput', 'adminPassEye')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#b8a7b3] hover:text-[#eac34a] p-1 cursor-pointer transition-colors" title="Toggle password visibility">
+                <i id="adminPassEye" data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
           </div>
-          <button type="submit" class="w-full py-3 rounded-xl bg-[#eac34a] text-[#241a00] font-bold uppercase tracking-wider text-xs shadow-lg hover:bg-[#ffe088] transition-all">
+          <button type="submit" class="w-full py-3 rounded-xl bg-[#eac34a] text-[#241a00] font-bold uppercase tracking-wider text-xs shadow-lg hover:bg-[#ffe088] transition-all cursor-pointer">
             Login to Admin
           </button>
         </form>
+
+        <script>
+          function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input) return;
+            if (input.type === 'password') {
+              input.type = 'text';
+              if (icon) icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+              input.type = 'password';
+              if (icon) icon.setAttribute('data-lucide', 'eye');
+            }
+            if (typeof lucide === 'object') lucide.createIcons();
+          }
+        </script>
       </div>
     <?php else: ?>
       <?php require_once __DIR__ . '/nav_header.php'; ?>
