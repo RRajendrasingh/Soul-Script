@@ -80,7 +80,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
 }
 </style>
 
-<div class="festive-stitch-body antialiased min-h-screen relative w-full max-w-full overflow-x-hidden pt-4 sm:pt-6">
+<div class="festive-stitch-body antialiased min-h-screen relative w-full max-w-full overflow-x-hidden pt-20 sm:pt-24 pb-12 sm:pb-16">
 
   <main class="w-full space-y-12 sm:space-y-20">
 
