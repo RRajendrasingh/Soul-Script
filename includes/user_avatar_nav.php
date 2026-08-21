@@ -9,11 +9,11 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $isAdminSession = !empty($_SESSION['admin_logged_in']);
-$isBuyerSession = !empty($_SESSION['buyer_token']) || !empty($_SESSION['buyer_page_id']);
+$isBuyerSession = !empty($_SESSION['buyer_token']) || !empty($_SESSION['edit_token']) || !empty($_SESSION['buyer_page_id']) || !empty($_SESSION['buyer_email']);
 
 $buyerName = !empty($_SESSION['buyer_name']) ? trim($_SESSION['buyer_name']) : 'Buyer';
 $buyerInitial = strtoupper(substr($buyerName, 0, 1));
-$buyerSlug = !empty($_SESSION['buyer_slug']) ? $_SESSION['buyer_slug'] : '';
+$buyerSlug = !empty($_SESSION['buyer_slug']) ? $_SESSION['buyer_slug'] : (!empty($_SESSION['edit_token']) ? '' : '');
 $buyerPageId = !empty($_SESSION['buyer_page_id']) ? $_SESSION['buyer_page_id'] : '';
 
 $currentAppUrl = defined('APP_URL') ? APP_URL : '';

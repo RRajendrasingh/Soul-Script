@@ -53,8 +53,9 @@ try {
             session_start();
         }
 
-        $_SESSION['buyer_email'] = strtolower($email);
         $buyerName = $pages[0]['buyer_name'] ?? $pendingOrders[0]['buyer_name'] ?? 'Buyer';
+        $_SESSION['buyer_email'] = strtolower($email);
+        $_SESSION['buyer_name'] = $buyerName;
 
         $pagesList = array_map(function($p) {
             return [
@@ -80,6 +81,9 @@ try {
         if (count($pages) > 0) {
             $firstPage = $pages[0];
             $_SESSION['edit_token'] = $firstPage['edit_token'];
+            $_SESSION['buyer_token'] = $firstPage['edit_token'];
+            $_SESSION['buyer_page_id'] = $firstPage['page_id'];
+            $_SESSION['buyer_slug'] = $firstPage['url_slug'];
             echo json_encode([
                 'success' => true,
                 'message' => 'Login successful!',
