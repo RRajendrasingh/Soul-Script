@@ -136,9 +136,11 @@ function getDB() {
 
             // Auto-heal legacy digitalyogi24.com URLs in DB to giftreveal.in
             try {
-                $pdo->exec("UPDATE page_media SET media_url = REPLACE(media_url, 'digitalyogi24.com', 'giftreveal.in') WHERE media_url LIKE '%digitalyogi24.com%'");
-                $pdo->exec("UPDATE page_content SET receiver_photo = REPLACE(receiver_photo, 'digitalyogi24.com', 'giftreveal.in'), music_url = REPLACE(music_url, 'digitalyogi24.com', 'giftreveal.in') WHERE receiver_photo LIKE '%digitalyogi24.com%' OR music_url LIKE '%digitalyogi24.com%'");
-                $pdo->exec("UPDATE templates SET preview_image_url = REPLACE(preview_image_url, 'digitalyogi24.com', 'giftreveal.in'), demo_url = REPLACE(demo_url, 'digitalyogi24.com', 'giftreveal.in') WHERE preview_image_url LIKE '%digitalyogi24.com%' OR demo_url LIKE '%digitalyogi24.com%'");
+                $pdo->exec("UPDATE page_media SET file_path = REPLACE(file_path, 'digitalyogi24.com', 'giftreveal.in') WHERE file_path LIKE '%digitalyogi24.com%'");
+                $pdo->exec("UPDATE page_content SET receiver_photo = REPLACE(receiver_photo, 'digitalyogi24.com', 'giftreveal.in') WHERE receiver_photo LIKE '%digitalyogi24.com%'");
+                $pdo->exec("UPDATE page_content SET bg_music_url = REPLACE(bg_music_url, 'digitalyogi24.com', 'giftreveal.in') WHERE bg_music_url LIKE '%digitalyogi24.com%'");
+                $pdo->exec("UPDATE templates SET preview_image_url = REPLACE(preview_image_url, 'digitalyogi24.com', 'giftreveal.in') WHERE preview_image_url LIKE '%digitalyogi24.com%'");
+                $pdo->exec("UPDATE templates SET demo_url = REPLACE(demo_url, 'digitalyogi24.com', 'giftreveal.in') WHERE demo_url LIKE '%digitalyogi24.com%'");
                 $pdo->exec("UPDATE pages SET qr_code_url = REPLACE(qr_code_url, 'digitalyogi24.com', 'giftreveal.in') WHERE qr_code_url LIKE '%digitalyogi24.com%'");
             } catch (Exception $exMigrate) {}
 
