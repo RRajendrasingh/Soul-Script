@@ -324,6 +324,7 @@ function initRakhiDragLogic() {
   }
 
   function dragEnd() {
+    if (!active) return;
     initialX = currentX;
     initialY = currentY;
     active = false;
