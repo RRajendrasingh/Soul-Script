@@ -116,53 +116,34 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
     </div>
   </div>
 </header>
-<!-- Mobile Compact Floating Music Pill (Hidden by default on Lock Screen, shown only on Mobile < 640px after unlock) -->
-<button id="mobileMusicMiniBtn" onclick="toggleMobileMusicDrawer()" aria-label="Open Music Player" class="hidden fixed bottom-4 right-4 z-[90] w-12 h-12 rounded-full bg-gradient-to-br from-[#d32f2f] via-[#ea580c] to-[#f57c00] text-white shadow-[0_4px_20px_rgba(211,47,47,0.4)] ring-2 ring-white/30 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95">
-  <span id="mobileMiniMusicIcon" class="flex items-center justify-center transition-transform duration-300">
-    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-    </svg>
-  </span>
-</button>
-
-<!-- Floating Music Player Widget Box (Hidden by default on Lock Screen, shown after unlock) -->
-<div id="desktopMusicBox" class="hidden fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-50 bg-[#221f21]/95 backdrop-blur-xl border border-[#eac34a]/40 rounded-2xl p-3 items-center gap-3.5 shadow-[0_10px_35px_rgba(0,0,0,0.9)] max-w-none sm:max-w-sm transition-all duration-300">
+<!-- Universal Dynamic Audio Pill (Hidden on Lock Screen, shown after unlock on both Mobile and Desktop) -->
+<div id="desktopMusicBox" class="hidden fixed bottom-4 right-3 sm:right-6 sm:bottom-6 z-[90] flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 bg-white/95 backdrop-blur-xl border-2 border-[#d4af37]/40 shadow-[0_10px_30px_rgba(211,47,47,0.25)] rounded-full py-2 px-3 sm:py-2.5 sm:px-4 ring-2 ring-[#d32f2f]/10 transition-all duration-300 max-w-[94vw] sm:max-w-md select-none">
   <audio id="bgAudio" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-11200.mp3" loop preload="none"></audio>
-  
-  <!-- Left: Partner Thumbnail Photo -->
-  <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#eac34a] via-[#e4b9df] to-[#cca830] p-[1.5px] shrink-0 shadow-md">
-    <div class="w-full h-full bg-[#151215] rounded-[10px] overflow-hidden flex items-center justify-center" id="playerAvatarContainer">
-      <?php if (!empty($initialLockData['receiver_photo'])): ?>
-        <img id="playerReceiverPhotoImg" src="<?php echo htmlspecialchars($initialLockData['receiver_photo']); ?>" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='block';" alt="Partner Photo" class="w-full h-full object-cover rounded-[10px]">
-        <span id="playerReceiverFallback" class="text-base font-bold font-serif text-[#eac34a] hidden"><?php echo htmlspecialchars(strtoupper(substr($initialLockData['partner_name'] ?? 'P', 0, 1))); ?></span>
-      <?php else: ?>
-        <span id="playerReceiverFallback" class="text-base font-bold font-serif text-[#eac34a]"><?php echo htmlspecialchars(strtoupper(substr($initialLockData['partner_name'] ?? 'P', 0, 1))); ?></span>
-      <?php endif; ?>
+
+  <!-- Left: Festive Red-Orange Music Icon -->
+  <div class="flex items-center gap-2.5 min-w-0">
+    <div id="playerAvatarContainer" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-[#d32f2f] to-[#f57c00] text-white flex items-center justify-center shadow-md shrink-0 overflow-hidden">
+      <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+    </div>
+
+    <!-- Center: Live Animated Soundwave Bars + Song Info -->
+    <div class="flex items-center gap-2 min-w-0">
+      <div id="musicSoundwaveBars" class="flex items-end gap-0.5 h-3.5 shrink-0">
+        <span class="w-1 bg-[#d32f2f] rounded-full h-3.5 animate-pulse"></span>
+        <span class="w-1 bg-[#f57c00] rounded-full h-2 animate-pulse" style="animation-delay: 150ms;"></span>
+        <span class="w-1 bg-[#d32f2f] rounded-full h-3 animate-pulse" style="animation-delay: 300ms;"></span>
+      </div>
+      <div class="min-w-0 leading-tight">
+        <span class="block text-xs sm:text-sm font-bold text-[#4a232f] truncate max-w-[130px] sm:max-w-[180px]" id="musicBoxTitle">Phoolon Ka Taaron Ka</span>
+        <span class="block text-[10px] sm:text-xs text-[#e5534b] font-semibold truncate max-w-[130px] sm:max-w-[180px]" id="musicBoxArtist">Kishore Kumar 🎵</span>
+      </div>
     </div>
   </div>
 
-  <!-- Center: Song Title, Artist & Volume Slider (Pre-set to 50%) -->
-  <div class="flex-1 min-w-0 space-y-1">
-    <div>
-      <span class="block font-bold text-xs text-[#e8e0e3] truncate leading-tight" id="musicBoxTitle">Tum Hi Ho</span>
-      <span class="block text-[10px] text-[#eac34a] truncate mt-0.5" id="musicBoxArtist">Arijit Singh</span>
-    </div>
-
-    <div class="flex items-center gap-1.5 pt-0.5">
-      <i data-lucide="volume-1" class="w-3 h-3 text-[#d0c3cb] shrink-0"></i>
-      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5" oninput="changeAudioVolume(this.value)" class="w-full h-1 bg-[#4d444b] rounded-lg appearance-none cursor-pointer accent-[#eac34a]">
-    </div>
-  </div>
-
-  <!-- Right Actions: Play/Pause Button & Mobile Minimize Arrow -->
-  <div class="flex items-center gap-2 shrink-0">
-    <button id="audioPlayBtn" onclick="toggleAudioPlay()" aria-label="Play Pause Music" class="w-10 h-10 rounded-full bg-[#eac34a] hover:bg-[#ffe088] text-[#241a00] flex items-center justify-center shadow-lg transition-all shrink-0 cursor-pointer">
-      <svg class="w-4 h-4 fill-[#241a00] ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-    </button>
-    <button onclick="collapseMobileMusicDrawer()" class="sm:hidden p-1.5 text-[#d0c3cb] hover:text-[#eac34a] transition cursor-pointer" title="Minimize Music Player">
-      <svg class="w-4 h-4 stroke-current stroke-2 fill-none" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-    </button>
-  </div>
+  <!-- Right: 1-Tap Play/Pause Toggle Button -->
+  <button id="audioPlayBtn" onclick="toggleAudioPlay()" aria-label="Play Pause Music" class="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-gradient-to-br from-[#d32f2f] to-[#f57c00] text-white flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer ml-1">
+    <svg class="w-3.5 h-3.5 fill-current ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+  </button>
 </div>
 
   <!-- STEP 7: LOCK SCREEN (Exact LockScreen.tsx DOM Layout) -->
@@ -402,18 +383,25 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
       const btn = document.getElementById('audioPlayBtn');
       const badgeIcon = document.getElementById('songBadgeIcon');
       const tapHint = document.getElementById('songBadgeTapHint');
-      const miniIcon = document.getElementById('mobileMiniMusicIcon');
+      const waveBars = document.getElementById('musicSoundwaveBars');
 
-      if (btn) btn.innerHTML = playing ? PAUSE_SVG : PLAY_SVG;
+      if (btn) {
+        btn.innerHTML = playing ? 
+          '<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>' : 
+          '<svg class="w-3.5 h-3.5 fill-current ml-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+      }
       if (badgeIcon) badgeIcon.innerHTML = playing ? '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>' : '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
       if (tapHint) tapHint.innerHTML = playing ? 'Now<br>Playing ♪' : 'Tap to<br>Play ▶';
-      if (miniIcon) {
-        if (playing) {
-          miniIcon.classList.add('animate-spin');
-          miniIcon.style.animationDuration = '4s';
-        } else {
-          miniIcon.classList.remove('animate-spin');
-        }
+      if (waveBars) {
+        Array.from(waveBars.children).forEach(bar => {
+          if (playing) {
+            bar.classList.add('animate-pulse');
+            bar.style.opacity = '1';
+          } else {
+            bar.classList.remove('animate-pulse');
+            bar.style.opacity = '0.4';
+          }
+        });
       }
       syncMusicBtnLabel();
     }
@@ -971,28 +959,22 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
       if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
       if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').innerText = finalArtist;
 
-      // Auto-show Floating Music Controls on theme unlock: Mini Pill on Mobile (< 640px), Full Widget on Desktop (>= 640px)
+      // Auto-show Floating Music Controls on theme unlock (Unified Dynamic Audio Pill)
       const musicBox = document.getElementById('desktopMusicBox');
-      const mobileMiniBtn = document.getElementById('mobileMusicMiniBtn');
-      if (mobileMiniBtn) {
-        if (templateId === 'raksha_bandhan_festive_light' || data.template_id === 'raksha_bandhan_festive_light') {
-          mobileMiniBtn.className = 'fixed bottom-4 right-4 z-[90] w-12 h-12 rounded-full bg-gradient-to-br from-[#d32f2f] via-[#ea580c] to-[#f57c00] text-white shadow-[0_4px_20px_rgba(211,47,47,0.4)] ring-2 ring-white/30 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95';
+      const isFestiveLight = (templateId === 'raksha_bandhan_festive_light' || data.template_id === 'raksha_bandhan_festive_light');
+      if (musicBox) {
+        if (isFestiveLight) {
+          musicBox.className = 'fixed bottom-4 right-3 sm:right-6 sm:bottom-6 z-[90] flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 bg-white/95 backdrop-blur-xl border-2 border-[#d4af37]/40 shadow-[0_10px_30px_rgba(211,47,47,0.25)] rounded-full py-2 px-3 sm:py-2.5 sm:px-4 ring-2 ring-[#d32f2f]/10 transition-all duration-300 max-w-[94vw] sm:max-w-md select-none';
+          if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').className = 'block text-xs sm:text-sm font-bold text-[#4a232f] truncate max-w-[130px] sm:max-w-[180px]';
+          if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').className = 'block text-[10px] sm:text-xs text-[#e5534b] font-semibold truncate max-w-[130px] sm:max-w-[180px]';
+          if (document.getElementById('audioPlayBtn')) document.getElementById('audioPlayBtn').className = 'w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-gradient-to-br from-[#d32f2f] to-[#f57c00] text-white flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer ml-1';
         } else {
-          mobileMiniBtn.className = 'fixed bottom-4 right-4 z-[90] w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.6)] flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95';
+          musicBox.className = 'fixed bottom-4 right-3 sm:right-6 sm:bottom-6 z-[90] flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 bg-[#221f21]/95 backdrop-blur-xl border-2 border-[#eac34a]/40 shadow-[0_10px_35px_rgba(0,0,0,0.8)] rounded-full py-2 px-3 sm:py-2.5 sm:px-4 ring-2 ring-[#eac34a]/10 transition-all duration-300 max-w-[94vw] sm:max-w-md select-none';
+          if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').className = 'block text-xs sm:text-sm font-bold text-[#e8e0e3] truncate max-w-[130px] sm:max-w-[180px]';
+          if (document.getElementById('musicBoxArtist')) document.getElementById('musicBoxArtist').className = 'block text-[10px] sm:text-xs text-[#eac34a] font-semibold truncate max-w-[130px] sm:max-w-[180px]';
+          if (document.getElementById('audioPlayBtn')) document.getElementById('audioPlayBtn').className = 'w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer ml-1';
         }
-      }
-      if (window.innerWidth < 640) {
-        if (mobileMiniBtn) {
-          mobileMiniBtn.style.display = 'flex';
-        }
-        if (musicBox) {
-          musicBox.style.display = 'none';
-        }
-      } else {
-        if (musicBox) {
-          musicBox.className = musicBox.className.replace(/\bhidden\b/g, '').trim();
-          musicBox.style.display = 'flex';
-        }
+        musicBox.style.display = 'flex';
       }
 
       if (document.getElementById('musicBoxTitle')) document.getElementById('musicBoxTitle').innerText = finalSongTitle;
