@@ -576,7 +576,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('theme') || urlParams.get('preview')) {
         try {
-          const vRes = await fetch('<?php echo APP_URL; ?>/api/verify_hint.php', {
+          const vRes = await fetch('/api/verify_hint.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ slug: currentSlug, answer: 'preview', preview_mode: '1', override_theme: urlParams.get('theme') || '' })
@@ -592,7 +592,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
       }
 
       try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/get_page_lock.php?slug=' + encodeURIComponent(currentSlug));
+        const res = await fetch('/api/get_page_lock.php?slug=' + encodeURIComponent(currentSlug));
         const data = await res.json();
 
         if (data.success) {
@@ -617,7 +617,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
           const urlParams = new URLSearchParams(window.location.search);
           if (urlParams.get('theme') || urlParams.get('preview')) {
             try {
-              const vRes = await fetch('<?php echo APP_URL; ?>/api/verify_hint.php', {
+              const vRes = await fetch('/api/verify_hint.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ slug: currentSlug, answer: 'preview', preview_mode: '1', override_theme: urlParams.get('theme') || '' })
@@ -697,7 +697,7 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
 
       try {
         const urlParams = new URLSearchParams(window.location.search);
-        const res = await fetch('<?php echo APP_URL; ?>/api/verify_hint.php', {
+        const res = await fetch('/api/verify_hint.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ slug: currentSlug, answer: input.value.trim(), preview_mode: (urlParams.get('theme') ? '1' : '0'), override_theme: urlParams.get('theme') || '' })

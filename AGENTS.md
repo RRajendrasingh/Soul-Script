@@ -25,10 +25,21 @@
    - **Rule 3: Mandatory 360° View Impact Analysis**: Always evaluate the complete 360° lifecycle of a feature before coding — asking: *"If we Add, Update, Delete, or Toggle X, how does it affect existing features? Will anything break or regress?"* Anticipate all CRUD edge cases proactively.
 
 6. **CRITICAL: The Master 30 URLs & Endpoints Regression Registry**:
-   - On every optimization, feature addition, or code change, automatically run regression checks against the platform's 30 core endpoints:
+   - On every optimization, feature addition, or code change, automatically run regression checks against the platform's 30 core endpoints on `https://giftreveal.in`:
      - **Public Pages (7):** `/`, `/about.php`, `/contact.php`, `/privacy.php`, `/terms.php`, `/refund-policy.php`, `/shipping-policy.php`.
-     - **Personalization Flow (3):** `/create.php`, `/create.php?template=raksha_bandhan_royal`, `/edit.php`.
-     - **Live Reveals (2):** `/gift/{slug}`, `/gift/manvi-rakhi-v2`.
+     - **Personalization Flow (3):** `/create.php`, `/create.php?template=raksha_bandhan_festive_light`, `/edit.php`.
+     - **Live Reveals (2):** `/gift/ananya-rohan`, `/gift/manvi-rakhi-v2`.
      - **Admin Suite (8):** `/admin/index.php`, `/admin/templates.php`, `/admin/sample_gallery.php`, `/admin/rakhi_vouchers.php`, `/admin/messages.php`, `/admin/affiliate_settings.php`, `/admin/journey.php`, `/admin/system_reset.php`.
-     - **Backend APIs (10):** `/api/get_page_lock.php`, `/api/verify_hint.php`, `/api/create_order.php`, `/api/create_page.php`, `/api/edit_page.php`, `/api/webhook_razorpay.php`, `/api/admin.php`, `/api/admin_templates.php`, `/api/admin_sample_gallery.php`, `/api/claim_voucher.php`.
+     - **Backend APIs (10):** `/api/get_page_lock.php`, `/api/verify_hint.php`, `/api/create_order.php`, `/api/create_page.php`, `/api/edit_page.php`, `/api/webhook_razorpay.php`, `/api/admin.php`, `/api/admin_templates.php`, `/api/admin_sample_gallery.php`, `/api/buyer_session.php`.
+
+7. **CRITICAL: Mandatory Pre-Push Real Browser Journey & Console Zero-Error Test**:
+   - NEVER rely solely on HTTP 200 status codes (since a page with broken JavaScript still returns HTTP 200).
+   - Before ANY Git commit and push, ALWAYS run an automated headless Chrome browser user journey:
+     1. **Visit Live Sample Page:** Open `/gift/ananya-rohan` in real Chromium.
+     2. **Zero Console & Syntax Errors:** Monitor `page.on('pageerror')` and `page.on('console', error)` — MUST BE EXACTLY 0.
+     3. **Enter Password & Unlock:** Type secret hint answer into `#answerInput`, click `#unlockBtn`.
+     4. **Verify DOM Transition:** Assert `#lockScreenView` is `.hidden`, `#resultPageView` is visible, and template content renders cleanly.
+     5. **Verify Re-Lock Action:** Scroll to bottom, click "Lock Page 🔒" (`relockGiftSession()`), and assert `#lockScreenView` becomes visible again.
+     6. **Verify End-to-End Creation Flow:** Create order -> Simulate payment -> Create page -> Unlock in browser.
+
 
