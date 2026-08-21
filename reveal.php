@@ -1007,12 +1007,6 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
         if (templateId === 'raksha_bandhan_festive_light' || data.template_id === 'raksha_bandhan_festive_light') {
           document.body.style.backgroundColor = '#fcf6f0';
           document.body.style.color = '#4a232f';
-          const header = document.getElementById('revealHeader');
-          if (header) header.style.display = 'none';
-          const musicBox = document.getElementById('desktopMusicBox');
-          if (musicBox) musicBox.style.display = 'none';
-          const mobileMusicBtn = document.getElementById('mobileMusicMiniBtn');
-          if (mobileMusicBtn) mobileMusicBtn.style.display = 'none';
         }
 
         // Re-execute scripts inside injected HTML so template functions execute
