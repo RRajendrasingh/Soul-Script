@@ -568,6 +568,11 @@ $headerBgClass = $isFestiveTheme ? 'bg-[#fcf6f0]/90 text-[#4a232f] border-b bord
       }
       const msg = document.getElementById('lockMessage');
       if (msg) msg.classList.add('hidden');
+      const unlockBtn = document.getElementById('unlockBtn');
+      if (unlockBtn) {
+        unlockBtn.disabled = false;
+        unlockBtn.innerText = 'Unlock Surprise Page';
+      }
       loadLockMetadata();
       window.scrollTo(0, 0);
     }

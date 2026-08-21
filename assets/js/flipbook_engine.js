@@ -1,9 +1,5 @@
-/**
- * SoulScript - 3D Interactive Virtual FlipBook Engine
- * Built on StPageFlip Canvas/WebGL with Web Audio API Synthesized Paper Turn Sound FX
- */
-
-class SoulScriptFlipbook {
+if (typeof window.SoulScriptFlipbook === 'undefined') {
+window.SoulScriptFlipbook = class SoulScriptFlipbook {
   constructor(options = {}) {
     this.containerId = options.containerId || 'soulscriptFlipbook';
     this.modalId = options.modalId || 'soulscriptFlipbookModal';
@@ -186,6 +182,5 @@ class SoulScriptFlipbook {
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
   }
+};
 }
-
-window.SoulScriptFlipbook = SoulScriptFlipbook;
