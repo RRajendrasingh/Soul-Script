@@ -78,7 +78,7 @@ if (!empty($initialLockData['page_id'])) {
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<body class="bg-[#fcf6f0] text-[#e8e0e3] font-sans min-h-screen relative overflow-x-hidden">
+<body class="bg-[#151215] text-[#e8e0e3] font-sans min-h-screen relative overflow-x-hidden">
 
   <style>
   @keyframes spinVinyl {
@@ -165,7 +165,7 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
   <canvas id="lockConfettiCanvas" class="fixed inset-0 pointer-events-none z-0 w-full h-full"></canvas>
 
   <!-- STEP 7: LOCK SCREEN (Exact LockScreen.tsx DOM Layout) -->
-  <main id="lockScreenView" class="w-full flex flex-col items-center justify-center p-4 <?php echo $isEditMode ? 'pt-28' : 'pt-16'; ?> pb-16 relative z-10">
+  <main id="lockScreenView" class="fixed inset-0 w-full h-full flex flex-col items-center justify-center p-4 bg-[#fcf6f0] overflow-y-auto z-10 <?php echo $isEditMode ? 'pt-28' : 'pt-16'; ?> pb-16">
     <div class="max-w-md w-full bg-[#221f21]/90 border border-[#eac34a]/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative my-8">
       
       <!-- Header Icon / Receiver Avatar -->
@@ -654,9 +654,9 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
         mobileMiniBtn.style.display = 'none';
       }
 
-      // Reset body background to warm cream festive theme
-      document.body.style.backgroundColor = '#fcf6f0';
-      document.body.style.color = '#e8e0e3';
+      // Reset body background to template default
+      document.body.style.backgroundColor = '';
+      document.body.style.color = '';
 
       // Reset and display top dark header
       const header = document.getElementById('revealHeader');
