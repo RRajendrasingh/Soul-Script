@@ -968,10 +968,6 @@ if ($cleanReceiverPhoto) {
   </div>
 </div>
 
-<!-- Load StPageFlip Browser Engine & SoulScript Flipbook Controller -->
-<script src="<?= htmlspecialchars(APP_URL) ?>/assets/js/page-flip.browser.js"></script>
-<script src="<?= htmlspecialchars(APP_URL) ?>/assets/js/flipbook_engine.js"></script>
-
 <script>
   window.__rakhiFlipbookInstance = null;
 
