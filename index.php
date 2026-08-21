@@ -272,6 +272,7 @@ require_once __DIR__ . '/includes/media_helper.php';
         $tTagline = htmlspecialchars($t['tagline']);
         $tDesc = htmlspecialchars($t['description']);
         $tPrice = (float)$t['price_inr'];
+        $tOriginalPrice = !empty($t['original_price_inr']) ? (float)$t['original_price_inr'] : null;
         $tBadge = htmlspecialchars($t['badge'] ?? '');
         $tCover = resolveMediaUrl($t['preview_image_url']);
         $tCreateUrl = APP_URL . '/create.php?template=' . urlencode($tid);
@@ -303,8 +304,14 @@ require_once __DIR__ . '/includes/media_helper.php';
             </div>
           <?php endif; ?>
 
-          <div class="absolute top-4 right-4 bg-[#eac34a] text-[#241a00] font-extrabold text-sm sm:text-base px-3.5 py-1 rounded-xl shadow-md">
-            ₹<?php echo number_format($tPrice, 0); ?>
+          <div class="absolute top-4 right-4 bg-black/80 backdrop-blur-md border border-[#eac34a]/40 px-3.5 py-1.5 rounded-2xl shadow-xl flex items-center gap-2">
+            <span class="text-base sm:text-lg font-serif font-bold text-[#eac34a]">₹<?php echo number_format($tPrice, 0); ?></span>
+            <?php if (!empty($tOriginalPrice) && $tOriginalPrice > $tPrice): 
+              $discountPct = round((($tOriginalPrice - $tPrice) / $tOriginalPrice) * 100);
+            ?>
+              <span class="text-xs text-gray-400 line-through font-normal">₹<?php echo number_format($tOriginalPrice, 0); ?></span>
+              <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider"><?php echo $discountPct; ?>% OFF</span>
+            <?php endif; ?>
           </div>
 
           <div class="absolute bottom-4 left-4 right-4 text-[#e8e0e3] space-y-0.5">

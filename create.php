@@ -22,12 +22,13 @@ $valid_templates = [
 
 try {
     $dbTpl = getDB();
-    $stmtTpl = $dbTpl->query("SELECT template_id, name, price_inr FROM templates WHERE active = 1");
+    $stmtTpl = $dbTpl->query("SELECT template_id, name, price_inr, original_price_inr FROM templates WHERE active = 1");
     $dbTemplates = $stmtTpl->fetchAll();
     foreach ($dbTemplates as $dt) {
         $valid_templates[$dt['template_id']] = [
-            'name'  => $dt['name'],
-            'price' => (float)$dt['price_inr']
+            'name'           => $dt['name'],
+            'price'          => (float)$dt['price_inr'],
+            'original_price' => !empty($dt['original_price_inr']) ? (float)$dt['original_price_inr'] : null
         ];
     }
 } catch (Exception $exT) {}
@@ -151,8 +152,16 @@ if ($order_id) {
 
         <div class="p-4 bg-[#100d10] border border-[#4d444b] rounded-2xl flex items-center justify-between gap-4">
           <div>
-            <span class="text-[11px] uppercase font-extrabold text-[#d0c3cb]/70 tracking-wider block">Total</span>
-            <span class="font-serif text-3xl font-extrabold text-[#eac34a]">₹<?php echo $tpl['price']; ?></span>
+            <span class="text-[11px] uppercase font-extrabold text-[#d0c3cb]/70 tracking-wider block">Total Amount</span>
+            <div class="flex items-baseline gap-2">
+              <span class="font-serif text-3xl font-extrabold text-[#eac34a]">₹<?php echo number_format($tpl['price'], 0); ?></span>
+              <?php if (!empty($tpl['original_price']) && $tpl['original_price'] > $tpl['price']): 
+                $disc = round((($tpl['original_price'] - $tpl['price']) / $tpl['original_price']) * 100);
+              ?>
+                <span class="text-sm text-gray-400 line-through font-normal">₹<?php echo number_format($tpl['original_price'], 0); ?></span>
+                <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider"><?php echo $disc; ?>% OFF</span>
+              <?php endif; ?>
+            </div>
           </div>
           <button type="submit" id="checkoutBtn" class="px-6 py-3.5 bg-[#eac34a] text-[#241a00] font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg flex items-center gap-2 hover:bg-[#ffe088] transition-all">
             <span>Proceed to Pay & Personalize</span>

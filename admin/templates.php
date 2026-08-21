@@ -232,14 +232,18 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
         </div>
 
         <!-- Pricing & Badge Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-[#e8e0e3] mb-1">Price (INR ₹) *</label>
-            <input type="number" id="formPriceInr" required min="0" step="1" value="449" class="w-full bg-[#171317] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+            <label class="block text-xs font-semibold text-[#e8e0e3] mb-1">Selling Price (INR ₹) *</label>
+            <input type="number" id="formPriceInr" required min="0" step="1" value="399" class="w-full bg-[#171317] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#e8e0e3] mb-1">Cutout MRP (₹) (Optional)</label>
+            <input type="number" id="formOriginalPriceInr" min="0" step="1" placeholder="e.g. 999" class="w-full bg-[#171317] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
           </div>
           <div>
             <label class="block text-xs font-semibold text-[#e8e0e3] mb-1">Badge Tag Label</label>
-            <input type="text" id="formBadge" placeholder="e.g. Festival Special 🪔" class="w-full bg-[#171317] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
+            <input type="text" id="formBadge" placeholder="e.g. Festival Special 🌸" class="w-full bg-[#171317] border border-[#4d444b] rounded-xl px-3 py-2 text-xs text-[#e8e0e3] focus:border-[#eac34a] focus:outline-none">
           </div>
         </div>
 
@@ -341,7 +345,10 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
             </div>
 
             <div class="absolute bottom-2 left-2 right-2 bg-black/80 backdrop-blur-md p-2 rounded-xl border border-white/10 flex items-center justify-between">
-              <span class="text-xs font-bold text-[#eac34a]">₹${item.price_inr}</span>
+              <div class="flex items-baseline gap-1.5">
+                <span class="text-xs font-bold text-[#eac34a]">₹${item.price_inr}</span>
+                ${item.original_price_inr && item.original_price_inr > item.price_inr ? `<span class="text-[10px] text-gray-400 line-through">₹${item.original_price_inr}</span>` : ''}
+              </div>
               <div class="flex items-center gap-1.5">
                 <span class="text-[10px] text-white font-mono font-bold bg-[#3b1e3b] px-2 py-0.5 rounded-md shadow-md border border-[#e4b9df]/30" title="Total Paid Purchases">🛍️ ${item.usage_count || 0}</span>
                 <span class="text-[10px] text-[#eac34a] font-mono font-bold bg-[#100d10] px-2 py-0.5 rounded-md border border-[#eac34a]/30">Pos: #${idx + 1}</span>
@@ -446,7 +453,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       // Persist sequence to MySQL database
       const sequence = globalTemplatesList.map(t => t.template_id);
       try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/admin_templates.php', {
+        const res = await fetch('/api/admin_templates.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'reorder', sequence: sequence })
@@ -494,6 +501,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
           document.getElementById('formTagline').value = t.tagline;
           document.getElementById('formDescription').value = t.description;
           document.getElementById('formPriceInr').value = t.price_inr;
+          document.getElementById('formOriginalPriceInr').value = t.original_price_inr || '';
           document.getElementById('formBadge').value = t.badge || '';
           document.getElementById('formButtonText').value = t.button_text || 'Personalize This Gift 🎁';
           document.getElementById('formDemoUrl').value = t.demo_url || '';
@@ -511,6 +519,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       } else {
         modalTitle.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4 text-[#eac34a]"></i><span>Add New Gift Card</span>`;
         document.getElementById('formTemplateId').value = '';
+        document.getElementById('formOriginalPriceInr').value = '';
         document.getElementById('formExistingImageUrl').value = '';
         updateAutoSlugPreview('');
       }
@@ -556,6 +565,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
         tagline: document.getElementById('formTagline').value,
         description: document.getElementById('formDescription').value,
         price_inr: parseFloat(document.getElementById('formPriceInr').value),
+        original_price_inr: document.getElementById('formOriginalPriceInr').value ? parseFloat(document.getElementById('formOriginalPriceInr').value) : null,
         badge: document.getElementById('formBadge').value,
         button_text: document.getElementById('formButtonText').value,
         demo_url: document.getElementById('formDemoUrl').value,
@@ -566,7 +576,7 @@ $isAdminLoggedIn = !empty($_SESSION['admin_logged_in']);
       };
 
       try {
-        const res = await fetch('<?php echo APP_URL; ?>/api/admin_templates.php', {
+        const res = await fetch('/api/admin_templates.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)

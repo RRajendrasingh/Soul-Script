@@ -36,6 +36,7 @@ try {
             $t['create_url'] = $baseUrl . '/create.php?template=' . urlencode($t['template_id']);
             $t['preview_image_url'] = resolveMediaUrl($t['preview_image_url']);
             $t['price_inr'] = (float)$t['price_inr'];
+            $t['original_price_inr'] = !empty($t['original_price_inr']) ? (float)$t['original_price_inr'] : null;
             $t['active'] = (int)$t['active'];
             $t['sort_order'] = (int)($t['sort_order'] ?? 0);
             $t['button_text'] = !empty($t['button_text']) ? $t['button_text'] : 'Personalize This Gift 🎁';
@@ -182,6 +183,8 @@ try {
                 @file_put_contents($persistentDir . '/sample_captions.json', json_encode($captions, JSON_PRETTY_PRINT));
             }
 
+            $original_price_inr = !empty($input['original_price_inr']) && (float)$input['original_price_inr'] > 0 ? (float)$input['original_price_inr'] : null;
+
             // Check if template exists
             $stmtChk = $db->prepare("SELECT COUNT(*) FROM templates WHERE template_id = ?");
             $stmtChk->execute([$rawTid]);
@@ -189,19 +192,20 @@ try {
 
             if ($exists) {
                 $sql = "UPDATE templates SET 
-                    name = :name, tagline = :tagline, description = :description, price_inr = :price_inr, 
+                    name = :name, tagline = :tagline, description = :description, price_inr = :price_inr, original_price_inr = :original_price_inr,
                     badge = :badge, button_text = :button_text, demo_url = :demo_url, demo_password = :demo_password, active = :active";
                 $params = [
-                    ':name'          => $name,
-                    ':tagline'       => $tagline,
-                    ':description'   => $description,
-                    ':price_inr'     => $price_inr,
-                    ':badge'         => $badge,
-                    ':button_text'   => $button_text,
-                    ':demo_url'      => $demo_url,
-                    ':demo_password' => $demo_password,
-                    ':active'        => $active,
-                    ':template_id'   => $rawTid
+                    ':name'               => $name,
+                    ':tagline'            => $tagline,
+                    ':description'        => $description,
+                    ':price_inr'          => $price_inr,
+                    ':original_price_inr' => $original_price_inr,
+                    ':badge'              => $badge,
+                    ':button_text'        => $button_text,
+                    ':demo_url'           => $demo_url,
+                    ':demo_password'      => $demo_password,
+                    ':active'             => $active,
+                    ':template_id'        => $rawTid
                 ];
                 if (!empty($preview_image_url)) {
                     $sql .= ", preview_image_url = :preview_image_url";
@@ -220,22 +224,23 @@ try {
                 }
 
                 $stmtSave = $db->prepare("INSERT INTO templates 
-                    (template_id, name, tagline, description, price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) 
+                    (template_id, name, tagline, description, price_inr, original_price_inr, preview_image_url, badge, button_text, demo_url, demo_password, active, sort_order) 
                     VALUES 
-                    (:template_id, :name, :tagline, :description, :price_inr, :preview_image_url, :badge, :button_text, :demo_url, :demo_password, :active, :sort_order)");
+                    (:template_id, :name, :tagline, :description, :price_inr, :original_price_inr, :preview_image_url, :badge, :button_text, :demo_url, :demo_password, :active, :sort_order)");
                 $stmtSave->execute([
-                    ':template_id'       => $rawTid,
-                    ':name'              => $name,
-                    ':tagline'           => $tagline,
-                    ':description'       => $description,
-                    ':price_inr'         => $price_inr,
-                    ':preview_image_url' => $preview_image_url,
-                    ':badge'             => $badge,
-                    ':button_text'       => $button_text,
-                    ':demo_url'          => $demo_url,
-                    ':demo_password'     => $demo_password,
-                    ':active'            => $active,
-                    ':sort_order'        => $newSort
+                    ':template_id'        => $rawTid,
+                    ':name'               => $name,
+                    ':tagline'            => $tagline,
+                    ':description'        => $description,
+                    ':price_inr'          => $price_inr,
+                    ':original_price_inr' => $original_price_inr,
+                    ':preview_image_url'  => $preview_image_url,
+                    ':badge'              => $badge,
+                    ':button_text'        => $button_text,
+                    ':demo_url'           => $demo_url,
+                    ':demo_password'      => $demo_password,
+                    ':active'             => $active,
+                    ':sort_order'         => $newSort
                 ]);
             }
 
