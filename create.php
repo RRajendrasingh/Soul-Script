@@ -1881,11 +1881,10 @@ Today, I want to ask you the most important question of my life. Will you take m
 
           const options = {
             key: data.razorpay_key_id,
-            amount: currentPrice * 100,
+            amount: Math.round(currentPrice * 100),
             currency: 'INR',
             name: '<?php echo defined('APP_NAME') ? APP_NAME : 'GiftReveal'; ?>',
-            description: 'Surprise Reveal Page Order',
-            order_id: data.order.razorpay_order_id,
+            description: 'Surprise Reveal Page Order (' + (payload.template_id || 'Gift') + ')',
             handler: async function(response) {
               await fetch('/api/webhook_razorpay.php', {
                 method: 'POST',
@@ -1893,8 +1892,8 @@ Today, I want to ask you the most important question of my life. Will you take m
                 body: JSON.stringify({ 
                   order_id: data.order.order_id, 
                   razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_signature: response.razorpay_signature,
+                  razorpay_order_id: response.razorpay_order_id || data.order.order_id,
+                  razorpay_signature: response.razorpay_signature || '',
                   status: 'paid' 
                 })
               });
@@ -1903,6 +1902,11 @@ Today, I want to ask you the most important question of my life. Will you take m
             prefill: { name: payload.buyer_name, email: payload.buyer_email, contact: payload.buyer_phone },
             theme: { color: '#eac34a' }
           };
+
+          if (data.order && data.order.razorpay_order_id && !data.order.razorpay_order_id.startsWith('order_rzp_')) {
+            options.order_id = data.order.razorpay_order_id;
+          }
+
           const rzp = new Razorpay(options);
           rzp.open();
         } else {
