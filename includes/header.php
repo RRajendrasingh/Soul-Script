@@ -42,12 +42,27 @@ $isAdminPage = $isAdminPage ?? false;
       <?php require __DIR__ . '/user_avatar_nav.php'; ?>
     </div>
 
-    <!-- Mobile Controls (Hamburger Menu Button & Quick CTA) -->
+    <!-- Mobile Controls (Hamburger Menu Button & Quick CTA / Avatar) -->
     <div class="flex md:hidden items-center gap-2">
-      <a href="<?php echo APP_URL; ?>/#gallery" class="px-3 py-1.5 rounded-full bg-[#eac34a] text-[#241a00] text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 shadow-md">
-        <i data-lucide="gift" class="w-3 h-3"></i>
-        <span>Create</span>
-      </a>
+      <?php 
+      $isMobileBuyerSession = !empty($_SESSION['buyer_token']) || !empty($_SESSION['edit_token']) || !empty($_SESSION['buyer_page_id']) || !empty($_SESSION['buyer_email']);
+      $mobileBuyerName = !empty($_SESSION['buyer_name']) ? trim($_SESSION['buyer_name']) : 'Buyer';
+      $mobileBuyerInitial = strtoupper(substr($mobileBuyerName, 0, 1));
+      $mobileBuyerSlug = !empty($_SESSION['buyer_slug']) ? $_SESSION['buyer_slug'] : '';
+      ?>
+      <?php if ($isMobileBuyerSession): ?>
+        <a href="<?php echo APP_URL; ?>/edit.php" class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/60 shadow-[0_0_12px_rgba(234,195,74,0.2)]">
+          <div class="w-5 h-5 rounded-full bg-gradient-to-tr from-[#eac34a] to-[#d4af37] text-[#151215] flex items-center justify-center font-bold text-[10px] shadow-inner">
+            <?php echo htmlspecialchars($mobileBuyerInitial); ?>
+          </div>
+          <span class="text-[11px] font-bold font-serif max-w-[70px] truncate text-[#e8e0e3]"><?php echo htmlspecialchars($mobileBuyerName); ?></span>
+        </a>
+      <?php else: ?>
+        <a href="<?php echo APP_URL; ?>/#gallery" class="px-3 py-1.5 rounded-full bg-[#eac34a] text-[#241a00] text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 shadow-md">
+          <i data-lucide="gift" class="w-3 h-3"></i>
+          <span>Create</span>
+        </a>
+      <?php endif; ?>
 
       <button onclick="toggleMobileNavMenu()" id="hamburgerBtn" aria-label="Toggle Menu" class="p-2 rounded-xl bg-[#221f21] border border-[#4d444b] text-[#e8e0e3] hover:text-[#eac34a] hover:border-[#eac34a] transition-all cursor-pointer">
         <i data-lucide="menu" id="hamburgerIcon" class="w-5 h-5"></i>
@@ -57,6 +72,24 @@ $isAdminPage = $isAdminPage ?? false;
 
   <!-- Mobile Drawer Overlay Menu -->
   <div id="mobileDrawerMenu" class="hidden md:hidden bg-[#151215]/98 border-b border-[#4d444b]/50 px-4 py-5 space-y-4 shadow-2xl backdrop-blur-2xl transition-all duration-300">
+    <?php if ($isMobileBuyerSession): ?>
+      <div class="p-3.5 rounded-2xl bg-[#221f21] border border-[#eac34a]/40 flex items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#eac34a] to-[#d4af37] text-[#151215] flex items-center justify-center font-bold text-sm shadow-inner shrink-0">
+            <?php echo htmlspecialchars($mobileBuyerInitial); ?>
+          </div>
+          <div class="flex flex-col text-left min-w-0 truncate">
+            <span class="text-xs font-bold font-serif text-[#e8e0e3] truncate"><?php echo htmlspecialchars($mobileBuyerName); ?></span>
+            <span class="text-[9px] text-[#eac34a] font-semibold uppercase tracking-wider">Buyer Portal Active</span>
+          </div>
+        </div>
+        <a href="<?php echo APP_URL; ?>/edit.php?logout=1" class="text-rose-400 hover:text-rose-300 px-2.5 py-1.5 bg-rose-950/30 hover:bg-rose-950/60 rounded-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 border border-rose-500/20 shrink-0">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    <?php endif; ?>
+
     <nav class="flex flex-col space-y-2.5 font-sans text-xs uppercase tracking-wider font-semibold">
       <a href="<?php echo APP_URL; ?>" onclick="toggleMobileNavMenu()" class="px-4 py-3 rounded-xl bg-[#3b1e3b]/60 text-[#eac34a] font-bold border border-[#eac34a]/30 flex items-center gap-2.5">
         <i data-lucide="home" class="w-4 h-4"></i>
@@ -70,10 +103,23 @@ $isAdminPage = $isAdminPage ?? false;
         <i data-lucide="sparkles" class="w-4 h-4"></i>
         <span>Live Demo</span>
       </a>
-      <a href="<?php echo APP_URL; ?>/edit.php" onclick="toggleMobileNavMenu()" class="px-4 py-3 rounded-xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/60 font-bold flex items-center gap-2.5">
-        <i data-lucide="key-round" class="w-4 h-4"></i>
-        <span>Buyer Login Portal</span>
-      </a>
+      <?php if ($isMobileBuyerSession): ?>
+        <a href="<?php echo APP_URL; ?>/edit.php" onclick="toggleMobileNavMenu()" class="px-4 py-3 rounded-xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/60 font-bold flex items-center gap-2.5">
+          <i data-lucide="edit-3" class="w-4 h-4"></i>
+          <span>Manage &amp; Edit My Surprise</span>
+        </a>
+        <?php if ($mobileBuyerSlug): ?>
+          <a href="<?php echo APP_URL; ?>/gift/<?php echo urlencode($mobileBuyerSlug); ?>" target="_blank" onclick="toggleMobileNavMenu()" class="px-4 py-3 rounded-xl bg-[#221f21] text-[#a4e4b9] border border-[#a4e4b9]/40 font-bold flex items-center gap-2.5">
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+            <span>View Live Gift Link ↗</span>
+          </a>
+        <?php endif; ?>
+      <?php else: ?>
+        <a href="<?php echo APP_URL; ?>/edit.php" onclick="toggleMobileNavMenu()" class="px-4 py-3 rounded-xl bg-[#3b1e3b] text-[#eac34a] border border-[#eac34a]/60 font-bold flex items-center gap-2.5">
+          <i data-lucide="key-round" class="w-4 h-4"></i>
+          <span>Buyer Login Portal</span>
+        </a>
+      <?php endif; ?>
     </nav>
 
     <div class="pt-2 border-t border-[#4d444b]/40">
