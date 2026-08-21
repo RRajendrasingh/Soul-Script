@@ -117,8 +117,12 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
   </div>
 </header>
 <!-- Mobile Compact Floating Music Pill (Hidden by default on Lock Screen, shown only on Mobile < 640px after unlock) -->
-<button id="mobileMusicMiniBtn" onclick="toggleMobileMusicDrawer()" aria-label="Open Music Player" class="hidden fixed bottom-4 right-4 z-[90] w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.6)] items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-95">
-  <span id="mobileMiniMusicIcon" class="text-lg">🎵</span>
+<button id="mobileMusicMiniBtn" onclick="toggleMobileMusicDrawer()" aria-label="Open Music Player" class="hidden fixed bottom-4 right-4 z-[90] w-12 h-12 rounded-full bg-gradient-to-br from-[#d32f2f] via-[#ea580c] to-[#f57c00] text-white shadow-[0_4px_20px_rgba(211,47,47,0.4)] ring-2 ring-white/30 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95">
+  <span id="mobileMiniMusicIcon" class="flex items-center justify-center transition-transform duration-300">
+    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+    </svg>
+  </span>
 </button>
 
 <!-- Floating Music Player Widget Box (Hidden by default on Lock Screen, shown after unlock) -->
@@ -398,10 +402,19 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
       const btn = document.getElementById('audioPlayBtn');
       const badgeIcon = document.getElementById('songBadgeIcon');
       const tapHint = document.getElementById('songBadgeTapHint');
+      const miniIcon = document.getElementById('mobileMiniMusicIcon');
 
       if (btn) btn.innerHTML = playing ? PAUSE_SVG : PLAY_SVG;
       if (badgeIcon) badgeIcon.innerHTML = playing ? '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>' : '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
       if (tapHint) tapHint.innerHTML = playing ? 'Now<br>Playing ♪' : 'Tap to<br>Play ▶';
+      if (miniIcon) {
+        if (playing) {
+          miniIcon.classList.add('animate-spin');
+          miniIcon.style.animationDuration = '4s';
+        } else {
+          miniIcon.classList.remove('animate-spin');
+        }
+      }
       syncMusicBtnLabel();
     }
 
@@ -961,9 +974,15 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
       // Auto-show Floating Music Controls on theme unlock: Mini Pill on Mobile (< 640px), Full Widget on Desktop (>= 640px)
       const musicBox = document.getElementById('desktopMusicBox');
       const mobileMiniBtn = document.getElementById('mobileMusicMiniBtn');
+      if (mobileMiniBtn) {
+        if (templateId === 'raksha_bandhan_festive_light' || data.template_id === 'raksha_bandhan_festive_light') {
+          mobileMiniBtn.className = 'fixed bottom-4 right-4 z-[90] w-12 h-12 rounded-full bg-gradient-to-br from-[#d32f2f] via-[#ea580c] to-[#f57c00] text-white shadow-[0_4px_20px_rgba(211,47,47,0.4)] ring-2 ring-white/30 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95';
+        } else {
+          mobileMiniBtn.className = 'fixed bottom-4 right-4 z-[90] w-12 h-12 rounded-full bg-gradient-to-tr from-[#eac34a] via-[#ffe088] to-[#cca830] text-[#241a00] border-2 border-[#151215] shadow-[0_0_20px_rgba(234,195,74,0.6)] flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95';
+        }
+      }
       if (window.innerWidth < 640) {
         if (mobileMiniBtn) {
-          mobileMiniBtn.className = mobileMiniBtn.className.replace(/\bhidden\b/g, '').trim();
           mobileMiniBtn.style.display = 'flex';
         }
         if (musicBox) {
