@@ -101,7 +101,8 @@ try {
                 'Content-Type: application/json',
                 'User-Agent: GiftReveal/1.0'
             ]);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 8);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             $rzpResp = curl_exec($ch);
             $rzpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
