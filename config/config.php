@@ -5,6 +5,10 @@
 // defined in config/config.env.php which is NOT committed to Git.
 // ─────────────────────────────────────────────────────────────────────────────
 
+if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+    @session_start();
+}
+
 if (!headers_sent()) {
     header("X-Robots-Tag: noindex, nofollow", true);
 }
