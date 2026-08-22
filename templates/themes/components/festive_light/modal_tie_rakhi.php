@@ -125,53 +125,53 @@
       </div>
 
       <!-- STEP 4: ROYAL SHAGUN LIFAFA & SCRATCH CARD -->
-      <div id="rakhiStep4" class="hidden flex-col space-y-4 max-w-2xl mx-auto py-1">
+      <div id="rakhiStep4" class="hidden flex-col space-y-3.5 max-w-xl mx-auto py-1">
         <div class="text-center space-y-0.5">
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffdcc5] text-[#934b00] text-[10px] font-bold uppercase tracking-wider">
             <span>🧧</span> <span>Royal Shagun Lifafa</span>
           </span>
-          <h4 class="text-xl sm:text-2xl font-bold font-serif text-[#4a232f]">Your Shagun Letter &amp; Gift Voucher</h4>
+          <h4 class="text-lg sm:text-xl font-bold font-serif text-[#4a232f]">Your Shagun Letter &amp; Gift Voucher</h4>
         </div>
 
         <!-- Two Column Card: Note & Scratch Card -->
-        <div class="flex flex-col md:flex-row bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-[#e8d5c4]">
+        <div class="flex flex-col md:flex-row bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-[#e8d5c4]">
           <!-- Left Column: Shagun Letter Quote -->
-          <div class="flex-1 p-5 sm:p-6 bg-white border-b md:border-b-0 md:border-r border-[#e8d5c4] flex flex-col justify-between space-y-4">
+          <div class="flex-1 p-4 sm:p-5 bg-white border-b md:border-b-0 md:border-r border-[#e8d5c4] flex flex-col justify-between space-y-3">
             <div>
-              <span class="text-3xl text-[#d4af37] block mb-2 opacity-75">❝</span>
-              <p class="text-sm sm:text-base text-[#4a232f] italic font-serif leading-relaxed">
+              <span class="text-2xl text-[#d4af37] block mb-1 opacity-75">❝</span>
+              <p class="text-xs sm:text-sm text-[#4a232f] italic font-serif leading-relaxed">
                 "<?= htmlspecialchars($loveNoteText ?: "mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧") ?>"
               </p>
             </div>
             <div class="text-right border-t border-[#f4e5d8] pt-2">
-              <span class="text-xs font-bold text-[#934b00] uppercase tracking-wider block">— With lots of love,</span>
-              <span class="text-sm font-bold font-serif text-[#4a232f]"><?= htmlspecialchars($buyerName ?: 'Brother') ?></span>
+              <span class="text-[10px] font-bold text-[#934b00] uppercase tracking-wider block">— With lots of love,</span>
+              <span class="text-xs font-bold font-serif text-[#4a232f]"><?= htmlspecialchars($buyerName ?: 'Brother') ?></span>
             </div>
           </div>
 
           <!-- Right Column: Interactive Gold Scratch Card -->
-          <div class="flex-1 p-5 sm:p-6 bg-[#fcf6f0] flex flex-col items-center text-center justify-center space-y-3">
+          <div class="flex-1 p-4 sm:p-5 bg-[#fcf6f0] flex flex-col items-center text-center justify-center space-y-2.5">
             <div class="text-center">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-[#e5534b] block">Amazon Gift Voucher</span>
-              <h5 class="text-base font-bold font-serif text-[#4a232f]">Scratch to Reveal Code 🪙</h5>
+              <span class="text-[9px] font-bold uppercase tracking-wider text-[#e5534b] block">Amazon Gift Voucher</span>
+              <h5 class="text-sm font-bold font-serif text-[#4a232f]">Scratch to Reveal Code 🪙</h5>
             </div>
 
             <!-- Scratch Card Area -->
-            <div class="relative w-full max-w-[260px] h-32 rounded-2xl overflow-hidden shadow-inner border-2 border-[#d4af37] bg-[#1a0f0a] flex flex-col items-center justify-center select-none">
+            <div class="relative w-full max-w-[240px] h-28 rounded-2xl overflow-hidden shadow-inner border-2 border-[#d4af37] bg-[#1a0f0a] flex flex-col items-center justify-center select-none">
               <!-- Revealed Content Behind Scratch Canvas -->
-              <div class="p-3 text-center space-y-1">
-                <span class="text-[10px] font-bold text-[#eac34a] uppercase block">₹500 Amazon Voucher</span>
-                <strong class="text-base font-mono font-black text-white block tracking-widest bg-black/50 px-3 py-1 rounded-lg border border-[#eac34a]/40 select-all">
+              <div class="p-2 text-center space-y-0.5">
+                <span class="text-[9px] font-bold text-[#eac34a] uppercase block">₹500 Amazon Voucher</span>
+                <strong class="text-sm font-mono font-black text-white block tracking-widest bg-black/50 px-2.5 py-0.5 rounded border border-[#eac34a]/40 select-all">
                   <?= htmlspecialchars($voucherCode ?: 'AMZ-RAKHI-2026') ?>
                 </strong>
-                <span class="text-[9px] text-gray-300 block">Redeem directly on Amazon</span>
+                <span class="text-[8px] text-gray-300 block">Redeem directly on Amazon</span>
               </div>
 
               <!-- HTML5 Scratch Canvas Layer -->
               <canvas id="modalScratchCanvas" class="absolute inset-0 w-full h-full cursor-pointer z-10 touch-none" style="touch-action: none;"></canvas>
             </div>
 
-            <button type="button" onclick="navigator.clipboard.writeText('<?= htmlspecialchars($voucherCode ?: 'AMZ-RAKHI-2026') ?>'); alert('Voucher Code Copied! 🎉'); confetti({ particleCount: 80, spread: 60 });" class="px-4 py-1.5 bg-[#e5534b] hover:bg-[#d32f2f] text-white text-xs font-bold uppercase rounded-full shadow-sm transition-all cursor-pointer">
+            <button type="button" onclick="navigator.clipboard.writeText('<?= htmlspecialchars($voucherCode ?: 'AMZ-RAKHI-2026') ?>'); alert('Voucher Code Copied! 🎉'); confetti({ particleCount: 80, spread: 60 });" class="px-3.5 py-1 bg-[#e5534b] hover:bg-[#d32f2f] text-white text-[11px] font-bold uppercase rounded-full shadow-sm transition-all cursor-pointer">
               Copy Voucher Code 📋
             </button>
           </div>
@@ -179,30 +179,27 @@
       </div>
 
       <!-- STEP 5: THERE'S MORE TO CELEBRATE (KEEPSAKES & FINISH) -->
-      <div id="rakhiStep5" class="hidden space-y-5 text-center max-w-xl mx-auto py-2">
-        <div class="w-20 h-20 mx-auto rounded-full bg-[#ffdcc5] text-[#934b00] flex items-center justify-center text-3xl shadow-xl relative">
+      <div id="rakhiStep5" class="hidden flex-col items-center space-y-3.5 max-w-md mx-auto py-1 text-center">
+        <div class="w-14 h-14 mx-auto rounded-full bg-[#ffdcc5] text-[#934b00] flex items-center justify-center text-2xl shadow-md relative">
           🎁
-          <div class="absolute -top-1 -right-1 w-7 h-7 bg-[#0061a5] text-white rounded-full flex items-center justify-center text-xs font-bold shadow-md">★</div>
+          <div class="absolute -top-1 -right-1 w-5 h-5 bg-[#0061a5] text-white rounded-full flex items-center justify-center text-[9px] font-bold shadow-sm">★</div>
         </div>
 
         <div class="space-y-1">
-          <h4 class="text-2xl sm:text-3xl font-bold font-serif text-[#4a232f]">There's more to celebrate!</h4>
-          <p class="text-xs sm:text-sm text-[#7a5c68] max-w-md mx-auto leading-relaxed">
+          <h4 class="text-xl sm:text-2xl font-bold font-serif text-[#4a232f]">There's more to celebrate!</h4>
+          <p class="text-xs text-[#7a5c68] max-w-xs mx-auto leading-relaxed">
             Download your high-definition Printable Keepsakes or explore the complete childhood memory gallery!
           </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-          <button type="button" onclick="downloadWallKeepsakePoster()" class="py-3 px-5 bg-gradient-to-r from-[#d4af37] via-[#f7e6a6] to-[#b89343] text-[#241a00] font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow hover:scale-105 transition-all cursor-pointer flex items-center justify-center gap-2">
+        <div class="w-full flex flex-col gap-2 pt-1">
+          <button type="button" onclick="downloadWallKeepsakePoster()" class="w-full py-3 px-4 bg-gradient-to-r from-[#d4af37] via-[#f7e6a6] to-[#b89343] text-[#241a00] font-extrabold text-xs uppercase tracking-wider rounded-xl shadow hover:scale-[1.02] transition-all cursor-pointer flex items-center justify-center gap-2">
             <span>🖼️</span> <span>Wall Poster (300 DPI)</span>
           </button>
-          <button type="button" onclick="downloadSiblingPhotobookPDF()" class="py-3 px-5 bg-gradient-to-r from-[#10b981] via-[#34d399] to-[#059669] text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow hover:scale-105 transition-all cursor-pointer flex items-center justify-center gap-2">
+          <button type="button" onclick="downloadSiblingPhotobookPDF()" class="w-full py-3 px-4 bg-gradient-to-r from-[#10b981] via-[#34d399] to-[#059669] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow hover:scale-[1.02] transition-all cursor-pointer flex items-center justify-center gap-2">
             <span>📖</span> <span>Keepsake Book (PDF)</span>
           </button>
-        </div>
-
-        <div class="pt-2">
-          <button type="button" onclick="closeFestiveRakhiModal()" class="w-full py-3.5 px-6 bg-[#934b00] hover:bg-[#7a3e00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer">
+          <button type="button" onclick="closeFestiveRakhiModal()" class="w-full py-3 px-4 bg-[#934b00] hover:bg-[#7a3e00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow hover:shadow-md transition-all cursor-pointer mt-1">
             Explore Full Gift Experience ➔
           </button>
         </div>
