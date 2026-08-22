@@ -2307,22 +2307,22 @@ $showLogin = !$showDashboard && !$showHub;
 
     function generateWhatsAppShareUrl(templateId, partnerName, shareUrl) {
       const pName = (partnerName || '').trim();
-      const nameSnippet = pName ? ` for ${pName}` : '';
+      const nameSnippet = pName ? ` *${pName}*` : '';
       let msg = '';
       const tid = (templateId || '').toLowerCase();
       
       if (tid.includes('rakhi') || tid.includes('raksha')) {
-        msg = `I created a special Raksha Bandhan surprise website${nameSnippet}! 🪔🧵 Open your gift link here: ${shareUrl}`;
+        msg = `✨ Pyari Behen${nameSnippet}, maine tumhare liye ek special Raksha Bandhan surprise website banayi hai! 🪔🧵\n\nPerform virtual Rakhi ceremony, unroll childhood memories & unlock your gift with our childhood secret word! 🎁\n\n👉 Tap to open your gift: ${shareUrl}`;
       } else if (tid.includes('birthday')) {
-        msg = `I created a special Birthday surprise website${nameSnippet}! 🎂🎁 Open your gift link here: ${shareUrl}`;
-      } else if (tid.includes('friendship') || tid.includes('friend')) {
-        msg = `I created a special Friendship memory website${nameSnippet}! 🌟✨ Open your gift link here: ${shareUrl}`;
-      } else if (tid.includes('proposal') || tid.includes('propose')) {
-        msg = `I created a special Proposal surprise website${nameSnippet}! 💍💖 Open your gift link here: ${shareUrl}`;
+        msg = `🎂 Happy Birthday${nameSnippet}! Maine tumhare liye ek special Birthday surprise website banayi hai! 🎉🎁\n\nCut the virtual cake, view our favorite moments & unlock your gifts! 🎈\n\n👉 Tap to open: ${shareUrl}`;
       } else if (tid.includes('anniversary')) {
-        msg = `I created a special Anniversary surprise website${nameSnippet}! 💕✨ Open your gift link here: ${shareUrl}`;
+        msg = `💕 Happy Anniversary${nameSnippet}! Maine humare is special din ke liye ek romantic surprise banaya hai! ✨🥂\n\nRelive our sweetest milestones, read sealed love letters & celebrate our journey! 💖\n\n👉 Tap to open: ${shareUrl}`;
+      } else if (tid.includes('proposal') || tid.includes('propose')) {
+        msg = `💍${nameSnippet}, will you marry me? Maine tumhare liye ek special proposal website banayi hai! 💖✨\n\n👉 Tap to unlock our story: ${shareUrl}`;
+      } else if (tid.includes('distance')) {
+        msg = `✈️ Distance means so little when you mean so much!${nameSnippet}, open this special long-distance keepsake! 💌🌍\n\n👉 Tap to open: ${shareUrl}`;
       } else {
-        msg = `I created a secret romantic surprise${nameSnippet}! ❤️ Open your gift link here: ${shareUrl}`;
+        msg = `✨ I created a special secret surprise${nameSnippet}! 🎁\n\n👉 Tap to unlock your gift: ${shareUrl}`;
       }
 
       return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;

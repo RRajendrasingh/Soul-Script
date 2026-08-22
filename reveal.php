@@ -72,12 +72,52 @@ if (!empty($initialLockData['page_id'])) {
 <html lang="en">
 <head>
   <?php 
-  $pageTitle = 'A Secret Surprise For You ✨ — ' . APP_NAME;
+  $tid = strtolower($initialLockData['template_id'] ?? '');
+  $pName = htmlspecialchars($initialLockData['partner_name'] ?? 'You');
+  $bName = htmlspecialchars($initialLockData['buyer_name'] ?? 'Someone Special');
+  $fullShareUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+  if (strpos($tid, 'rakhi') !== false || strpos($tid, 'raksha') !== false) {
+      $pageTitle = "A Secret Raksha Bandhan Surprise for {$pName} 🪔🧵 — " . (defined('APP_NAME') ? APP_NAME : 'GiftReveal');
+      $ogTitle = "A Secret Raksha Bandhan Surprise for {$pName} 🪔🧵";
+      $ogDesc = "Perform sacred Rakhi rituals, unroll 3D childhood memories & unlock your gift with our childhood secret!";
+  } elseif (strpos($tid, 'birthday') !== false) {
+      $pageTitle = "Happy Birthday {$pName}! 🎂🎁 — " . (defined('APP_NAME') ? APP_NAME : 'GiftReveal');
+      $ogTitle = "Happy Birthday {$pName}! 🎂🎉";
+      $ogDesc = "A magical birthday surprise created with love by {$bName}! Cut the virtual cake and view memories.";
+  } elseif (strpos($tid, 'anniversary') !== false) {
+      $pageTitle = "Happy Anniversary {$pName}! 💕✨ — " . (defined('APP_NAME') ? APP_NAME : 'GiftReveal');
+      $ogTitle = "A Romantic Anniversary Surprise for {$pName} 💕✨";
+      $ogDesc = "Reliving our love story milestones, sealed love letters, and romantic memories.";
+  } elseif (strpos($tid, 'proposal') !== false || strpos($tid, 'propose') !== false) {
+      $pageTitle = "A Magical Proposal Surprise for {$pName} 💍💖 — " . (defined('APP_NAME') ? APP_NAME : 'GiftReveal');
+      $ogTitle = "A Magical Proposal Surprise for {$pName} 💍💖";
+      $ogDesc = "A private memory portal asking the most special question.";
+  } elseif (strpos($tid, 'distance') !== false) {
+      $pageTitle = "A Special Long-Distance Keepsake for {$pName} ✈️💌 — " . (defined('APP_NAME') ? APP_NAME : 'GiftReveal');
+      $ogTitle = "Special Long-Distance Keepsake for {$pName} ✈️💌";
+      $ogDesc = "Distance means so little when you mean so much!";
+  } else {
+      $pageTitle = "A Secret Surprise For {$pName} ✨ — " . (defined('APP_NAME') ? APP_NAME : 'GiftReveal');
+      $ogTitle = "A Secret Surprise For {$pName} ✨";
+      $ogDesc = "A private digital gift created with love by {$bName}. Unlock with secret hint!";
+  }
   require_once __DIR__ . '/includes/head.php'; 
   ?>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="<?= $ogTitle ?>">
+  <meta property="og:description" content="<?= $ogDesc ?>">
+  <meta property="og:url" content="<?= htmlspecialchars($fullShareUrl) ?>">
+  <?php if (!empty($initialLockData['receiver_photo'])): ?>
+    <meta property="og:image" content="<?= htmlspecialchars($initialLockData['receiver_photo']) ?>">
+  <?php endif; ?>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<?= $ogTitle ?>">
+  <meta name="twitter:description" content="<?= $ogDesc ?>">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
 <body class="bg-[#151215] text-[#e8e0e3] font-sans min-h-screen relative overflow-x-hidden">
 
   <style>
@@ -1273,6 +1313,34 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
         modal.classList.remove('flex');
         document.body.style.overflow = '';
       }
+    }
+
+    function shareGiftPageWhatsApp() {
+      const tid = '<?= addslashes(strtolower($initialLockData['template_id'] ?? '')) ?>';
+      const pName = '<?= addslashes($initialLockData['partner_name'] ?? '') ?>';
+      const nameSnippet = pName ? ` *${pName}*` : '';
+      const url = window.location.href;
+      let msg = '';
+
+      if (tid.includes('rakhi') || tid.includes('raksha')) {
+        msg = `✨ Pyari Behen${nameSnippet}, maine tumhare liye ek special Raksha Bandhan surprise website banayi hai! 🪔🧵\n\nPerform virtual Rakhi ceremony, unroll childhood memories & unlock your gift with our childhood secret word! 🎁\n\n👉 Tap to open your gift: ${url}`;
+      } else if (tid.includes('birthday')) {
+        msg = `🎂 Happy Birthday${nameSnippet}! Maine tumhare liye ek special Birthday surprise website banayi hai! 🎉🎁\n\nCut the virtual cake, view our favorite moments & unlock your gifts! 🎈\n\n👉 Tap to open: ${url}`;
+      } else if (tid.includes('anniversary')) {
+        msg = `💕 Happy Anniversary${nameSnippet}! Maine humare is special din ke liye ek romantic surprise banaya hai! ✨🥂\n\nRelive our sweetest milestones, read sealed love letters & celebrate our journey! 💖\n\n👉 Tap to open: ${url}`;
+      } else if (tid.includes('proposal') || tid.includes('propose')) {
+        msg = `💍${nameSnippet}, will you marry me? Maine tumhare liye ek special proposal website banayi hai! 💖✨\n\n👉 Tap to unlock our story: ${url}`;
+      } else if (tid.includes('distance')) {
+        msg = `✈️ Distance means so little when you mean so much!${nameSnippet}, open this special long-distance keepsake! 💌🌍\n\n👉 Tap to open: ${url}`;
+      } else {
+        msg = `✨ I created a special secret surprise${nameSnippet}! 🎁\n\n👉 Tap to unlock your gift: ${url}`;
+      }
+
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function shareFestivePage() {
+      shareGiftPageWhatsApp();
     }
 
     let rakhiRitualProgress = { tilak: false, diya: false, rakhi: false, selectedDesign: 'gold_zardosi' };
