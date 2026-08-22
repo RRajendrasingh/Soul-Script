@@ -1213,6 +1213,9 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
 
     function openLetterModal(title, category, text) {
       const modal = document.getElementById('letterModal');
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) musicBox.style.display = 'none';
+
       document.getElementById('letterModalTitle').innerText = title;
       document.getElementById('letterModalCat').innerText = category;
       document.getElementById('letterModalBody').innerHTML = text;
@@ -1221,14 +1224,19 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
         confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
       }
     }
 
     function closeLetterModal() {
       const modal = document.getElementById('letterModal');
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) musicBox.style.display = 'flex';
+
       if (modal) {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        document.body.style.overflow = '';
       }
     }
 
@@ -1242,20 +1250,28 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
     }
 
     function openLightbox(url) {
-      const modal = document.getElementById('imageLightboxModal');
-      const img = document.getElementById('lightboxImg');
+      const modal = document.getElementById('imageLightboxModal') || document.getElementById('rbLightboxModal');
+      const img = document.getElementById('lightboxImg') || document.getElementById('rbLightboxImg');
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) musicBox.style.display = 'none';
+
       if (modal && img) {
         img.src = url;
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
       }
     }
 
     function closeLightbox() {
-      const modal = document.getElementById('imageLightboxModal');
+      const modal = document.getElementById('imageLightboxModal') || document.getElementById('rbLightboxModal');
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) musicBox.style.display = 'flex';
+
       if (modal) {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        document.body.style.overflow = '';
       }
     }
 
@@ -1302,6 +1318,9 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
 
     function openCeremonyModal() {
       const modal = document.getElementById('rakhiCeremonyModal');
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) musicBox.style.display = 'none';
+
       if(modal) {
         modal.classList.remove('hidden');
         // trigger reflow
@@ -1314,6 +1333,9 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
 
     function closeCeremonyModal() {
       const modal = document.getElementById('rakhiCeremonyModal');
+      const musicBox = document.getElementById('desktopMusicBox');
+      if (musicBox) musicBox.style.display = 'flex';
+
       if(modal) {
         modal.classList.remove('opacity-100');
         modal.classList.add('opacity-0');
@@ -2352,7 +2374,7 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
   </div>
 
   <!-- Letter Reading Modal -->
-  <div id="letterModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6 flex items-start sm:items-center justify-center py-8 sm:py-12" onclick="closeLetterModal()">
+  <div id="letterModal" class="fixed inset-0 z-[100] bg-[#100d10]/90 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6 flex items-start sm:items-center justify-center py-8 sm:py-12" onclick="closeLetterModal()">
     <div class="relative max-w-xl w-full bg-[#221f21] p-6 sm:p-10 rounded-3xl border border-[#eac34a]/50 shadow-2xl space-y-6 text-center my-auto max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
       <span id="letterModalCat" class="text-[10px] uppercase font-bold text-[#eac34a] bg-[#3b1e3b] px-3 py-1 rounded-full border border-[#e4b9df]/20"></span>
       <h2 id="letterModalTitle" class="text-2xl font-bold font-serif text-[#e8e0e3]"></h2>
@@ -2368,7 +2390,7 @@ $headerBgClass = 'bg-[#151215]/95 text-[#e8e0e3] border-b border-[#4d444b]/30';
   </div>
 
   <!-- Image Lightbox Modal -->
-  <div id="imageLightboxModal" class="fixed inset-0 z-50 bg-[#100d10]/90 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox()">
+  <div id="imageLightboxModal" class="fixed inset-0 z-[100] bg-[#100d10]/90 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox()">
     <div class="relative max-w-3xl w-full max-h-[85vh] flex items-center justify-center" onclick="event.stopPropagation()">
       <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-[#e8e0e3] hover:text-[#eac34a] p-2 cursor-pointer">
         <i data-lucide="x" class="w-6 h-6"></i>
