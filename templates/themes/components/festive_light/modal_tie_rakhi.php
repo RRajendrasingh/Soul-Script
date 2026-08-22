@@ -69,7 +69,7 @@
         <!-- Bare Wrist Interactive Stage -->
         <div id="rakhiInteractionArea" class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 sm:border-4 border-[#d4af37]/40 bg-white touch-none">
           <!-- 100% Bare Wrist Image (Without any Rakhi) -->
-          <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida/AP1WRLusJMjZjDNpL3tdMMUcxKwtBHZB1m0ulhgHVwD_ZG1RiPZHPkFWvQoviBGySth2IRJP7U8_ZRh173Q5rGPCoj-rQdxS98HK8HPLgOlTLKwzQAhDI0_xc9qhBja4ry7qP8YfM4XASkHMHYXXaPwtRdt4kXdoK3LZq_y_0LhAk3SPlD-kg9VH2_C68AFubCsBZD0A7RPNdjgemarba2C-3vuMw7lto7kP_MhlKWD5TQgZah-7MmGkrvn-oNw" alt="Brother's Bare Wrist" class="w-full h-full object-cover select-none pointer-events-none">
+          <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeUqO2t1o0sPZLFq_QHL05QMQiy-hGG27aSMXTMcJgF9UtH9PydzEAcoQvjVf7j6EQ8qN0baAB3AXk-wCpKqT_rnYHR4QgQUZOoxUYqf1nNsrNt5FXSFyBjmkgXyHm5ee7FqIKvYsY2bt4tb8y3OjjRIj82i5qQgn_17oeC7dZVvSlckOUFoW_wNPtbKmov8ta0VlxxyeJeIB507DxsErD7CVlz90EvF3xdO06rwHv_9dFeiwAFE8i" alt="Brother's Bare Wrist" class="w-full h-full object-cover select-none pointer-events-none">
           
           <!-- Dashed Target Zone Overlay -->
           <div id="rakhiTargetZone" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-20 border-2 border-dashed border-white/90 bg-black/20 rounded-2xl flex flex-col items-center justify-center backdrop-blur-xs transition-all pointer-events-none">
@@ -78,7 +78,7 @@
 
           <!-- Draggable Rakhi Thread -->
           <div id="draggableRakhi" class="absolute bottom-3 left-1/2 -translate-x-1/2 w-28 h-28 cursor-grab active:cursor-grabbing z-20 touch-none" style="touch-action: none;">
-            <img id="draggableRakhiImg" src="https://lh3.googleusercontent.com/aida/AP1WRLvbnd-5weRLOAwdfA-O5tILrD1hX7niryxFWKAlZF9ArzpuKowuWj2utypXaVQ4dWHgV1LFWoevzqQlZbJe5YKZaaqOuordVByiZMf50Aq3hu55KzCryJbWIfxjOQwKofotmSg9UYTdNB2vv7hlIweT2fJuGE6piTSeX1vXMHny0MU6CGc1obbTH5Fixj6WZXIhuDaxfT3IhM5zHSyPawlN4WX5Mgbu8HgW8GdJj2LzLztHDIqZRRuleXA" alt="Rakhi" class="w-full h-full object-contain filter drop-shadow-xl select-none pointer-events-none">
+            <img id="draggableRakhiImg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrBgMcQPiJpH7ajGLFwJGVwRa8i1Cni6zU2PfdkIGO1Z52qnUapLQhEUB8IKS0u8LsO0x805E_mFTMaNxfNXiQGF5D9iEMg5ZFASInorsWjA8pMK8Lnt0I8jabUevnMHQAovnjP55h75mbDpmHRXuv5Mop7xu2TuWvXI-USFO8NdpfjFRy1d44pA0WFRFxbFRpYMqN_FHoNxjNn32vmJcW31a_RWHGrmth_-XXvYRw6uGgK-SS_5sT" alt="Rakhi" class="w-full h-full object-contain filter drop-shadow-xl select-none pointer-events-none">
           </div>
         </div>
 
@@ -109,7 +109,7 @@
 
         <!-- Tied Wrist Image Container -->
         <div class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 sm:border-4 border-[#d4af37]/60 bg-white">
-          <img src="https://lh3.googleusercontent.com/aida/AEtjO1V9fsGQla1yqqkKaOKFChivC6eDTa-cQ8oIlYdIBLFJEKnfgk4jIIloFOR-WWEueSaUggxUCWvAsCoVYN2NSwulJpcT_YMIIchS796mQCVkv643jHSQplN1cAsMlDHDg7-oXqdejXr9-_izXQG_gNVVqpKlMzFQwRTrGa8iLfFX2nJY3yHCcyNNNcEusroXtgSMNkvIwNKATz3RZyBsnU75OreOfCnZ9xvweQ5AYbnStlot4vvdsGL4Dgs" alt="Rakhi Tied Successfully" class="w-full h-full object-cover">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZfsICxK34oixmN1AZRizpBM2bZC5BAB_XYhQLhxKaZRKgNxEv8X9v3Z4lzEedQVni4JuXg6LECezawWUPThbfyUKDAnCX14tBlz_SHV5Z0nHTlrYpNX81aS2JbA1-fREPTFZBGfA4Oin9IzGHb5PZxUinsPuL6pU81_ZnpEIrbooze4l1aomWnjr8FWAmwYUcQR92cij0amxmT3sNwf3Uq4XO2ot9yJ_JaQvk6cQiDvzzRP2Mvcj0" alt="Rakhi Tied Successfully" class="w-full h-full object-cover">
           
           <div class="absolute top-3 right-3 px-3 py-1 bg-[#1f4e27]/90 border border-[#52b76b] text-[#98ecaa] font-bold text-[10px] uppercase rounded-full shadow-lg flex items-center gap-1 backdrop-blur-sm">
             <span>✓</span> <span>Tied with Love</span>
