@@ -69,7 +69,7 @@
         <!-- Bare Wrist Interactive Stage -->
         <div id="rakhiInteractionArea" class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-[#d4af37]/60 bg-[#fff9f5] touch-none">
           <!-- 100% Bare Wrist Image (Stitch Exact Asset) -->
-          <img id="wristBgImage" src="<?= APP_URL ?>/assets/images/rakhi_wrist_bare.jpg" alt="Brother's Bare Wrist" class="w-full h-full object-cover select-none pointer-events-none" loading="eager" decoding="sync">
+          <img id="wristBgImage" src="<?= APP_URL ?>/assets/images/rakhi_wrist_bare.jpg" alt="Brother's Bare Wrist" class="absolute inset-0 w-full h-full object-cover select-none pointer-events-none" loading="eager" decoding="sync">
           
           <!-- Auspicious Target Zone Overlay -->
           <div id="rakhiTargetZone" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-24 border-2 border-dashed border-[#d4af37] bg-white/40 rounded-2xl flex flex-col items-center justify-center backdrop-blur-[2px] transition-all pointer-events-none shadow-inner">
@@ -113,7 +113,7 @@
 
         <!-- Tied Wrist Image Container (Exact Stitch Design) -->
         <div class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-[#d4af37]/60 bg-[#fff9f5]">
-          <img id="tiedWristBgImage" src="<?= APP_URL ?>/assets/images/rakhi_wrist_tied.jpg" alt="Rakhi Tied Successfully on Wrist" class="w-full h-full object-cover select-none" loading="eager" decoding="sync">
+          <img id="tiedWristBgImage" src="<?= APP_URL ?>/assets/images/rakhi_wrist_tied.jpg" alt="Rakhi Tied Successfully on Wrist" class="absolute inset-0 w-full h-full object-cover select-none" loading="eager" decoding="sync">
           
           <div class="absolute top-3 right-3 px-3 py-1 bg-[#1f4e27]/90 border border-[#52b76b] text-[#98ecaa] font-bold text-[10px] uppercase rounded-full shadow-lg flex items-center gap-1 backdrop-blur-sm">
             <span>✓</span> <span>Tied with Love</span>
