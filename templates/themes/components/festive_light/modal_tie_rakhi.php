@@ -31,7 +31,7 @@
       <!-- STEP 1: PREPARE SACRED THALI & SELECT RAKHI -->
       <div id="rakhiStep1" class="flex flex-col items-center text-center space-y-4 max-w-md mx-auto py-1 w-full">
         <?php 
-        $heroPhoto = !empty($receiver_photo) ? resolveMediaUrl($receiver_photo) : (!empty($galleryMedia[0]) ? (is_array($galleryMedia[0]) ? resolveMediaUrl($galleryMedia[0]['file_path'] ?? '') : resolveMediaUrl($galleryMedia[0])) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZfsICxK34oixmN1AZRizpBM2bZC5BAB_XYhQLhxKaZRKgNxEv8X9v3Z4lzEedQVni4JuXg6LECezawWUPThbfyUKDAnCX14tBlz_SHV5Z0nHTlrYpNX81aS2JbA1-fREPTFZBGfA4Oin9IzGHb5PZxUinsPuL6pU81_ZnpEIrbooze4l1aomWnjr8FWAmwYUcQR92cij0amxmT3sNwf3Uq4XO2ot9yJ_JaQvk6cQiDvzzRP2Mvcj0');
+        $heroPhoto = !empty($receiverPhoto) ? resolveMediaUrl($receiverPhoto) : (!empty($cleanReceiverPhoto) ? $cleanReceiverPhoto : (!empty($galleryMedia[0]) ? (is_array($galleryMedia[0]) ? resolveMediaUrl($galleryMedia[0]['file_path'] ?? '') : resolveMediaUrl($galleryMedia[0])) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZfsICxK34oixmN1AZRizpBM2bZC5BAB_XYhQLhxKaZRKgNxEv8X9v3Z4lzEedQVni4JuXg6LECezawWUPThbfyUKDAnCX14tBlz_SHV5Z0nHTlrYpNX81aS2JbA1-fREPTFZBGfA4Oin9IzGHb5PZxUinsPuL6pU81_ZnpEIrbooze4l1aomWnjr8FWAmwYUcQR92cij0amxmT3sNwf3Uq4XO2ot9yJ_JaQvk6cQiDvzzRP2Mvcj0'));
         ?>
         <div class="w-36 h-36 sm:w-44 sm:h-44 mx-auto rounded-full bg-white border-4 border-[#d4af37]/60 shadow-xl relative overflow-hidden flex items-center justify-center p-1 shrink-0">
           <img src="<?= htmlspecialchars($heroPhoto) ?>" alt="Sibling Memory" class="w-full h-full object-cover rounded-full">
