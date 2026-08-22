@@ -9,7 +9,7 @@ module.exports = defineConfig({
   reporter: [['html', { open: 'never' }], ['list']],
   timeout: 45000,
   use: {
-    baseURL: process.env.BASE_URL || 'https://digitalyogi24.com',
+    baseURL: process.env.BASE_URL || 'https://giftreveal.in',
     actionTimeout: 20000,
     navigationTimeout: 30000,
     trace: 'on-first-retry',
