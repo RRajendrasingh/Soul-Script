@@ -501,18 +501,31 @@ function closeFestiveRakhiModal() {
 
 function openStitchVirtualAlbumModal() {
   const container = document.getElementById('festive3DAlbumModalContainer');
+  const musicBox = document.getElementById('desktopMusicBox');
   if (container) {
+    if (container.parentElement !== document.body) {
+      document.body.appendChild(container);
+    }
     container.classList.remove('hidden');
     container.style.display = 'flex';
   }
+  if (musicBox) {
+    musicBox.style.display = 'none';
+  }
+  document.body.style.overflow = 'hidden';
 }
 
 function closeStitchVirtualAlbumModal() {
   const container = document.getElementById('festive3DAlbumModalContainer');
+  const musicBox = document.getElementById('desktopMusicBox');
   if (container) {
     container.classList.add('hidden');
     container.style.display = 'none';
   }
+  if (musicBox) {
+    musicBox.style.display = 'flex';
+  }
+  document.body.style.overflow = '';
 }
 function closeFestiveVirtualAlbumModal() {
   closeStitchVirtualAlbumModal();
