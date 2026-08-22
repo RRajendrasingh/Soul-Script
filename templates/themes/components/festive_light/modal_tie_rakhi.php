@@ -466,6 +466,12 @@ function updateCeremonyCompletedUI() {
   } catch(e) {}
 }
 
+window.openFestiveRakhiModal = openFestiveRakhiModal;
+window.closeFestiveRakhiModal = closeFestiveRakhiModal;
+window.navigateFestiveStep = navigateFestiveStep;
+window.triggerRakhiTiedSuccess = triggerRakhiTiedSuccess;
+window.selectRakhiOption = selectRakhiOption;
+
 // Auto-portal to body & check completion on ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
