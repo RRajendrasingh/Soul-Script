@@ -67,14 +67,16 @@
         </div>
 
         <!-- Bare Wrist Interactive Stage -->
-        <div id="rakhiInteractionArea" class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-[#d4af37]/40 bg-white touch-none">
+        <div id="rakhiInteractionArea" class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-[#d4af37]/60 bg-[#fff9f5] touch-none">
           <!-- 100% Bare Wrist Image (Without any Rakhi from Stitch) -->
-          <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1bkVHhFWMp4O7BQuZmSAS4Yz00ddghP2rKLOhaxDBbUY0chclAJVCDxSekCx0X_m1K8UkZ3rxMtC63opQomaNePkwvFBUD72yfxqMTtXoG3Fn-wgkbKA13OoGyPKkYaWRoNq4E7nliOnRFtnB-lvw8mcpGrkibtvM3Tz76Cw-yU-lEFkzIQBIEU-XLsmYQoX6-DEz_8qmixlmAjA1MdbWa46RvtmIp8g4HhcGwj2TwH3LWzGsOODa" alt="Brother's Bare Wrist" class="w-full h-full object-cover select-none pointer-events-none">
+          <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1bkVHhFWMp4O7BQuZmSAS4Yz00ddghP2rKLOhaxDBbUY0chclAJVCDxSekCx0X_m1K8UkZ3rxMtC63opQomaNePkwvFBUD72yfxqMTtXoG3Fn-wgkbKA13OoGyPKkYaWRoNq4E7nliOnRFtnB-lvw8mcpGrkibtvM3Tz76Cw-yU-lEFkzIQBIEU-XLsmYQoX6-DEz_8qmixlmAjA1MdbWa46RvtmIp8g4HhcGwj2TwH3LWzGsOODa" alt="Brother's Bare Wrist" class="w-full h-full object-cover select-none pointer-events-none" loading="eager" decoding="sync">
           
-          <!-- Dashed Target Zone Overlay -->
-          <div id="rakhiTargetZone" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-24 border-2 border-dashed border-white/90 bg-black/25 rounded-2xl flex flex-col items-center justify-center backdrop-blur-xs transition-all pointer-events-none">
-            <span class="text-[11px] font-extrabold text-white uppercase tracking-widest drop-shadow-md">Drag Rakhi Here</span>
-            <span class="text-[9px] text-white/80 mt-0.5">⬆️ Release to tie</span>
+          <!-- Auspicious Target Zone Overlay -->
+          <div id="rakhiTargetZone" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-24 border-2 border-dashed border-[#d4af37] bg-white/40 rounded-2xl flex flex-col items-center justify-center backdrop-blur-[2px] transition-all pointer-events-none shadow-inner">
+            <span class="text-[11px] font-black text-[#78350f] uppercase tracking-widest drop-shadow-sm flex items-center gap-1">
+              <span>🧵</span> <span>Drop Rakhi Here</span>
+            </span>
+            <span class="text-[9px] font-bold text-[#b45309] mt-0.5 animate-pulse">⬆️ Drag from below to tie</span>
           </div>
         </div>
 
@@ -85,19 +87,20 @@
               <span id="selectedRakhiIcon" class="text-xl">🏵️</span>
               <span id="selectedRakhiName" class="text-xs sm:text-sm font-bold text-[#4a232f]">Royal Kundan Rakhi</span>
             </div>
-            <button type="button" onclick="triggerRakhiTiedSuccess()" class="px-4 py-1.5 bg-gradient-to-r from-[#d32f2f] to-[#f57c00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow hover:opacity-90 active:scale-95 transition-all cursor-pointer">
-              Tie Now 🧵
+            <button type="button" onclick="performAutoTieAnimation()" class="px-4 py-1.5 bg-gradient-to-r from-[#d32f2f] to-[#f57c00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow hover:opacity-90 active:scale-95 transition-all cursor-pointer flex items-center gap-1">
+              <span>Tie Now</span> <span>🧵</span>
             </button>
           </div>
 
-          <!-- Bottom Draggable Tray Container -->
-          <div id="draggableRakhiTray" class="w-full h-20 bg-[#fcf6f0] border-2 border-dashed border-[#d4af37]/60 rounded-xl flex items-center justify-center relative overflow-visible cursor-grab active:cursor-grabbing select-none touch-none" style="touch-action: none;">
-            <div id="draggableRakhi" class="w-full h-full flex items-center justify-center pointer-events-none select-none">
-              <!-- SVG / Transparent PNG Content -->
-              <div id="rakhiVectorContainer" class="w-48 h-16 flex items-center justify-center"></div>
+          <!-- Bottom Draggable Tray Container (100% Fixed/Stationary Box) -->
+          <div id="draggableRakhiTray" class="w-full h-20 bg-[#fcf6f0] border-2 border-dashed border-[#d4af37]/60 rounded-xl flex items-center justify-center relative overflow-visible select-none touch-none" style="touch-action: none;">
+            <!-- Only the Rakhi itself is draggable / transformed -->
+            <div id="draggableRakhi" class="w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing select-none relative z-30 transition-transform" style="touch-action: none;">
+              <!-- SVG / Pure Clip-Art Content -->
+              <div id="rakhiVectorContainer" class="w-48 h-16 flex items-center justify-center pointer-events-none select-none"></div>
             </div>
           </div>
-          <span class="text-[10px] text-gray-500 text-center font-medium block">👆 Grab the Rakhi and drag upwards to the wrist</span>
+          <span class="text-[10px] text-gray-500 text-center font-medium block">👆 Grab the Rakhi sticker and drag upwards to the wrist</span>
         </div>
       </div>
 
@@ -109,8 +112,8 @@
         </div>
 
         <!-- Tied Wrist Image Container (Exact Stitch Design) -->
-        <div class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-[#d4af37]/60 bg-white">
-          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeUqO2t1o0sPZLFq_QHL05QMQiy-hGG27aSMXTMcJgF9UtH9PydzEAcoQvjVf7j6EQ8qN0baAB3AXk-wCpKqT_rnYHR4QgQUZOoxUYqf1nNsrNt5FXSFyBjmkgXyHm5ee7FqIKvYsY2bt4tb8y3OjjRIj82i5qQgn_17oeC7dZVvSlckOUFoW_wNPtbKmov8ta0VlxxyeJeIB507DxsErD7CVlz90EvF3xdO06rwHv_9dFeiwAFE8i" alt="Rakhi Tied Successfully on Wrist" class="w-full h-full object-cover">
+        <div class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-[#d4af37]/60 bg-[#fff9f5]">
+          <img id="tiedWristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeUqO2t1o0sPZLFq_QHL05QMQiy-hGG27aSMXTMcJgF9UtH9PydzEAcoQvjVf7j6EQ8qN0baAB3AXk-wCpKqT_rnYHR4QgQUZOoxUYqf1nNsrNt5FXSFyBjmkgXyHm5ee7FqIKvYsY2bt4tb8y3OjjRIj82i5qQgn_17oeC7dZVvSlckOUFoW_wNPtbKmov8ta0VlxxyeJeIB507DxsErD7CVlz90EvF3xdO06rwHv_9dFeiwAFE8i" alt="Rakhi Tied Successfully on Wrist" class="w-full h-full object-cover select-none" loading="eager" decoding="sync">
           
           <div class="absolute top-3 right-3 px-3 py-1 bg-[#1f4e27]/90 border border-[#52b76b] text-[#98ecaa] font-bold text-[10px] uppercase rounded-full shadow-lg flex items-center gap-1 backdrop-blur-sm">
             <span>✓</span> <span>Tied with Love</span>
@@ -333,7 +336,7 @@ function navigateFestiveStep(dir) {
       nextBtn.onclick = function() { navigateFestiveStep(1); };
     } else if (currentFestiveStep === 2) {
       nextBtn.innerText = 'TIE RAKHI 🧵';
-      nextBtn.onclick = function() { triggerRakhiTiedSuccess(); };
+      nextBtn.onclick = function() { performAutoTieAnimation(); };
     } else {
       nextBtn.innerText = 'NEXT ➔';
       nextBtn.onclick = function() { navigateFestiveStep(1); };
@@ -356,21 +359,53 @@ function navigateFestiveStep(dir) {
   }
 }
 
+let isTyingAnimating = false;
+
+function performAutoTieAnimation() {
+  if (isTyingAnimating) return;
+  isTyingAnimating = true;
+
+  const draggableRakhi = document.getElementById('draggableRakhi');
+  const targetEl = document.getElementById('rakhiTargetZone');
+  
+  if (draggableRakhi && targetEl) {
+    const targetRect = targetEl.getBoundingClientRect();
+    const rakhiRect = draggableRakhi.getBoundingClientRect();
+    const deltaY = targetRect.top + (targetRect.height / 2) - (rakhiRect.top + (rakhiRect.height / 2));
+    const deltaX = targetRect.left + (targetRect.width / 2) - (rakhiRect.left + (rakhiRect.width / 2));
+
+    draggableRakhi.style.transition = 'transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    draggableRakhi.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(1.15)`;
+
+    setTimeout(() => {
+      triggerRakhiTiedSuccess();
+      isTyingAnimating = false;
+      draggableRakhi.style.transition = '';
+      draggableRakhi.style.transform = 'translate3d(0, 0, 0)';
+    }, 600);
+  } else {
+    triggerRakhiTiedSuccess();
+    isTyingAnimating = false;
+  }
+}
+
 function triggerRakhiTiedSuccess() {
   navigateFestiveStep(1);
 }
 
 function initRakhiDragLogic() {
-  const tray = document.getElementById('draggableRakhiTray');
+  const draggableRakhi = document.getElementById('draggableRakhi');
   const targetEl = document.getElementById('rakhiTargetZone');
-  const container = document.getElementById('rakhiInteractionArea');
+  const tray = document.getElementById('draggableRakhiTray');
 
-  if (!tray || !targetEl || !container) return;
+  if (!draggableRakhi || !targetEl || !tray) return;
 
   let active = false;
   let currentX = 0, currentY = 0, initialX = 0, initialY = 0;
 
   function dragStart(e) {
+    if (isTyingAnimating) return;
+    draggableRakhi.style.transition = 'none';
     if (e.type === "touchstart") {
       initialX = e.touches[0].clientX;
       initialY = e.touches[0].clientY;
@@ -379,6 +414,7 @@ function initRakhiDragLogic() {
       initialY = e.clientY;
     }
     active = true;
+    draggableRakhi.style.zIndex = '50';
   }
 
   function dragEnd() {
@@ -386,12 +422,15 @@ function initRakhiDragLogic() {
     active = false;
 
     // Check if dragged upwards towards target zone
-    if (currentY < -80) {
-      triggerRakhiTiedSuccess();
+    if (currentY < -60) {
+      performAutoTieAnimation();
+    } else {
+      // Spring back smoothly into the fixed tray
+      draggableRakhi.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      draggableRakhi.style.transform = 'translate3d(0, 0, 0)';
+      currentX = 0;
+      currentY = 0;
     }
-    tray.style.transform = 'translate3d(0, 0, 0)';
-    currentX = 0;
-    currentY = 0;
   }
 
   function drag(e) {
@@ -404,15 +443,15 @@ function initRakhiDragLogic() {
       currentX = e.clientX - initialX;
       currentY = e.clientY - initialY;
     }
-    // Constrain horizontal and permit upward drag
-    currentY = Math.min(0, currentY);
-    tray.style.transform = `translate3d(${currentX * 0.4}px, ${currentY}px, 0)`;
+    // Allow free upward drag and slight horizontal drift
+    currentY = Math.min(10, currentY);
+    draggableRakhi.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(1.08)`;
   }
 
-  tray.addEventListener("touchstart", dragStart, {passive: false});
+  draggableRakhi.addEventListener("touchstart", dragStart, {passive: false});
   window.addEventListener("touchend", dragEnd, {passive: false});
   window.addEventListener("touchmove", drag, {passive: false});
-  tray.addEventListener("mousedown", dragStart, false);
+  draggableRakhi.addEventListener("mousedown", dragStart, false);
   window.addEventListener("mouseup", dragEnd, false);
   window.addEventListener("mousemove", drag, false);
 }
@@ -470,6 +509,7 @@ window.openFestiveRakhiModal = openFestiveRakhiModal;
 window.closeFestiveRakhiModal = closeFestiveRakhiModal;
 window.navigateFestiveStep = navigateFestiveStep;
 window.triggerRakhiTiedSuccess = triggerRakhiTiedSuccess;
+window.performAutoTieAnimation = performAutoTieAnimation;
 window.selectRakhiOption = selectRakhiOption;
 
 // Auto-portal to body & check completion on ready
