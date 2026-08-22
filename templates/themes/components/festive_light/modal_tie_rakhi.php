@@ -68,8 +68,8 @@
 
         <!-- Bare Wrist Interactive Stage -->
         <div id="rakhiInteractionArea" class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 sm:border-4 border-[#d4af37]/40 bg-white touch-none">
-          <!-- 100% Bare Wrist Image (Without any Rakhi) -->
-          <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeUqO2t1o0sPZLFq_QHL05QMQiy-hGG27aSMXTMcJgF9UtH9PydzEAcoQvjVf7j6EQ8qN0baAB3AXk-wCpKqT_rnYHR4QgQUZOoxUYqf1nNsrNt5FXSFyBjmkgXyHm5ee7FqIKvYsY2bt4tb8y3OjjRIj82i5qQgn_17oeC7dZVvSlckOUFoW_wNPtbKmov8ta0VlxxyeJeIB507DxsErD7CVlz90EvF3xdO06rwHv_9dFeiwAFE8i" alt="Brother's Bare Wrist" class="w-full h-full object-cover select-none pointer-events-none">
+          <!-- 100% Bare Wrist Image (Without any Rakhi from Stitch) -->
+          <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1bkVHhFWMp4O7BQuZmSAS4Yz00ddghP2rKLOhaxDBbUY0chclAJVCDxSekCx0X_m1K8UkZ3rxMtC63opQomaNePkwvFBUD72yfxqMTtXoG3Fn-wgkbKA13OoGyPKkYaWRoNq4E7nliOnRFtnB-lvw8mcpGrkibtvM3Tz76Cw-yU-lEFkzIQBIEU-XLsmYQoX6-DEz_8qmixlmAjA1MdbWa46RvtmIp8g4HhcGwj2TwH3LWzGsOODa" alt="Brother's Bare Wrist" class="w-full h-full object-cover select-none pointer-events-none">
           
           <!-- Dashed Target Zone Overlay -->
           <div id="rakhiTargetZone" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-20 border-2 border-dashed border-white/90 bg-black/20 rounded-2xl flex flex-col items-center justify-center backdrop-blur-xs transition-all pointer-events-none">
