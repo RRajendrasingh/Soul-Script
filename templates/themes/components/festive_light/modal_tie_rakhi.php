@@ -108,9 +108,9 @@
           <p class="text-xs text-[#7a5c68]">A sacred bond of love, protection, and lifelong joy.</p>
         </div>
 
-        <!-- Tied Wrist Image Container -->
+        <!-- Tied Wrist Image Container (Exact Stitch Design) -->
         <div class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-[#d4af37]/60 bg-white">
-          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZfsICxK34oixmN1AZRizpBM2bZC5BAB_XYhQLhxKaZRKgNxEv8X9v3Z4lzEedQVni4JuXg6LECezawWUPThbfyUKDAnCX14tBlz_SHV5Z0nHTlrYpNX81aS2JbA1-fREPTFZBGfA4Oin9IzGHb5PZxUinsPuL6pU81_ZnpEIrbooze4l1aomWnjr8FWAmwYUcQR92cij0amxmT3sNwf3Uq4XO2ot9yJ_JaQvk6cQiDvzzRP2Mvcj0" alt="Rakhi Tied Successfully" class="w-full h-full object-cover">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeUqO2t1o0sPZLFq_QHL05QMQiy-hGG27aSMXTMcJgF9UtH9PydzEAcoQvjVf7j6EQ8qN0baAB3AXk-wCpKqT_rnYHR4QgQUZOoxUYqf1nNsrNt5FXSFyBjmkgXyHm5ee7FqIKvYsY2bt4tb8y3OjjRIj82i5qQgn_17oeC7dZVvSlckOUFoW_wNPtbKmov8ta0VlxxyeJeIB507DxsErD7CVlz90EvF3xdO06rwHv_9dFeiwAFE8i" alt="Rakhi Tied Successfully on Wrist" class="w-full h-full object-cover">
           
           <div class="absolute top-3 right-3 px-3 py-1 bg-[#1f4e27]/90 border border-[#52b76b] text-[#98ecaa] font-bold text-[10px] uppercase rounded-full shadow-lg flex items-center gap-1 backdrop-blur-sm">
             <span>✓</span> <span>Tied with Love</span>
@@ -331,6 +331,9 @@ function navigateFestiveStep(dir) {
     } else if (currentFestiveStep === 3) {
       nextBtn.innerText = 'SEE YOUR SHAGUN 🎁';
       nextBtn.onclick = function() { navigateFestiveStep(1); };
+    } else if (currentFestiveStep === 2) {
+      nextBtn.innerText = 'TIE RAKHI 🧵';
+      nextBtn.onclick = function() { triggerRakhiTiedSuccess(); };
     } else {
       nextBtn.innerText = 'NEXT ➔';
       nextBtn.onclick = function() { navigateFestiveStep(1); };
