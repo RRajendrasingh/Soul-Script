@@ -169,7 +169,7 @@ $galleryMedia = !empty($media) && is_array($media) ? $media : [];
           </div>
         </div>
 
-        <button type="button" onclick="openStitchRakhiModal()" class="btn-gradient text-white font-bold py-3.5 sm:py-4 px-8 sm:px-12 rounded-full shadow-lg hover:opacity-90 transition-opacity text-base sm:text-lg inline-block cursor-pointer">
+        <button type="button" id="heroCeremonyBtn" onclick="openFestiveRakhiModal()" class="btn-gradient text-white font-bold py-3.5 sm:py-4 px-8 sm:px-12 rounded-full shadow-lg hover:opacity-90 transition-opacity text-base sm:text-lg inline-block cursor-pointer">
           Tap to Tie Rakhi
         </button>
       </div>

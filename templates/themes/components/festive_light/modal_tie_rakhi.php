@@ -5,7 +5,7 @@
 ?>
 
 <div id="festiveRakhiModalContainer" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-6 bg-black/85 backdrop-blur-md transition-opacity duration-300">
-  <div id="festiveRakhiModal" class="relative w-full h-full sm:h-auto sm:max-w-3xl sm:max-h-[94vh] bg-[#fcf6f0] border-0 sm:border-2 border-[#d4af37]/60 rounded-none sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+  <div id="festiveRakhiModal" class="relative w-full h-full sm:h-auto sm:max-w-2xl sm:max-h-[94vh] bg-[#fcf6f0] border-0 sm:border-2 border-[#d4af37]/60 rounded-none sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col">
     
     <!-- Modal Header Bar -->
     <div class="px-5 py-3.5 bg-[#f4e5d8]/90 border-b border-[#e8d5c4] flex items-center justify-between shrink-0 shadow-sm z-10">
@@ -29,86 +29,87 @@
     <div class="p-4 sm:p-6 overflow-y-auto flex-1 bg-[#fcf6f0] relative">
 
       <!-- STEP 1: PREPARE SACRED THALI & SELECT RAKHI -->
-      <div id="rakhiStep1" class="space-y-5 max-w-xl mx-auto text-center py-2">
+      <div id="rakhiStep1" class="flex flex-col items-center text-center space-y-4 max-w-md mx-auto py-1 w-full">
         <?php 
         $heroPhoto = !empty($receiver_photo) ? resolveMediaUrl($receiver_photo) : (!empty($galleryMedia[0]) ? (is_array($galleryMedia[0]) ? resolveMediaUrl($galleryMedia[0]['file_path'] ?? '') : resolveMediaUrl($galleryMedia[0])) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZfsICxK34oixmN1AZRizpBM2bZC5BAB_XYhQLhxKaZRKgNxEv8X9v3Z4lzEedQVni4JuXg6LECezawWUPThbfyUKDAnCX14tBlz_SHV5Z0nHTlrYpNX81aS2JbA1-fREPTFZBGfA4Oin9IzGHb5PZxUinsPuL6pU81_ZnpEIrbooze4l1aomWnjr8FWAmwYUcQR92cij0amxmT3sNwf3Uq4XO2ot9yJ_JaQvk6cQiDvzzRP2Mvcj0');
         ?>
-        <div class="w-40 h-40 sm:w-48 sm:h-48 mx-auto rounded-full bg-white border-4 border-[#d4af37]/60 shadow-2xl relative overflow-hidden flex items-center justify-center p-1">
+        <div class="w-36 h-36 sm:w-44 sm:h-44 mx-auto rounded-full bg-white border-4 border-[#d4af37]/60 shadow-xl relative overflow-hidden flex items-center justify-center p-1 shrink-0">
           <img src="<?= htmlspecialchars($heroPhoto) ?>" alt="Sibling Memory" class="w-full h-full object-cover rounded-full">
         </div>
 
-        <div class="space-y-1">
-          <h4 class="text-2xl sm:text-3xl font-bold font-serif text-[#4a232f]">Prepare Sacred Thali</h4>
-          <p class="text-xs sm:text-sm text-[#7a5c68]">Select your chosen Rakhi thread to perform the virtual ceremony.</p>
+        <div class="space-y-0.5">
+          <h4 class="text-xl sm:text-2xl font-bold font-serif text-[#4a232f]">Prepare Sacred Thali</h4>
+          <p class="text-xs text-[#7a5c68]">Select your chosen Rakhi thread to perform the virtual ceremony.</p>
         </div>
 
         <!-- 3 Rakhi Options Grid -->
-        <div class="grid grid-cols-3 gap-3 pt-2">
-          <button type="button" onclick="selectRakhiOption(1, this)" class="rakhi-opt-btn p-3 rounded-2xl border-2 border-[#e5534b] bg-white flex flex-col items-center gap-1.5 cursor-pointer shadow-sm hover:shadow-md transition-all active:scale-95">
+        <div class="grid grid-cols-3 gap-2.5 w-full pt-1">
+          <button type="button" onclick="selectRakhiOption(1, this)" class="rakhi-opt-btn p-2.5 rounded-2xl border-2 border-[#e5534b] bg-white flex flex-col items-center gap-1 cursor-pointer shadow-sm hover:shadow-md transition-all active:scale-95">
             <span class="text-2xl sm:text-3xl">🏵️</span>
-            <span class="text-xs font-bold text-[#4a232f]">Royal Kundan</span>
+            <span class="text-[11px] sm:text-xs font-bold text-[#4a232f] leading-tight">Royal Kundan</span>
           </button>
-          <button type="button" onclick="selectRakhiOption(2, this)" class="rakhi-opt-btn p-3 rounded-2xl border-2 border-transparent hover:border-[#d4af37] bg-white flex flex-col items-center gap-1.5 cursor-pointer shadow-sm hover:shadow-md transition-all active:scale-95">
+          <button type="button" onclick="selectRakhiOption(2, this)" class="rakhi-opt-btn p-2.5 rounded-2xl border-2 border-transparent hover:border-[#d4af37] bg-white flex flex-col items-center gap-1 cursor-pointer shadow-sm hover:shadow-md transition-all active:scale-95">
             <span class="text-2xl sm:text-3xl">📿</span>
-            <span class="text-xs font-bold text-[#4a232f]">Rudraksha</span>
+            <span class="text-[11px] sm:text-xs font-bold text-[#4a232f] leading-tight">Rudraksha</span>
           </button>
-          <button type="button" onclick="selectRakhiOption(3, this)" class="rakhi-opt-btn p-3 rounded-2xl border-2 border-transparent hover:border-[#d4af37] bg-white flex flex-col items-center gap-1.5 cursor-pointer shadow-sm hover:shadow-md transition-all active:scale-95">
+          <button type="button" onclick="selectRakhiOption(3, this)" class="rakhi-opt-btn p-2.5 rounded-2xl border-2 border-transparent hover:border-[#d4af37] bg-white flex flex-col items-center gap-1 cursor-pointer shadow-sm hover:shadow-md transition-all active:scale-95">
             <span class="text-2xl sm:text-3xl">✨</span>
-            <span class="text-xs font-bold text-[#4a232f]">Silver Thread</span>
+            <span class="text-[11px] sm:text-xs font-bold text-[#4a232f] leading-tight">Silver Thread</span>
           </button>
         </div>
       </div>
 
-      <!-- STEP 2: STITCH CEREMONY READY TO TIE (BARE WRIST + DRAG TARGET) -->
-      <div id="rakhiStep2" class="hidden flex-col items-center space-y-4 max-w-xl mx-auto py-1">
+      <!-- STEP 2: STITCH CEREMONY READY TO TIE (BARE WRIST + BOTTOM TRAY DRAGGABLE) -->
+      <div id="rakhiStep2" class="hidden flex-col items-center space-y-3.5 max-w-md mx-auto py-1 w-full">
         <div class="text-center space-y-0.5">
           <h4 class="text-xl sm:text-2xl font-bold font-serif text-[#4a232f]">Ceremony: Ready to Tie</h4>
-          <p class="text-xs text-[#7a5c68]">Select a Rakhi and tie it to celebrate</p>
+          <p class="text-xs text-[#7a5c68]">Drag the Rakhi upwards onto the wrist to tie</p>
         </div>
 
         <!-- Bare Wrist Interactive Stage -->
-        <div id="rakhiInteractionArea" class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 sm:border-4 border-[#d4af37]/40 bg-white touch-none">
+        <div id="rakhiInteractionArea" class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-[#d4af37]/40 bg-white touch-none">
           <!-- 100% Bare Wrist Image (Without any Rakhi from Stitch) -->
           <img id="wristBgImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1bkVHhFWMp4O7BQuZmSAS4Yz00ddghP2rKLOhaxDBbUY0chclAJVCDxSekCx0X_m1K8UkZ3rxMtC63opQomaNePkwvFBUD72yfxqMTtXoG3Fn-wgkbKA13OoGyPKkYaWRoNq4E7nliOnRFtnB-lvw8mcpGrkibtvM3Tz76Cw-yU-lEFkzIQBIEU-XLsmYQoX6-DEz_8qmixlmAjA1MdbWa46RvtmIp8g4HhcGwj2TwH3LWzGsOODa" alt="Brother's Bare Wrist" class="w-full h-full object-cover select-none pointer-events-none">
           
           <!-- Dashed Target Zone Overlay -->
-          <div id="rakhiTargetZone" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-20 border-2 border-dashed border-white/90 bg-black/20 rounded-2xl flex flex-col items-center justify-center backdrop-blur-xs transition-all pointer-events-none">
-            <span class="text-[11px] font-bold text-white uppercase tracking-widest drop-shadow-md">Drag Rakhi Here</span>
-          </div>
-
-          <!-- Draggable Rakhi Thread -->
-          <div id="draggableRakhi" class="absolute bottom-3 left-1/2 -translate-x-1/2 w-28 h-28 cursor-grab active:cursor-grabbing z-20 touch-none" style="touch-action: none;">
-            <img id="draggableRakhiImg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrBgMcQPiJpH7ajGLFwJGVwRa8i1Cni6zU2PfdkIGO1Z52qnUapLQhEUB8IKS0u8LsO0x805E_mFTMaNxfNXiQGF5D9iEMg5ZFASInorsWjA8pMK8Lnt0I8jabUevnMHQAovnjP55h75mbDpmHRXuv5Mop7xu2TuWvXI-USFO8NdpfjFRy1d44pA0WFRFxbFRpYMqN_FHoNxjNn32vmJcW31a_RWHGrmth_-XXvYRw6uGgK-SS_5sT" alt="Rakhi" class="w-full h-full object-contain filter drop-shadow-xl select-none pointer-events-none">
+          <div id="rakhiTargetZone" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-24 border-2 border-dashed border-white/90 bg-black/25 rounded-2xl flex flex-col items-center justify-center backdrop-blur-xs transition-all pointer-events-none">
+            <span class="text-[11px] font-extrabold text-white uppercase tracking-widest drop-shadow-md">Drag Rakhi Here</span>
+            <span class="text-[9px] text-white/80 mt-0.5">⬆️ Release to tie</span>
           </div>
         </div>
 
-        <!-- Bottom Sheet Action Bar -->
-        <div class="w-full bg-white rounded-2xl p-3 sm:p-4 border border-[#e8d5c4] shadow-sm flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-10 h-10 rounded-xl bg-[#fcf6f0] border border-[#e8d5c4] p-1 flex items-center justify-center shrink-0">
+        <!-- Bottom Tray: Draggable Rakhi Thread & Action Button -->
+        <div class="w-full bg-white rounded-2xl p-3 sm:p-4 border border-[#e8d5c4] shadow-sm flex flex-col gap-2.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
               <span id="selectedRakhiIcon" class="text-xl">🏵️</span>
+              <span id="selectedRakhiName" class="text-xs sm:text-sm font-bold text-[#4a232f]">Royal Kundan Rakhi</span>
             </div>
-            <div class="truncate">
-              <span class="text-[10px] font-bold text-[#e5534b] uppercase block tracking-wider">Ready to Tie</span>
-              <span id="selectedRakhiName" class="text-xs sm:text-sm font-bold text-[#4a232f] block truncate">Royal Kundan Rakhi</span>
-            </div>
+            <button type="button" onclick="triggerRakhiTiedSuccess()" class="px-4 py-1.5 bg-gradient-to-r from-[#d32f2f] to-[#f57c00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow hover:opacity-90 active:scale-95 transition-all cursor-pointer">
+              Tie Now 🧵
+            </button>
           </div>
 
-          <button type="button" onclick="triggerRakhiTiedSuccess()" class="px-5 py-2.5 bg-gradient-to-r from-[#d32f2f] to-[#f57c00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow hover:opacity-90 active:scale-95 transition-all cursor-pointer shrink-0 flex items-center gap-1">
-            <span>Tie Now 🧵</span>
-          </button>
+          <!-- Bottom Draggable Tray Container -->
+          <div id="draggableRakhiTray" class="w-full h-20 bg-[#fcf6f0] border-2 border-dashed border-[#d4af37]/60 rounded-xl flex items-center justify-center relative overflow-visible cursor-grab active:cursor-grabbing select-none touch-none" style="touch-action: none;">
+            <div id="draggableRakhi" class="w-full h-full flex items-center justify-center pointer-events-none select-none">
+              <!-- SVG / Transparent PNG Content -->
+              <div id="rakhiVectorContainer" class="w-48 h-16 flex items-center justify-center"></div>
+            </div>
+          </div>
+          <span class="text-[10px] text-gray-500 text-center font-medium block">👆 Grab the Rakhi and drag upwards to the wrist</span>
         </div>
       </div>
 
       <!-- STEP 3: RAKHI TIED SUCCESSFULLY (TIED WRIST + SEE YOUR GIFT) -->
-      <div id="rakhiStep3" class="hidden flex-col items-center space-y-4 max-w-xl mx-auto py-1 text-center">
+      <div id="rakhiStep3" class="hidden flex-col items-center space-y-4 max-w-md mx-auto py-1 text-center w-full">
         <div class="space-y-0.5">
           <h4 class="text-2xl sm:text-3xl font-black font-serif text-[#4a232f]">Rakhi Tied Successfully!</h4>
-          <p class="text-xs sm:text-sm text-[#7a5c68]">A bond of love, protection, and joy.</p>
+          <p class="text-xs text-[#7a5c68]">A sacred bond of love, protection, and lifelong joy.</p>
         </div>
 
         <!-- Tied Wrist Image Container -->
-        <div class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 sm:border-4 border-[#d4af37]/60 bg-white">
+        <div class="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border-2 sm:border-4 border-[#d4af37]/60 bg-white">
           <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZfsICxK34oixmN1AZRizpBM2bZC5BAB_XYhQLhxKaZRKgNxEv8X9v3Z4lzEedQVni4JuXg6LECezawWUPThbfyUKDAnCX14tBlz_SHV5Z0nHTlrYpNX81aS2JbA1-fREPTFZBGfA4Oin9IzGHb5PZxUinsPuL6pU81_ZnpEIrbooze4l1aomWnjr8FWAmwYUcQR92cij0amxmT3sNwf3Uq4XO2ot9yJ_JaQvk6cQiDvzzRP2Mvcj0" alt="Rakhi Tied Successfully" class="w-full h-full object-cover">
           
           <div class="absolute top-3 right-3 px-3 py-1 bg-[#1f4e27]/90 border border-[#52b76b] text-[#98ecaa] font-bold text-[10px] uppercase rounded-full shadow-lg flex items-center gap-1 backdrop-blur-sm">
@@ -118,68 +119,54 @@
 
         <!-- Prominent "SEE YOUR GIFT" Button -->
         <div class="w-full pt-1">
-          <button type="button" onclick="navigateFestiveStep(1)" class="w-full py-4 px-8 bg-gradient-to-r from-[#e57800] via-[#f59e0b] to-[#d97706] text-white font-extrabold text-sm sm:text-base uppercase tracking-wider rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-2">
-            <span>SEE YOUR GIFT 🎁</span>
+          <button type="button" onclick="navigateFestiveStep(1)" class="w-full py-3.5 px-8 bg-gradient-to-r from-[#e57800] via-[#f59e0b] to-[#d97706] text-white font-extrabold text-sm sm:text-base uppercase tracking-wider rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-2">
+            <span>SEE YOUR SHAGUN 🎁</span>
           </button>
         </div>
       </div>
 
-      <!-- STEP 4: ROYAL SHAGUN LIFAFA & SCRATCH CARD -->
-      <div id="rakhiStep4" class="hidden flex-col space-y-3.5 max-w-xl mx-auto py-1">
+      <!-- STEP 4: ROYAL SHAGUN LIFAFA LETTER & BLESSING -->
+      <div id="rakhiStep4" class="hidden flex-col space-y-3.5 max-w-md mx-auto py-1 w-full">
         <div class="text-center space-y-0.5">
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffdcc5] text-[#934b00] text-[10px] font-bold uppercase tracking-wider">
             <span>🧧</span> <span>Royal Shagun Lifafa</span>
           </span>
-          <h4 class="text-lg sm:text-xl font-bold font-serif text-[#4a232f]">Your Shagun Letter &amp; Gift Voucher</h4>
+          <h4 class="text-lg sm:text-xl font-bold font-serif text-[#4a232f]">Your Shagun Letter &amp; Blessings</h4>
         </div>
 
-        <!-- Two Column Card: Note & Scratch Card -->
-        <div class="flex flex-col md:flex-row bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-[#e8d5c4]">
-          <!-- Left Column: Shagun Letter Quote -->
-          <div class="flex-1 p-4 sm:p-5 bg-white border-b md:border-b-0 md:border-r border-[#e8d5c4] flex flex-col justify-between space-y-3">
-            <div>
-              <span class="text-2xl text-[#d4af37] block mb-1 opacity-75">❝</span>
-              <p class="text-xs sm:text-sm text-[#4a232f] italic font-serif leading-relaxed">
-                "<?= htmlspecialchars($loveNoteText ?: "mera saara pyaar aur dher saare aashirwaad iss lifafe mein h! 🧧") ?>"
-              </p>
+        <!-- Shagun Envelope Letter Card -->
+        <div class="w-full bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-[#e8d5c4] p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between border-b border-[#f4e5d8] pb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#934b00]">Shagun Sandesh 💌</span>
+              <span class="text-xs text-gray-500">Raksha Bandhan 2026</span>
             </div>
-            <div class="text-right border-t border-[#f4e5d8] pt-2">
-              <span class="text-[10px] font-bold text-[#934b00] uppercase tracking-wider block">— With lots of love,</span>
-              <span class="text-xs font-bold font-serif text-[#4a232f]"><?= htmlspecialchars($buyerName ?: 'Brother') ?></span>
+            <span class="text-3xl text-[#d4af37] block opacity-75 leading-none">❝</span>
+            <p class="text-sm sm:text-base text-[#4a232f] italic font-serif leading-relaxed px-1">
+              "<?= htmlspecialchars($loveNoteText ?: "Gunnu, mera saara pyaar aur dher saare aashirwaad iss shagun mein h! 🎁") ?>"
+            </p>
+          </div>
+
+          <!-- Shagun Aashirwaad Coin Box -->
+          <div class="w-full bg-[#fcf6f0] border border-[#d4af37]/50 rounded-2xl p-4 flex items-center gap-3.5 shadow-inner">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#d4af37] via-[#f7e6a6] to-[#b89343] text-[#241a00] font-black text-2xl flex items-center justify-center shadow-md shrink-0">
+              ₹
+            </div>
+            <div class="text-left">
+              <span class="text-[10px] font-bold text-[#e5534b] uppercase block tracking-wider">Shagun &amp; Aashirwaad</span>
+              <span class="text-xs font-bold text-[#4a232f] block">Forever Love, Care &amp; Lifelong Protection</span>
             </div>
           </div>
 
-          <!-- Right Column: Interactive Gold Scratch Card -->
-          <div class="flex-1 p-4 sm:p-5 bg-[#fcf6f0] flex flex-col items-center text-center justify-center space-y-2.5">
-            <div class="text-center">
-              <span class="text-[9px] font-bold uppercase tracking-wider text-[#e5534b] block">Amazon Gift Voucher</span>
-              <h5 class="text-sm font-bold font-serif text-[#4a232f]">Scratch to Reveal Code 🪙</h5>
-            </div>
-
-            <!-- Scratch Card Area -->
-            <div class="relative w-full max-w-[240px] h-28 rounded-2xl overflow-hidden shadow-inner border-2 border-[#d4af37] bg-[#1a0f0a] flex flex-col items-center justify-center select-none">
-              <!-- Revealed Content Behind Scratch Canvas -->
-              <div class="p-2 text-center space-y-0.5">
-                <span class="text-[9px] font-bold text-[#eac34a] uppercase block">₹500 Amazon Voucher</span>
-                <strong class="text-sm font-mono font-black text-white block tracking-widest bg-black/50 px-2.5 py-0.5 rounded border border-[#eac34a]/40 select-all">
-                  <?= htmlspecialchars($voucherCode ?: 'AMZ-RAKHI-2026') ?>
-                </strong>
-                <span class="text-[8px] text-gray-300 block">Redeem directly on Amazon</span>
-              </div>
-
-              <!-- HTML5 Scratch Canvas Layer -->
-              <canvas id="modalScratchCanvas" class="absolute inset-0 w-full h-full cursor-pointer z-10 touch-none" style="touch-action: none;"></canvas>
-            </div>
-
-            <button type="button" onclick="navigator.clipboard.writeText('<?= htmlspecialchars($voucherCode ?: 'AMZ-RAKHI-2026') ?>'); alert('Voucher Code Copied! 🎉'); confetti({ particleCount: 80, spread: 60 });" class="px-3.5 py-1 bg-[#e5534b] hover:bg-[#d32f2f] text-white text-[11px] font-bold uppercase rounded-full shadow-sm transition-all cursor-pointer">
-              Copy Voucher Code 📋
-            </button>
+          <div class="text-right border-t border-[#f4e5d8] pt-2">
+            <span class="text-[10px] font-bold text-[#934b00] uppercase tracking-wider block">— With lots of love,</span>
+            <span class="text-sm font-bold font-serif text-[#4a232f]"><?= htmlspecialchars($buyerName ?: 'Brother') ?></span>
           </div>
         </div>
       </div>
 
       <!-- STEP 5: THERE'S MORE TO CELEBRATE (KEEPSAKES & FINISH) -->
-      <div id="rakhiStep5" class="hidden flex-col items-center space-y-3.5 max-w-md mx-auto py-1 text-center">
+      <div id="rakhiStep5" class="hidden flex-col items-center space-y-3.5 max-w-md mx-auto py-1 text-center w-full">
         <div class="w-14 h-14 mx-auto rounded-full bg-[#ffdcc5] text-[#934b00] flex items-center justify-center text-2xl shadow-md relative">
           🎁
           <div class="absolute -top-1 -right-1 w-5 h-5 bg-[#0061a5] text-white rounded-full flex items-center justify-center text-[9px] font-bold shadow-sm">★</div>
@@ -209,11 +196,11 @@
 
     <!-- Modal Footer Controls (Sticky Bottom with Clean Elevation) -->
     <div class="sticky bottom-0 z-20 px-4 sm:px-6 py-3.5 bg-[#f4e5d8] border-t border-[#e8d5c4] flex items-center justify-between shrink-0 shadow-[0_-4px_15px_rgba(0,0,0,0.06)]">
-      <button type="button" id="festiveModalBackBtn" onclick="navigateFestiveStep(-1)" class="px-5 py-2.5 bg-white text-[#4a232f] font-bold text-xs rounded-full hover:bg-gray-100 transition-all cursor-pointer invisible shadow-sm">
+      <button type="button" id="festiveModalBackBtn" onclick="navigateFestiveStep(-1)" class="px-5 py-2 bg-white text-[#4a232f] font-bold text-xs rounded-full hover:bg-gray-100 transition-all cursor-pointer invisible shadow-sm">
         ← Back
       </button>
 
-      <button type="button" id="festiveModalNextBtn" onclick="navigateFestiveStep(1)" class="px-8 py-2.5 bg-gradient-to-r from-[#d32f2f] to-[#f57c00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md hover:opacity-90 active:scale-95 transition-all cursor-pointer">
+      <button type="button" id="festiveModalNextBtn" onclick="navigateFestiveStep(1)" class="px-7 py-2 bg-gradient-to-r from-[#d32f2f] to-[#f57c00] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md hover:opacity-90 active:scale-95 transition-all cursor-pointer">
         NEXT ➔
       </button>
     </div>
@@ -225,21 +212,65 @@
 let currentFestiveStep = 1;
 let selectedRakhiOptionId = 1;
 
-const rakhiImages = {
+// 100% Transparent High-Definition Vector Rakhi SVG Templates
+const rakhiVectors = {
   1: {
     name: 'Royal Kundan Rakhi',
     icon: '🏵️',
-    img: 'https://lh3.googleusercontent.com/aida/AP1WRLvbnd-5weRLOAwdfA-O5tILrD1hX7niryxFWKAlZF9ArzpuKowuWj2utypXaVQ4dWHgV1LFWoevzqQlZbJe5YKZaaqOuordVByiZMf50Aq3hu55KzCryJbWIfxjOQwKofotmSg9UYTdNB2vv7hlIweT2fJuGE6piTSeX1vXMHny0MU6CGc1obbTH5Fixj6WZXIhuDaxfT3IhM5zHSyPawlN4WX5Mgbu8HgW8GdJj2LzLztHDIqZRRuleXA'
+    svg: `<svg viewBox="0 0 240 60" class="w-full h-full filter drop-shadow-md select-none pointer-events-none">
+      <!-- Braided Red & Gold Silk Thread -->
+      <path d="M0 30 Q 30 25, 60 30 T 120 30" stroke="#d32f2f" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M0 30 Q 30 35, 60 30 T 120 30" stroke="#f59e0b" stroke-width="2" fill="none" stroke-dasharray="4,2"/>
+      <path d="M120 30 Q 150 25, 180 30 T 240 30" stroke="#d32f2f" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M120 30 Q 150 35, 180 30 T 240 30" stroke="#f59e0b" stroke-width="2" fill="none" stroke-dasharray="4,2"/>
+      <!-- Kundan Centerpiece -->
+      <circle cx="120" cy="30" r="22" fill="#b91c1c" stroke="#d4af37" stroke-width="3"/>
+      <circle cx="120" cy="30" r="16" fill="#fbbf24" stroke="#78350f" stroke-width="1.5"/>
+      <circle cx="120" cy="30" r="8" fill="#dc2626"/>
+      <circle cx="120" cy="30" r="4" fill="#ffffff" opacity="0.9"/>
+      <!-- Kundan Petals -->
+      <circle cx="120" cy="10" r="4" fill="#fbbf24" stroke="#d4af37" stroke-width="1"/>
+      <circle cx="120" cy="50" r="4" fill="#fbbf24" stroke="#d4af37" stroke-width="1"/>
+      <circle cx="100" cy="30" r="4" fill="#fbbf24" stroke="#d4af37" stroke-width="1"/>
+      <circle cx="140" cy="30" r="4" fill="#fbbf24" stroke="#d4af37" stroke-width="1"/>
+    </svg>`
   },
   2: {
     name: 'Rudraksha Sacred Rakhi',
     icon: '📿',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwAuD61c82cyWNX0PFa77UJrvtXb2o2mLIuK8K8FvXCRuYInKBWruke4m9l7Gxxh984tDgFxHPVsqt_Vwd3qTes7nZ9F5-53YY8EazEK1ydgpWVh4et5zgTy3SyCvD5BfMHag1TaSj2QVzNGnsWG4HsTxX_r9CdC6-TnjGNmeNMCETqb6Vh10Qqkzo3smXC2m-Y5Ui0WqvaGyRf-vLnTc2tFj6yZlQM2Z0F7_pntD9vNkJmi3PkrjH'
+    svg: `<svg viewBox="0 0 240 60" class="w-full h-full filter drop-shadow-md select-none pointer-events-none">
+      <!-- Sacred Holy Moli Thread -->
+      <path d="M0 30 L 90 30" stroke="#ea580c" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M0 30 L 90 30" stroke="#facc15" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
+      <path d="M150 30 L 240 30" stroke="#ea580c" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M150 30 L 240 30" stroke="#facc15" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
+      <!-- Gold Bead Accents -->
+      <circle cx="95" cy="30" r="6" fill="#eab308" stroke="#713f12" stroke-width="1"/>
+      <circle cx="145" cy="30" r="6" fill="#eab308" stroke="#713f12" stroke-width="1"/>
+      <!-- Sacred Rudraksha Bead with Textures -->
+      <circle cx="120" cy="30" r="18" fill="#78350f" stroke="#451a03" stroke-width="2"/>
+      <path d="M112 18 Q 120 30 112 42" stroke="#451a03" stroke-width="2" fill="none"/>
+      <path d="M120 12 L 120 48" stroke="#451a03" stroke-width="2" fill="none"/>
+      <path d="M128 18 Q 120 30 128 42" stroke="#451a03" stroke-width="2" fill="none"/>
+      <!-- Auspicious Red Dot -->
+      <circle cx="120" cy="30" r="3" fill="#dc2626"/>
+    </svg>`
   },
   3: {
     name: 'Silver Thread Zari Rakhi',
     icon: '✨',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAdJgvnpt9efEREwzgTGxPH8MPQ5AWE0t4mqfy-UhaDL-arn2W1sEI1ND2UOlcFMlEXpeog2gXEuJMN9mQudEErF0Mxvx1eUO17QBpvGtTyDHcJBLnJOr11V3pjEm3aLuZaUr7ucec0xi9sy-j4vzY7eGrpFjBUpRTcBGTPnwtWSk7wFKxGFfREfhaQEQ5mi9OBNsmf8qGSHlW-wB7hhVnd77ika9jsTD5Z0FT1B7OQtcCsRvTnJhFU'
+    svg: `<svg viewBox="0 0 240 60" class="w-full h-full filter drop-shadow-md select-none pointer-events-none">
+      <!-- Metallic Silver & Blue Braided Thread -->
+      <path d="M0 30 Q 30 26, 60 30 T 120 30" stroke="#94a3b8" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M0 30 Q 30 34, 60 30 T 120 30" stroke="#0284c7" stroke-width="2" fill="none" stroke-dasharray="5,2"/>
+      <path d="M120 30 Q 150 26, 180 30 T 240 30" stroke="#94a3b8" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M120 30 Q 150 34, 180 30 T 240 30" stroke="#0284c7" stroke-width="2" fill="none" stroke-dasharray="5,2"/>
+      <!-- Silver Starburst Crystal Centerpiece -->
+      <circle cx="120" cy="30" r="20" fill="#f8fafc" stroke="#38bdf8" stroke-width="2"/>
+      <!-- Diamond Star -->
+      <polygon points="120,14 125,25 136,30 125,35 120,46 115,35 104,30 115,25" fill="#0284c7" stroke="#0369a1" stroke-width="1"/>
+      <circle cx="120" cy="30" r="5" fill="#ffffff"/>
+    </svg>`
   }
 };
 
@@ -254,12 +285,12 @@ function selectRakhiOption(optId, btnEl) {
     btnEl.classList.add('border-[#e5534b]');
   }
 
-  const rData = rakhiImages[optId] || rakhiImages[1];
-  const dragImg = document.getElementById('draggableRakhiImg');
+  const rData = rakhiVectors[optId] || rakhiVectors[1];
+  const container = document.getElementById('rakhiVectorContainer');
   const nameEl = document.getElementById('selectedRakhiName');
   const iconEl = document.getElementById('selectedRakhiIcon');
 
-  if (dragImg) dragImg.src = rData.img;
+  if (container) container.innerHTML = rData.svg;
   if (nameEl) nameEl.innerText = rData.name;
   if (iconEl) iconEl.innerText = rData.icon;
 }
@@ -271,7 +302,6 @@ function navigateFestiveStep(dir) {
   const currentEl = document.getElementById(`rakhiStep${currentFestiveStep}`);
   if (currentEl) {
     currentEl.classList.add('hidden');
-    currentEl.classList.remove('flex');
   }
 
   currentFestiveStep = nextStep;
@@ -279,7 +309,6 @@ function navigateFestiveStep(dir) {
   const nextEl = document.getElementById(`rakhiStep${currentFestiveStep}`);
   if (nextEl) {
     nextEl.classList.remove('hidden');
-    nextEl.classList.add('flex');
   }
 
   const badge = document.getElementById('festiveModalStepBadge');
@@ -300,7 +329,7 @@ function navigateFestiveStep(dir) {
       nextBtn.innerText = 'FINISH ✓';
       nextBtn.onclick = function() { closeFestiveRakhiModal(); };
     } else if (currentFestiveStep === 3) {
-      nextBtn.innerText = 'SEE YOUR GIFT 🎁';
+      nextBtn.innerText = 'SEE YOUR SHAGUN 🎁';
       nextBtn.onclick = function() { navigateFestiveStep(1); };
     } else {
       nextBtn.innerText = 'NEXT ➔';
@@ -309,12 +338,18 @@ function navigateFestiveStep(dir) {
   }
 
   if (currentFestiveStep === 2) {
+    selectRakhiOption(selectedRakhiOptionId);
     initRakhiDragLogic();
   } else if (currentFestiveStep === 3) {
     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     if (typeof playTempleBellSound === 'function') playTempleBellSound();
-  } else if (currentFestiveStep === 4) {
-    initModalScratchCanvas();
+    
+    // Save completion state in browser memory
+    try {
+      const pId = '<?= addslashes($initialLockData['page_id'] ?? 'rakhi_festive') ?>';
+      localStorage.setItem('rakhi_ceremony_completed_' + pId, 'true');
+      updateCeremonyCompletedUI();
+    } catch(e) {}
   }
 }
 
@@ -323,118 +358,63 @@ function triggerRakhiTiedSuccess() {
 }
 
 function initRakhiDragLogic() {
-  const dragEl = document.getElementById('draggableRakhi');
+  const tray = document.getElementById('draggableRakhiTray');
   const targetEl = document.getElementById('rakhiTargetZone');
   const container = document.getElementById('rakhiInteractionArea');
 
-  if (!dragEl || !container) return;
+  if (!tray || !targetEl || !container) return;
 
   let active = false;
-  let currentX, currentY, initialX, initialY;
-  let xOffset = 0, yOffset = 0;
+  let currentX = 0, currentY = 0, initialX = 0, initialY = 0;
 
   function dragStart(e) {
     if (e.type === "touchstart") {
-      initialX = e.touches[0].clientX - xOffset;
-      initialY = e.touches[0].clientY - yOffset;
+      initialX = e.touches[0].clientX;
+      initialY = e.touches[0].clientY;
     } else {
-      initialX = e.clientX - xOffset;
-      initialY = e.clientY - yOffset;
+      initialX = e.clientX;
+      initialY = e.clientY;
     }
-    if (e.target === dragEl || dragEl.contains(e.target)) {
-      active = true;
-    }
+    active = true;
   }
 
   function dragEnd() {
     if (!active) return;
-    initialX = currentX;
-    initialY = currentY;
     active = false;
 
-    if (dragEl && targetEl) {
-      const dragRect = dragEl.getBoundingClientRect();
-      const targetRect = targetEl.getBoundingClientRect();
-      const dist = Math.hypot(
-        (dragRect.left + dragRect.width/2) - (targetRect.left + targetRect.width/2),
-        (dragRect.top + dragRect.height/2) - (targetRect.top + targetRect.height/2)
-      );
-      if (dist < 110) {
-        triggerRakhiTiedSuccess();
-      }
+    // Check if dragged upwards towards target zone
+    if (currentY < -80) {
+      triggerRakhiTiedSuccess();
     }
+    tray.style.transform = 'translate3d(0, 0, 0)';
+    currentX = 0;
+    currentY = 0;
   }
 
   function drag(e) {
-    if (active) {
-      e.preventDefault();
-      if (e.type === "touchmove") {
-        currentX = e.touches[0].clientX - initialX;
-        currentY = e.touches[0].clientY - initialY;
-      } else {
-        currentX = e.clientX - initialX;
-        currentY = e.clientY - initialY;
-      }
-      xOffset = currentX;
-      yOffset = currentY;
-      dragEl.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-    }
-  }
-
-  container.addEventListener("touchstart", dragStart, {passive: false});
-  container.addEventListener("touchend", dragEnd, {passive: false});
-  container.addEventListener("touchmove", drag, {passive: false});
-  container.addEventListener("mousedown", dragStart, false);
-  window.addEventListener("mouseup", dragEnd, false);
-  container.addEventListener("mousemove", drag, false);
-}
-
-function initModalScratchCanvas() {
-  const canvas = document.getElementById('modalScratchCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width || 260;
-  canvas.height = rect.height || 128;
-
-  // Fill gold scratch foil
-  const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-  grad.addColorStop(0, '#d4af37');
-  grad.addColorStop(0.5, '#f7e6a6');
-  grad.addColorStop(1, '#b89343');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = '#241a00';
-  ctx.font = 'bold 12px Montserrat, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('✨ Scratch Here to Reveal 🪙', canvas.width / 2, canvas.height / 2 + 4);
-
-  let isScratching = false;
-
-  function scratch(e) {
-    if (!isScratching) return;
+    if (!active) return;
     e.preventDefault();
-    const cRect = canvas.getBoundingClientRect();
-    const x = (e.touches ? e.touches[0].clientX : e.clientX) - cRect.left;
-    const y = (e.touches ? e.touches[0].clientY : e.clientY) - cRect.top;
-
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(x, y, 16, 0, Math.PI * 2, false);
-    ctx.fill();
+    if (e.type === "touchmove") {
+      currentX = e.touches[0].clientX - initialX;
+      currentY = e.touches[0].clientY - initialY;
+    } else {
+      currentX = e.clientX - initialX;
+      currentY = e.clientY - initialY;
+    }
+    // Constrain horizontal and permit upward drag
+    currentY = Math.min(0, currentY);
+    tray.style.transform = `translate3d(${currentX * 0.4}px, ${currentY}px, 0)`;
   }
 
-  canvas.addEventListener('mousedown', () => isScratching = true);
-  window.addEventListener('mouseup', () => isScratching = false);
-  canvas.addEventListener('mousemove', scratch);
-
-  canvas.addEventListener('touchstart', (e) => { isScratching = true; scratch(e); }, {passive: false});
-  window.addEventListener('touchend', () => isScratching = false);
-  canvas.addEventListener('touchmove', scratch, {passive: false});
+  tray.addEventListener("touchstart", dragStart, {passive: false});
+  window.addEventListener("touchend", dragEnd, {passive: false});
+  window.addEventListener("touchmove", drag, {passive: false});
+  tray.addEventListener("mousedown", dragStart, false);
+  window.addEventListener("mouseup", dragEnd, false);
+  window.addEventListener("mousemove", drag, false);
 }
 
-function openFestiveRakhiModal() {
+function openFestiveRakhiModal(targetStep = 1) {
   const container = document.getElementById('festiveRakhiModalContainer');
   const musicBox = document.getElementById('desktopMusicBox');
   if (container) {
@@ -448,6 +428,12 @@ function openFestiveRakhiModal() {
     musicBox.style.display = 'none';
   }
   document.body.style.overflow = 'hidden';
+
+  // Navigate to target step if specified
+  if (targetStep !== currentFestiveStep) {
+    const diff = targetStep - currentFestiveStep;
+    navigateFestiveStep(diff);
+  }
 }
 
 function closeFestiveRakhiModal() {
@@ -463,15 +449,34 @@ function closeFestiveRakhiModal() {
   document.body.style.overflow = '';
 }
 
-// Auto-portal to body on document ready
+function updateCeremonyCompletedUI() {
+  try {
+    const pId = '<?= addslashes($initialLockData['page_id'] ?? 'rakhi_festive') ?>';
+    const isCompleted = localStorage.getItem('rakhi_ceremony_completed_' + pId) === 'true';
+    const heroBtn = document.getElementById('heroCeremonyBtn');
+    const heroBadge = document.getElementById('heroCeremonyBadge');
+    
+    if (isCompleted && heroBtn) {
+      heroBtn.innerHTML = '<span>View Shagun &amp; Keepsakes 🎁</span>';
+      heroBtn.onclick = function() { openFestiveRakhiModal(4); };
+    }
+  } catch(e) {}
+}
+
+// Auto-portal to body & check completion on ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
     const c = document.getElementById('festiveRakhiModalContainer');
     if (c && c.parentElement !== document.body) document.body.appendChild(c);
+    selectRakhiOption(1);
+    updateCeremonyCompletedUI();
   });
 } else {
   const c = document.getElementById('festiveRakhiModalContainer');
   if (c && c.parentElement !== document.body) document.body.appendChild(c);
+  selectRakhiOption(1);
+  updateCeremonyCompletedUI();
 }
 </script>
+
 
